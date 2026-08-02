@@ -15,7 +15,8 @@
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo 'No tests yet — see WT-C05' && exit 0"
   },
   "dependencies": {
     "nuxt": "^4.5.1",
