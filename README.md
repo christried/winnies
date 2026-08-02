@@ -1,6 +1,6 @@
-# wintool
+# nuxt project scaffold
 
-A gaming win-challenge tracker.
+A nuxt project scaffold i will surely use again. haha.
 
 ## Built with
 
