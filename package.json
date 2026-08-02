@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.10.0",
   "engines": {
-    "node": ">=22"
+    "node": "^24.11.0"
   },
   "scripts": {
     "build": "nuxt build",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^9.2.0",
     "@nuxt/eslint": "^1.16.0",
-    "@types/node": "^26.1.2",
+    "@types/node": "^24.13.3",
     "eslint": "^10.8.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
