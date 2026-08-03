@@ -15,5 +15,6 @@
     "markdown",
     "html",
     "css"
-  ]
+  ],
+  "css.lint.unknownAtRules": "ignore"
 }
