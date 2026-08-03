@@ -32,5 +32,6 @@ const ICONS = {
   <NuxtIcon
     :name="ICONS[name]"
     :size="size"
+    aria-hidden="true"
   />
 </template>
