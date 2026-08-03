@@ -1,6 +1,6 @@
 // @ts-check
-import antfu from '@antfu/eslint-config';
-import withNuxt from './.nuxt/eslint.config.mjs';
+import antfu from "@antfu/eslint-config";
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
   antfu({
@@ -9,30 +9,31 @@ export default withNuxt(
 
     stylistic: {
       semi: true,
+      quotes: "double",
     },
 
     formatters: {
       css: true,
       html: true,
-      markdown: 'prettier',
+      markdown: "prettier",
     },
     rules: {
-      'unicorn/filename-case': ['error', { case: 'kebabCase' }],
+      "unicorn/filename-case": ["error", { case: "kebabCase" }],
 
-      'vue/max-attributes-per-line': ['error', {
+      "vue/max-attributes-per-line": ["error", {
         singleline: { max: 2 },
         multiline: { max: 1 },
       }],
 
-      'node/no-process-env': 'error',
+      "node/no-process-env": "error",
     },
 
     ignores: [
-      'design/**',
-      '.nuxt/**',
-      '.output/**',
-      '**/migrations/**',
-      '.pnpm-store/**',
+      "design/**",
+      ".nuxt/**",
+      ".output/**",
+      "**/migrations/**",
+      ".pnpm-store/**",
     ],
   }),
 );
