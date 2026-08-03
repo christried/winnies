@@ -13,77 +13,77 @@
 // defaults to weights: [400] and says nothing about it. Rendering all four
 // adjacent is how that stays caught: a faked weight smears next to a real one.
 const weights = [
-  { klass: 'font-normal', name: '400 · normal' },
-  { klass: 'font-medium', name: '500 · medium' },
-  { klass: 'font-semibold', name: '600 · semibold' },
-  { klass: 'font-bold', name: '700 · bold' },
+  { klass: "font-normal", name: "400 · normal" },
+  { klass: "font-medium", name: "500 · medium" },
+  { klass: "font-semibold", name: "600 · semibold" },
+  { klass: "font-bold", name: "700 · bold" },
 ];
 
 // Every key UiIcon accepts. A name that fails to resolve renders as nothing at
 // all, so the only way to know all eighteen are real is to look at eighteen.
 const icons = [
-  'plus',
-  'play',
-  'pause',
-  'check',
-  'more',
-  'grip',
-  'pin',
-  'share',
-  'trophy',
-  'eye',
-  'copy',
-  'chevron',
-  'close',
-  'minus',
-  'edit',
-  'trash',
-  'duplicate',
-  'reset',
+  "plus",
+  "play",
+  "pause",
+  "check",
+  "more",
+  "grip",
+  "pin",
+  "share",
+  "trophy",
+  "eye",
+  "copy",
+  "chevron",
+  "close",
+  "minus",
+  "edit",
+  "trash",
+  "duplicate",
+  "reset",
 ] as const;
 
 const surfaces = [
-  { klass: 'bg-base-100', name: 'base-100', use: 'page background', lightness: '20%' },
-  { klass: 'bg-base-200', name: 'base-200', use: 'raised surface — cards', lightness: '15%' },
-  { klass: 'bg-base-300', name: 'base-300', use: 'borders, dividers', lightness: '10%' },
+  { klass: "bg-base-100", name: "base-100", use: "page background", lightness: "20%" },
+  { klass: "bg-base-200", name: "base-200", use: "raised surface — cards", lightness: "15%" },
+  { klass: "bg-base-300", name: "base-300", use: "borders, dividers", lightness: "10%" },
 ];
 
 const semantics = [
-  { klass: 'bg-primary text-primary-content', name: 'primary', use: 'running timer, new-run button' },
-  { klass: 'bg-secondary text-secondary-content', name: 'secondary', use: 'unassigned' },
-  { klass: 'bg-accent text-accent-content', name: 'accent', use: 'unassigned' },
-  { klass: 'bg-neutral text-neutral-content', name: 'neutral', use: 'quiet controls' },
-  { klass: 'bg-info text-info-content', name: 'info', use: 'unassigned' },
-  { klass: 'bg-success text-success-content', name: 'success', use: 'won challenge, complete run' },
-  { klass: 'bg-warning text-warning-content', name: 'warning', use: 'unassigned' },
-  { klass: 'bg-error text-error-content', name: 'error', use: 'destructive actions' },
+  { klass: "bg-primary text-primary-content", name: "primary", use: "running timer, new-run button" },
+  { klass: "bg-secondary text-secondary-content", name: "secondary", use: "unassigned" },
+  { klass: "bg-accent text-accent-content", name: "accent", use: "unassigned" },
+  { klass: "bg-neutral text-neutral-content", name: "neutral", use: "quiet controls" },
+  { klass: "bg-info text-info-content", name: "info", use: "unassigned" },
+  { klass: "bg-success text-success-content", name: "success", use: "won challenge, complete run" },
+  { klass: "bg-warning text-warning-content", name: "warning", use: "unassigned" },
+  { klass: "bg-error text-error-content", name: "error", use: "destructive actions" },
 ];
 
 const buttons = [
-  { klass: 'btn', name: 'btn' },
-  { klass: 'btn btn-primary', name: 'btn-primary' },
-  { klass: 'btn btn-secondary', name: 'btn-secondary' },
-  { klass: 'btn btn-accent', name: 'btn-accent' },
-  { klass: 'btn btn-neutral', name: 'btn-neutral' },
-  { klass: 'btn btn-info', name: 'btn-info' },
-  { klass: 'btn btn-success', name: 'btn-success' },
-  { klass: 'btn btn-warning', name: 'btn-warning' },
-  { klass: 'btn btn-error', name: 'btn-error' },
-  { klass: 'btn btn-ghost', name: 'btn-ghost' },
-  { klass: 'btn btn-outline', name: 'btn-outline' },
+  { klass: "btn", name: "btn" },
+  { klass: "btn btn-primary", name: "btn-primary" },
+  { klass: "btn btn-secondary", name: "btn-secondary" },
+  { klass: "btn btn-accent", name: "btn-accent" },
+  { klass: "btn btn-neutral", name: "btn-neutral" },
+  { klass: "btn btn-info", name: "btn-info" },
+  { klass: "btn btn-success", name: "btn-success" },
+  { klass: "btn btn-warning", name: "btn-warning" },
+  { klass: "btn btn-error", name: "btn-error" },
+  { klass: "btn btn-ghost", name: "btn-ghost" },
+  { klass: "btn btn-outline", name: "btn-outline" },
 ];
 
 // Deferred feature (see BACKLOG scope) — rendered only to confirm the tokens
 // resolve and stay distinguishable from each other.
 const players = [
-  'bg-player-1',
-  'bg-player-2',
-  'bg-player-3',
-  'bg-player-4',
-  'bg-player-5',
-  'bg-player-6',
-  'bg-player-7',
-  'bg-player-8',
+  "bg-player-1",
+  "bg-player-2",
+  "bg-player-3",
+  "bg-player-4",
+  "bg-player-5",
+  "bg-player-6",
+  "bg-player-7",
+  "bg-player-8",
 ];
 </script>
 

@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "daisyui" {
   themes:
@@ -29,8 +29,8 @@
   --color-player-7: oklch(83% 0.15 200);
   --color-player-8: oklch(80% 0.19 355);
 
-  --font-sans: 'Chivo', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Chivo Mono', ui-monospace, 'SF Mono', monospace;
+  --font-sans: "Chivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Chivo Mono", ui-monospace, "SF Mono", monospace;
 }
 
 @media (prefers-reduced-motion: reduce) {
