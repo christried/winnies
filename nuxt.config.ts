@@ -1,4 +1,4 @@
-import './server/utils/env'
+import './server/utils/env';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -19,4 +19,4 @@ export default defineNuxtConfig({
       appUrl: 'http://localhost:3000',
     },
   },
-})
+});
