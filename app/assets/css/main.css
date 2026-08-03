@@ -28,6 +28,9 @@
   --color-player-6: oklch(78% 0.15 30);
   --color-player-7: oklch(83% 0.15 200);
   --color-player-8: oklch(80% 0.19 355);
+
+  --font-sans: 'Chivo', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Chivo Mono', ui-monospace, 'SF Mono', monospace;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -37,5 +40,41 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  /* Header wordmark */
+  .type-wordmark {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    color: var(--color-primary);
+  }
+
+  /* Total run timer: fluid 24→40px */
+  .type-timer-total {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(24px, 5.4vw, 40px);
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Dates, counts, percentages, row timers */
+  .type-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Section labels: "VIEW ONLY" */
+  .type-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
   }
 }
