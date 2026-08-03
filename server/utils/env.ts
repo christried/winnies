@@ -1,6 +1,6 @@
 /* eslint-disable node/no-process-env -- only permitted place to read raw environment */
-import process from 'node:process'
-import { z } from 'zod'
+import process from 'node:process';
+import { z } from 'zod';
 
 const envSchema = z.object({
   DATABASE_URL: z.url('DATABASE_URL must be a valid connection URL'),
@@ -9,22 +9,22 @@ const envSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string().min(1, 'DISCORD_CLIENT_SECRET is required'),
   // wrong value silently falls back to the localhost default in nuxt.config.
   NUXT_PUBLIC_APP_URL: z.url('NUXT_PUBLIC_APP_URL must be a valid URL'),
-})
+});
 
-export type Env = z.infer<typeof envSchema>
+export type Env = z.infer<typeof envSchema>;
 
 function parseEnv(): Env {
-  const result = envSchema.safeParse(process.env)
+  const result = envSchema.safeParse(process.env);
 
   if (!result.success) {
     throw new Error(
       `Invalid environment configuration:\n${z.prettifyError(result.error)}\n\nSee .env.example.`,
-    )
+    );
   }
 
-  return result.data
+  return result.data;
 }
 
-const env = parseEnv()
+const env = parseEnv();
 
-export default env
+export default env;

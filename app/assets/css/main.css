@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+  themes:
+    abyss --default,
+    winter;
+}
+
+@theme {
+  /* Running-indicator pulse. */
+  --animate-pulse-run: wtPulse 1.6s ease-in-out infinite;
+
+  @keyframes wtPulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  --color-player-1: oklch(78% 0.17 250);
+  --color-player-2: oklch(80% 0.18 25);
+  --color-player-3: oklch(84% 0.17 85);
+  --color-player-4: oklch(80% 0.16 310);
+  --color-player-5: oklch(82% 0.17 165);
+  --color-player-6: oklch(78% 0.15 30);
+  --color-player-7: oklch(83% 0.15 200);
+  --color-player-8: oklch(80% 0.19 355);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

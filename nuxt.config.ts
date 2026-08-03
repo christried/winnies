@@ -1,4 +1,5 @@
-import './server/utils/env'
+import tailwindcss from '@tailwindcss/vite';
+import './server/utils/env';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -19,4 +20,13 @@ export default defineNuxtConfig({
       appUrl: 'http://localhost:3000',
     },
   },
-})
+  css: ['~/assets/css/main.css'],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  app: {
+    head: {
+      htmlAttrs: { 'data-theme': 'abyss', 'lang': 'en' },
+    },
+  },
+});
