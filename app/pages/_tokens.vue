@@ -1,13 +1,46 @@
 <script setup lang="ts">
 // Whole File ist AI-generated, enjoy with caution
 
-// WT-B01 step 8 — swatch page for theme sign-off. Not production: it exists so
-// step 9 can be answered by looking rather than guessing, and it goes away (or
-// gets gated) before release.
+// Swatch page for design-system sign-off — WT-B01 colour, WT-B02 type,
+// WT-B03 icons. Not production: it exists so those stories can be answered by
+// looking rather than guessing, and it goes away (or gets gated) before release.
 //
 // Class names are written out in full on purpose. Tailwind scans source files
 // for complete class strings, so `bg-${slot}` would compile to nothing — the
 // utility is never generated because that literal never appears anywhere.
+
+// WT-B02 shipped browser-synthesised bold once already, because @nuxt/fonts
+// defaults to weights: [400] and says nothing about it. Rendering all four
+// adjacent is how that stays caught: a faked weight smears next to a real one.
+const weights = [
+  { klass: 'font-normal', name: '400 · normal' },
+  { klass: 'font-medium', name: '500 · medium' },
+  { klass: 'font-semibold', name: '600 · semibold' },
+  { klass: 'font-bold', name: '700 · bold' },
+];
+
+// Every key UiIcon accepts. A name that fails to resolve renders as nothing at
+// all, so the only way to know all eighteen are real is to look at eighteen.
+const icons = [
+  'plus',
+  'play',
+  'pause',
+  'check',
+  'more',
+  'grip',
+  'pin',
+  'share',
+  'trophy',
+  'eye',
+  'copy',
+  'chevron',
+  'close',
+  'minus',
+  'edit',
+  'trash',
+  'duplicate',
+  'reset',
+] as const;
 
 const surfaces = [
   { klass: 'bg-base-100', name: 'base-100', use: 'page background', lightness: '20%' },
@@ -63,7 +96,7 @@ const players = [
       <p class="mt-2 text-sm opacity-70">
         Not a production page. Open it beside
         <code class="rounded bg-base-300 px-1">design/wintool3.dc.html</code>
-        and answer WT-B01 step 9.
+        to sign off colour (WT-B01), type (WT-B02) and icons (WT-B03).
       </p>
     </header>
 
@@ -108,7 +141,207 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-1 text-lg font-semibold">
-        2 · Surfaces
+        2 · Typography
+      </h2>
+      <p class="mb-4 max-w-2xl text-sm opacity-70">
+        Chivo and Chivo Mono, self-hosted via <code>@nuxt/fonts</code>. Both are variable fonts,
+        so every weight comes out of the same file.
+      </p>
+
+      <div class="grid max-w-4xl gap-4 sm:grid-cols-2">
+        <div class="rounded-box border border-base-300 bg-base-200 p-4">
+          <div class="mb-2 font-mono text-xs opacity-50">
+            --font-sans · Chivo
+          </div>
+          <p class="text-lg">
+            Sphinx of black quartz, judge my vow
+          </p>
+        </div>
+        <div class="rounded-box border border-base-300 bg-base-200 p-4">
+          <div class="mb-2 font-mono text-xs opacity-50">
+            --font-mono · Chivo Mono
+          </div>
+          <p class="font-mono text-lg">
+            Sphinx of black quartz, judge my vow
+          </p>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        Weight ladder
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        All four weights must be real files. A synthetic weight — the browser smearing 400 to fake
+        700 — reads as slightly blurred and unevenly spaced next to a genuine one.
+      </p>
+      <div class="grid max-w-4xl gap-4 sm:grid-cols-2">
+        <div class="rounded-box border border-base-300 bg-base-200 p-4">
+          <div
+            v-for="w in weights"
+            :key="w.klass"
+            class="flex items-baseline justify-between gap-4 py-1"
+          >
+            <span class="text-lg" :class="w.klass">Hamburgefonstiv</span>
+            <span class="font-mono text-xs opacity-50">{{ w.name }}</span>
+          </div>
+        </div>
+        <div class="rounded-box border border-base-300 bg-base-200 p-4">
+          <div
+            v-for="w in weights"
+            :key="w.klass"
+            class="flex items-baseline justify-between gap-4 py-1"
+          >
+            <span class="font-mono text-lg" :class="w.klass">Hamburgefons</span>
+            <span class="font-mono text-xs opacity-50">{{ w.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        The four roles
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Defined in <code>main.css</code>. Nothing else should set a font size by hand.
+      </p>
+      <div class="max-w-xl space-y-4 rounded-box border border-base-300 bg-base-200 p-5">
+        <div>
+          <div class="type-wordmark">
+            wintool
+          </div>
+          <div class="mt-1 font-mono text-xs opacity-40">
+            .type-wordmark
+          </div>
+        </div>
+        <div>
+          <div class="type-timer-total">
+            01:23:45
+          </div>
+          <div class="mt-1 font-mono text-xs opacity-40">
+            .type-timer-total — fluid 24→40px, resize to check
+          </div>
+        </div>
+        <div>
+          <div class="type-meta">
+            3 of 7 won · 43% · 12:03
+          </div>
+          <div class="mt-1 font-mono text-xs opacity-40">
+            .type-meta
+          </div>
+        </div>
+        <div>
+          <div class="type-label">
+            view only
+          </div>
+          <div class="mt-1 font-mono text-xs opacity-40">
+            .type-label
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        Tabular numerals
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Timers tick every second. Without tabular figures the digits change width and the whole
+        row twitches. Every colon below must sit on one vertical line.
+      </p>
+      <div class="inline-block rounded-box border border-base-300 bg-base-200 px-5 py-4">
+        <div class="type-timer-total leading-tight">
+          11:11
+        </div>
+        <div class="type-timer-total leading-tight">
+          00:00
+        </div>
+        <div class="type-timer-total leading-tight">
+          88:88
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-1 text-lg font-semibold">
+        3 · Icons
+      </h2>
+      <p class="mb-4 max-w-2xl text-sm opacity-70">
+        Tabler via <code>@nuxt/icon</code>, wrapped in <code>&lt;UiIcon&gt;</code> so names are a
+        typed, closed list. Stroke stays at Tabler's shipped 2 rather than the mockup's 1.75.
+        An icon whose name fails to resolve renders as blank space — count eighteen.
+      </p>
+
+      <div class="grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-6">
+        <div
+          v-for="n in icons"
+          :key="n"
+          class="flex flex-col items-center gap-2 rounded-box border border-base-300 bg-base-200 p-3"
+        >
+          <UiIcon :name="n" :size="22" />
+          <span class="font-mono text-xs opacity-50">{{ n }}</span>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        Colour inheritance
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Icons carry <code>currentColor</code>, so they take the semantic slot of whatever contains
+        them — no per-icon fill.
+      </p>
+      <div class="flex flex-wrap items-center gap-6">
+        <span class="flex items-center gap-2 text-primary">
+          <UiIcon name="play" :size="20" /> <span class="text-sm">text-primary</span>
+        </span>
+        <span class="flex items-center gap-2 text-success">
+          <UiIcon name="trophy" :size="20" /> <span class="text-sm">text-success</span>
+        </span>
+        <span class="flex items-center gap-2 text-error">
+          <UiIcon name="trash" :size="20" /> <span class="text-sm">text-error</span>
+        </span>
+        <span class="flex items-center gap-2 opacity-50">
+          <UiIcon name="eye" :size="20" /> <span class="text-sm">inherited, dimmed</span>
+        </span>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        Optical centring in buttons
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        D16. Look for a glyph sitting off-centre in its square — <code>play</code> is the usual
+        offender, since a triangle's visual centre is left of its bounding box.
+      </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button" class="btn btn-square btn-primary">
+          <UiIcon name="plus" :size="20" />
+        </button>
+        <button type="button" class="btn btn-square">
+          <UiIcon name="share" :size="20" />
+        </button>
+        <button type="button" class="btn btn-square btn-ghost">
+          <UiIcon name="more" :size="20" />
+        </button>
+        <button type="button" class="btn btn-square btn-sm btn-ghost">
+          <UiIcon name="edit" />
+        </button>
+        <button type="button" class="btn btn-square btn-sm btn-ghost">
+          <UiIcon name="grip" />
+        </button>
+        <button type="button" class="btn btn-lg btn-circle btn-primary">
+          <UiIcon name="play" :size="26" />
+        </button>
+        <button type="button" class="btn btn-lg btn-circle btn-primary">
+          <UiIcon name="pause" :size="26" />
+        </button>
+        <button type="button" class="btn btn-sm">
+          <UiIcon name="reset" /> Reset
+        </button>
+        <button type="button" class="btn btn-sm btn-error">
+          <UiIcon name="trash" /> Delete
+        </button>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-1 text-lg font-semibold">
+        4 · Surfaces
       </h2>
       <p class="mb-4 max-w-2xl text-sm opacity-70">
         Note the direction: in <code>abyss</code>, <code>base-100</code> is the
@@ -136,7 +369,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        3 · Semantic slots
+        5 · Semantic slots
       </h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div
@@ -160,7 +393,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        4 · Buttons
+        6 · Buttons
       </h2>
       <div class="flex flex-wrap gap-3">
         <button
@@ -176,7 +409,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        5 · Card
+        7 · Card
       </h2>
       <div class="card max-w-sm border border-base-300 bg-base-200">
         <div class="card-body">
@@ -200,7 +433,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-1 text-lg font-semibold">
-        6 · Player palette
+        8 · Player palette
       </h2>
       <p class="mb-4 max-w-2xl text-sm opacity-70">
         Deferred feature. Defined now because DaisyUI has no categorical palette — rendered here
@@ -220,7 +453,7 @@ const players = [
 
     <section class="mb-4">
       <h2 class="mb-4 text-lg font-semibold">
-        7 · Spacing scale
+        9 · Spacing scale
       </h2>
       <div class="flex flex-wrap items-end gap-4">
         <div
