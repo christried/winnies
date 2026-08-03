@@ -5,7 +5,7 @@ import './server/utils/env';
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint'],
+  modules: ['@nuxt/eslint', '@nuxt/fonts'],
   eslint: {
     config: {
       // Let @antfu/eslint-config own the general rules and all formatting.
@@ -18,6 +18,12 @@ export default defineNuxtConfig({
     public: {
       // Overridden at runtime by NUXT_PUBLIC_APP_URL.
       appUrl: 'http://localhost:3000',
+    },
+  },
+  fonts: {
+    defaults: {
+      weights: [400, 500, 600, 700],
+      styles: ['normal'],
     },
   },
   css: ['~/assets/css/main.css'],
