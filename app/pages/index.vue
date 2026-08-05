@@ -1,27 +1,36 @@
 <script setup lang="ts">
-import Icon from "~/components/ui/icon.vue";
-import Modal from "~/components/ui/modal.vue";
+const modal = useTemplateRef("modal");
+const inputRef = ref("");
+
+async function onCreate() {
+  // TODO: Await mutation; on failrue return early and leave dialog open
+  console.warn(inputRef.value);
+  modal.value?.close();
+  inputRef.value = "";
+}
 </script>
 
 <template>
   <div>
-    <!--  modal testzone -->
     <div class="p-4">
-      <button class="btn btn-primary" onclick="test_modal.showModal()">
-        <Icon
+      <button class="btn btn-primary" @click="modal?.open()">
+        <UiIcon
           name="plus"
         />
       </button>
-      <Modal
-        modal-id="test_modal"
-        modal-title="New Winnie"
+      <UiModal
+        ref="modal"
+        title="New Winnie"
+        action-label="Create"
+        @action="onCreate"
       >
         <input
+          v-model="inputRef"
           type="text"
           placeholder="Name of your Winnie"
-          class="input  bg-base-300"
+          class="input focus-within:[--input-color:var(--color-primary)] bg-base-300"
         >
-      </Modal>
+      </UiModal>
     </div>
   </div>
 </template>
