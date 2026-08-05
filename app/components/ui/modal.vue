@@ -34,5 +34,9 @@ defineExpose({
         </button>
       </div>
     </div>
+
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
   </dialog>
 </template>

@@ -2,18 +2,21 @@
 const modal = useTemplateRef("modal");
 const inputRef = ref("");
 
+function openModal() {
+  inputRef.value = "";
+  modal.value?.open();
+}
+
 async function onCreate() {
   // TODO: Await mutation; on failrue return early and leave dialog open
-  console.warn(inputRef.value);
   modal.value?.close();
-  inputRef.value = "";
 }
 </script>
 
 <template>
   <div>
     <div class="p-4">
-      <button class="btn btn-primary" @click="modal?.open()">
+      <button class="btn btn-primary" @click="openModal">
         <UiIcon
           name="plus"
         />
