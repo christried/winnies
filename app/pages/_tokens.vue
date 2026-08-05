@@ -1,5 +1,4 @@
-<script setup lang="ts">
-// Whole File ist AI-generated, enjoy with caution
+// Most of the file is AI-generated, enjoy with caution
 
 // Swatch page for design-system sign-off — WT-B01 colour, WT-B02 type,
 // WT-B03 icons. Not production: it exists so those stories can be answered by
@@ -12,6 +11,8 @@
 // WT-B02 shipped browser-synthesised bold once already, because @nuxt/fonts
 // defaults to weights: [400] and says nothing about it. Rendering all four
 // adjacent is how that stays caught: a faked weight smears next to a real one.
+
+<script setup lang="ts">
 const weights = [
   { klass: "font-normal", name: "400 · normal" },
   { klass: "font-medium", name: "500 · medium" },

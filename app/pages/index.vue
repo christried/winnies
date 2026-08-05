@@ -1,9 +1,16 @@
+<script setup lang="ts">
+import Icon from "~/components/ui/icon.vue";
+import Modal from "~/components/ui/modal.vue";
+</script>
+
 <template>
   <div>
     <!--  modal testzone -->
-    <div>
-      <button class="btn" onclick="test_modal.showModal()">
-        Modal hier testen
+    <div class="p-4">
+      <button class="btn btn-primary" onclick="test_modal.showModal()">
+        <Icon
+          name="plus"
+        />
       </button>
       <Modal
         modal-id="test_modal"
