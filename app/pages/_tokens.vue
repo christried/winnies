@@ -13,6 +13,9 @@
 // adjacent is how that stays caught: a faked weight smears next to a real one.
 
 <script setup lang="ts">
+import type { IconName } from "~/utils/icons";
+import { ICONS } from "~/utils/icons";
+
 const weights = [
   { klass: "font-normal", name: "400 · normal" },
   { klass: "font-medium", name: "500 · medium" },
@@ -20,28 +23,11 @@ const weights = [
   { klass: "font-bold", name: "700 · bold" },
 ];
 
-// Every key UiIcon accepts. A name that fails to resolve renders as nothing at
-// all, so the only way to know all eighteen are real is to look at eighteen.
-const icons = [
-  "plus",
-  "play",
-  "pause",
-  "check",
-  "more",
-  "grip",
-  "pin",
-  "share",
-  "trophy",
-  "eye",
-  "copy",
-  "chevron",
-  "close",
-  "minus",
-  "edit",
-  "trash",
-  "duplicate",
-  "reset",
-] as const;
+// Every key UiIcon accepts, read from the source of truth rather than copied —
+// a new entry in app/utils/icons.ts shows up here with no edit. A name that
+// fails to resolve renders as nothing at all, so the only way to know they are
+// all real is to look at them all.
+const icons = Object.keys(ICONS) as IconName[];
 
 const surfaces = [
   { klass: "bg-base-100", name: "base-100", use: "page background", lightness: "20%" },

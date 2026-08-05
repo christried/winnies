@@ -16,11 +16,16 @@ async function onCreate() {
 <template>
   <div>
     <div class="p-4">
-      <button class="btn btn-primary" @click="openModal">
+      <UiIconButton
+        icon="plus"
+        label="Create new Winnie"
+        class="btn btn-primary"
+        @click="openModal"
+      >
         <UiIcon
           name="plus"
         />
-      </button>
+      </UiIconButton>
       <UiModal
         ref="modal"
         title="New Winnie"

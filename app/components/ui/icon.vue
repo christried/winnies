@@ -1,31 +1,12 @@
 <script setup lang="ts">
+import type { IconName } from "~/utils/icons";
 import { Icon as NuxtIcon } from "#components";
+import { ICONS } from "~/utils/icons";
 
 withDefaults(defineProps<{
-  name: keyof typeof ICONS;
+  name: IconName;
   size?: number;
 }>(), { size: 16 });
-
-const ICONS = {
-  plus: "tabler:plus",
-  play: "tabler:player-play",
-  pause: "tabler:player-pause",
-  check: "tabler:check",
-  more: "tabler:dots-vertical",
-  grip: "tabler:grip-vertical",
-  pin: "tabler:pin",
-  share: "tabler:share",
-  trophy: "tabler:trophy",
-  eye: "tabler:eye",
-  copy: "tabler:copy",
-  chevron: "tabler:chevron-down",
-  close: "tabler:x",
-  minus: "tabler:minus",
-  edit: "tabler:pencil",
-  trash: "tabler:trash",
-  duplicate: "tabler:copy-plus",
-  reset: "tabler:rotate",
-} as const;
 </script>
 
 <template>
