@@ -100,7 +100,7 @@ const players = [
 
       <div class="max-w-xl overflow-hidden rounded-box border border-base-300">
         <div class="flex items-center gap-3 border-b border-base-300 bg-base-200 p-3">
-          <span class="size-2.5 shrink-0 rounded-full bg-primary animate-pulse-run" />
+          <span class="size-2.5 shrink-0 animate-pulse-run rounded-full bg-primary" />
           <span class="grow text-sm">Beat the tutorial boss</span>
           <span class="font-mono text-sm text-primary">04:17</span>
         </div>
@@ -118,7 +118,7 @@ const players = [
 
       <div class="mt-4 flex flex-wrap items-center gap-6">
         <div class="flex items-center gap-2">
-          <span class="size-3 rounded-full bg-primary animate-pulse-run" />
+          <span class="size-3 animate-pulse-run rounded-full bg-primary" />
           <span class="text-sm">
             <code>animate-pulse-run</code> — 1.6s, respects reduced motion
           </span>
@@ -305,22 +305,22 @@ const players = [
         <button type="button" class="btn btn-square btn-ghost">
           <UiIcon name="more" :size="20" />
         </button>
-        <button type="button" class="btn btn-square btn-sm btn-ghost">
+        <button type="button" class="btn btn-square btn-ghost btn-sm">
           <UiIcon name="edit" />
         </button>
-        <button type="button" class="btn btn-square btn-sm btn-ghost">
+        <button type="button" class="btn btn-square btn-ghost btn-sm">
           <UiIcon name="grip" />
         </button>
-        <button type="button" class="btn btn-lg btn-circle btn-primary">
+        <button type="button" class="btn btn-circle btn-lg btn-primary">
           <UiIcon name="play" :size="26" />
         </button>
-        <button type="button" class="btn btn-lg btn-circle btn-primary">
+        <button type="button" class="btn btn-circle btn-lg btn-primary">
           <UiIcon name="pause" :size="26" />
         </button>
         <button type="button" class="btn btn-sm">
           <UiIcon name="reset" /> Reset
         </button>
-        <button type="button" class="btn btn-sm btn-error">
+        <button type="button" class="btn btn-error btn-sm">
           <UiIcon name="trash" /> Delete
         </button>
       </div>
@@ -407,10 +407,10 @@ const players = [
             3 of 7 challenges won · 1 running
           </p>
           <div class="card-actions justify-end">
-            <button type="button" class="btn btn-sm btn-ghost">
+            <button type="button" class="btn btn-ghost btn-sm">
               Details
             </button>
-            <button type="button" class="btn btn-sm btn-primary">
+            <button type="button" class="btn btn-primary btn-sm">
               Resume
             </button>
           </div>

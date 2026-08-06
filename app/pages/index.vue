@@ -19,7 +19,7 @@ async function onCreate() {
 </script>
 
 <template>
-  <div class="bg-base-300 h-screen p-4 flex gap-4">
+  <div class="flex h-screen gap-4 bg-base-300 p-4">
     <!-- Create Winnie Modal -->
     <div>
       <UiIconButton
@@ -38,7 +38,7 @@ async function onCreate() {
           v-model="inputRef"
           type="text"
           placeholder="Name of your Winnie"
-          class="input focus-within:[--input-color:var(--color-primary)] bg-base-300"
+          class="input bg-base-300 focus-within:[--input-color:var(--color-primary)]"
         >
       </UiModal>
     </div>

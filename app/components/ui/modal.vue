@@ -15,7 +15,7 @@ defineExpose({
 
 <template>
   <dialog ref="dialog" class="modal">
-    <div class="modal-box border border-neutral rounded-2xl bg-base-200">
+    <div class=" modal-box rounded-2xl border border-neutral bg-base-200">
       <div class="flex flex-col gap-4">
         <h3 class="text-lg font-bold">
           {{ props.title }}
@@ -28,7 +28,7 @@ defineExpose({
             Cancel
           </button>
         </form>
-        <button class="btn btn-primary rounded-lg border border-neutral text-neutral" @click="$emit('action')">
+        <button class="btn rounded-lg border border-neutral text-neutral btn-primary" @click="$emit('action')">
           {{ actionLabel }}
         </button>
       </div>
