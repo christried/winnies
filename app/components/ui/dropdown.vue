@@ -1,47 +1,48 @@
 <script lang="ts" setup>
-import type { Winnie } from "~/types/winnie";
+defineProps<{
 
-const props = defineProps<{
-  currentWinnie: Winnie;
-  winnies: Winnie[];
-}>();
-
-const emit = defineEmits<{
-  (e: "updateCurrentWinnie", winnie: Winnie): void;
+  label?: string;
+  // directly applied classes on Vue Elements fall through onto the outest div hier: not what I want
+  // class props solve this issue so I can style both the elements that are styleworthy
+  triggerClass?: string;
+  menuClass?: string;
 }>();
 
 const id = useId();
-const winnieMenu = useTemplateRef<HTMLElement>("winnieMenu");
-const otherWinnies = computed(() => props.winnies.filter(w => w.id !== props.currentWinnie.id));
 
-function selectWinnie(winnie: Winnie): void {
-  emit("updateCurrentWinnie", winnie);
-  winnieMenu.value?.hidePopover();
+const menu = useTemplateRef<HTMLElement>("menu");
+
+// Passed DOWN to slot so menu can be closed from inside slotted components
+function close(): void {
+  menu.value?.hidePopover();
 }
+
+// Passed UP so menu can be closed from parent
+defineExpose({ close });
 </script>
 
 <template>
-  <div>
+  <div class="inline-block">
     <button
-      class="btn btn-neutral"
+      :class="triggerClass"
       :popovertarget="id"
+      :aria-label="label"
       :style="`anchor-name: --${id}`"
     >
-      {{ currentWinnie.title }}
-      <UiIcon name="chevron" />
+      <slot name="trigger" />
     </button>
+
     <ul
       :id="id"
-      ref="winnieMenu"
-      class="dropdown menu w-max rounded-box bg-base-100 shadow-sm mt-1 border border-neutral ml-15 "
+      ref="menu"
       popover
+      class="dropdown menu w-max rounded-box border border-neutral bg-base-100 shadow-sm"
+      :class="menuClass"
       :style="`position-anchor: --${id}`"
     >
-      <li v-for="winnie in otherWinnies" :key="winnie.id">
-        <button @click="selectWinnie(winnie)">
-          {{ winnie.title }}
-        </button>
-      </li>
+      <!-- "Scoped Slot". Able to pass stuff into the parent, that fills the slot and there
+     you can destructure it which is sick -->
+      <slot :close="close" />
     </ul>
   </div>
 </template>

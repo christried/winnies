@@ -4,8 +4,7 @@ const props = defineProps<{
   actionLabel: string;
 }>();
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-const emit = defineEmits<{ action: [] }>();
+defineEmits<{ action: [] }>();
 
 const dialog = useTemplateRef<HTMLDialogElement>("dialog");
 defineExpose({

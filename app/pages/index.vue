@@ -20,7 +20,7 @@ async function onCreate() {
 
 <template>
   <div class="bg-base-300 h-screen p-4 flex gap-4">
-    <!-- Modal Testing -->
+    <!-- Create Winnie Modal -->
     <div>
       <UiIconButton
         icon="plus"
@@ -42,12 +42,13 @@ async function onCreate() {
         >
       </UiModal>
     </div>
-    <!-- Dropdown Testing -->
+    <!-- Winnie Dropdown -->
     <div v-if="currentWinnie">
-      <UiDropdown
-        :current-winnie="currentWinnie"
+      <!-- v-model makes it possible to use update:currentWinnie as an emit in winniePicker without
+        the need to react to the emit here verbosely :) -->
+      <WinniePicker
+        v-model:current-winnie="currentWinnie"
         :winnies="winnies"
-        @update-current-winnie="(winnie) => currentWinnie = winnie"
       />
     </div>
   </div>
