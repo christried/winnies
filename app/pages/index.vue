@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { mockWinnies } from "~/data/mock-winnies";
+
+const winnies = ref(mockWinnies);
+const currentWinnie = ref(mockWinnies[0]);
+
 const modal = useTemplateRef("modal");
 const inputRef = ref("");
 
@@ -8,24 +13,21 @@ function openModal() {
 }
 
 async function onCreate() {
-  // TODO: Await mutation; on failrue return early and leave dialog open
+  // TODO: Await mutation; on failure return early and leave dialog open
   modal.value?.close();
 }
 </script>
 
 <template>
-  <div>
-    <div class="p-4">
+  <div class="bg-base-300 h-screen p-4 flex gap-4">
+    <!-- Modal Testing -->
+    <div>
       <UiIconButton
         icon="plus"
         label="Create new Winnie"
         class="btn btn-primary"
         @click="openModal"
-      >
-        <UiIcon
-          name="plus"
-        />
-      </UiIconButton>
+      />
       <UiModal
         ref="modal"
         title="New Winnie"
@@ -39,6 +41,14 @@ async function onCreate() {
           class="input focus-within:[--input-color:var(--color-primary)] bg-base-300"
         >
       </UiModal>
+    </div>
+    <!-- Dropdown Testing -->
+    <div v-if="currentWinnie">
+      <UiDropdown
+        :current-winnie="currentWinnie"
+        :winnies="winnies"
+        @update-current-winnie="(winnie) => currentWinnie = winnie"
+      />
     </div>
   </div>
 </template>
