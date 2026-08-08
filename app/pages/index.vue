@@ -104,5 +104,12 @@ async function onCreate() {
         disabled
       />
     </div>
+    <!-- Pulse Indicator Component   -->
+    <div>
+      <PulseIndicator :count="5" />
+    </div>
+    <div>
+      <PulseIndicator :count="0" empty-label="nothing running" />
+    </div>
   </div>
 </template>
