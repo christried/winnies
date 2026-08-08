@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import StatusDot from "~/components/status-dot.vue";
 import { mockWinnies } from "~/data/mock-winnies";
 
 const winnies = ref(mockWinnies);
@@ -52,7 +53,7 @@ async function onCreate() {
       />
     </div>
     <!-- Timer Displays -->
-    <div class=" flex w-100 flex-col gap-2 text-right">
+    <div class=" flex w-25 flex-col gap-2 text-right">
       <TimerDisplay
         :seconds="0"
         status="idle"
@@ -71,6 +72,36 @@ async function onCreate() {
       <TimerDisplay
         :seconds="36000"
         status="won"
+      />
+    </div>
+    <!-- Status Dots -->
+    <div class="flex w-25 flex-col gap-2">
+      <StatusDot status="idle" />
+      <StatusDot status="running" />
+      <StatusDot status="won" />
+    </div>
+    <!-- Counter Pills -->
+    <div>
+      <CounterPill
+        :value="0"
+        :target="3"
+        label="Counter Strike Challenge"
+      />
+      <CounterPill
+        :value="2"
+        :target="5"
+        label="StarCraft 2 Challenge"
+      />
+      <CounterPill
+        :value="1"
+        :target="100"
+        label="League of Legends Challenge"
+      />
+      <CounterPill
+        :value="1"
+        :target="3"
+        label="wins"
+        disabled
       />
     </div>
   </div>

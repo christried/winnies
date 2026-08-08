@@ -21,11 +21,11 @@ const displayedTime = computed(() => {
 });
 
 const computedClasses = computed(() => {
-  const statusClass = props.status === "idle"
-    ? "opacity-60"
-    : props.status === "running"
-      ? "text-primary"
-      : "text-success";
+  const statusClass = props.status === "running"
+    ? "text-primary"
+    : props.status === "won"
+      ? "text-success"
+      : "opacity-60";
 
   const sizeClasses = props.size === "total"
     ? "type-timer-total"
