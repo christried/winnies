@@ -65,7 +65,7 @@
   /* Dates, counts, percentages, row timers */
   .type-meta {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 13px;
     opacity: 0.6;
     font-variant-numeric: tabular-nums;
   }

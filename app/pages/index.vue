@@ -51,5 +51,27 @@ async function onCreate() {
         :winnies="winnies"
       />
     </div>
+    <!-- Timer Displays -->
+    <div class=" flex w-100 flex-col gap-2 text-right">
+      <TimerDisplay
+        :seconds="0"
+        status="idle"
+      />
+
+      <TimerDisplay
+        :seconds="3599"
+        status="idle"
+      />
+
+      <TimerDisplay
+        :seconds="3600"
+        status="running"
+      />
+
+      <TimerDisplay
+        :seconds="36000"
+        status="won"
+      />
+    </div>
   </div>
 </template>
