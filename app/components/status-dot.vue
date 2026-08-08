@@ -9,10 +9,10 @@ const pulseDelay = usePulseDelay();
 
 const computedClasses = computed(() => {
   const statusClass = props.status === "running"
-    ? "bg-primary animate-pulse-run"
+    ? "status-primary animate-pulse-run"
     : props.status === "won"
-      ? "bg-success"
-      : "bg-neutral";
+      ? "status-success"
+      : "status-neutral";
 
   return statusClass;
 });
@@ -20,7 +20,7 @@ const computedClasses = computed(() => {
 
 <template>
   <span
-    class="size-2.5 shrink-0 rounded-full"
+    class="status size-2.5 shrink-0"
     :class="computedClasses"
     :style="{ animationDelay: pulseDelay }"
   />
