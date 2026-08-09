@@ -1,5 +1,6 @@
 // @ts-check
 import antfu from "@antfu/eslint-config";
+import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
@@ -36,4 +37,17 @@ export default withNuxt(
       ".pnpm-store/**",
     ],
   }),
+  {
+    name: "better-tailwindcss",
+    files: ["**/*.vue"],
+    plugins: { "better-tailwindcss": betterTailwindcss },
+    settings: {
+      "better-tailwindcss": {
+        entryPoint: "app/assets/css/main.css",
+      },
+    },
+    rules: {
+      "better-tailwindcss/enforce-consistent-class-order": "error",
+    },
+  },
 );
