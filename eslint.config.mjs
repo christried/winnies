@@ -6,6 +6,12 @@ import withNuxt from "./.nuxt/eslint.config.mjs";
 // A doc block must earn its place: no type tags (TypeScript already has them),
 // no restating the name, no empty shells.
 const jsdocQuality = {
+  // Fixers left on: these scaffold the tag, then the -description rules below
+  // make you fill it in. `pnpm lint:fix` writes the placeholders.
+  "jsdoc/require-param": "error",
+  // require-param's fixer is on by default; require-returns' is not.
+  "jsdoc/require-returns": ["error", { enableFixer: true }],
+
   "jsdoc/require-param-description": "error",
   "jsdoc/require-returns-description": "error",
   "jsdoc/no-types": "error",
