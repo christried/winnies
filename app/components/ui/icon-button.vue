@@ -3,7 +3,9 @@
 import type { IconName } from "~/utils/icons";
 
 const props = defineProps<{
+  /** Which icon to show */
   icon: IconName;
+  /** Accessible name for the button */
   label: string;
 }>();
 </script>

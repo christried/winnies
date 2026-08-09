@@ -1,15 +1,21 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
+  /** Current count. */
   value: number;
+  /** Count to reach */
   target: number;
+  /** * Names what is being counted, for the two buttons' accessible labels */
   label: string;
+  /** Disables both buttons regardless of the count */
   disabled?: boolean;
 }>(), {
   disabled: false,
 });
 
 const emit = defineEmits<{
+  /** Sends +1 signal to parent which has to update value prop input */
   increment: [];
+  /** Sends -1 signal to parent which has to update value prop input */
   decrement: [];
 }>();
 

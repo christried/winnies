@@ -8,11 +8,13 @@ const currentWinnie = ref(mockWinnies[0]);
 const modal = useTemplateRef("modal");
 const inputRef = ref("");
 
+/** Clears any previous entry before showing the dialog, so it never reopens pre-filled. */
 function openModal() {
   inputRef.value = "";
   modal.value?.open();
 }
 
+/** Handles the modal's confirm action */
 async function onCreate() {
   // TODO: Await mutation; on failure return early and leave dialog open
   modal.value?.close();

@@ -1,12 +1,21 @@
 <script lang="ts" setup>
 const props = defineProps<{
+  /** Heading text */
   title: string;
+  /** Text on the confirm button, e.g. "Create". Cancel is always present. */
   actionLabel: string;
 }>();
 
-defineEmits<{ action: [] }>();
+defineEmits<{
+  /**
+   * Confirm button pressed. Does NOT close the modal — that is the parent's job once
+   * the mutation resolves. open and close are passed to parent using defineExpose below
+   */
+  action: [];
+}>();
 
 const dialog = useTemplateRef<HTMLDialogElement>("dialog");
+
 defineExpose({
   open: () => dialog.value?.showModal(),
   close: () => dialog.value?.close(),

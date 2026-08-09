@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 defineProps<{
-
+  /** Accessible name for the trigger button */
   label?: string;
-  // directly applied classes on Vue Elements fall through onto the outest div hier: not what I want
-  // class props solve this issue so I can style both the elements that are styleworthy
+  /** Classes for the trigger button. */
   triggerClass?: string;
+  /** Classes for the popover <ul> */
   menuClass?: string;
 }>();
 
@@ -12,12 +12,15 @@ const id = useId();
 
 const menu = useTemplateRef<HTMLElement>("menu");
 
-// Passed DOWN to slot so menu can be closed from inside slotted components
+/**
+ * Dismisses the menu. Selecting an item does not close the popover on its own!
+ * Passed DOWN to slot so menu can be closed from inside slotted components
+ * Passed UP by defineExpose below so parent can control closing as well.
+ */
 function close(): void {
   menu.value?.hidePopover();
 }
 
-// Passed UP so menu can be closed from parent
 defineExpose({ close });
 </script>
 
