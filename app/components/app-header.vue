@@ -5,7 +5,7 @@
 <template>
   <header class="flex flex-wrap items-center gap-2">
     <span class="type-wordmark">Winnies</span>
-    <span class="select">Run Picker</span>
+    <span class="select">Winnie Picker</span>
     <UiIconButton
       icon="plus"
       label="add new winnie"

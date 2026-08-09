@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
-  /** How many runs are active. Zero falls back to {@link emptyLabel}. */
+  /** How many Winnies are active. Zero falls back to {@link emptyLabel}. */
   count: number;
   /** What to show when `count` is zero, e.g. used in shared view. */
   emptyLabel?: string;

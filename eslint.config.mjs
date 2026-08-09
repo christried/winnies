@@ -88,7 +88,7 @@ export default withNuxt(
     files: ["app/utils/**/*.ts", "app/composables/**/*.ts", "server/utils/**/*.ts"],
     rules: {
       "jsdoc/require-jsdoc": ["error", {
-        enableFixer: false,
+        enableFixer: true,
         publicOnly: true,
         require: {
           FunctionDeclaration: true,
@@ -105,7 +105,7 @@ export default withNuxt(
     files: ["**/*.vue"],
     rules: {
       "jsdoc/require-jsdoc": ["error", {
-        enableFixer: false,
+        enableFixer: true,
         contexts: ["TSPropertySignature"],
       }],
       ...jsdocQuality,

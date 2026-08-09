@@ -52,12 +52,12 @@ const surfaces = [
 ];
 
 const semantics = [
-  { klass: "bg-primary text-primary-content", name: "primary", use: "running timer, new-run button" },
+  { klass: "bg-primary text-primary-content", name: "primary", use: "running timer, new winnie button" },
   { klass: "bg-secondary text-secondary-content", name: "secondary", use: "unassigned" },
   { klass: "bg-accent text-accent-content", name: "accent", use: "unassigned" },
   { klass: "bg-neutral text-neutral-content", name: "neutral", use: "quiet controls" },
   { klass: "bg-info text-info-content", name: "info", use: "unassigned" },
-  { klass: "bg-success text-success-content", name: "success", use: "won challenge, complete run" },
+  { klass: "bg-success text-success-content", name: "success", use: "won challenge, complete winnie" },
   { klass: "bg-warning text-warning-content", name: "warning", use: "unassigned" },
   { klass: "bg-error text-error-content", name: "error", use: "destructive actions" },
 ];
@@ -525,7 +525,7 @@ const players = [
         />
         <UiIconButton
           icon="trash"
-          label="Delete run"
+          label="Delete Winnie"
           class="btn-error btn-sm"
         />
       </div>
