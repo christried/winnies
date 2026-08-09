@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const atMinimum = computed(() => props.disabled || props.value <= 0);
-const aTMaximum = computed(() => props.disabled || props.value >= props.target);
+const atMaximum = computed(() => props.disabled || props.value >= props.target);
 </script>
 
 <template>
@@ -39,7 +39,7 @@ const aTMaximum = computed(() => props.disabled || props.value >= props.target);
     <button
       type="button"
       class="btn join-item btn-square bg-neutral/40 btn-ghost btn-sm"
-      :disabled="aTMaximum"
+      :disabled="atMaximum"
       :aria-label="`Increase ${label}`"
       @click="emit('increment')"
     >
