@@ -3,5 +3,7 @@
 </script>
 
 <template>
-  <AppHeader />
+  <div>
+    <AppHeader />
+  </div>
 </template>
