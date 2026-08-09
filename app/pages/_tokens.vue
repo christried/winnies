@@ -1,8 +1,9 @@
 // Most of the file is AI-generated, enjoy with caution
 
 // Swatch page for design-system sign-off — WT-B01 colour, WT-B02 type,
-// WT-B03 icons. Not production: it exists so those stories can be answered by
-// looking rather than guessing, and it goes away (or gets gated) before release.
+// WT-B03 icons, WT-B04 components. Not production: it exists so those stories
+// can be answered by looking rather than guessing, and it goes away (or gets
+// gated) before release.
 //
 // Class names are written out in full on purpose. Tailwind scans source files
 // for complete class strings, so `bg-${slot}` would compile to nothing — the
@@ -28,6 +29,21 @@ const weights = [
 // fails to resolve renders as nothing at all, so the only way to know they are
 // all real is to look at them all.
 const icons = Object.keys(ICONS) as IconName[];
+
+// TimerDisplay boundaries. Every pair here is a place the format changes shape,
+// which is where formatter bugs live: the minute rollover, the width change at
+// ten minutes, and 3599 → 3600 where the hours segment appears at all.
+const timerSeconds = [0, 9, 59, 60, 599, 600, 3599, 3600, 3661, 36000];
+
+// D17 proof. A dot mounted at page load is in phase with its siblings whether
+// or not usePulseDelay() works, so the test needs one that arrives late.
+const showLateDot = ref(false);
+
+// One live CounterPill, so the disabled edges can be walked into rather than
+// only read about.
+const liveCount = ref(2);
+
+const galleryModal = useTemplateRef("galleryModal");
 
 const surfaces = [
   { klass: "bg-base-100", name: "base-100", use: "page background", lightness: "20%" },
@@ -83,7 +99,8 @@ const players = [
       <p class="mt-2 text-sm opacity-70">
         Not a production page. Open it beside
         <code class="rounded bg-base-300 px-1">design/wintool3.dc.html</code>
-        to sign off colour (WT-B01), type (WT-B02) and icons (WT-B03).
+        to sign off colour (WT-B01), type (WT-B02), icons (WT-B03) and
+        components (WT-B04).
       </p>
     </header>
 
@@ -98,29 +115,37 @@ const players = [
         (hue 125), <code>success</code> is green (hue 152).
       </p>
 
+      <!-- Rows use the real StatusDot and TimerDisplay. Until WT-B04 these were
+           hand-rolled spans, which meant the page proving D17 was itself the only
+           place applying animate-pulse-run without usePulseDelay() — permanently
+           out of phase with every real dot. Never demonstrate a component with a
+           copy of it. -->
       <div class="max-w-xl overflow-hidden rounded-box border border-base-300">
         <div class="flex items-center gap-3 border-b border-base-300 bg-base-200 p-3">
-          <span class="size-2.5 shrink-0 animate-pulse-run rounded-full bg-primary" />
+          <StatusDot status="running" />
           <span class="grow text-sm">Beat the tutorial boss</span>
-          <span class="font-mono text-sm text-primary">04:17</span>
+          <TimerDisplay :seconds="257" status="running" />
         </div>
         <div class="flex items-center gap-3 border-b border-base-300 bg-base-200 p-3">
-          <span class="size-2.5 shrink-0 rounded-full bg-success" />
+          <StatusDot status="won" />
           <span class="grow text-sm line-through opacity-60">Find the hidden shrine</span>
-          <span class="font-mono text-sm text-success">12:03</span>
+          <TimerDisplay :seconds="723" status="won" />
         </div>
         <div class="flex items-center gap-3 bg-base-200 p-3">
-          <span class="size-2.5 shrink-0 rounded-full bg-base-300" />
+          <StatusDot status="idle" />
           <span class="grow text-sm opacity-60">No-hit the second area</span>
-          <span class="font-mono text-sm opacity-40">--:--</span>
+          <TimerDisplay :seconds="0" status="idle" />
         </div>
       </div>
 
       <div class="mt-4 flex flex-wrap items-center gap-6">
         <div class="flex items-center gap-2">
-          <span class="size-3 animate-pulse-run rounded-full bg-primary" />
+          <StatusDot status="running" />
           <span class="text-sm">
-            <code>animate-pulse-run</code> — 1.6s, respects reduced motion
+            <code>animate-pulse-run</code> — 1.5s, respects reduced motion.
+            Kept in sync by hand with <code>PULSE_MS</code> in
+            <code>use-pulse.ts</code>; the comment in each file is the only thing
+            holding them together.
           </span>
         </div>
       </div>
@@ -326,9 +351,247 @@ const players = [
       </div>
     </section>
 
+    <!-- WT-B04. Everything DaisyUI had no equivalent for, plus the two wrappers
+         whose behaviour is worth being able to poke at. -->
     <section class="mb-12">
       <h2 class="mb-1 text-lg font-semibold">
-        4 · Surfaces
+        4 · Components
+      </h2>
+      <p class="mb-4 max-w-2xl text-sm opacity-70">
+        The four custom components from WT-B04 in every state, plus
+        <code>UiModal</code> and <code>UiDropdown</code>. Everything else on the
+        page above comes from DaisyUI — see
+        <code>docs/reference/daisyui-components.md</code> in the planning repo.
+      </p>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        TimerDisplay — format boundaries
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Minutes are always two digits, hours never are —
+        <code>00:00</code> … <code>59:59</code>, then <code>1:00:00</code>. The pair that
+        matters is 3599 → 3600, where the hours segment appears and the string grows by two
+        characters. Colons align within a shape but not across shapes; that is arithmetic, not
+        a font failure. What <code>tabular-nums</code> buys is that no digit is wider than
+        another, so a ticking timer never shifts.
+      </p>
+      <div class="flex max-w-md flex-col gap-1 rounded-box border border-base-300 bg-base-200 p-4 text-right">
+        <TimerDisplay
+          v-for="s in timerSeconds"
+          :key="s"
+          :seconds="s"
+          status="running"
+        />
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        TimerDisplay — sizes and states
+      </h3>
+      <div class="flex flex-wrap items-end gap-6 rounded-box border border-base-300 bg-base-200 p-4">
+        <TimerDisplay
+          :seconds="3661"
+          size="total"
+          status="running"
+        />
+        <TimerDisplay
+          :seconds="3661"
+          size="total"
+          status="won"
+        />
+        <TimerDisplay
+          :seconds="3661"
+          size="total"
+          status="idle"
+        />
+        <div class="flex flex-col gap-1">
+          <TimerDisplay :seconds="257" status="running" />
+          <TimerDisplay :seconds="257" status="won" />
+          <TimerDisplay :seconds="257" status="idle" />
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        CounterPill
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Emits <code>increment</code> / <code>decrement</code> rather than a new value — the count
+        is server-authoritative (<code>D3</code>), so the pill never invents a number. Minus
+        disables at zero, plus at target, and <code>disabled</code> covers the read-only shared
+        view. <code>1 / 100</code> stays on this page permanently: it is what caught the value
+        wrapping onto three lines.
+      </p>
+      <div class="flex flex-wrap items-center gap-4 rounded-box border border-base-300 bg-base-200 p-4">
+        <CounterPill
+          :value="0"
+          :target="3"
+          label="wins for Find the hidden shrine"
+        />
+        <CounterPill
+          :value="2"
+          :target="5"
+          label="wins for Beat the tutorial boss"
+        />
+        <CounterPill
+          :value="1"
+          :target="100"
+          label="wins for the grind"
+        />
+        <CounterPill
+          :value="1"
+          :target="3"
+          label="wins"
+          disabled
+        />
+        <div class="flex items-center gap-2">
+          <CounterPill
+            :value="liveCount"
+            :target="3"
+            label="wins, live"
+            @increment="liveCount++"
+            @decrement="liveCount--"
+          />
+          <span class="text-xs opacity-60">live — walk it into both edges</span>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        StatusDot, PulseIndicator, and the D17 beat
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        A CSS animation starts when its element starts animating, so a dot that appears ten
+        seconds after its neighbours would be permanently out of phase.
+        <code>usePulseDelay()</code> anchors every pulse to one shared origin with a negative
+        <code>animation-delay</code>, so a late arrival joins the beat already in progress.
+        <strong>Mount the fourth dot well after the page loads</strong> — dots that all mount
+        together are in phase whether or not any of this works, so that button is the only real
+        test on this page.
+      </p>
+      <div class="flex flex-col gap-4 rounded-box border border-base-300 bg-base-200 p-4">
+        <div class="flex flex-wrap items-center gap-4">
+          <StatusDot status="idle" />
+          <StatusDot status="running" />
+          <StatusDot status="won" />
+          <span class="text-xs opacity-60">idle · running · won</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+          <StatusDot status="running" />
+          <StatusDot status="running" />
+          <StatusDot status="running" />
+          <PulseIndicator :count="3" />
+          <StatusDot v-if="showLateDot" status="running" />
+          <button
+            type="button"
+            class="btn btn-xs"
+            @click="showLateDot = !showLateDot"
+          >
+            {{ showLateDot ? "remove" : "mount" }} a late dot
+          </button>
+        </div>
+        <div class="flex flex-wrap items-center gap-6">
+          <PulseIndicator :count="0" empty-label="nothing running" />
+          <PulseIndicator :count="1" />
+          <PulseIndicator :count="12" />
+          <span class="text-xs opacity-60">
+            <code>:count="0"</code> with no <code>empty-label</code> renders nothing at all —
+            the owner header, versus the shared view's "nothing running"
+          </span>
+        </div>
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        UiIconButton
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        <code>label</code> is required, not optional, so a missing accessible name is a type
+        error rather than an audit finding at WT-J03. The icon itself is
+        <code>aria-hidden</code>, which is why the button — not the icon — has to be the
+        component.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 rounded-box border border-base-300 bg-base-200 p-4">
+        <UiIconButton
+          icon="plus"
+          label="New win-challenge"
+          class="btn-primary"
+        />
+        <UiIconButton
+          icon="share"
+          label="Open shared view"
+          class="btn-ghost"
+        />
+        <UiIconButton
+          icon="more"
+          label="More actions"
+          class="btn-ghost btn-sm"
+        />
+        <UiIconButton
+          icon="trash"
+          label="Delete run"
+          class="btn-error btn-sm"
+        />
+      </div>
+
+      <h3 class="mt-8 mb-1 text-sm font-semibold">
+        UiModal and UiDropdown
+      </h3>
+      <p class="mb-3 max-w-2xl text-sm opacity-70">
+        Both lean on the platform. The modal is a native <code>&lt;dialog&gt;</code> opened with
+        <code>showModal()</code>, so focus trapping, Escape, background-inert and top-layer
+        rendering are free. The dropdown uses the <code>[popover]</code> variant, which is the
+        only one of DaisyUI's three that closes on Escape and on an outside click — the other two
+        have no Escape handling at all, because CSS cannot listen for a key. Arrow-key navigation
+        is deliberately absent and <code>role="menu"</code> deliberately unset: the role promises
+        navigation the CSS does not implement, which would be worse than plain buttons.
+      </p>
+      <div class="flex flex-wrap items-center gap-4 rounded-box border border-base-300 bg-base-200 p-4">
+        <button
+          type="button"
+          class="btn btn-sm"
+          @click="galleryModal?.open()"
+        >
+          Open modal
+        </button>
+        <UiModal
+          ref="galleryModal"
+          title="New Winnie"
+          action-label="Create"
+        >
+          <p class="text-sm opacity-70">
+            Tab — focus stays inside. Escape — closes. Focus returns to the trigger.
+          </p>
+        </UiModal>
+
+        <UiDropdown label="Row actions" trigger-class="btn btn-square btn-ghost btn-sm">
+          <template #trigger>
+            <UiIcon name="more" />
+          </template>
+          <template #default="{ close }">
+            <li>
+              <button type="button" @click="close()">
+                Edit
+              </button>
+            </li>
+            <li>
+              <button type="button" @click="close()">
+                Duplicate
+              </button>
+            </li>
+            <li>
+              <button type="button" @click="close()">
+                Pin
+              </button>
+            </li>
+          </template>
+        </UiDropdown>
+        <span class="text-xs opacity-60">
+          icon-only trigger — passes <code>label</code>, because
+          <code>aria-label</code> replaces visible text and so cannot be required
+        </span>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-1 text-lg font-semibold">
+        5 · Surfaces
       </h2>
       <p class="mb-4 max-w-2xl text-sm opacity-70">
         Note the direction: in <code>abyss</code>, <code>base-100</code> is the
@@ -356,7 +619,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        5 · Semantic slots
+        6 · Semantic slots
       </h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div
@@ -380,7 +643,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        6 · Buttons
+        7 · Buttons
       </h2>
       <div class="flex flex-wrap gap-3">
         <button
@@ -396,7 +659,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-4 text-lg font-semibold">
-        7 · Card
+        8 · Card
       </h2>
       <div class="card max-w-sm border border-base-300 bg-base-200">
         <div class="card-body">
@@ -420,7 +683,7 @@ const players = [
 
     <section class="mb-12">
       <h2 class="mb-1 text-lg font-semibold">
-        8 · Player palette
+        9 · Player palette
       </h2>
       <p class="mb-4 max-w-2xl text-sm opacity-70">
         Deferred feature. Defined now because DaisyUI has no categorical palette — rendered here
@@ -440,7 +703,7 @@ const players = [
 
     <section class="mb-4">
       <h2 class="mb-4 text-lg font-semibold">
-        9 · Spacing scale
+        10 · Spacing scale
       </h2>
       <div class="flex flex-wrap items-end gap-4">
         <div
