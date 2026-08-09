@@ -1,3 +1,4 @@
+<script setup lang="ts">
 // Most of the file is AI-generated, enjoy with caution
 
 // Swatch page for design-system sign-off — WT-B01 colour, WT-B02 type,
@@ -13,7 +14,6 @@
 // defaults to weights: [400] and says nothing about it. Rendering all four
 // adjacent is how that stays caught: a faked weight smears next to a real one.
 
-<script setup lang="ts">
 import type { IconName } from "~/utils/icons";
 import { ICONS } from "~/utils/icons";
 

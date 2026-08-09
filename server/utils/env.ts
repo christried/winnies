@@ -11,6 +11,10 @@ const envSchema = z.object({
   NUXT_PUBLIC_APP_URL: z.url("NUXT_PUBLIC_APP_URL must be a valid URL"),
 });
 
+/**
+ * Shape of the validated server environment, inferred from the schema above so
+ * the two cannot drift.
+ */
 export type Env = z.infer<typeof envSchema>;
 
 function parseEnv(): Env {

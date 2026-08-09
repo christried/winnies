@@ -4,7 +4,9 @@ import { Icon as NuxtIcon } from "#components";
 import { ICONS } from "~/utils/icons";
 
 withDefaults(defineProps<{
+  /** Local key from `ICONS` */
   name: IconName;
+  /** Size in px  */
   size?: number;
 }>(), { size: 16 });
 </script>

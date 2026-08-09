@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
+  /** Used to generate the purely decorative classes/colors for the dot */
   status?: "idle" | "running" | "won";
 }>(), {
   status: "idle",

@@ -1,3 +1,4 @@
+/** Every icon the app is allowed to render. */
 export const ICONS = {
   plus: "tabler:plus",
   play: "tabler:player-play",
@@ -19,4 +20,5 @@ export const ICONS = {
   reset: "tabler:rotate",
 } as const;
 
+/** Union of the local keys in {@link ICONS}. */
 export type IconName = keyof typeof ICONS;

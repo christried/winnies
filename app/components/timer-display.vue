@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
+  /** Elapsed time to render */
   seconds: number;
+  /** Used to generate the purely decorative classes/colors for the dot */
   status?: "idle" | "running" | "won";
+  /** Which context this is in - controls size */
   size?: "total" | "challenge";
 }>(), {
   status: "idle",
