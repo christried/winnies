@@ -12,8 +12,7 @@ const envSchema = z.object({
 });
 
 /**
- * Shape of the validated server environment, inferred from the schema above so
- * the two cannot drift.
+ * Shape of the validated server environment inferred from above
  */
 export type Env = z.infer<typeof envSchema>;
 
