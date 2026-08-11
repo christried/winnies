@@ -1,0 +1,58 @@
+import type { z } from "zod";
+import { relations } from "drizzle-orm";
+import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import { challenge } from "./challenge";
+
+export const winnie = pgTable("winnie", {
+  id: uuid().primaryKey().defaultRandom(),
+  name: text().notNull(),
+
+  // TODO in Epic D: add .references
+  ownerId: uuid().notNull(),
+
+  shareSlug: uuid().notNull().defaultRandom(),
+
+  // for players feature (out of scope in version 1)
+  playersOn: boolean().notNull().default(false),
+
+  // Timer
+  totalAccumulatedSeconds: integer().notNull().default(0),
+  totalRunningSince: timestamp({ withTimezone: true }),
+
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+
+},
+// indexing
+tableColumns => [
+  index().on(tableColumns.ownerId),
+  uniqueIndex().on(tableColumns.shareSlug),
+]);
+
+export const winnieRelations = relations(winnie, ({ many }) => ({
+  challenges: many(challenge),
+}));
+
+export const insertWinnieSchema = createInsertSchema(winnie,
+  // this is just refinedment of not-omitted columns
+  { name: string => string.min(1, "Name is required").max(30, "Name is too long"),
+  }).omit({
+  id: true,
+  ownerId: true,
+  shareSlug: true,
+  playersOn: true,
+  totalAccumulatedSeconds: true,
+  totalRunningSince: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Schema describing a row coming from the DB
+export const selectWinnieSchema = createSelectSchema(winnie);
+
+// The CREATION contract - patch stuff may be different in future implementations
+export type InsertWinnie = z.infer<typeof insertWinnieSchema>;
+export type SelectWinnie = typeof winnie.$inferSelect;
