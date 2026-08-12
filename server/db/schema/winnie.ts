@@ -37,7 +37,7 @@ export const winnieRelations = relations(winnie, ({ many }) => ({
 }));
 
 export const insertWinnieSchema = createInsertSchema(winnie,
-  // this is just refinedment of not-omitted columns
+  // this is just refinement of not-omitted columns
   { name: string => string.min(1, "Name is required").max(30, "Name is too long"),
   }).omit({
   id: true,
@@ -54,5 +54,11 @@ export const insertWinnieSchema = createInsertSchema(winnie,
 export const selectWinnieSchema = createSelectSchema(winnie);
 
 // The CREATION contract - patch stuff may be different in future implementations
+/**
+ * Type used when creating a database-compatible Winnie.
+ */
 export type InsertWinnie = z.infer<typeof insertWinnieSchema>;
+/**
+ * Type used for selecting a Winnie from the database.
+ */
 export type SelectWinnie = typeof winnie.$inferSelect;
