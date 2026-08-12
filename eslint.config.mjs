@@ -85,7 +85,13 @@ export default withNuxt(
   {
 
     name: "jsdoc-public-api",
-    files: ["app/utils/**/*.ts", "app/composables/**/*.ts", "server/utils/**/*.ts"],
+    files: [
+      "app/utils/**/*.ts",
+      "app/composables/**/*.ts",
+      "server/utils/**/*.ts",
+      "server/db/**/*.ts",
+      "shared/**/*.ts",
+    ],
     rules: {
       "jsdoc/require-jsdoc": ["error", {
         enableFixer: true,
