@@ -5,7 +5,7 @@ import { challenge, winnie } from "../schema";
 /**
  *
  * @param winnieId The ID of the Winnie being started/continued.
- * @returns The Update Query for the Winnie Entry of the id in params, where totalRunningSince and status are being updated.
+ * @returns The Update Query for the Winnie Entry of the id in params, where totalRunningSince is being updated.
  */
 export function startWinnieTimer(winnieId: string) {
   return db.update(winnie).set({

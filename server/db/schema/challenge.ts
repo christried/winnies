@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { boolean, index, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -27,7 +27,7 @@ export const challenge = pgTable("challenge", {
   runningSince: timestamp({ withTimezone: true }),
 
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+  updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => sql`now()`),
 
 },
 // indexing
