@@ -40,7 +40,7 @@ export const challengeRelations = relations(challenge, ({ one }) => ({
 }));
 
 export const insertChallengeSchema = createInsertSchema(challenge,
-  // this is just refinedment of not-omitted columns
+  // this is just refinement of not-omitted columns
   { game: string => string.min(1, "Game is required")
     .max(30, "Game is too long"), spec: string => string.max(40, "Spec is too long").optional(), target: number => number
     .min(0, "Target cannot be negative")
@@ -62,5 +62,11 @@ export const insertChallengeSchema = createInsertSchema(challenge,
 export const selectChallengeSchema = createSelectSchema(challenge);
 
 // The CREATION contract - patch stuff may be different in future implementations
+/**
+ * Type used when creating a database-compatible Challenge.
+ */
 export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
+/**
+ * Type used for selecting a Challenge from the database.
+ */
 export type SelectChallenge = typeof challenge.$inferSelect;
