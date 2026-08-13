@@ -2,10 +2,11 @@ import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
 import { boolean, index, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { CHALLENGE_STATUSES } from "../../../shared/constants";
 
 import { winnie } from "./winnie";
 
-export const challengeStatus = pgEnum("challenge_status", ["todo", "active", "won"]);
+export const challengeStatus = pgEnum("challenge_status", CHALLENGE_STATUSES);
 
 export const challenge = pgTable("challenge", {
   id: uuid().primaryKey().defaultRandom(),
