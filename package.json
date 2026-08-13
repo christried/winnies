@@ -16,10 +16,11 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix --max-warnings 0",
     "prepare": "husky",
-    "test": "echo 'No tests yet — see WT-C05' && exit 0",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -38,6 +39,7 @@
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.4.1",
+    "@nuxt/test-utils": "^4.1.0",
     "@types/node": "^24.13.3",
     "daisyui": "^5.7.14",
     "drizzle-kit": "^0.31.10",
@@ -47,6 +49,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
     "vue-tsc": "^3.3.9"
   }
 }
