@@ -14,6 +14,8 @@ const jsdocQuality = {
 
   "jsdoc/require-param-description": "error",
   "jsdoc/require-returns-description": "error",
+  // A block of bare @param/@returns tags says nothing the signature does not.
+  "jsdoc/require-description": "error",
   "jsdoc/no-types": "error",
   "jsdoc/informative-docs": "error",
   "jsdoc/no-blank-blocks": "error",

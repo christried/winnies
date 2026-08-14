@@ -28,7 +28,7 @@ export function elapsedSeconds(timer: TimerStatus, now: number): number {
 }
 
 /**
- *
+ * Function that describes if a specific timer is currently running.
  * @param timer Timer data for a specific timer.
  * @returns Returns true if timer is running, false if it isn't.
  */
