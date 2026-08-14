@@ -48,6 +48,12 @@ describe("nextCount", () => {
     expect(nextCount(counterStatus, delta)).toBe(3);
   });
 
+  it("counts one step down from the target if target was met", () => {
+    const counterStatus = { count: 3, target: 3 };
+    const delta = -1;
+    expect(nextCount(counterStatus, delta)).toBe(2);
+  });
+
   it("counts one step up towards the target", () => {
     const counterStatus = { count: 1, target: 3 };
     const delta = 1;
