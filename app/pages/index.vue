@@ -57,6 +57,9 @@ onMounted(loadSession);
       <button class="btn btn-ghost" @click="loadSession">
         Reload session
       </button>
+      <NuxtLink class="btn btn-ghost" to="/protected">
+        Open protected page
+      </NuxtLink>
     </div>
     <pre class="mt-2 max-w-200 overflow-x-auto rounded bg-base-200 p-3 text-xs">{{ session ?? "no session" }}</pre>
     <!-- Auth harness End -->
