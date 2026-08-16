@@ -5,6 +5,7 @@ import { z } from "zod";
 const envSchema = z.object({
   DATABASE_URL: z.url("DATABASE_URL must be a valid connection URL"),
   BETTER_AUTH_SECRET: z.string().min(32, "BETTER_AUTH_SECRET must be at least 32 characters"),
+  BETTER_AUTH_URL: z.url("BETTER_AUTH_URL must be a valid URL"),
   DISCORD_CLIENT_ID: z.string().min(1, "DISCORD_CLIENT_ID is required"),
   DISCORD_CLIENT_SECRET: z.string().min(1, "DISCORD_CLIENT_SECRET is required"),
   // wrong value silently falls back to the localhost default in nuxt.config.
