@@ -33,7 +33,7 @@ async function onSignOut(close: () => void) {
     :disabled="signingIn"
     @click="onSignIn()"
   >
-    <span v-if="signingIn" class="loading loading-md loading-dots" />
+    <span v-if="signingIn" class="loading loading-spinner text-primary" />
     Sign in with Discord
   </button>
 
