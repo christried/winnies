@@ -9,4 +9,4 @@ export async function getSessionUser(event: H3Event) {
   const session = await auth.api.getSession({ headers: event.headers });
 
   return session?.user ?? null;
-};
+}
