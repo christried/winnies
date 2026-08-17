@@ -4,14 +4,14 @@ import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } 
 
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
+import { user } from "./auth";
 import { challenge } from "./challenge";
 
 export const winnie = pgTable("winnie", {
   id: uuid().primaryKey().defaultRandom(),
   name: text().notNull(),
 
-  // TODO in Epic D: add .references
-  ownerId: uuid().notNull(),
+  ownerId: uuid().notNull().references(() => user.id, { onDelete: "cascade" }),
 
   shareSlug: uuid().notNull().defaultRandom(),
 

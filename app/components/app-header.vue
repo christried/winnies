@@ -15,9 +15,6 @@
       label="open shared view"
     />
     <div class="ms-auto" />
-    <UiIconButton
-      icon="eye"
-      label="login?"
-    />
+    <AccountControl />
   </header>
 </template>
