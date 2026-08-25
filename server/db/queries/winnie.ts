@@ -9,12 +9,10 @@ import { challenge, winnie } from "../schema";
  * @returns All fitting Winnie rows.
  */
 export function findWinniesByOwner(ownerId: string) {
-  return db.query.winnie.findMany(
-    {
-      where: eq(winnie.ownerId, ownerId),
-      orderBy: [desc(winnie.createdAt)],
-    },
-  );
+  return db.query.winnie.findMany({
+    where: eq(winnie.ownerId, ownerId),
+    orderBy: [desc(winnie.createdAt)],
+  });
 }
 
 /**
@@ -23,14 +21,12 @@ export function findWinniesByOwner(ownerId: string) {
  * @returns The Winnie and its challenges or undefined if none exists with the param ID.
  */
 export function findWinnieWithChallenges(winnieId: string) {
-  return db.query.winnie.findFirst(
-    {
-      where: eq(winnie.id, winnieId),
-      with: {
-        challenges: { orderBy: [challenge.position] },
-      },
+  return db.query.winnie.findFirst({
+    where: eq(winnie.id, winnieId),
+    with: {
+      challenges: { orderBy: [challenge.position] },
     },
-  );
+  });
 }
 
 /**
@@ -38,7 +34,9 @@ export function findWinnieWithChallenges(winnieId: string) {
  * @param inputValues Validated information necessary for the new Winnie + owner inferred from the session.
  * @returns The created row including all of the db-generated data such as the ID.
  */
-export async function createWinnie(inputValues: InsertWinnie & { ownerId: string }) {
+export async function createWinnie(
+  inputValues: InsertWinnie & { ownerId: string },
+) {
   const [newWinnie] = await db.insert(winnie).values(inputValues).returning();
 
   return newWinnie;
@@ -51,7 +49,8 @@ export async function createWinnie(inputValues: InsertWinnie & { ownerId: string
  * @returns The updated row as a whole including all of the db-generated data even though that did not change or undefined.
  */
 export async function renameWinnie(winnieId: string, name: string) {
-  const [renamedWinnie] = await db.update(winnie)
+  const [renamedWinnie] = await db
+    .update(winnie)
     .set({ name })
     .where(eq(winnie.id, winnieId))
     .returning();
@@ -65,7 +64,8 @@ export async function renameWinnie(winnieId: string, name: string) {
  * @returns The deleted row, or undefined when no row matched.
  */
 export async function deleteWinnie(winnieId: string) {
-  const [deletedWinnie] = await db.delete(winnie)
+  const [deletedWinnie] = await db
+    .delete(winnie)
     .where(eq(winnie.id, winnieId))
     .returning({ id: winnie.id });
 
@@ -78,35 +78,32 @@ export async function deleteWinnie(winnieId: string) {
  * @returns Only data that is supposed to be publicly accessible
  */
 export function findWinnieBySlug(shareSlug: string) {
-  return db.query.winnie.findFirst(
-    {
-      where: eq(winnie.shareSlug, shareSlug),
-      // Allow list for columns
-      columns: {
-        id: true,
-        name: true,
-        totalAccumulatedSeconds: true,
-        totalRunningSince: true,
-        createdAt: true,
-      },
-      with: {
-        challenges: {
-          orderBy: [challenge.position],
-          columns: {
-            id: true,
-            game: true,
-            spec: true,
-            status: true,
-            pinned: true,
-            position: true,
-            target: true,
-            count: true,
-            accumulatedSeconds: true,
-            runningSince: true,
-          },
+  return db.query.winnie.findFirst({
+    where: eq(winnie.shareSlug, shareSlug),
+    // Allow list for columns
+    columns: {
+      id: true,
+      name: true,
+      totalAccumulatedSeconds: true,
+      totalRunningSince: true,
+      createdAt: true,
+    },
+    with: {
+      challenges: {
+        orderBy: [challenge.position],
+        columns: {
+          id: true,
+          game: true,
+          spec: true,
+          status: true,
+          pinned: true,
+          position: true,
+          target: true,
+          count: true,
+          accumulatedSeconds: true,
+          runningSince: true,
         },
       },
     },
-
-  );
+  });
 }
