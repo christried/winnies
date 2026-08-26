@@ -5,15 +5,13 @@ import { challenge, winnie } from "../schema";
 /**
  * Query Function called when starting a Winnie timer (the total one).
  * @param winnieId The ID of the Winnie being started/continued.
- * @returns The touched Winnie row.
+ * @returns The touched Winnie rows — empty when it was already running.
  */
-export async function startWinnieTimer(winnieId: string) {
-  const [startedWinnie] = await db.update(winnie).set({
+export function startWinnieTimer(winnieId: string) {
+  return db.update(winnie).set({
     // coalesce -> Postgres function to return the first argument that isn't NULL --> makes this IDEMPOTENT
     totalRunningSince: sql`coalesce(${winnie.totalRunningSince}, now())`,
   }).where(eq(winnie.id, winnieId)).returning({ id: winnie.id });
-
-  return startedWinnie;
 }
 
 /**
@@ -58,10 +56,10 @@ export async function startChallengeTimer(challengeId: string) {
 /**
  * Query Function called when stopping a single Challenge timer.
  * @param challengeId The ID of the challenge being stopped.
- * @returns The stopped Challenge identified by its ID.
+ * @returns The stopped Challenge rows — empty when it was already stopped.
  */
-export async function stopChallengeTimer(challengeId: string) {
-  const [stoppedChallenge] = await db.update(challenge).set(
+export function stopChallengeTimer(challengeId: string) {
+  return db.update(challenge).set(
     {
       // now() - runningSice give an interval
       // extract(epoch from ...) makes it a decimal
@@ -75,8 +73,6 @@ export async function stopChallengeTimer(challengeId: string) {
     ),
     isNotNull(challenge.runningSince),
   )).returning({ id: challenge.id });
-
-  return stoppedChallenge;
 }
 
 /**
