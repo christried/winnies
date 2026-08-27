@@ -8,3 +8,6 @@ declare module "h3" {
     user?: SessionUser;
   }
 }
+
+// Makes this a ESM so it's not ignored by H3
+export {};
