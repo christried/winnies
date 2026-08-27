@@ -1,19 +1,18 @@
 <script lang="ts" setup>
-import type { Winnie } from "~/types/winnie";
+import type { SelectWinnie } from "~~/server/db/schema";
 
 const props = defineProps<{
   /** The selected Winnie, shown on the trigger */
-  currentWinnie: Winnie;
+  currentWinnie: SelectWinnie;
   /** Everything selectable, including `currentWinnie` */
-  winnies: Winnie[];
+  winnies: SelectWinnie[];
 }>();
 
 const emit = defineEmits<{
   /**
-   * Paired with the `currentWinnie` prop so the parent can bind
-   * `v-model:current-winnie`
+   * Emits the new currentWinnie so parent component can update the store.
    */
-  "update:currentWinnie": [winnie: Winnie];
+  "update:currentWinnie": [winnie: SelectWinnie];
 }>();
 
 const otherWinnies = computed(() =>
@@ -26,7 +25,7 @@ const otherWinnies = computed(() =>
  * @param close Closer handed down by `UiDropdown`'s slot scope
  * selecting an item does not dismiss the popover on its own!!
  */
-function selectWinnie(winnie: Winnie, close: () => void): void {
+function selectWinnie(winnie: SelectWinnie, close: () => void): void {
   emit("update:currentWinnie", winnie);
   close();
 }
@@ -35,14 +34,14 @@ function selectWinnie(winnie: Winnie, close: () => void): void {
 <template>
   <UiDropdown trigger-class="btn btn-neutral">
     <template #trigger>
-      {{ currentWinnie.title }}
+      {{ currentWinnie.name }}
       <UiIcon name="chevron" />
     </template>
 
     <template #default="{ close }">
       <li v-for="winnie in otherWinnies" :key="winnie.id">
         <button @click="selectWinnie(winnie, close)">
-          {{ winnie.title }}
+          {{ winnie.name }}
         </button>
       </li>
     </template>
