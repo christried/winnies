@@ -5,18 +5,21 @@ import { challenge, winnie } from "../schema";
 /**
  * Wins a single Challenge and, if it was the last one, completes the whole Winnie.
  * @param challengeId The Challenge being won.
- * @param winnieId The Winnie it belongs to.
  * @returns Whether that win completed the Winnie.
  */
-export function winChallenge(challengeId: string, winnieId: string) {
+export function winChallenge(challengeId: string) {
   return db.transaction(async (tx) => {
-    await tx.update(challenge)
+    const [wonChallenge] = await tx.update(challenge)
       .set({
         status: "won",
         accumulatedSeconds: sql`${challenge.accumulatedSeconds} + coalesce(extract(epoch from (now() - ${challenge.runningSince}))::int, 0)`,
         runningSince: null,
       })
-      .where(eq(challenge.id, challengeId));
+      .where(eq(challenge.id, challengeId))
+      .returning({ winnieId: challenge.winnieId });
+
+    if (!wonChallenge)
+      return false;
 
     const [countingData] = await tx
       .select({
@@ -24,13 +27,15 @@ export function winChallenge(challengeId: string, winnieId: string) {
         unwon: count(sql`case when ${challenge.status} <> 'won' then 1 end`),
       })
       .from(challenge)
-      .where(eq(challenge.winnieId, winnieId));
+      .where(eq(challenge.winnieId, wonChallenge.winnieId));
 
-    // `total > 0` prevents completion when Winnie has no challenges
-    const complete = countingData!.total > 0 && countingData!.unwon === 0;
+    if (!countingData)
+      return false;
+
+    const complete = countingData.total > 0 && countingData.unwon === 0;
 
     if (complete)
-      await stopEverything(tx, winnieId);
+      await stopEverything(tx, wonChallenge.winnieId);
 
     return complete;
   });
