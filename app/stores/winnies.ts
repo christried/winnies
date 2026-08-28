@@ -21,13 +21,15 @@ export const useWinnieStore = defineStore("winnies", () => {
 
   const isComplete = computed(() => isWinnieComplete(challenges.value));
 
+  const request = useRequestFetch();
+
   // actions
   /** Loads one Winnie with its challenges and makes it the active one. */
   async function selectWinnie(id: string) {
     pending.value = true;
 
     try {
-      currentWinnie.value = await $fetch<WinnieWithChallenges>(`/api/winnies/${id}`);
+      currentWinnie.value = await request<WinnieWithChallenges>(`/api/winnies/${id}`);
       currentWinnieId.value = id;
     }
     finally {
@@ -37,7 +39,7 @@ export const useWinnieStore = defineStore("winnies", () => {
 
   /** Fills the store for the signed-in user. */
   async function init() {
-    winnies.value = await $fetch<SelectWinnie[]>("/api/winnies");
+    winnies.value = await request<SelectWinnie[]>("/api/winnies");
 
     if (!currentWinnieId.value && winnies.value.length)
       await selectWinnie(winnies.value[0]!.id);
