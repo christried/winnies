@@ -27,6 +27,15 @@ function selectWinnie(winnie: WinnieRow, close: () => void): void {
   emit("update:currentWinnie", winnie);
   close();
 }
+
+/**
+ * Formats a Winnie's creation date.
+ * @param value The `createdAt` off a Winnie as an ISO string.
+ * @returns The date in the user's local time.
+ */
+function shortDate(value: string) {
+  return new Date(value).toLocaleDateString();
+}
 </script>
 
 <template>
@@ -35,14 +44,15 @@ function selectWinnie(winnie: WinnieRow, close: () => void): void {
   </span>
   <UiDropdown v-else trigger-class="btn btn-neutral">
     <template #trigger>
-      {{ currentWinnie.name }}
+      <span class="max-w-56 truncate">{{ currentWinnie.name }} </span>
       <UiIcon name="chevron" />
     </template>
 
     <template #default="{ close }">
       <li v-for="winnie in otherWinnies" :key="winnie.id">
         <button @click="selectWinnie(winnie, close)">
-          {{ winnie.name }}
+          <span class="max-w-56 truncate">{{ winnie.name }}</span>
+          <span class="type-meta"> {{ shortDate(winnie.createdAt) }} </span>
         </button>
       </li>
     </template>

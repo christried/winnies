@@ -13,7 +13,12 @@ export interface WinnieWithChallenges extends WinnieRow {
 export const useWinnieStore = defineStore("winnies", () => {
   const winnies = ref<WinnieRow[]>([]);
   const currentWinnie = ref<WinnieWithChallenges | null>(null);
-  const currentWinnieId = ref<string | null>(null);
+  const currentWinnieId = useCookie<string | null>("winnies:current-id", {
+    default: () => null,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+
   const pending = ref(false);
 
   const challenges = computed(() => sortChallenges(currentWinnie.value?.challenges ?? []));
@@ -30,12 +35,22 @@ export const useWinnieStore = defineStore("winnies", () => {
   const request = useRequestFetch();
 
   // actions
-  /** Fills the store for the signed-in user. */
+  /**
+   * Fills the store for the signed-in user.
+   * Also selects the last used (cookie) Winnie if available otherwise first in list otherwise null so the picker button does not render.
+   */
   async function init() {
     winnies.value = await request<WinnieRow[]>("/api/winnies");
 
-    if (!currentWinnieId.value && winnies.value.length)
+    const saved = currentWinnieId.value;
+    const stillExists = saved && winnies.value.some(w => w.id === saved);
+
+    if (stillExists)
+      await selectWinnie(saved);
+    else if (winnies.value.length)
       await selectWinnie(winnies.value[0]!.id);
+    else
+      currentWinnieId.value = null;
   }
 
   /**
