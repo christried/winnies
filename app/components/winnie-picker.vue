@@ -30,7 +30,10 @@ function selectWinnie(winnie: WinnieRow, close: () => void): void {
 </script>
 
 <template>
-  <UiDropdown trigger-class="btn btn-neutral">
+  <span v-if="otherWinnies.length < 1" class="btn pointer-events-none btn-neutral">
+    {{ currentWinnie.name }}
+  </span>
+  <UiDropdown v-else trigger-class="btn btn-neutral">
     <template #trigger>
       {{ currentWinnie.name }}
       <UiIcon name="chevron" />
