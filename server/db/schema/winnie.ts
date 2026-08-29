@@ -3,6 +3,7 @@ import { relations, sql } from "drizzle-orm";
 import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { winnieNameSchema } from "../../../shared/schemas/winnie";
 
 import { user } from "./auth";
 import { challenge } from "./challenge";
@@ -38,8 +39,7 @@ export const winnieRelations = relations(winnie, ({ many }) => ({
 
 export const insertWinnieSchema = createInsertSchema(winnie,
   // this is just refinement of not-omitted columns
-  { name: string => string.min(1, "Name is required").max(30, "Name is too long"),
-  }).omit({
+  { name: () => winnieNameSchema }).omit({
   id: true,
   ownerId: true,
   shareSlug: true,

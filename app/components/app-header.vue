@@ -5,8 +5,9 @@ import WinniePicker from "./winnie-picker.vue";
 const winnieStore = useWinnieStore();
 const { winnies, currentWinnie } = storeToRefs(winnieStore);
 const { selectWinnie } = winnieStore;
-
 const { data: session } = await useAuth();
+
+const newWinnie = useTemplateRef("newWinnie");
 </script>
 
 <template>
@@ -22,8 +23,11 @@ const { data: session } = await useAuth();
 
       <UiIconButton
         icon="plus"
-        label="add new winnie"
+        label="Add new Winnie"
+        class="btn-primary"
+        @click="newWinnie?.open()"
       />
+      <NewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
       <UiIconButton
         icon="share"
         label="open shared view"
