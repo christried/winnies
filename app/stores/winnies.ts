@@ -1,11 +1,17 @@
+import type { Serialize, Simplify } from "nitropack/types";
 import type { SelectChallenge, SelectWinnie } from "~~/server/db/schema";
 
-export interface WinnieWithChallenges extends SelectWinnie {
-  challenges: SelectChallenge[];
+/** A Winnie as it arrives as JSON, so its timestamps are ISO strings. */
+export type WinnieRow = Simplify<Serialize<SelectWinnie>>;
+/** A Challenge as it arrives as JSON, so its timestamps are ISO strings. */
+export type ChallengeRow = Simplify<Serialize<SelectChallenge>>;
+
+export interface WinnieWithChallenges extends WinnieRow {
+  challenges: ChallengeRow[];
 }
 
 export const useWinnieStore = defineStore("winnies", () => {
-  const winnies = ref<SelectWinnie[]>([]);
+  const winnies = ref<WinnieRow[]>([]);
   const currentWinnie = ref<WinnieWithChallenges | null>(null);
   const currentWinnieId = ref<string | null>(null);
   const pending = ref(false);
@@ -24,6 +30,24 @@ export const useWinnieStore = defineStore("winnies", () => {
   const request = useRequestFetch();
 
   // actions
+  /** Fills the store for the signed-in user. */
+  async function init() {
+    winnies.value = await request<WinnieRow[]>("/api/winnies");
+
+    if (!currentWinnieId.value && winnies.value.length)
+      await selectWinnie(winnies.value[0]!.id);
+  }
+
+  /**
+   * Adds a Winnie the server has just created and makes it the active one.
+   * @param created The row returned by POST /api/winnies, not the values that were typed.
+   */
+  function addWinnie(created: WinnieRow) {
+    winnies.value.unshift(created);
+    currentWinnie.value = { ...created, challenges: [] };
+    currentWinnieId.value = created.id;
+  }
+
   /** Loads one Winnie with its challenges and makes it the active one. */
   async function selectWinnie(id: string) {
     pending.value = true;
@@ -37,16 +61,8 @@ export const useWinnieStore = defineStore("winnies", () => {
     }
   }
 
-  /** Fills the store for the signed-in user. */
-  async function init() {
-    winnies.value = await request<SelectWinnie[]>("/api/winnies");
-
-    if (!currentWinnieId.value && winnies.value.length)
-      await selectWinnie(winnies.value[0]!.id);
-  }
-
   /** Replaces one Winnie with the server's version of it. */
-  function replaceWinnie(updatedWinnie: SelectWinnie) {
+  function replaceWinnie(updatedWinnie: WinnieRow) {
     const index = winnies.value.findIndex(w => w.id === updatedWinnie.id);
 
     if (index !== -1)
@@ -68,6 +84,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     percentComplete,
     isComplete,
     init,
+    addWinnie,
     selectWinnie,
     replaceWinnie,
   };

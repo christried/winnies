@@ -39,6 +39,9 @@ export async function createWinnie(
 ) {
   const [newWinnie] = await db.insert(winnie).values(inputValues).returning();
 
+  if (!newWinnie)
+    throw createError({ statusCode: 500, statusMessage: "The Winnie could not be created." });
+
   return newWinnie;
 }
 

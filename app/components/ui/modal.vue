@@ -4,6 +4,8 @@ const props = defineProps<{
   title: string;
   /** Text on the confirm button, e.g. "Create". Cancel is always present. */
   actionLabel: string;
+  /** Disables the action button while actioning. */
+  pending?: boolean;
 }>();
 
 defineEmits<{
@@ -37,7 +39,12 @@ defineExpose({
             Cancel
           </button>
         </form>
-        <button class="btn rounded-lg border border-neutral text-neutral btn-primary" @click="$emit('action')">
+        <button
+          :disabled="pending"
+          class="btn rounded-lg border border-neutral text-neutral btn-primary"
+          @click="$emit('action')"
+        >
+          <span v-if="pending" class="loading loading-spinner" />
           {{ actionLabel }}
         </button>
       </div>

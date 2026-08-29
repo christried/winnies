@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import type { SelectWinnie } from "~~/server/db/schema";
-
 const props = defineProps<{
   /** The selected Winnie, shown on the trigger */
-  currentWinnie: SelectWinnie;
+  currentWinnie: WinnieRow;
   /** Everything selectable, including `currentWinnie` */
-  winnies: SelectWinnie[];
+  winnies: WinnieRow[];
 }>();
 
 const emit = defineEmits<{
   /**
    * Emits the new currentWinnie so parent component can update the store.
    */
-  "update:currentWinnie": [winnie: SelectWinnie];
+  "update:currentWinnie": [winnie: WinnieRow];
 }>();
 
 const otherWinnies = computed(() =>
@@ -25,7 +23,7 @@ const otherWinnies = computed(() =>
  * @param close Closer handed down by `UiDropdown`'s slot scope
  * selecting an item does not dismiss the popover on its own!!
  */
-function selectWinnie(winnie: SelectWinnie, close: () => void): void {
+function selectWinnie(winnie: WinnieRow, close: () => void): void {
   emit("update:currentWinnie", winnie);
   close();
 }

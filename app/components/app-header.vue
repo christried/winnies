@@ -24,6 +24,7 @@ const newWinnie = useTemplateRef("newWinnie");
       <UiIconButton
         icon="plus"
         label="Add new Winnie"
+        class="btn-primary"
         @click="newWinnie?.open()"
       />
       <NewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />

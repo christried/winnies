@@ -1,21 +1,29 @@
-import type { ZodType } from "zod";
-import { z } from "zod";
+import type { TypedSchema } from "vee-validate";
+import type { z, ZodType } from "zod";
 
 /**
- * Adapts a Zod schema to what vee-validate's validationSchema expects.
- * (Clankered this one because vee validate doesn't seem to be up to date with Zod 4 which i am using here)
- * @param schema Any Zod schema, usually one derived from a Drizzle table.
- * @returns A validator returning parsed values, or errors keyed by field path.
+ * Adapts a Zod schema to vee-validate's typed-schema contract.
+ * @param schema Any Zod schema
+ * @returns A typed schema returning the parsed values, or errors grouped by field path.
  */
-export function zodSchema<T extends ZodType>(schema: T) {
-  return async (values: unknown) => {
-    const result = await schema.safeParseAsync(values);
+export function zodSchema<T extends ZodType>(schema: T): TypedSchema<z.input<T>, z.output<T>> {
+  return {
+    __type: "VVTypedSchema",
+    async parse(values) {
+      const result = await schema.safeParseAsync(values);
 
-    if (result.success)
-      return { values: result.data, errors: {} };
+      if (result.success)
+        return { value: result.data, errors: [] };
 
-    // flattenError gives Record<string, string[]>, which is the shape
-    // vee-validate and setErrors both accept.
-    return { values: {}, errors: z.flattenError(result.error).fieldErrors };
+      // Zod reports one issue per problem; vee-validate wants them grouped per field.
+      const byPath = new Map<string, string[]>();
+
+      for (const issue of result.error.issues) {
+        const path = issue.path.map(String).join(".");
+        byPath.set(path, [...byPath.get(path) ?? [], issue.message]);
+      }
+
+      return { errors: [...byPath].map(([path, errors]) => ({ path, errors })) };
+    },
   };
 }

@@ -38,7 +38,7 @@ export const winnieRelations = relations(winnie, ({ many }) => ({
 
 export const insertWinnieSchema = createInsertSchema(winnie,
   // this is just refinement of not-omitted columns
-  { name: string => string.min(1, "Name is required").max(30, "Name is too long"),
+  { name: string => string.trim().min(1, "Name is required").max(30, "Name is too long"),
   }).omit({
   id: true,
   ownerId: true,
