@@ -5,5 +5,6 @@
 <template>
   <div>
     <AppHeader />
+    <WinnieCardHeader />
   </div>
 </template>
