@@ -40,7 +40,14 @@ export const useWinnieStore = defineStore("winnies", () => {
    * Also selects the last used (cookie) Winnie if available otherwise first in list otherwise null so the picker button does not render.
    */
   async function init() {
-    winnies.value = await request<WinnieRow[]>("/api/winnies");
+    try {
+      winnies.value = await request<WinnieRow[]>("/api/winnies");
+    }
+    catch {
+      winnies.value = []; // hopefully fixes the signed out SSR failure in Vercel?
+      currentWinnieId.value = null;
+      return;
+    }
 
     const saved = currentWinnieId.value;
     const stillExists = saved && winnies.value.some(w => w.id === saved);
