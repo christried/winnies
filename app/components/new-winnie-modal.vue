@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { FetchError } from "ofetch";
 import { useForm } from "vee-validate";
-import { insertWinnieSchema } from "~~/server/db/schema";
+import z from "zod";
+import { winnieNameSchema } from "~~/shared/schemas/winnie";
 import { useWinnieStore } from "~/stores/winnies";
 
 const emit = defineEmits<{
@@ -14,7 +15,7 @@ const modal = useTemplateRef("modal");
 const formError = ref("");
 
 const { handleSubmit, errors, setErrors, isSubmitting, defineField, resetForm } = useForm({
-  validationSchema: zodSchema(insertWinnieSchema),
+  validationSchema: zodSchema(z.object({ name: winnieNameSchema })),
 });
 
 const [name, nameAttrs] = defineField("name");
