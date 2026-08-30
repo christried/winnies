@@ -1,7 +1,8 @@
 import type { InsertChallenge } from "../schema";
-import { eq, sql } from "drizzle-orm";
+import { and, count, eq, gt, sql } from "drizzle-orm";
 import { db } from "..";
 import { challenge } from "../schema";
+import { stopEverything } from "./completion";
 
 /**
  * Appends a Challenge to the end of a Winnie's Challenge list.
@@ -42,47 +43,72 @@ export async function updateChallenge(
 }
 
 /**
- * Deletes one Challenge.
- * @param challengeId The Challenge being deleted.
- * @returns The deleted row, or undefined when no row matched.
+ * Deletes one challenge and reports whether that completed the Winnie.
+ * @param challengeId The challenge being deleted.
+ * @returns The deleted id and if the Winnie is completed, or undefined when no row matched.
  */
-export async function deleteChallenge(challengeId: string) {
-  const [row] = await db.delete(challenge)
-    .where(eq(challenge.id, challengeId))
-    .returning({ id: challenge.id });
+export function deleteChallenge(challengeId: string) {
+  return db.transaction(async (tx) => {
+    const [deletedChallengeData] = await tx.delete(challenge)
+      .where(eq(challenge.id, challengeId))
+      .returning({ id: challenge.id, winnieId: challenge.winnieId });
 
-  return row;
+    if (!deletedChallengeData)
+      return undefined;
+
+    const [counts] = await tx.select({
+      total: count(),
+      unwon: count(sql`case when ${challenge.status} <> 'won' then 1 end`),
+    })
+      .from(challenge)
+      .where(eq(challenge.winnieId, deletedChallengeData.winnieId));
+
+    // deleting the last unwon challenge completes Winnie
+    // deleting the last challenge must not
+    const complete = Boolean(counts && counts.total > 0 && counts.unwon === 0);
+
+    if (complete)
+      await stopEverything(tx, deletedChallengeData.winnieId);
+
+    return { id: deletedChallengeData.id, complete };
+  });
 }
 
 /**
- * Copies a Challenge, resetting everything to default values for the new Challenge.
+ * Copies a Challenge's definition and drops the copy directly below the original.
  * @param challengeId The Challenge being duplicated.
- * @returns The new Challenge row or undefined.
+ * @returns The new Challenge row.
  */
 export function duplicateChallenge(challengeId: string) {
   return db.transaction(async (tx) => {
-    const originalChallenge = await tx.query.challenge.findFirst(
-      {
-        where: eq(challenge.id, challengeId),
-      },
-    );
+    const originalChallenge = await tx.query.challenge.findFirst({
+      where: eq(challenge.id, challengeId),
+    });
 
     if (!originalChallenge)
-      return undefined;
+      throw createError({ statusCode: 500, statusMessage: "The Challenge could not be duplicated." });
+
+    // Make room
+    await tx.update(challenge)
+      .set({ position: sql`${challenge.position} + 1` })
+      .where(and(
+        eq(challenge.winnieId, originalChallenge.winnieId),
+        gt(challenge.position, originalChallenge.position),
+      ));
 
     const [duplicatedChallenge] = await tx.insert(challenge)
-      .values(
-        {
-          winnieId: originalChallenge.winnieId,
-          game: originalChallenge.game,
-          spec: originalChallenge.spec,
-          target: originalChallenge.target,
-          // The rest is not duplicated so it is generated to default values
-          position: sql`(select coalesce(max(${challenge.position}), -1) + 1 from ${challenge} where ${challenge.winnieId} = ${originalChallenge.winnieId})`,
-
-        },
-      )
+      .values({
+        winnieId: originalChallenge.winnieId,
+        game: originalChallenge.game,
+        spec: originalChallenge.spec,
+        target: originalChallenge.target,
+        position: originalChallenge.position + 1,
+        // The rest is left to defaults for a fresh challenge
+      })
       .returning();
+
+    if (!duplicatedChallenge)
+      throw createError({ statusCode: 500, statusMessage: "The Challenge could not be duplicated." });
 
     return duplicatedChallenge;
   });

@@ -46,7 +46,7 @@ type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
  * @param tx The open transaction — completion must not be split across two.
  * @param winnieId The Winnie that wants all of its timers stopped at once.
  */
-async function stopEverything(tx: Tx, winnieId: string) {
+export async function stopEverything(tx: Tx, winnieId: string) {
   await tx.update(challenge)
     .set({
       accumulatedSeconds: sql`${challenge.accumulatedSeconds} + extract(epoch from (now() - ${challenge.runningSince}))::int`,
