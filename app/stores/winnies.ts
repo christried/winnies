@@ -148,6 +148,41 @@ export const useWinnieStore = defineStore("winnies", () => {
     if (challengeList && index !== -1)
       challengeList[index] = updatedChallenge;
   }
+  /** Removes a challenge the server has deleted. */
+  function removeChallenge(deletedId: string) {
+    const winnie = currentWinnie.value;
+
+    if (!winnie)
+      return;
+
+    winnie.challenges = winnie.challenges.filter(challenge => challenge.id !== deletedId);
+  }
+
+  /** Resets a Challenge timer to 0 in the store after the server reset it. */
+  function resetChallengeTimer(challengeId: string) {
+    const target = currentWinnie.value?.challenges.find(challenge => challenge.id === challengeId);
+
+    if (target) {
+      target.accumulatedSeconds = 0;
+      target.runningSince = null;
+    }
+  }
+
+  /** Inserts a server-duplicated challenge */
+  function insertDuplicateChallenge(created: ChallengeRow) {
+    const challengeList = currentWinnie.value?.challenges;
+
+    if (!challengeList)
+      return;
+
+    // Drop in same slot as done on server
+    for (const challenge of challengeList) {
+      if (challenge.position >= created.position)
+        challenge.position += 1;
+    }
+
+    challengeList.push(created);
+  }
 
   return {
     winnies,
@@ -172,5 +207,8 @@ export const useWinnieStore = defineStore("winnies", () => {
     stopRename,
     addChallenge,
     replaceChallenge,
+    removeChallenge,
+    insertDuplicateChallenge,
+    resetChallengeTimer,
   };
 });

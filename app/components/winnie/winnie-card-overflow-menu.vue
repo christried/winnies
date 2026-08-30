@@ -37,7 +37,7 @@ function onDelete(close: () => void) {
           <UiIcon name="edit" /> Rename
         </button>
       </li>
-      <li>
+      <li class="border-t border-base-300">
         <button
           type="button"
           class="text-error"

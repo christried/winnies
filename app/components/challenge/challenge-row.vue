@@ -67,8 +67,7 @@ const isEditing = computed(() => editingChallengeId.value === props.challenge.id
         class="btn btn-square size-[clamp(30px,8.6vw,36px)] btn-ghost btn-sm"
       />
 
-      <!--  Will be built soon -->
-      <!-- <ChallengeOverflowMenu :challenge="challenge" /> -->
+      <ChallengeOverflowMenu :challenge="challenge" />
     </div>
   </div>
 </template>
