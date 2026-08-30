@@ -7,3 +7,6 @@ export type ChallengeStatus = typeof CHALLENGE_STATUSES[number];
 
 export const MAX_WINNIES_PER_DAY = 10;
 export const MAX_CHALLENGES_PER_WINNIE = 50;
+
+// used for use-delayed composable measured in ms
+export const ACCEPTED_LOADING_DELAY = 200;
