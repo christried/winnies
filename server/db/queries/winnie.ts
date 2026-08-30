@@ -58,6 +58,10 @@ export async function renameWinnie(winnieId: string, name: string) {
     .where(eq(winnie.id, winnieId))
     .returning();
 
+  // Edge case: another tab deleted the winnie midway
+  if (!renamedWinnie)
+    throw createError({ statusCode: 404, statusMessage: "That Winnie no longer exists." });
+
   return renamedWinnie;
 }
 
