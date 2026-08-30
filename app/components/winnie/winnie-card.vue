@@ -8,7 +8,7 @@ const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winn
 <template>
   <div
     v-if="currentWinnie"
-    class="card  flex flex-col gap-2 bg-base-200 p-4"
+    class="card flex flex-col gap-2 bg-base-200 p-4"
     :class="isComplete && 'border border-success bg-success/10'"
   >
     <div class="flex items-start justify-between gap-3">

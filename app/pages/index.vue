@@ -4,9 +4,9 @@
 <template>
   <div>
     <AppHeader />
-    <div class="m-4">
-      <WinnieCard />
-    </div>
+
+    <WinnieCard />
+
     <ChallengeList />
   </div>
 </template>

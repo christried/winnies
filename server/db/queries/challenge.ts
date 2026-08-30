@@ -17,6 +17,9 @@ export async function createChallenge(winnieId: string, inputValues: InsertChall
     )
     .returning();
 
+  if (!createdChallenge)
+    throw createError({ statusCode: 500, statusMessage: "The Challenge could not be created." });
+
   return createdChallenge;
 }
 
