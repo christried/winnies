@@ -27,7 +27,7 @@ const newWinnie = useTemplateRef("newWinnie");
         class="btn-primary"
         @click="newWinnie?.open()"
       />
-      <NewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
+      <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
       <UiIconButton
         icon="share"
         label="open shared view"

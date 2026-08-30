@@ -510,7 +510,7 @@ const players = [
       <div class="flex flex-wrap items-center gap-2 rounded-box border border-base-300 bg-base-200 p-4">
         <UiIconButton
           icon="plus"
-          label="New win-challenge"
+          label="New Winnie"
           class="btn-primary"
         />
         <UiIconButton
