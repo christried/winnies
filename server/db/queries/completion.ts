@@ -5,7 +5,7 @@ import { challenge, winnie } from "../schema";
 /**
  * Wins a single Challenge and, if it was the last one, completes the whole Winnie.
  * @param challengeId The Challenge being won.
- * @returns Whether that win completed the Winnie.
+ * @returns The won challenge row, or undefined when no row matched.
  */
 export function winChallenge(challengeId: string) {
   return db.transaction(async (tx) => {
@@ -16,10 +16,10 @@ export function winChallenge(challengeId: string) {
         runningSince: null,
       })
       .where(eq(challenge.id, challengeId))
-      .returning({ winnieId: challenge.winnieId });
+      .returning();
 
     if (!wonChallenge)
-      return false;
+      return undefined;
 
     const [countingData] = await tx
       .select({
@@ -29,15 +29,12 @@ export function winChallenge(challengeId: string) {
       .from(challenge)
       .where(eq(challenge.winnieId, wonChallenge.winnieId));
 
-    if (!countingData)
-      return false;
-
-    const complete = countingData.total > 0 && countingData.unwon === 0;
+    const complete = Boolean(countingData && countingData.total > 0 && countingData.unwon === 0);
 
     if (complete)
       await stopEverything(tx, wonChallenge.winnieId);
 
-    return complete;
+    return wonChallenge;
   });
 }
 

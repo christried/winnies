@@ -14,8 +14,12 @@ export default defineAuthenticatedEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "Not your challenge" });
 
   // Winning may complete the whole Winnie as well
-  if (result.data.status === "won")
-    return winChallenge(id);
+  const updated = result.data.status === "won"
+    ? await winChallenge(id)
+    : await updateChallenge(id, result.data);
 
-  return updateChallenge(id, result.data);
+  if (!updated)
+    throw createError({ statusCode: 500, statusMessage: "The challenge could not be updated." });
+
+  return updated;
 });
