@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const winnieStore = useWinnieStore();
-const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
+const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winnieStore);
 </script>
 
 <template>
@@ -26,6 +26,7 @@ const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
           status="running"
         />
         <button
+          :disabled="totalCount === 0"
           type="button"
           class="btn btn-circle btn-lg"
           aria-label="Start Winnie"
