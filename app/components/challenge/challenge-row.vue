@@ -8,6 +8,8 @@ const props = defineProps<{
 
 const isWon = computed(() => props.challenge.status === "won");
 const isRunning = computed(() => props.challenge.runningSince !== null);
+const { editingChallengeId } = storeToRefs(useWinnieStore());
+const isEditing = computed(() => editingChallengeId.value === props.challenge.id);
 </script>
 
 <template>
@@ -30,7 +32,8 @@ const isRunning = computed(() => props.challenge.runningSince !== null);
       class="size-4 text-primary"
     />
 
-    <div class="min-w-0 flex-1">
+    <ChallengeNameEditor v-if="isEditing" :challenge="challenge" />
+    <div v-else class="min-w-0 flex-1">
       <div class="truncate text-sm font-semibold" :class="isWon && 'text-success line-through'">
         {{ challenge.game }}
       </div>
@@ -38,7 +41,6 @@ const isRunning = computed(() => props.challenge.runningSince !== null);
         {{ challenge.spec }}
       </div>
     </div>
-
     <div class="ms-auto flex items-center gap-2">
       <CounterPill
         v-if="challenge.target > 0"

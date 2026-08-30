@@ -27,6 +27,8 @@ export const useWinnieStore = defineStore("winnies", () => {
 
   const challenges = computed(() => sortChallenges(currentWinnie.value?.challenges ?? []));
 
+  const editingChallengeId = ref<string | null>(null);
+
   const totalCount = computed(() => challenges.value.length);
   const wonCount = computed(() => challenges.value.filter(c => c.status === "won").length);
   const runningCount = computed(() => challenges.value.filter(c => c.runningSince !== null).length);
@@ -138,6 +140,15 @@ export const useWinnieStore = defineStore("winnies", () => {
     currentWinnie.value?.challenges.push(created);
   }
 
+  /** Replaces one challenge with the server version of it. */
+  function replaceChallenge(updatedChallenge: ChallengeRow) {
+    const challengeList = currentWinnie.value?.challenges;
+    const index = challengeList?.findIndex(challenge => challenge.id === updatedChallenge.id) ?? -1;
+
+    if (challengeList && index !== -1)
+      challengeList[index] = updatedChallenge;
+  }
+
   return {
     winnies,
     currentWinnieId,
@@ -151,6 +162,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     runningCount,
     percentComplete,
     isComplete,
+    editingChallengeId,
     init,
     addWinnie,
     selectWinnie,
@@ -159,5 +171,6 @@ export const useWinnieStore = defineStore("winnies", () => {
     startRename,
     stopRename,
     addChallenge,
+    replaceChallenge,
   };
 });
