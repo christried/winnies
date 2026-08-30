@@ -2,10 +2,10 @@
 import { useWinnieStore } from "~/stores/winnies";
 
 const winnieStore = useWinnieStore();
-const { data: session } = await useAuth();
+const user = useCurrentUser();
 
 // "callOnce" runs this during SSR only to avoid mismatches while hydrating
-if (session.value)
+if (user.value)
   await callOnce("winnies:init", () => winnieStore.init());
 </script>
 

@@ -21,6 +21,10 @@ export const useWinnieStore = defineStore("winnies", () => {
 
   const pending = ref(false);
 
+  // Inline-rename editor state
+  const renaming = ref(false);
+  const renameDraft = ref("");
+
   const challenges = computed(() => sortChallenges(currentWinnie.value?.challenges ?? []));
 
   const totalCount = computed(() => challenges.value.length);
@@ -94,11 +98,24 @@ export const useWinnieStore = defineStore("winnies", () => {
       Object.assign(currentWinnie.value, updatedWinnie);
   }
 
+  /** Signals to open the inline name editor */
+  function startRename() {
+    renameDraft.value = currentWinnie.value?.name ?? "";
+    renaming.value = true;
+  }
+
+  /** Signals to close the inline name editor */
+  function stopRename() {
+    renaming.value = false;
+  }
+
   return {
     winnies,
     currentWinnieId,
     currentWinnie,
     pending,
+    renaming,
+    renameDraft,
     challenges,
     totalCount,
     wonCount,
@@ -109,5 +126,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     addWinnie,
     selectWinnie,
     replaceWinnie,
+    startRename,
+    stopRename,
   };
 });

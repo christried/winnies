@@ -11,16 +11,11 @@ const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
   >
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
-        <h2 class="truncate text-base font-semibold">
-          {{ currentWinnie.name }}
-        </h2>
+        <WinnieName class="truncate text-base font-semibold" />
 
         <p class="type-meta">
           {{ new Date(currentWinnie.createdAt).toLocaleDateString() }}
           <PulseIndicator v-if="runningCount > 0" :count="runningCount" />
-          <!-- Test Indicator to keep running until Challenges are added
-             TODO: REMOVE THAT -->
-          <PulseIndicator v-if="true" :count="4" />
         </p>
       </div>
 
@@ -37,7 +32,6 @@ const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
         >
           <UiIcon name="play" />
         </button>
-        <!-- Overflow Menu deferred to later  -->
         <WinnieOverflowMenu />
       </div>
     </div>
