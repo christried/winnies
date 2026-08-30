@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-const { data: session } = await useAuth();
+const user = useCurrentUser();
 const signingIn = ref(false);
 
 const userShorthand = computed(() => {
-  return session.value?.user.name.slice(0, 2).toUpperCase();
+  return user.value?.name.slice(0, 2).toUpperCase();
 });
 
 /**
@@ -27,7 +27,7 @@ async function onSignOut(close: () => void) {
 
 <template>
   <button
-    v-if="!session"
+    v-if="!user"
     type="button"
     class="btn btn-neutral"
     :disabled="signingIn"
@@ -43,9 +43,9 @@ async function onSignOut(close: () => void) {
     menu-class="dropdown-end"
   >
     <template #trigger>
-      <div v-if="session.user.image" class="avatar">
+      <div v-if="user.image" class="avatar">
         <div class="w-12 rounded-full">
-          <img alt="" :src="session.user.image">
+          <img alt="" :src="user.image">
         </div>
       </div>
       <div v-else class="avatar avatar-placeholder">
@@ -56,7 +56,7 @@ async function onSignOut(close: () => void) {
     </template>
     <template #default=" { close }">
       <li class="menu-title">
-        Logged in as {{ session.user.name }}
+        Logged in as {{ user.name }}
       </li>
       <li>
         <button type="button" @click="onSignOut(close)">

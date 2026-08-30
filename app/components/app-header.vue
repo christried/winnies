@@ -5,7 +5,7 @@ import WinniePicker from "./winnie-picker.vue";
 const winnieStore = useWinnieStore();
 const { winnies, currentWinnie } = storeToRefs(winnieStore);
 const { selectWinnie } = winnieStore;
-const { data: session } = await useAuth();
+const user = useCurrentUser();
 
 const newWinnie = useTemplateRef("newWinnie");
 </script>
@@ -13,7 +13,7 @@ const newWinnie = useTemplateRef("newWinnie");
 <template>
   <header class="flex flex-wrap items-center gap-2">
     <span class="type-wordmark">Winnies</span>
-    <template v-if="session">
+    <template v-if="user">
       <WinniePicker
         v-if="currentWinnie"
         :current-winnie="currentWinnie"
