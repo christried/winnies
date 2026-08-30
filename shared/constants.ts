@@ -1,3 +1,11 @@
+export const DATE_LOCALE = "de-DE";
+
+export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
+  day: "2-digit",
+  month: "2-digit",
+  year: "2-digit",
+};
+
 export const CHALLENGE_STATUSES = ["todo", "active", "won"] as const;
 /**
  * Possible statuses of a single Challenge throughout a Winnie.

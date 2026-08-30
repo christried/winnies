@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { DATE_FORMAT, DATE_LOCALE } from "~~/shared/constants";
+
 const props = defineProps<{
   /** The selected Winnie, shown on the trigger */
   currentWinnie: WinnieRow;
@@ -34,7 +36,7 @@ function selectWinnie(winnie: WinnieRow, close: () => void): void {
  * @returns The date in the user's local time.
  */
 function shortDate(value: string) {
-  return new Date(value).toLocaleDateString();
+  return new Date(value).toLocaleDateString(DATE_LOCALE, DATE_FORMAT);
 }
 </script>
 
