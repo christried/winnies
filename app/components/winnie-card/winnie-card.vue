@@ -6,12 +6,12 @@ const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
 <template>
   <div
     v-if="currentWinnie"
-    class="card m-4 flex flex-col gap-2 bg-base-200 p-4"
+    class="card  flex flex-col gap-2 bg-base-200 p-4"
     :class="isComplete && 'border border-success bg-success/10'"
   >
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
-        <WinnieName class="truncate text-base font-semibold" />
+        <WinnieCardName class="truncate text-base font-semibold" />
 
         <p class="type-meta">
           {{ new Date(currentWinnie.createdAt).toLocaleDateString() }}
@@ -32,8 +32,9 @@ const { currentWinnie, runningCount, isComplete } = storeToRefs(winnieStore);
         >
           <UiIcon name="play" />
         </button>
-        <WinnieOverflowMenu />
+        <WinnieCardOverflowMenu />
       </div>
     </div>
+    <WinnieCardProgress />
   </div>
 </template>
