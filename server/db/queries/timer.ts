@@ -98,3 +98,17 @@ export function startChallengeAndWinnieTimers(challengeId: string) {
     return [startedChallenge];
   });
 }
+
+/**
+ * Resets a Challenge timer to 0, stopping it if it was running.
+ * @param challengeId The challenge being reset.
+ * @returns The updated Challenge row, or undefined when no row matched.
+ */
+export async function resetChallengeTimer(challengeId: string) {
+  const [resetChallenge] = await db.update(challenge)
+    .set({ accumulatedSeconds: 0, runningSince: null })
+    .where(eq(challenge.id, challengeId))
+    .returning();
+
+  return resetChallenge;
+}
