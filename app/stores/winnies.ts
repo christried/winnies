@@ -38,7 +38,8 @@ export const useWinnieStore = defineStore("winnies", () => {
 
   const request = useRequestFetch();
 
-  // actions
+  // WINNIE LEVEL ACTIONS
+
   /**
    * Fills the store for the signed-in user.
    * Also selects the last used (cookie) Winnie if available otherwise first in list
@@ -127,6 +128,16 @@ export const useWinnieStore = defineStore("winnies", () => {
     renaming.value = false;
   }
 
+  // CHALLENGE LEVEL ACTIONS
+
+  /**
+   * Adds a challenge the server has just created to the current Winnie.
+   * @param created The row returned by POST /api/winnies/:id/challenges.
+   */
+  function addChallenge(created: ChallengeRow) {
+    currentWinnie.value?.challenges.push(created);
+  }
+
   return {
     winnies,
     currentWinnieId,
@@ -147,5 +158,6 @@ export const useWinnieStore = defineStore("winnies", () => {
     replaceWinnie,
     startRename,
     stopRename,
+    addChallenge,
   };
 });
