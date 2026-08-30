@@ -13,13 +13,16 @@ export default defineAuthenticatedEventHandler(async (event) => {
   if (!ownsChallenge)
     throw createError({ statusCode: 403, statusMessage: "Not your Challenge." });
 
-  const updatedChallenge = requestBody.data.op === "step"
+  let updatedChallenge = requestBody.data.op === "step"
     ? await adjustChallengeCount(challengeId, requestBody.data.delta)
     : await setChallengeTarget(challengeId, requestBody.data.target);
 
-  // Reaching the target wins the challenge and may also win the Winnie in total as well.
-  if (updatedChallenge?.status === "won")
-    await winChallenge(challengeId);
+  if (!updatedChallenge)
+    throw createError({ statusCode: 500, statusMessage: "The challenge could not be updated." });
+
+  // Reaching the target wins the challenge (and maybe the Winnie).
+  if (updatedChallenge.status === "won")
+    updatedChallenge = await winChallenge(challengeId) ?? updatedChallenge;
 
   return updatedChallenge;
 });

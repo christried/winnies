@@ -15,7 +15,7 @@ export const slugParamSchema = z.object({
 });
 
 export const timerActionSchema = z.object({
-  action: z.enum(["start", "stop"]),
+  action: z.enum(["start", "stop", "reset"]),
 });
 
 export const updateChallengeSchema = insertChallengeSchema
