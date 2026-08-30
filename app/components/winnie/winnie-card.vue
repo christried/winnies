@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DATE_FORMAT, DATE_LOCALE } from "~~/shared/constants";
+
 const winnieStore = useWinnieStore();
 const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winnieStore);
 </script>
@@ -14,7 +16,7 @@ const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winn
         <WinnieCardName class="truncate text-base font-semibold" />
 
         <p class="type-meta">
-          {{ new Date(currentWinnie.createdAt).toLocaleDateString() }}
+          {{ new Date(currentWinnie.createdAt).toLocaleDateString(DATE_LOCALE, DATE_FORMAT) }}
           <PulseIndicator v-if="runningCount > 0" :count="runningCount" />
         </p>
       </div>

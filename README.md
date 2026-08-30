@@ -1,6 +1,6 @@
 # wintool
 
-A gaming win-challenge tracker.
+A gaming Winnie tracker.
 
 ## Built with
 

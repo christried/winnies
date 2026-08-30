@@ -156,8 +156,8 @@ const players = [
         2 · Typography
       </h2>
       <p class="mb-4 max-w-2xl text-sm opacity-70">
-        Chivo and Chivo Mono, self-hosted via <code>@nuxt/fonts</code>. Both are variable fonts,
-        so every weight comes out of the same file.
+        --font-sans: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
+        --font-mono: "Google Sans Code", ui-monospace, "SF Mono", monospace;
       </p>
 
       <div class="grid max-w-4xl gap-4 sm:grid-cols-2">
@@ -510,7 +510,7 @@ const players = [
       <div class="flex flex-wrap items-center gap-2 rounded-box border border-base-300 bg-base-200 p-4">
         <UiIconButton
           icon="plus"
-          label="New win-challenge"
+          label="New Winnie"
           class="btn-primary"
         />
         <UiIconButton

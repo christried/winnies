@@ -6,6 +6,8 @@ const props = defineProps<{
   actionLabel: string;
   /** Disables the action button while actioning. */
   pending?: boolean;
+  /** When action is destructive, render button in other colour than primary */
+  destructive?: boolean;
 }>();
 
 defineEmits<{
@@ -41,7 +43,8 @@ defineExpose({
         </form>
         <button
           :disabled="pending"
-          class="btn rounded-lg border border-neutral text-neutral btn-primary"
+          class="btn rounded-lg border border-neutral text-neutral"
+          :class="destructive ? 'btn-error' : 'btn-primary'"
           @click="$emit('action')"
         >
           <span v-if="pending" class="loading loading-spinner" />

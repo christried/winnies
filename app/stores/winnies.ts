@@ -41,7 +41,8 @@ export const useWinnieStore = defineStore("winnies", () => {
   // actions
   /**
    * Fills the store for the signed-in user.
-   * Also selects the last used (cookie) Winnie if available otherwise first in list otherwise null so the picker button does not render.
+   * Also selects the last used (cookie) Winnie if available otherwise first in list
+   * otherwise null so the picker button does not render.
    */
   async function init() {
     try {
@@ -87,6 +88,23 @@ export const useWinnieStore = defineStore("winnies", () => {
     }
   }
 
+  /**
+   * Removes a Winnie the server has deleted and falls back to whatever remains.
+   * @param deletedWinnieId The Winnie that no longer exists.
+   */
+  async function removeWinnie(deletedWinnieId: string) {
+    winnies.value = winnies.value.filter(winnie => winnie.id !== deletedWinnieId);
+
+    if (currentWinnie.value?.id !== deletedWinnieId)
+      return;
+
+    currentWinnie.value = null;
+    currentWinnieId.value = null;
+
+    if (winnies.value.length)
+      await selectWinnie(winnies.value[0]!.id);
+  }
+
   /** Replaces one Winnie with the server's version of it. */
   function replaceWinnie(updatedWinnie: WinnieRow) {
     const index = winnies.value.findIndex(w => w.id === updatedWinnie.id);
@@ -125,6 +143,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     init,
     addWinnie,
     selectWinnie,
+    removeWinnie,
     replaceWinnie,
     startRename,
     stopRename,

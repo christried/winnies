@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { startRename } = useWinnieStore();
+const deleteWinnie = useTemplateRef("deleteWinnie");
 
 /**
  * Closes the menu, then opens the inline name editor.
@@ -8,6 +9,15 @@ const { startRename } = useWinnieStore();
 function onRename(close: () => void) {
   close();
   startRename();
+}
+
+/**
+ * Closes the menu, then opens the Winnie deletion modal.
+ * @param close close method passed up by the menu.
+ */
+function onDelete(close: () => void) {
+  close();
+  deleteWinnie.value?.open();
 }
 </script>
 
@@ -27,6 +37,17 @@ function onRename(close: () => void) {
           <UiIcon name="edit" /> Rename
         </button>
       </li>
+      <li>
+        <button
+          type="button"
+          class="text-error"
+          @click="onDelete(close)"
+        >
+          <UiIcon name="trash" /> Delete
+        </button>
+      </li>
     </template>
   </UiDropdown>
+
+  <WinnieDeleteWinnieModal ref="deleteWinnie" @deleted="deleteWinnie?.close()" />
 </template>
