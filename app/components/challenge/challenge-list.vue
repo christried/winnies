@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { totalCount, pending, currentWinnieId } = storeToRefs(useWinnieStore());
+const { challenges, totalCount, pending, currentWinnieId } = storeToRefs(useWinnieStore());
 const showSkeleton = useDelayed(pending);
 </script>
 
@@ -10,8 +10,19 @@ const showSkeleton = useDelayed(pending);
       No Challenges yet
     </p>
     <p class="type-meta">
-      Add the first Challenge now.
+      Add your first Challenge now.
     </p>
   </div>
-  <!-- challenge components follow in a later epic -->
+  <div v-else class="card bg-base-200">
+    <ul>
+      <!-- :key is the id, never the index (see step 1) -->
+      <li
+        v-for="challenge in challenges"
+        :key="challenge.id"
+        class="border-b border-base-300 last:border-0"
+      >
+        <ChallengeRow :challenge="challenge" />
+      </li>
+    </ul>
+  </div>
 </template>
