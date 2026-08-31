@@ -13,23 +13,20 @@ const isEditing = computed(() => editingChallengeId.value === props.challenge.id
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-2 px-3 py-2.5">
-    <!-- TODO: Drag & Drop follows later -->
-    <button
-      type="button"
-      class="drag-grip cursor-grab"
+  <div class="flex flex-wrap items-center gap-2 p-3">
+    <span
+      class="drag-grip flex size-11 cursor-grab items-center justify-center"
       aria-hidden="true"
-      tabindex="-1"
     >
-      <UiIcon name="grip" class="size-4" />
-    </button>
+      <UiIcon name="grip" class="size-6" />
+    </span>
 
     <StatusDot :status="isWon ? 'won' : isRunning ? 'running' : 'idle'" />
 
     <UiIcon
       v-if="challenge.pinned"
       name="pin"
-      class="size-4 text-primary"
+      class="size-6 text-primary"
     />
 
     <ChallengeNameEditor v-if="isEditing" :challenge="challenge" />
@@ -58,13 +55,13 @@ const isEditing = computed(() => editingChallengeId.value === props.challenge.id
       <UiIconButton
         :label="isRunning ? 'Pause timer' : 'Start timer'"
         :icon="isRunning ? 'pause' : 'play'"
-        class="btn btn-square size-[clamp(30px,8.6vw,36px)] btn-ghost btn-sm"
+        class="btn btn-square size-11 btn-ghost btn-sm"
       />
 
       <UiIconButton
         label="Mark as won"
         icon="trophy"
-        class="btn btn-square size-[clamp(30px,8.6vw,36px)] btn-ghost btn-sm"
+        class="btn btn-square size-11 btn-ghost btn-sm"
       />
 
       <ChallengeOverflowMenu :challenge="challenge" />

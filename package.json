@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.29",
+    "@formkit/drag-and-drop": "^0.6.1",
     "@neondatabase/serverless": "^1.1.0",
     "@pinia/nuxt": "1.0.2",
     "@tailwindcss/vite": "^4.3.3",
