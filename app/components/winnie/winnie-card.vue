@@ -2,7 +2,18 @@
 import { DATE_FORMAT, DATE_LOCALE } from "~~/shared/constants";
 
 const winnieStore = useWinnieStore();
-const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winnieStore);
+const { currentWinnie, runningCount, isComplete, totalCount, timerInFlight } = storeToRefs(winnieStore);
+
+const now = useNow();
+const isRunning = computed(() => currentWinnie.value?.totalRunningSince !== null);
+
+const totalSeconds = computed(() => elapsedSeconds(
+  {
+    accumulatedSeconds: currentWinnie.value?.totalAccumulatedSeconds ?? 0,
+    runningSince: currentWinnie.value?.totalRunningSince ?? null,
+  },
+  now.value,
+));
 </script>
 
 <template>
@@ -23,17 +34,18 @@ const { currentWinnie, runningCount, isComplete, totalCount } = storeToRefs(winn
 
       <div class="flex shrink-0 items-center gap-2">
         <TimerDisplay
-          :seconds="5"
+          :seconds="totalSeconds"
           size="total"
-          status="running"
+          :status="isRunning ? 'running' : 'idle'"
         />
         <button
-          :disabled="totalCount === 0"
           type="button"
           class="btn btn-circle btn-lg"
-          aria-label="Start Winnie"
+          :aria-label="isRunning ? 'Pause Winnie' : 'Start Winnie'"
+          :disabled="timerInFlight || isComplete || totalCount === 0"
+          @click="winnieStore.toggleTotalTimer"
         >
-          <UiIcon name="play" />
+          <UiIcon :name="isRunning ? 'pause' : 'play'" />
         </button>
         <WinnieCardOverflowMenu />
       </div>

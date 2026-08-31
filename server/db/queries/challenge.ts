@@ -172,3 +172,18 @@ export async function setChallengeTarget(challengeId: string, target: number) {
 
   return row;
 }
+
+/**
+ * Reads which Winnie a challenge belongs to.
+ * @param challengeId The challenge in question.
+ * @returns The parent Winnie's id, or undefined when the challenge does not exist.
+ */
+export async function findChallengeWinnieId(challengeId: string) {
+  const [row] = await db
+    .select({ winnieId: challenge.winnieId })
+    .from(challenge)
+    .where(eq(challenge.id, challengeId))
+    .limit(1);
+
+  return row?.winnieId;
+}

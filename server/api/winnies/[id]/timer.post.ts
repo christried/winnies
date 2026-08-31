@@ -1,5 +1,6 @@
 import { winnieBelongsTo } from "~~/server/db/queries/ownership";
 import { startWinnieTimer, stopWinnieTimer } from "~~/server/db/queries/timer";
+import { findWinnieWithChallenges } from "~~/server/db/queries/winnie";
 
 export default defineAuthenticatedEventHandler(async (event) => {
   const { id: winnieId } = await getValidatedRouterParams(event, idParamSchema.parse);
@@ -19,6 +20,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   return {
     changed: Boolean(touched),
+    winnie: await findWinnieWithChallenges(winnieId),
     serverNow: await serverTimestamp(),
   };
 });
