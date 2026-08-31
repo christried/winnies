@@ -184,6 +184,23 @@ export const useWinnieStore = defineStore("winnies", () => {
     challengeList.push(created);
   }
 
+  /** Applies a reordering to the store. */
+  function applyChallengeOrder(ids: string[]) {
+    const challengeList = currentWinnie.value?.challenges;
+
+    if (!challengeList)
+      return;
+
+    const indexById = new Map(ids.map((id, index) => [id, index]));
+
+    for (const challenge of challengeList) {
+      const nextPosition = indexById.get(challenge.id);
+
+      if (nextPosition !== undefined)
+        challenge.position = nextPosition;
+    }
+  }
+
   return {
     winnies,
     currentWinnieId,
@@ -210,5 +227,6 @@ export const useWinnieStore = defineStore("winnies", () => {
     removeChallenge,
     insertDuplicateChallenge,
     resetChallengeTimer,
+    applyChallengeOrder,
   };
 });
