@@ -78,16 +78,23 @@ export const useWinnieStore = defineStore("winnies", () => {
     currentWinnieId.value = created.id;
   }
 
-  /** Loads one Winnie with its challenges and makes it the active one. */
-  async function selectWinnie(id: string) {
-    pending.value = true;
+  /**
+   * Loads one Winnie with its challenges and makes it the active one.
+   * @silent If not silent (default), will set the pending flag to true which will render skeletons delayed.
+   */
+  async function selectWinnie(id: string, { silent = false } = { }) {
+    if (!silent) {
+      pending.value = true;
+    }
 
     try {
       currentWinnie.value = await request<WinnieWithChallenges>(`/api/winnies/${id}`);
       currentWinnieId.value = id;
     }
     finally {
-      pending.value = false;
+      if (!silent) {
+        pending.value = false;
+      }
     }
   }
 
@@ -128,6 +135,19 @@ export const useWinnieStore = defineStore("winnies", () => {
   /** Signals to close the inline name editor */
   function stopRename() {
     renaming.value = false;
+  }
+
+  let currentRefreshCall: Promise<void> | null = null;
+  /** Reloads the active Winnie, integrating successive calls into one request. */
+  function refreshCurrentWinnie() {
+    if (!currentWinnieId.value)
+      return Promise.resolve();
+
+    // Nullish Coalescing Assignment (cool)
+    currentRefreshCall ??= selectWinnie(currentWinnieId.value, { silent: true })
+      .finally(() => (currentRefreshCall = null));
+
+    return currentRefreshCall;
   }
 
   // CHALLENGE LEVEL ACTIONS
@@ -208,6 +228,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     pending,
     renaming,
     renameDraft,
+
     challenges,
     totalCount,
     wonCount,
@@ -215,6 +236,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     percentComplete,
     isComplete,
     editingChallengeId,
+
     init,
     addWinnie,
     selectWinnie,
@@ -222,6 +244,8 @@ export const useWinnieStore = defineStore("winnies", () => {
     replaceWinnie,
     startRename,
     stopRename,
+    refreshCurrentWinnie,
+
     addChallenge,
     replaceChallenge,
     removeChallenge,
