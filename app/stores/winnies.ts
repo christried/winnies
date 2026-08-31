@@ -137,6 +137,8 @@ export const useWinnieStore = defineStore("winnies", () => {
     renaming.value = false;
   }
 
+  // WINNIE TIMER ACTIONS
+
   let currentRefreshCall: Promise<void> | null = null;
   /** Reloads the active Winnie, integrating successive calls into one request. */
   function refreshCurrentWinnie() {
@@ -148,6 +150,76 @@ export const useWinnieStore = defineStore("winnies", () => {
       .finally(() => (currentRefreshCall = null));
 
     return currentRefreshCall;
+  }
+
+  const timerInFlight = ref(false);
+
+  /** Starts or stops the total timer optimistically, then syncs after server feedback. */
+  async function toggleTotalTimer() {
+    const winnie = currentWinnie.value;
+
+    if (!winnie || timerInFlight.value)
+      return;
+
+    const clock = useServerClock();
+    const fallbackSnapshot = {
+      totalRunningSince: winnie.totalRunningSince,
+      challenges: winnie.challenges.map(c => ({ ...c })),
+    };
+
+    const startingTimer = winnie.totalRunningSince === null;
+
+    if (startingTimer) {
+      winnie.totalRunningSince = new Date(clock.now()).toISOString();
+    }
+    // stopping the Timer
+    else {
+      const now = clock.now();
+
+      winnie.totalAccumulatedSeconds = elapsedSeconds(
+        { accumulatedSeconds: winnie.totalAccumulatedSeconds, runningSince: winnie.totalRunningSince },
+        now,
+      );
+      winnie.totalRunningSince = null;
+
+      // stop all Challenge timers as well
+      for (const challenge of winnie.challenges) {
+        challenge.accumulatedSeconds = elapsedSeconds(challenge, now);
+        challenge.runningSince = null;
+      }
+    }
+
+    timerInFlight.value = true;
+
+    try {
+      const updatedWinnieData = await $fetch(`/api/winnies/${winnie.id}/timer`, {
+        method: "POST",
+        body: { action: startingTimer ? "start" : "stop" },
+      });
+
+      if (updatedWinnieData.winnie)
+        resyncWinnie(updatedWinnieData.winnie);
+
+      clock.sync(new Date(updatedWinnieData.serverNow).getTime());
+    }
+    catch (error) {
+      Object.assign(winnie, fallbackSnapshot);
+      toastApiError(error);
+    }
+    finally {
+      timerInFlight.value = false;
+    }
+  }
+
+  /**
+   * Takes the server Winnie after changes on several rows.
+   * @param updated The Winnie with its challenges, as the timer routes return it.
+   */
+  function resyncWinnie(updated: WinnieWithChallenges) {
+    const { challenges, ...row } = updated;
+
+    currentWinnie.value = updated;
+    replaceWinnie(row);
   }
 
   // CHALLENGE LEVEL ACTIONS
@@ -222,21 +294,13 @@ export const useWinnieStore = defineStore("winnies", () => {
   }
 
   return {
+    // WINNIE Exports
     winnies,
     currentWinnieId,
     currentWinnie,
     pending,
     renaming,
     renameDraft,
-
-    challenges,
-    totalCount,
-    wonCount,
-    runningCount,
-    percentComplete,
-    isComplete,
-    editingChallengeId,
-
     init,
     addWinnie,
     selectWinnie,
@@ -246,6 +310,18 @@ export const useWinnieStore = defineStore("winnies", () => {
     stopRename,
     refreshCurrentWinnie,
 
+    // WINNIE Timer Exports
+    timerInFlight,
+    toggleTotalTimer,
+
+    // CHALLENGE Exports
+    challenges,
+    totalCount,
+    wonCount,
+    runningCount,
+    percentComplete,
+    isComplete,
+    editingChallengeId,
     addChallenge,
     replaceChallenge,
     removeChallenge,
