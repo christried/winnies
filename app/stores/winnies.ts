@@ -293,6 +293,64 @@ export const useWinnieStore = defineStore("winnies", () => {
     }
   }
 
+  // CHALLENGE TIMER ACTIONS
+
+  /** Ids of challenges which are currently toggling their timers so this cant be done twice by accident */
+  const challengesBeingToggled = ref(new Set<string>());
+
+  /** Starts or stops one challenge, starting the total too when needed. */
+  async function toggleChallengeTimer(challengeId: string) {
+    const winnie = currentWinnie.value;
+    const challenge = winnie?.challenges.find(c => c.id === challengeId);
+
+    if (!winnie || !challenge || challenge.status === "won" || isComplete.value
+      || challengesBeingToggled.value.has(challengeId)) {
+      return;
+    }
+
+    const clock = useServerClock();
+    const fallbackSnapshot = {
+      challenge: { ...challenge },
+      totalRunningSince: winnie.totalRunningSince,
+    };
+
+    const starting = challenge.runningSince === null;
+
+    if (starting) {
+      const optimisticNow = new Date(clock.now()).toISOString();
+      challenge.runningSince = optimisticNow;
+      challenge.status = "active";
+
+      winnie.totalRunningSince ??= optimisticNow;
+    }
+    else {
+      challenge.accumulatedSeconds = elapsedSeconds(challenge, clock.now());
+      challenge.runningSince = null;
+    }
+
+    challengesBeingToggled.value.add(challengeId);
+
+    try {
+      const updatedWinnieData = await $fetch(`/api/challenges/${challengeId}/timer`, {
+        method: "POST",
+        body: { action: starting ? "start" : "stop" },
+      });
+
+      if ("winnie" in updatedWinnieData && updatedWinnieData.winnie)
+        resyncWinnie(updatedWinnieData.winnie);
+
+      clock.sync(new Date(updatedWinnieData.serverNow).getTime());
+    }
+    catch (error) {
+      Object.assign(challenge, fallbackSnapshot.challenge);
+      winnie.totalRunningSince = fallbackSnapshot.totalRunningSince;
+      toastApiError(error);
+    }
+    finally {
+      challengesBeingToggled.value.delete(challengeId);
+    }
+  }
+
   return {
     // WINNIE Exports
     winnies,
@@ -328,5 +386,9 @@ export const useWinnieStore = defineStore("winnies", () => {
     insertDuplicateChallenge,
     resetChallengeTimer,
     applyChallengeOrder,
+
+    // CHALLENGE Timer Exports
+    challengesBeingToggled,
+    toggleChallengeTimer,
   };
 });
