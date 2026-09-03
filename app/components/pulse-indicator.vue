@@ -14,7 +14,7 @@ const label = computed(() =>
   isActive.value ? `· ${props.count} running` : props.emptyLabel,
 );
 
-const pulseDelay = usePulseDelay();
+const pulseDelay = usePulseDelay(isActive);
 </script>
 
 <template>
