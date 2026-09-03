@@ -12,6 +12,7 @@ export function winChallenge(challengeId: string) {
     const [wonChallenge] = await tx.update(challenge)
       .set({
         status: "won",
+        count: sql`case when ${challenge.target} > 0 then ${challenge.target} else ${challenge.count} end`,
         accumulatedSeconds: sql`${challenge.accumulatedSeconds} + coalesce(extract(epoch from (now() - ${challenge.runningSince}))::int, 0)`,
         runningSince: null,
       })
@@ -36,6 +37,23 @@ export function winChallenge(challengeId: string) {
 
     return wonChallenge;
   });
+}
+
+/**
+ * Reopens a won Challenge without restarting its timer.
+ * @param challengeId The Challenge being un-won.
+ * @returns The updated row, or undefined when no row matched.
+ */
+export async function unwinChallenge(challengeId: string) {
+  const [reopenedChallenge] = await db.update(challenge)
+    .set({
+      status: sql`(case when ${challenge.accumulatedSeconds} > 0 then 'active' else 'todo' end)::challenge_status`,
+      count: sql`case when ${challenge.target} > 0 then greatest(${challenge.target} - 1, 0) else ${challenge.count} end`,
+    })
+    .where(eq(challenge.id, challengeId))
+    .returning();
+
+  return reopenedChallenge;
 }
 
 // Drizzle does not export a transaction type, so derive it from db.transaction

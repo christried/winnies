@@ -6,8 +6,8 @@ const props = defineProps<{
   challenge: ChallengeRow;
 }>();
 
-const { editingChallengeId, isComplete, challengesBeingToggled } = storeToRefs(useWinnieStore());
 const winnieStore = useWinnieStore();
+const { editingChallengeId, isComplete, challengesBeingToggled } = storeToRefs(winnieStore);
 
 const isWon = computed(() => props.challenge.status === "won");
 const isRunning = computed(() => props.challenge.runningSince !== null);
@@ -69,11 +69,12 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       />
 
       <UiIconButton
-        label="Mark as won"
+        :label="isWon ? 'Mark as not won' : 'Mark as won'"
         icon="trophy"
         class="btn btn-square size-11 btn-ghost btn-sm"
+        :class="isWon && 'text-success'"
+        @click="winnieStore.toggleWin(challenge.id)"
       />
-
       <ChallengeOverflowMenu :challenge="challenge" />
     </div>
   </div>
