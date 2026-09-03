@@ -24,7 +24,14 @@ const totalSeconds = computed(() => elapsedSeconds(
   >
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
-        <WinnieCardName class="truncate text-base font-semibold" />
+        <div class="flex min-w-0 items-center gap-2">
+          <UiIcon
+            v-if="isComplete"
+            name="trophy"
+            class="shrink-0 text-success"
+          />
+          <WinnieCardName class="truncate text-base font-semibold" />
+        </div>
 
         <p class="type-meta">
           {{ new Date(currentWinnie.createdAt).toLocaleDateString(DATE_LOCALE, DATE_FORMAT) }}
