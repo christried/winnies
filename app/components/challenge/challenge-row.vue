@@ -47,11 +47,9 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       </div>
     </div>
     <div class="ms-auto flex items-center gap-2">
-      <CounterPill
+      <ChallengeCounter
         v-if="challenge.target > 0"
-        :value="challenge.count"
-        :target="challenge.target"
-        :label="challenge.game"
+        :challenge="challenge"
       />
 
       <TimerDisplay

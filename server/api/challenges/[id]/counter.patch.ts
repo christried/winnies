@@ -1,4 +1,4 @@
-import { adjustChallengeCount, setChallengeTarget } from "~~/server/db/queries/challenge";
+import { adjustChallengeCount, setChallengeCounter, setChallengeTarget } from "~~/server/db/queries/challenge";
 import { winChallenge } from "~~/server/db/queries/completion";
 import { challengeBelongsTo } from "~~/server/db/queries/ownership";
 
@@ -15,7 +15,9 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   let updatedChallenge = requestBody.data.op === "step"
     ? await adjustChallengeCount(challengeId, requestBody.data.delta)
-    : await setChallengeTarget(challengeId, requestBody.data.target);
+    : requestBody.data.op === "set"
+      ? await setChallengeCounter(challengeId, requestBody.data.count)
+      : await setChallengeTarget(challengeId, requestBody.data.target);
 
   if (!updatedChallenge)
     throw createError({ statusCode: 500, statusMessage: "The challenge could not be updated." });

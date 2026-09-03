@@ -144,6 +144,35 @@ export async function adjustChallengeCount(challengeId: string, delta: 1 | -1) {
 }
 
 /**
+ * Sets a Challenge's counter to a number.
+ * @param challengeId The Challenge whose count is being set.
+ * @param count The requested absolute count.
+ * @returns The updated row, or undefined when no row matched.
+ */
+export async function setChallengeCounter(challengeId: string, count: number) {
+  const clamped = sql`least(greatest(${count}::int, 0), ${challenge.target})`;
+  // target = 0 means there is no counter, so the count is left alone
+  const next = sql`case when ${challenge.target} = 0 then ${challenge.count} else ${clamped} end`;
+
+  const [row] = await db.update(challenge)
+    .set({
+      count: next,
+      status: sql`
+        case
+          when ${challenge.target} > 0 and ${next} >= ${challenge.target} then 'won'
+          when ${challenge.status} = 'won' and ${challenge.runningSince} is not null then 'active'
+          when ${challenge.status} = 'won' then 'todo'
+          else ${challenge.status}
+        end
+      `,
+    })
+    .where(eq(challenge.id, challengeId))
+    .returning();
+
+  return row;
+}
+
+/**
  * Changes a Challenge counter target. Standalone query because this might have implications on other properties of the Challenge.
  * SQL is clankered, really need to revist this stuff.
  * @param challengeId The Challenge being reconfigured.
