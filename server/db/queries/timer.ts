@@ -5,13 +5,18 @@ import { challenge, winnie } from "../schema";
 /**
  * Query Function called when starting a Winnie timer (the total one).
  * @param winnieId The ID of the Winnie being started/continued.
- * @returns The touched Winnie rows — empty when it was already running.
+ * @returns The touched Winnie rows — empty when it was already running, complete or empty.
  */
 export function startWinnieTimer(winnieId: string) {
   return db.update(winnie).set({
     // coalesce -> Postgres function to return the first argument that isn't NULL --> makes this IDEMPOTENT
     totalRunningSince: sql`coalesce(${winnie.totalRunningSince}, now())`,
-  }).where(eq(winnie.id, winnieId)).returning({ id: winnie.id });
+  }).where(and(
+    eq(winnie.id, winnieId),
+    sql`exists (select 1 from ${challenge}
+                where ${challenge.winnieId} = ${winnie.id}
+                  and ${challenge.status} <> 'won')`,
+  )).returning({ id: winnie.id });
 }
 
 /**

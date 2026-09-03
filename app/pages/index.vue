@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useCompletion();
 </script>
 
 <template>
@@ -6,6 +7,8 @@
     <AppHeader />
 
     <WinnieCard />
+
+    <WinnieCompleteBanner />
 
     <ChallengeList />
   </div>

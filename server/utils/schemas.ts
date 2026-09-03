@@ -47,4 +47,9 @@ export const counterSchema = z.discriminatedUnion("op", [
     op: z.literal("target"),
     target: z.number().int().min(0, "Target cannot be negative"),
   }),
+  z.object({
+    // Absolute value instead of increments
+    op: z.literal("set"),
+    count: z.number().int().min(0, "Count cannot be negative"),
+  }),
 ]);
