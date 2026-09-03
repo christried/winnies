@@ -6,7 +6,7 @@ const props = withDefaults(defineProps<{
   status: "idle",
 });
 
-const pulseDelay = usePulseDelay();
+const pulseDelay = usePulseDelay(() => props.status === "running");
 
 const computedClasses = computed(() => {
   const statusClass = props.status === "running"

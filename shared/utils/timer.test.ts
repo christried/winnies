@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { formatDuration } from "./timer";
 
 const anyDate = new Date("2026-01-01T12:00:00Z");
 const anyTime = anyDate.getTime();
@@ -35,5 +36,20 @@ describe("elapsedSeconds", () => {
       { accumulatedSeconds: 0, runningSince: anyDate.toISOString() },
       anyTime + 20000,
     )).toBe(20);
+  });
+});
+
+describe("formatDuration", () => {
+  it("pads minutes and seconds below an hour", () => {
+    expect(formatDuration(65)).toBe("01:05");
+  });
+
+  it("adds the hours segment past an hour", () => {
+    expect(formatDuration(3725)).toBe("1:02:05");
+  });
+
+  it("floors fractional seconds and never goes negative", () => {
+    expect(formatDuration(9.9)).toBe("00:09");
+    expect(formatDuration(-5)).toBe("00:00");
   });
 });

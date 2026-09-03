@@ -6,10 +6,18 @@ const props = defineProps<{
   challenge: ChallengeRow;
 }>();
 
+const { editingChallengeId, isComplete, challengesBeingToggled } = storeToRefs(useWinnieStore());
+const winnieStore = useWinnieStore();
+
 const isWon = computed(() => props.challenge.status === "won");
 const isRunning = computed(() => props.challenge.runningSince !== null);
-const { editingChallengeId } = storeToRefs(useWinnieStore());
 const isEditing = computed(() => editingChallengeId.value === props.challenge.id);
+
+const now = useNow();
+const seconds = computed(() =>
+  elapsedSeconds(props.challenge, now.value),
+);
+const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.challenge.id));
 </script>
 
 <template>
@@ -47,7 +55,7 @@ const isEditing = computed(() => editingChallengeId.value === props.challenge.id
       />
 
       <TimerDisplay
-        :seconds="challenge.accumulatedSeconds"
+        :seconds="seconds"
         size="challenge"
         :status="isWon ? 'won' : isRunning ? 'running' : 'idle'"
       />
@@ -56,6 +64,8 @@ const isEditing = computed(() => editingChallengeId.value === props.challenge.id
         :label="isRunning ? 'Pause timer' : 'Start timer'"
         :icon="isRunning ? 'pause' : 'play'"
         class="btn btn-square size-11 btn-ghost btn-sm"
+        :disabled="isWon || isComplete || isTogglingTimer"
+        @click="winnieStore.toggleChallengeTimer(challenge.id)"
       />
 
       <UiIconButton
