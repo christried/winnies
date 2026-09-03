@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { formatDuration } from "~~/shared/utils/timer";
+
 const props = withDefaults(defineProps<{
   /** Elapsed time to render */
   seconds: number;
@@ -11,17 +13,7 @@ const props = withDefaults(defineProps<{
   size: "challenge",
 });
 
-const displayedTime = computed(() => {
-  const secondsTemp = Math.max(0, Math.floor(props.seconds));
-  const minutesTemp = Math.floor(secondsTemp / 60);
-  const hoursTemp = Math.floor(minutesTemp / 60);
-
-  const seconds = (secondsTemp % 60).toString().padStart(2, "0");
-  const hours = hoursTemp ? `${hoursTemp}:` : "";
-  const minutes = `${(minutesTemp % 60).toString().padStart(2, "0")}:`;
-
-  return `${hours}${minutes}${seconds}`;
-});
+const displayedTime = computed(() => formatDuration(props.seconds));
 
 const computedClasses = computed(() => {
   const statusClass = props.status === "running"

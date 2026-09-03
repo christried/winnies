@@ -28,6 +28,22 @@ export function elapsedSeconds(timer: TimerStatus, now: number): number {
 }
 
 /**
+ * Formats elapsed seconds as a clock string while not showing the hours segment below an hour.
+ * @param totalSeconds Elapsed seconds.
+ * @returns A string like `1:02:05`, or `02:05` under an hour.
+ */
+export function formatDuration(totalSeconds: number): string {
+  const whole = Math.max(0, Math.floor(totalSeconds));
+  const minutesTotal = Math.floor(whole / 60);
+  const hours = Math.floor(minutesTotal / 60);
+
+  const seconds = (whole % 60).toString().padStart(2, "0");
+  const minutes = `${(minutesTotal % 60).toString().padStart(2, "0")}:`;
+
+  return `${hours ? `${hours}:` : ""}${minutes}${seconds}`;
+}
+
+/**
  * Function that describes if a specific timer is currently running.
  * @param timer Timer data for a specific timer.
  * @returns Returns true if timer is running, false if it isn't.

@@ -1,12 +1,28 @@
 <script lang="ts" setup>
-import { useWinnieStore } from "~/stores/winnies";
+import { formatDuration } from "~~/shared/utils/timer";
 
 const winnieStore = useWinnieStore();
+const { currentWinnie } = storeToRefs(winnieStore);
 const user = useCurrentUser();
 
 // "callOnce" runs this during SSR only to avoid mismatches while hydrating
 if (user.value)
   await callOnce("winnies:init", () => winnieStore.init());
+
+const now = useTitleNow();
+useHead({
+  title: computed(() => {
+    const winnie = currentWinnie.value;
+    if (!winnie?.totalRunningSince)
+      return "Winnies";
+
+    const seconds = elapsedSeconds(
+      { accumulatedSeconds: winnie.totalAccumulatedSeconds, runningSince: winnie.totalRunningSince },
+      now.value,
+    );
+    return `${formatDuration(seconds)} · Winnies`;
+  }),
+});
 </script>
 
 <template>
