@@ -293,6 +293,28 @@ export const useWinnieStore = defineStore("winnies", () => {
     }
   }
 
+  /** Wins or Un-Wins a Challenge. */
+  async function toggleWin(challengeId: string) {
+    const challenge = currentWinnie.value?.challenges.find(c => c.id === challengeId);
+
+    if (!challenge)
+      return;
+
+    try {
+      const updatedChallenge = await $fetch(`/api/challenges/${challengeId}`, {
+        method: "PATCH",
+        // DB Query decides if Challenge is Active/Todo if it's un-winning and sets Counter away from maximum if needed
+        // Means Frontend can just go win or un-win here :)
+        body: { status: challenge.status === "won" ? "active" : "won" },
+      });
+
+      replaceChallenge(updatedChallenge);
+    }
+    catch (error) {
+      toastApiError(error);
+    }
+  }
+
   // CHALLENGE TIMER ACTIONS
 
   /** Ids of challenges which are currently toggling their timers so this cant be done twice by accident */
@@ -386,6 +408,7 @@ export const useWinnieStore = defineStore("winnies", () => {
     insertDuplicateChallenge,
     resetChallengeTimer,
     applyChallengeOrder,
+    toggleWin,
 
     // CHALLENGE Timer Exports
     challengesBeingToggled,

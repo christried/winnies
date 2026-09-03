@@ -1,5 +1,5 @@
 import { updateChallenge } from "~~/server/db/queries/challenge";
-import { winChallenge } from "~~/server/db/queries/completion";
+import { unwinChallenge, winChallenge } from "~~/server/db/queries/completion";
 import { challengeBelongsTo } from "~~/server/db/queries/ownership";
 
 export default defineAuthenticatedEventHandler(async (event) => {
@@ -14,12 +14,14 @@ export default defineAuthenticatedEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "Not your challenge" });
 
   // Winning may complete the whole Winnie as well
-  const updated = result.data.status === "won"
+  const updatedChallenge = result.data.status === "won"
     ? await winChallenge(id)
-    : await updateChallenge(id, result.data);
+    : result.data.status
+      ? await unwinChallenge(id)
+      : await updateChallenge(id, result.data);
 
-  if (!updated)
+  if (!updatedChallenge)
     throw createError({ statusCode: 500, statusMessage: "The challenge could not be updated." });
 
-  return updated;
+  return updatedChallenge;
 });
