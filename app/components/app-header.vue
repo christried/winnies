@@ -38,7 +38,7 @@ async function copyShareLink() {
 
 <template>
   <header class="flex flex-wrap items-center gap-2">
-    <span class="type-wordmark">Winnies</span>
+    <span class="type-wordmark">Winnies (turbo-early access)</span>
     <template v-if="user">
       <WinniePicker
         v-if="currentWinnie"

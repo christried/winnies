@@ -2,7 +2,7 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 
 const winnieStore = useWinnieStore();
-const { challenges, totalCount, pending, currentWinnieId, currentWinnie } = storeToRefs(winnieStore);
+const { challenges, totalCount, pending, currentWinnie } = storeToRefs(winnieStore);
 const showSkeleton = useDelayed(pending);
 
 // DRAG & DROP
@@ -50,7 +50,7 @@ async function onDragend() {
 
 <template>
   <div v-if="showSkeleton" class="h-24 w-full skeleton" />
-  <template v-else-if="currentWinnieId">
+  <template v-else-if="currentWinnie">
     <div v-if="totalCount === 0" class="flex flex-col items-center gap-2 py-8">
       <p class="font-semibold">
         No Challenges yet
