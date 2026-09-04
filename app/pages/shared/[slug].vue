@@ -21,10 +21,34 @@ const now = useNow();
 
 const challenges = computed(() => sortChallenges(shared.value?.winnie.challenges ?? []));
 const isComplete = computed(() => isWinnieComplete(challenges.value));
+
+// Poll the same endpoint the initial load used.
+const { lastUpdated, failing, gone } = useSharedPoll<NonNullable<typeof shared.value>>(
+  route.params.slug as string,
+  (data) => {
+    shared.value = data;
+  },
+  isComplete,
+);
+
+const freshness = computed(() => {
+  if (failing.value)
+    return "Reconnecting…";
+
+  const seconds = Math.floor((now.value - lastUpdated.value) / 1000);
+
+  if (seconds < 5)
+    return "Updated just now";
+
+  if (seconds < 60)
+    return `Updated ${seconds}s ago`;
+
+  return `Updated ${Math.floor(seconds / 60)}m ago`;
+});
 </script>
 
 <template>
-  <div v-if="error" class="flex flex-col items-center gap-2 py-16">
+  <div v-if="error || gone" class="flex flex-col items-center gap-2 py-16">
     <p class="font-semibold">
       This Winnie doesn't exist. Does it? Did it?
     </p>
@@ -60,6 +84,7 @@ const isComplete = computed(() => isWinnieComplete(challenges.value));
     </ul>
     <footer class="flex items-center gap-2">
       <SharedCopyLink :url="shareUrl" class="flex-1" />
+      <span class="type-meta">{{ freshness }}</span>
     </footer>
   </div>
 </template>
