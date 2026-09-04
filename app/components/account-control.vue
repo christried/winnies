@@ -21,7 +21,7 @@ async function onSignIn() {
 async function onSignOut(close: () => void) {
   close();
   await authClient.signOut();
-  await navigateTo("/", { replace: true });
+  await reloadNuxtApp({ path: "/" });
 }
 </script>
 
