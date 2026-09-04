@@ -3,6 +3,8 @@ definePageMeta({ layout: "shared" });
 
 const route = useRoute();
 
+const shareUrl = computed(() => `${useRequestURL().origin}/shared/${route.params.slug}`);
+
 const { data: shared, error } = await useFetch(`/api/share/${route.params.slug}`, {
   lazy: true,
 });
@@ -56,5 +58,8 @@ const isComplete = computed(() => isWinnieComplete(challenges.value));
         <SharedChallengeRow :challenge="challenge" :now="now" />
       </li>
     </ul>
+    <footer class="flex items-center gap-2">
+      <SharedCopyLink :url="shareUrl" class="flex-1" />
+    </footer>
   </div>
 </template>
