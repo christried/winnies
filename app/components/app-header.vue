@@ -8,6 +8,32 @@ const { selectWinnie } = winnieStore;
 const user = useCurrentUser();
 
 const newWinnie = useTemplateRef("newWinnie");
+
+const requestUrl = useRequestURL();
+
+const shareUrl = computed(() =>
+  currentWinnie.value ? `${requestUrl.origin}/shared/${currentWinnie.value.shareSlug}` : "",
+);
+
+/**
+ * Copies the current Winnie's share link to the clipboard.
+ */
+async function copyShareLink() {
+  if (!shareUrl.value)
+    return;
+
+  try {
+    // doesn't work without a browser I think
+    if (!navigator.clipboard)
+      throw new Error("Clipboard unavailable");
+
+    await navigator.clipboard.writeText(shareUrl.value);
+    useToast().success("Share link copied");
+  }
+  catch {
+    useToast().error("Couldn't copy the link");
+  }
+}
 </script>
 
 <template>
@@ -28,9 +54,12 @@ const newWinnie = useTemplateRef("newWinnie");
         @click="newWinnie?.open()"
       />
       <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
+
       <UiIconButton
+        v-if="currentWinnie"
         icon="share"
-        label="open shared view"
+        label="Copy share link"
+        @click="copyShareLink"
       />
     </template>
     <div class="ms-auto" />

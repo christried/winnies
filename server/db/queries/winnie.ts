@@ -89,7 +89,6 @@ export function findWinnieBySlug(shareSlug: string) {
     where: eq(winnie.shareSlug, shareSlug),
     // Allow list for columns
     columns: {
-      id: true,
       name: true,
       totalAccumulatedSeconds: true,
       totalRunningSince: true,
