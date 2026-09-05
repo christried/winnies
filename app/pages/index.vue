@@ -3,7 +3,7 @@ useCompletion();
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-2">
     <AppHeader />
 
     <WinnieCard />
