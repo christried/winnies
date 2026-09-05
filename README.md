@@ -1,37 +1,44 @@
-# wintool
+# Winnies
 
-A gaming Winnie tracker.
+Track gaming challenges. A **Winnie** is a named list of challenges — each challenge has
+its own stopwatch, and the Winnie has one total timer over all of them. It completes when
+every challenge is won. Sign in with Discord; share any Winnie read-only through a permanent
+link.
 
-## Built with
+**Live:** [winnies.christried.me](https://winnies.christried.me/)
 
-- Node 24
-- pnpm 11.10.0
-- Nuxt 4.5.1
+## Stack
 
-## Setup
+Nuxt 4 · Vue 3 · TypeScript · Tailwind 4 + daisyUI · Drizzle ORM + Neon Postgres ·
+Better Auth (Discord) · Pinia · Vitest. Deployed on Vercel.
 
-    corepack enable
-    pnpm install
-    pnpm dev
+## Running locally
 
-Copy `.env.example` to `.env` and fill it in. `pnpm test` reads `.env.test` instead, which needs
-the same keys with any values that pass validation.
+Requires Node 24 (see `.nvmrc`) and pnpm 11 via Corepack.
 
-## Authentication
+```bash
+corepack enable
+cp .env.example .env
+pnpm install
+pnpm db:migrate
+pnpm dev
+```
 
-Discord OAuth through Better Auth, using **two Discord applications** — one for local development,
-one for production. A single application holding both redirect URIs would let a local build
-authenticate against the production identity.
+### Environment variables
 
-| Application | Redirect URI                                            | `BETTER_AUTH_URL`             |
-| ----------- | ------------------------------------------------------- | ----------------------------- |
-| dev         | `http://localhost:3000/api/auth/callback/discord`       | `http://localhost:3000`       |
-| prod        | `https://<production-domain>/api/auth/callback/discord` | `https://<production-domain>` |
+Each variable lives in four places: `.env.example`, the Zod schema in
+[`server/utils/env.ts`](server/utils/env.ts), the `env:` block in
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) plus the repository secrets behind it and
+your hosting provider (Vercel in my case).
 
-`BETTER_AUTH_URL` is the origin only. Better Auth appends the callback path itself, and Discord
-compares the result as an exact string — a trailing slash or `127.0.0.1` in place of `localhost`
-is a different URI.
+## Scripts
 
-**Preview deployments cannot sign in.** Every Vercel preview gets a different hostname and Discord
-requires redirect URIs registered up front, so there is nothing to register. Known limitation, not
-a bug.
+`pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` ·
+`pnpm db:generate` · `pnpm db:migrate` · `pnpm db:studio`
+
+CI runs lint, typecheck, test and build on every pull request.
+
+## License
+
+Source-available, all rights reserved — see [LICENSE.md](LICENSE.md). Contributions are
+welcome; reuse needs permission.
