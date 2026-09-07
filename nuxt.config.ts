@@ -1,4 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
+import pkg from "./package.json";
 import "./server/utils/env";
 
 export default defineNuxtConfig({
@@ -27,6 +28,7 @@ export default defineNuxtConfig({
     public: {
       // Overridden at runtime by NUXT_PUBLIC_APP_URL.
       appUrl: "http://localhost:3000",
+      appVersion: pkg.version,
     },
   },
 

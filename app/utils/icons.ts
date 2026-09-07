@@ -18,6 +18,7 @@ export const ICONS = {
   trash: "tabler:trash",
   duplicate: "tabler:copy-plus",
   reset: "tabler:rotate",
+  bug: "tabler:bug",
 } as const;
 
 /** Union of the local keys in {@link ICONS}. */
