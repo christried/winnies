@@ -19,6 +19,8 @@ export const ICONS = {
   duplicate: "tabler:copy-plus",
   reset: "tabler:rotate",
   bug: "tabler:bug",
+  countOn: "tabler:abacus",
+  countOff: "tabler:abacus-off",
 } as const;
 
 /** Union of the local keys in {@link ICONS}. */

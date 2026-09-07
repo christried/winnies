@@ -22,7 +22,7 @@ const runtimeConfig = useRuntimeConfig();
       </NuxtLink>
     </nav>
     <nav>
-      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="Visit the project on github">
+      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="See on GitHub">
         <NuxtLink
           to="https://github.com/christried/winnies"
           class="cursor-pointer"

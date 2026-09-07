@@ -14,6 +14,16 @@ const { handleSubmit, defineField, isSubmitting, resetForm } = useForm({
 
 const [game, gameAttrs] = defineField("game");
 const [spec, specAttrs] = defineField("spec");
+const [target, targetAttrs] = defineField("target");
+
+const counterChecked = ref(false);
+/**
+ * Handles clicking on the toggle button for adding a counter target to the new Challenge creation
+ */
+function onCounterToggle() {
+  counterChecked.value = !counterChecked.value;
+  target.value = undefined;
+}
 
 const gameInput = useTemplateRef("gameInput");
 const onSubmit = handleSubmit(async (values) => {
@@ -38,7 +48,12 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form class="flex items-center gap-4 p-4" @submit="onSubmit">
+  Create your next Challenge:
+  <!-- then make the form here a fieldset with these nice lines, maybe legends?
+   also tooltips are missing on buttons
+   also check vee validate and instead feedback on wrong input here (negative numbers in target fields are not legal)
+   form should wrap to more lines on smaller devices -->
+  <form class="mx-2 flex items-center gap-4 min-[720px]:mx-6" @submit="onSubmit">
     <input
       ref="gameInput"
       v-model="game"
@@ -51,9 +66,27 @@ const onSubmit = handleSubmit(async (values) => {
       v-model="spec"
       v-bind="specAttrs"
       class="input flex-1 input-sm"
-      placeholder="What counts as a win?"
+      placeholder="Win Condition"
       :disabled="atCap"
     >
+    <input
+      v-if="counterChecked"
+      v-model="target"
+      type="number"
+      v-bind="targetAttrs"
+      class="input flex-1 input-sm"
+      placeholder="Target"
+      :disabled="atCap"
+    >
+
+    <UiIconButton
+      v-model="counterChecked"
+      :label="counterChecked ? 'Add counter' : 'Remove counter'"
+      :icon="counterChecked ? 'countOn' : 'countOff'"
+      :class="counterChecked ? 'btn btn-circle btn-primary' : 'btn btn-circle'"
+      :disabled="atCap || isSubmitting"
+      @click.prevent="onCounterToggle"
+    />
 
     <UiIconButton
       type="submit"
