@@ -58,7 +58,7 @@ const freshness = computed(() => {
   </div>
 
   <div v-else-if="shared" class="flex flex-col gap-3">
-    <header class="flex items-center gap-2">
+    <header class="flex flex-wrap items-center justify-center gap-2">
       <AppWordmark />
       <div class="ms-auto badge gap-1">
         <UiIcon name="eye" />

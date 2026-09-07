@@ -37,32 +37,38 @@ async function copyShareLink() {
 </script>
 
 <template>
-  <header class="flex flex-wrap items-center gap-2">
+  <header class="mb-2 flex flex-wrap items-center justify-center gap-2">
     <AppWordmark />
     <template v-if="user">
       <WinniePicker
         v-if="currentWinnie"
         :current-winnie="currentWinnie"
         :winnies
+        class=" min-[720px]:ms-auto"
         @update:current-winnie="winnie => selectWinnie(winnie.id)"
       />
+      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="Create new Winnie">
+        <UiIconButton
+          icon="plus"
+          label="Create new Winnie"
+          class="btn-primary"
+          @click="newWinnie?.open()"
+        />
 
-      <UiIconButton
-        icon="plus"
-        label="Add new Winnie"
-        class="btn-primary"
-        @click="newWinnie?.open()"
-      />
-      <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
+        <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
+      </div>
 
-      <UiIconButton
-        v-if="currentWinnie"
-        icon="share"
-        label="Copy share link"
-        @click="copyShareLink"
-      />
+      <div class="tooltip-neutral tooltip tooltip-bottom" data-tip="Copy share link">
+        <UiIconButton
+          v-if="currentWinnie"
+          icon="share"
+          label="Copy share link"
+          class="btn-neutral"
+          @click="copyShareLink"
+        />
+      </div>
     </template>
-    <div class="ms-auto" />
+
     <AccountControl />
   </header>
 </template>
