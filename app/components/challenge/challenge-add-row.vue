@@ -4,7 +4,7 @@ import { insertChallengeSchema } from "~~/server/db/schema";
 import { MAX_CHALLENGES_PER_WINNIE } from "#shared/constants";
 
 const winnieStore = useWinnieStore();
-const { currentWinnie, totalCount } = storeToRefs(winnieStore);
+const { currentWinnie, totalCount, pending } = storeToRefs(winnieStore);
 
 const atCap = computed(() => totalCount.value >= MAX_CHALLENGES_PER_WINNIE);
 
@@ -45,59 +45,80 @@ const onSubmit = handleSubmit(async (values) => {
     toastApiError(error);
   }
 });
+
+const showSkeleton = useDelayed(pending);
 </script>
 
 <template>
-  Create your next Challenge:
-  <!-- then make the form here a fieldset with these nice lines, maybe legends?
-   also tooltips are missing on buttons
-   also check vee validate and instead feedback on wrong input here (negative numbers in target fields are not legal)
-   form should wrap to more lines on smaller devices -->
-  <form class="mx-2 flex items-center gap-4 min-[720px]:mx-6" @submit="onSubmit">
-    <input
-      ref="gameInput"
-      v-model="game"
-      v-bind="gameAttrs"
-      class="input flex-1 input-sm"
-      placeholder="Game"
-      :disabled="atCap"
-    >
-    <input
-      v-model="spec"
-      v-bind="specAttrs"
-      class="input flex-1 input-sm"
-      placeholder="Win Condition"
-      :disabled="atCap"
-    >
-    <input
-      v-if="counterChecked"
-      v-model="target"
-      type="number"
-      v-bind="targetAttrs"
-      class="input flex-1 input-sm"
-      placeholder="Target"
-      :disabled="atCap"
-    >
+  <div v-if="showSkeleton" class="h-24 w-full skeleton" />
+  <div
+    v-else
+    tabindex="0"
+    class="collapse bg-base-200"
+  >
+    <div v-if="totalCount > 0" class="collapse-title text-center font-semibold">
+      Create your next Challenge
+    </div>
+    <div v-else class="text-primar collapse-title text-center font-semibold">
+      Create your first Challenge
+    </div>
+    <div class="collapse-content">
+      <form
+        class="flex flex-col items-center gap-2 md:flex-row"
+        @submit="onSubmit"
+        @keydown.enter="onSubmit"
+      >
+        <input
+          ref="gameInput"
+          v-model="game"
+          type="text"
+          v-bind="gameAttrs"
+          class="input w-full"
+          placeholder="Game"
+          :disabled="atCap"
+        >
+        <input
+          v-model="spec"
+          type="text"
+          v-bind="specAttrs"
+          class="input w-full"
+          placeholder="Win Condition"
+          :disabled="atCap"
+        >
+        <div class="flex items-center gap-2">
+          <input
+            v-if="counterChecked"
+            v-model="target"
+            type="number"
+            v-bind="targetAttrs"
+            class="input min-w-20"
+            placeholder="Target"
+            :disabled="atCap"
+          >
+          <div class="tooltip-neutral tooltip tooltip-top" :data-tip="counterChecked ? 'Remove counter' : 'Add counter'">
+            <UiIconButton
+              :label="counterChecked ? 'Add counter' : 'Remove counter'"
+              :icon="counterChecked ? 'countOn' : 'countOff'"
+              :class="counterChecked ? 'btn btn-circle btn-ghost text-primary' : 'btn btn-circle btn-ghost'"
+              :disabled="atCap || isSubmitting"
+              @click.prevent="onCounterToggle"
+            />
+          </div>
 
-    <UiIconButton
-      v-model="counterChecked"
-      :label="counterChecked ? 'Add counter' : 'Remove counter'"
-      :icon="counterChecked ? 'countOn' : 'countOff'"
-      :class="counterChecked ? 'btn btn-circle btn-primary' : 'btn btn-circle'"
-      :disabled="atCap || isSubmitting"
-      @click.prevent="onCounterToggle"
-    />
-
-    <UiIconButton
-      type="submit"
-      label="Add challenge"
-      icon="plus"
-      class="btn"
-      :disabled="atCap || isSubmitting"
-    />
-  </form>
-
-  <p v-if="atCap" class="type-meta px-3 pb-2">
-    Limit reached ({{ MAX_CHALLENGES_PER_WINNIE }} challenges)
-  </p>
+          <div class="tooltip tooltip-top tooltip-primary" data-tip="Add Challenge">
+            <UiIconButton
+              type="submit"
+              label="Add challenge"
+              icon="plus"
+              class="btn hover:btn-primary"
+              :disabled="atCap || isSubmitting"
+            />
+          </div>
+        </div>
+      </form>
+      <p v-if="atCap" class="mt-4 text-center text-error">
+        Limit reached ({{ MAX_CHALLENGES_PER_WINNIE }} challenges per day)
+      </p>
+    </div>
+  </div>
 </template>
