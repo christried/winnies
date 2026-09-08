@@ -44,7 +44,7 @@ async function copyShareLink() {
         v-if="currentWinnie"
         :current-winnie="currentWinnie"
         :winnies
-        class="min-[720px]:ms-auto"
+        class="md:ms-auto"
         @update:current-winnie="winnie => selectWinnie(winnie.id)"
       />
       <div class="tooltip tooltip-bottom tooltip-primary" data-tip="Create new Winnie">

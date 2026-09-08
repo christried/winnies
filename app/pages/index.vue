@@ -11,5 +11,7 @@ useCompletion();
     <WinnieCompleteBanner />
 
     <ChallengeList />
+
+    <AppFooter />
   </div>
 </template>
