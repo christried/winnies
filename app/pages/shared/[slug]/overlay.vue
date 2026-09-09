@@ -7,6 +7,8 @@ definePageMeta({ layout: false });
 // CONFIG (user can config this later, surely)
 const CHALLENGES_PER_PAGE = 5;
 const PAGE_ROTATION_MS = 10_000;
+const FIREWORK_INTERVAL_MS = 1_200;
+const FIREWORK_PARTICLE_COUNT = 25;
 
 const route = useRoute();
 const slug = route.params.slug as string;
@@ -94,6 +96,65 @@ const totalSeconds = computed(() => {
 });
 
 const totalIsRunning = computed(() => shared.value?.winnie.totalRunningSince != null);
+
+let fireworks: ReturnType<typeof setInterval> | undefined;
+
+const fireworkCanvas = useTemplateRef<HTMLCanvasElement>("fireworkCanvas");
+
+/**
+ * Fireworks go brrr
+ */
+async function startFireworks() {
+  if (fireworks || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    return;
+
+  // The canvas only exists once the panel has rendered.
+  await nextTick();
+
+  const canvas = fireworkCanvas.value;
+
+  if (!canvas || !isComplete.value)
+    return;
+
+  const { default: confetti } = await import("canvas-confetti");
+
+  // resized to only the overlay, not the whole page
+  const confettiBurst = confetti.create(canvas, { resize: true });
+
+  const defaults = {
+    particleCount: FIREWORK_PARTICLE_COUNT,
+    startVelocity: 18,
+    spread: 360,
+    ticks: 60,
+    scalar: 0.8,
+  };
+
+  const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+  fireworks = setInterval(() => {
+    confettiBurst({ ...defaults, origin: { x: randomInRange(0.1, 0.3), y: randomInRange(0, 0.4) } });
+    confettiBurst({ ...defaults, origin: { x: randomInRange(0.7, 0.9), y: randomInRange(0, 0.4) } });
+  }, FIREWORK_INTERVAL_MS);
+}
+
+/**
+ * Stop Confetti going brr.
+ */
+function stopFireworks() {
+  clearInterval(fireworks);
+  fireworks = undefined;
+}
+
+onMounted(() => {
+  watch(isComplete, (complete) => {
+    if (complete)
+      startFireworks();
+    else
+      stopFireworks();
+  }, { immediate: true });
+});
+
+onUnmounted(stopFireworks);
 </script>
 
 <template>
@@ -108,8 +169,14 @@ const totalIsRunning = computed(() => shared.value?.winnie.totalRunningSince != 
 
   <div
     v-else-if="shared"
-    class="w-90 rounded-lg bg-base-200/90 pb-2"
+    class="relative z-0 w-90 overflow-hidden rounded-lg bg-base-200/90 pb-2"
   >
+    <!-- used to only render canvas confetti here and not on the empty rest of the page -->
+    <canvas
+      ref="fireworkCanvas"
+      class="pointer-events-none absolute inset-0 -z-10 size-full"
+    />
+
     <div class="border-b p-2 text-center">
       <p class="text-md text-xl font-bold opacity-90">
         {{ shared.winnie.name }}
