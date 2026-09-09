@@ -17,8 +17,10 @@ const shareUrl = computed(() =>
 
 /**
  * Copies the current Winnie's share link to the clipboard.
+ * @param close Closer handed down by `UiDropdown`'s slot scope
  */
-async function copyShareLink() {
+async function copyShareLink(close: () => void) {
+  close();
   if (!shareUrl.value)
     return;
 
@@ -28,7 +30,28 @@ async function copyShareLink() {
       throw new Error("Clipboard unavailable");
 
     await navigator.clipboard.writeText(shareUrl.value);
-    useToast().success("Share link copied");
+    useToast().success("Share view link copied");
+  }
+  catch {
+    useToast().error("Couldn't copy the link");
+  }
+}
+/**
+ * Copies the current Winnie's stream overlay link to the clipboard.
+ * @param close Closer handed down by `UiDropdown`'s slot scope
+ */
+async function copyOverlayLink(close: () => void) {
+  close();
+  if (!shareUrl.value)
+    return;
+
+  try {
+    // doesn't work without a browser I think
+    if (!navigator.clipboard)
+      throw new Error("Clipboard unavailable");
+
+    await navigator.clipboard.writeText(`${shareUrl.value}/overlay`);
+    useToast().success("Stream overlay link copied");
   }
   catch {
     useToast().error("Couldn't copy the link");
@@ -58,14 +81,29 @@ async function copyShareLink() {
         <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
       </div>
 
-      <div class="tooltip-neutral tooltip tooltip-bottom" data-tip="Copy share link">
-        <UiIconButton
-          v-if="currentWinnie"
-          icon="share"
-          label="Copy share link"
-          class="btn-neutral"
-          @click="copyShareLink"
-        />
+      <div class="tooltip-neutral tooltip tooltip-bottom" data-tip="Copy share links">
+        <UiDropdown>
+          <template #trigger>
+            <UiIconButton
+              v-if="currentWinnie"
+              icon="share"
+              label="Copy share links"
+              class="btn-neutral"
+            />
+          </template>
+          <template #default="{ close }">
+            <li>
+              <button @click="copyShareLink(close)">
+                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="screenShare" />Shared view</span>
+              </button>
+            </li>
+            <li>
+              <button @click="copyOverlayLink(close)">
+                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="cast" />Stream overlay</span>
+              </button>
+            </li>
+          </template>
+        </uidropdown>
       </div>
     </template>
 
