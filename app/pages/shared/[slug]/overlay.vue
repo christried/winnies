@@ -127,9 +127,9 @@ const totalIsRunning = computed(() => shared.value?.winnie.totalRunningSince != 
       <li
         v-for="row in challengeRows"
         :key="row.id"
-        class="flex gap-2 leading-snug"
+        class="flex items-center gap-2 leading-snug"
       >
-        <span class="flex w-5 justify-center pt-0.5">
+        <span class="flex w-5 items-center justify-center">
           <StatusDot v-if="row.running" status="running" />
           <UiIcon
             v-if="row.won"
@@ -172,7 +172,7 @@ const totalIsRunning = computed(() => shared.value?.winnie.totalRunningSince != 
         v-for="page in pages.length"
         :key="page"
         class="size-2.5 rounded-full transition-colors"
-        :class="page - 1 === pageIndex ? 'bg-base-content' : 'bg-base-content/30'"
+        :class="page - 1 === pageIndex ? 'bg-base-content' : 'bg-base-content/40'"
       />
     </div>
   </div>
