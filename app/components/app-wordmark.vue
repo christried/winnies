@@ -16,8 +16,10 @@ const runtimeConfig = useRuntimeConfig();
 <template>
   <div class="flex items-center justify-center gap-2">
     <NuxtLink
-      to="/"
+      :to="isFooter ? 'https://github.com/christried/winnies' : '/'"
       :external="needReload"
+      :rel="isFooter ? 'noopener' : undefined"
+      :target="isFooter ? '_blank' : undefined"
     >
       <span class="type-wordmark">Winnies</span>
     </NuxtLink>
