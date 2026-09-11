@@ -4,6 +4,10 @@ defineProps<{
    * Footer Component only wants the global wordmark
    */
   isFooter?: boolean;
+  /**
+   * When navigating to "/" from a pre-rendered page we need a reload to get user session data
+   */
+  needReload?: boolean;
 }>();
 
 const runtimeConfig = useRuntimeConfig();
@@ -11,7 +15,12 @@ const runtimeConfig = useRuntimeConfig();
 
 <template>
   <div class="flex items-center justify-center gap-2">
-    <span class="type-wordmark">Winnies</span>
+    <NuxtLink
+      to="/"
+      :external="needReload"
+    >
+      <span class="type-wordmark">Winnies</span>
+    </NuxtLink>
 
     <template v-if="!isFooter">
       <div class="badge badge-outline badge-warning">

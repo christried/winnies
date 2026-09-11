@@ -13,7 +13,7 @@ useSeoMeta({
 <template>
   <div>
     <header class="mb-4 flex">
-      <AppWordmark />
+      <AppWordmark :need-reload="true" />
     </header>
 
     <main class="card bg-base-200 p-4 md:p-8">
