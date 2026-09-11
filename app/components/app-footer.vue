@@ -20,6 +20,10 @@ const runtimeConfig = useRuntimeConfig();
       >
         Privacy Policy
       </NuxtLink>
+
+      <NuxtLink to="/changelog" class="link link-hover hover:text-success">
+        Changelog
+      </NuxtLink>
     </nav>
     <nav>
       <div class="tooltip tooltip-bottom tooltip-primary" data-tip="See on GitHub">
