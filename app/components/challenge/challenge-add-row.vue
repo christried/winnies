@@ -88,7 +88,6 @@ const showSkeleton = useDelayed(pending);
       <form
         class="flex flex-col items-center gap-2 md:flex-row md:items-start"
         @submit="onSubmit"
-        @keydown.enter="onSubmit"
       >
         <div class="w-full">
           <input
@@ -157,11 +156,12 @@ const showSkeleton = useDelayed(pending);
           </div>
           <div class="tooltip-neutral tooltip tooltip-top" :data-tip="counterChecked ? 'Remove counter' : 'Add counter'">
             <UiIconButton
+              type="button"
               :label="counterChecked ? 'Add counter' : 'Remove counter'"
               :icon="counterChecked ? 'countOn' : 'countOff'"
               :class="counterChecked ? 'btn btn-circle btn-ghost text-primary' : 'btn btn-circle btn-ghost'"
               :disabled="atCap || isSubmitting"
-              @click.prevent="onCounterToggle"
+              @click="onCounterToggle"
             />
           </div>
 
