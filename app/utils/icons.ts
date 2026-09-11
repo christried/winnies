@@ -7,7 +7,9 @@ export const ICONS = {
   more: "tabler:dots-vertical",
   grip: "tabler:grip-vertical",
   pin: "tabler:pin",
-  share: "tabler:share",
+  share: "tabler:share-3",
+  screenShare: "tabler:screen-share",
+  cast: "tabler:cast",
   trophy: "tabler:trophy",
   eye: "tabler:eye",
   copy: "tabler:copy",
@@ -18,6 +20,9 @@ export const ICONS = {
   trash: "tabler:trash",
   duplicate: "tabler:copy-plus",
   reset: "tabler:rotate",
+  bug: "tabler:bug",
+  countOn: "tabler:abacus",
+  countOff: "tabler:abacus-off",
 } as const;
 
 /** Union of the local keys in {@link ICONS}. */

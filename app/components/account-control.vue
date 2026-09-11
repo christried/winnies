@@ -43,7 +43,7 @@ async function onSignOut(close: () => void) {
     menu-class="dropdown-end"
   >
     <template #trigger>
-      <div v-if="user.image" class="avatar">
+      <div v-if="user.image" class="avatar cursor-pointer">
         <div class="w-12 rounded-full">
           <img alt="" :src="user.image">
         </div>

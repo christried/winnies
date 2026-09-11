@@ -38,6 +38,11 @@ your hosting provider (Vercel in my case).
 
 CI runs lint, typecheck, test and build on every pull request.
 
+## AI usage disclaimer
+
+This project's code is handwritten by a developer learning the frameworks while being augmented by AI. Anything more than that wouldn't make sense in an exercise context, wouldn't it?
+AI has been used heavily to create mockups, edit the server-side-first implementation plan for the MVP and create [Issues](https://github.com/christried/winnies/issues) on this repository.
+
 ## License
 
 Source-available, all rights reserved — see [LICENSE.md](LICENSE.md). Contributions are

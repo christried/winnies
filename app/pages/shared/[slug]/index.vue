@@ -22,6 +22,11 @@ const now = useNow();
 const challenges = computed(() => sortChallenges(shared.value?.winnie.challenges ?? []));
 const isComplete = computed(() => isWinnieComplete(challenges.value));
 
+useFavicon(() => ({
+  running: shared.value?.winnie.totalRunningSince != null,
+  complete: isComplete.value,
+}));
+
 // Poll the same endpoint the initial load used.
 const { lastUpdated, failing, gone } = useSharedPoll<NonNullable<typeof shared.value>>(
   route.params.slug as string,
@@ -58,8 +63,8 @@ const freshness = computed(() => {
   </div>
 
   <div v-else-if="shared" class="flex flex-col gap-3">
-    <header class="flex items-center gap-2">
-      <span class="type-wordmark">Winnies</span>
+    <header class="flex flex-wrap items-center justify-center gap-2">
+      <AppWordmark />
       <div class="ms-auto badge gap-1">
         <UiIcon name="eye" />
         <span class="type-label">View only</span>

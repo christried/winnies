@@ -2,8 +2,7 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 
 const winnieStore = useWinnieStore();
-const { challenges, totalCount, pending, currentWinnie } = storeToRefs(winnieStore);
-const showSkeleton = useDelayed(pending);
+const { challenges, currentWinnie, totalCount } = storeToRefs(winnieStore);
 
 // DRAG & DROP
 
@@ -49,30 +48,19 @@ async function onDragend() {
 </script>
 
 <template>
-  <div v-if="showSkeleton" class="h-24 w-full skeleton" />
-  <template v-else-if="currentWinnie">
-    <div v-if="totalCount === 0" class="flex flex-col items-center gap-2 py-8">
-      <p class="font-semibold">
-        No Challenges yet
-      </p>
-      <p class="type-meta">
-        Add your first Challenge now.
-      </p>
-    </div>
-    <ul
-      v-else
-      ref="parent"
-      class="card bg-base-200"
-    >
-      <li
-        v-for="challenge in items"
-        :key="challenge.id"
-        class="border-b border-base-300 transition-all duration-150 last:border-0"
-      >
-        <ChallengeRow :challenge="challenge" />
-      </li>
-    </ul>
+  <ChallengeAddRow />
 
-    <ChallengeAddRow />
-  </template>
+  <ul
+    v-show="totalCount > 0"
+    ref="parent"
+    class="card bg-base-200"
+  >
+    <li
+      v-for="challenge in items"
+      :key="challenge.id"
+      class="border-b border-base-300 transition-all duration-150 last:border-0"
+    >
+      <ChallengeRow :challenge="challenge" />
+    </li>
+  </ul>
 </template>

@@ -1,20 +1,57 @@
+<script lang="ts" setup>
+const runtimeConfig = useRuntimeConfig();
+</script>
+
 <template>
-  <footer class="type-meta mt-2 flex flex-col flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-base-300 pt-4">
-    <!-- TODO: Write cool footer text -->
-    <span class="text-align-center"> Cool footer text winnies made with nuxt using daisyUI with links or something </span>
-    <div class="flex gap-4">
-      <a
-        href="https://christried.me/imprint.html"
-        target="_blank"
-        rel="noopener"
-        class="hover:underline"
-      >Impressum</a>
-      <a
-        href="https://christried.me/privacy-winnies.html"
-        target="_blank"
-        rel="noopener"
-        class="hover:underline"
-      >Datenschutz</a>
-    </div>
+  <footer class="footer flex footer-center footer-horizontal flex-col gap-3 rounded-lg bg-base-200 p-4">
+    <nav class="flex gap-2">
+      <NuxtLink
+        to="https://christried.me/imprint.html"
+        class="link link-hover hover:text-success"
+        external
+      >
+        Imprint
+      </NuxtLink>
+
+      <NuxtLink
+        to="https://christried.me/privacy-winnies.html"
+        class="link link-hover hover:text-success"
+        external
+      >
+        Privacy Policy
+      </NuxtLink>
+
+      <NuxtLink to="/changelog" class="link link-hover hover:text-success">
+        Changelog
+      </NuxtLink>
+    </nav>
+    <nav>
+      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="See on GitHub">
+        <NuxtLink
+          to="https://github.com/christried/winnies"
+          class="cursor-pointer"
+          external
+        >
+          <AppWordmark :is-footer="true" />
+        </NuxtLink>
+      </div>
+    </nav>
+    <aside>
+      <p>
+        v{{ runtimeConfig.public.appVersion }} created with <NuxtLink
+          to="https://nuxt.com/"
+          class="link link-hover hover:text-success"
+          external
+        >
+          Nuxt
+        </NuxtLink> using <NuxtLink
+          to="https://daisyui.com/"
+          class="link link-hover hover:text-success"
+          external
+        >
+          daisyUI
+        </NuxtLink>
+      </p>
+    </aside>
   </footer>
 </template>
