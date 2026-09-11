@@ -157,7 +157,8 @@ const showSkeleton = useDelayed(pending);
           <div class="tooltip-neutral tooltip tooltip-top" :data-tip="counterChecked ? 'Remove counter' : 'Add counter'">
             <UiIconButton
               type="button"
-              :label="counterChecked ? 'Add counter' : 'Remove counter'"
+              label="Counter target"
+              :aria-pressed="counterChecked"
               :icon="counterChecked ? 'countOn' : 'countOff'"
               :class="counterChecked ? 'btn btn-circle btn-ghost text-primary' : 'btn btn-circle btn-ghost'"
               :disabled="atCap || isSubmitting"
@@ -177,7 +178,7 @@ const showSkeleton = useDelayed(pending);
         </div>
       </form>
       <p v-if="atCap" class="mt-4 text-center text-error">
-        Limit reached ({{ MAX_CHALLENGES_PER_WINNIE }} challenges per day)
+        Limit reached ({{ MAX_CHALLENGES_PER_WINNIE }} challenges per Winnie)
       </p>
     </div>
   </div>
