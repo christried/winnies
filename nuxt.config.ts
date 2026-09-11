@@ -32,6 +32,10 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    "/changelog": { prerender: true },
+  },
+
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
