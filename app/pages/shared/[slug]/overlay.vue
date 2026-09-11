@@ -97,6 +97,11 @@ const totalSeconds = computed(() => {
 
 const totalIsRunning = computed(() => shared.value?.winnie.totalRunningSince != null);
 
+useFavicon(() => ({
+  running: totalIsRunning.value,
+  complete: isComplete.value,
+}));
+
 let fireworks: ReturnType<typeof setInterval> | undefined;
 
 const fireworkCanvas = useTemplateRef<HTMLCanvasElement>("fireworkCanvas");

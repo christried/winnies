@@ -23,6 +23,11 @@ useHead({
     return `${formatDuration(seconds)} · Winnies`;
   }),
 });
+
+useFavicon(() => ({
+  running: currentWinnie.value?.totalRunningSince != null,
+  complete: winnieStore.isComplete,
+}));
 </script>
 
 <template>
