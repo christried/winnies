@@ -81,15 +81,14 @@ async function copyOverlayLink(close: () => void) {
         <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
       </div>
 
-      <div class="tooltip-neutral tooltip tooltip-bottom" data-tip="Copy share links">
-        <UiDropdown>
+      <div
+        v-if="currentWinnie"
+        class="tooltip-neutral tooltip tooltip-bottom"
+        data-tip="Copy share links"
+      >
+        <UiDropdown label="Copy share links" trigger-class="btn btn-square btn-neutral">
           <template #trigger>
-            <UiIconButton
-              v-if="currentWinnie"
-              icon="share"
-              label="Copy share links"
-              class="btn-neutral"
-            />
+            <UiIcon name="share" />
           </template>
           <template #default="{ close }">
             <li>
@@ -103,7 +102,7 @@ async function copyOverlayLink(close: () => void) {
               </button>
             </li>
           </template>
-        </uidropdown>
+        </UiDropdown>
       </div>
     </template>
 

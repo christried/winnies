@@ -9,6 +9,8 @@ const runtimeConfig = useRuntimeConfig();
         to="https://christried.me/imprint.html"
         class="link link-hover hover:text-success"
         external
+        rel="noopener"
+        target="_blank"
       >
         Imprint
       </NuxtLink>
@@ -17,23 +19,22 @@ const runtimeConfig = useRuntimeConfig();
         to="https://christried.me/privacy-winnies.html"
         class="link link-hover hover:text-success"
         external
+        rel="noopener"
+        target="_blank"
       >
         Privacy Policy
       </NuxtLink>
 
-      <NuxtLink to="/changelog" class="link link-hover hover:text-success">
+      <NuxtLink
+        to="/changelog"
+        class="link link-hover hover:text-success"
+      >
         Changelog
       </NuxtLink>
     </nav>
     <nav>
       <div class="tooltip tooltip-bottom tooltip-primary" data-tip="See on GitHub">
-        <NuxtLink
-          to="https://github.com/christried/winnies"
-          class="cursor-pointer"
-          external
-        >
-          <AppWordmark :is-footer="true" />
-        </NuxtLink>
+        <AppWordmark :is-footer="true" />
       </div>
     </nav>
     <aside>

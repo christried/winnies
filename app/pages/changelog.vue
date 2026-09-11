@@ -12,14 +12,8 @@ useSeoMeta({
 
 <template>
   <div>
-    <header class="mb-4 flex justify-start">
-      <!-- external = full page reload. Necessary because this is pre-rendered without a user! -->
-      <NuxtLink
-        to="/"
-        external
-      >
-        <AppWordmark />
-      </NuxtLink>
+    <header class="mb-4 flex">
+      <AppWordmark :need-reload="true" />
     </header>
 
     <main class="card bg-base-200 p-4 md:p-8">

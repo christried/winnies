@@ -48,7 +48,7 @@ async function onDragend() {
 </script>
 
 <template>
-  <ChallengeAddRow />
+  <ChallengeAddRow v-if="currentWinnie" />
 
   <ul
     v-show="totalCount > 0"
