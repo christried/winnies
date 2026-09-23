@@ -42,7 +42,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      htmlAttrs: { "data-theme": "abyss", "lang": "en" },
+      htmlAttrs: { lang: "en" },
     },
   },
 

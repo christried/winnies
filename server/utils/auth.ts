@@ -1,5 +1,6 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
+import { THEME_PREFERENCE } from "../../shared/constants";
 import { COOKIE_MAX_AGE } from "../constants";
 import { db } from "../db";
 import * as schema from "../db/schema";
@@ -27,6 +28,17 @@ export const auth = betterAuth(
 
     advanced: {
       database: { generateId: "uuid" },
+    },
+
+    user: {
+      additionalFields: {
+        theme: {
+          type: [...THEME_PREFERENCE],
+          required: false,
+          defaultValue: "system",
+          input: false,
+        },
+      },
     },
   },
 );

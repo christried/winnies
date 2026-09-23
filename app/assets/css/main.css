@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes:
-    abyss --default,
-    winter;
+  themes: abyss --prefersdark;
+}
+
+@plugin "daisyui" {
+  name: "winter";
+  default: true;
 }
 
 body {
@@ -24,14 +27,14 @@ body {
     }
   }
 
-  --color-player-1: oklch(78% 0.17 250);
-  --color-player-2: oklch(80% 0.18 25);
-  --color-player-3: oklch(84% 0.17 85);
-  --color-player-4: oklch(80% 0.16 310);
-  --color-player-5: oklch(82% 0.17 165);
-  --color-player-6: oklch(78% 0.15 30);
-  --color-player-7: oklch(83% 0.15 200);
-  --color-player-8: oklch(80% 0.19 355);
+  --color-player-1: light-dark(oklch(52% 0.15 250), oklch(78% 0.17 250));
+  --color-player-2: light-dark(oklch(52% 0.15 25), oklch(80% 0.18 25));
+  --color-player-3: light-dark(oklch(52% 0.15 85), oklch(84% 0.17 85));
+  --color-player-4: light-dark(oklch(52% 0.15 310), oklch(80% 0.16 310));
+  --color-player-5: light-dark(oklch(52% 0.15 165), oklch(82% 0.17 165));
+  --color-player-6: light-dark(oklch(52% 0.15 30), oklch(78% 0.15 30));
+  --color-player-7: light-dark(oklch(52% 0.15 200), oklch(83% 0.15 200));
+  --color-player-8: light-dark(oklch(52% 0.15 355), oklch(80% 0.19 355));
 
   --font-sans: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Google Sans Code", ui-monospace, "SF Mono", monospace;
