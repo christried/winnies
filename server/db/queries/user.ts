@@ -16,9 +16,9 @@ export async function updateUserTheme(userId: string, theme: ThemePreference) {
     .where(eq(user.id, userId))
     .returning({ theme: user.theme });
 
-  if (!updatedThemePreference) {
+  // The account was deleted while its session was still alive
+  if (!updatedThemePreference)
     throw createError({ statusCode: 404, statusMessage: "That account no longer exists." });
 
-    return updatedThemePreference;
-  }
+  return updatedThemePreference;
 }
