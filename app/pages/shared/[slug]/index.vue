@@ -69,6 +69,7 @@ const freshness = computed(() => {
         <UiIcon name="eye" />
         <span class="type-label">View only</span>
       </div>
+      <ThemeController />
     </header>
 
     <SharedWinnieCard :winnie="shared.winnie" :now="now" />

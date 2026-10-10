@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CHALLENGE_STATUSES } from "#shared/constants";
+import { themePreferenceSchema } from "../../shared/schemas/user";
 import { insertChallengeSchema } from "../db/schema";
 
 // Additional zod schemas that validate BEFORE hitting the DB:
@@ -53,3 +54,7 @@ export const counterSchema = z.discriminatedUnion("op", [
     count: z.number().int().min(0, "Count cannot be negative"),
   }),
 ]);
+
+export const themeBodySchema = z.object({
+  theme: themePreferenceSchema,
+});

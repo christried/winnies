@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DAISY_THEMES } from "~~/shared/constants";
 import { elapsedSeconds, formatDuration } from "~~/shared/utils/timer";
 
 // gets rid of background color
@@ -17,8 +18,12 @@ const { data: shared, error } = await useFetch(`/api/share/${slug}`, { lazy: tru
 
 useHead({
   meta: [{ name: "robots", content: "noindex, nofollow" }],
-  // daisyUI paints the root element in theme colors otherwise
-  htmlAttrs: { style: "--root-bg: transparent; --page-scroll-bg: transparent" },
+  htmlAttrs: {
+    // Fixed look for OBS, independent of the viewer's theme (#121)
+    "data-theme": DAISY_THEMES.dark,
+    // daisyUI paints the root element in theme colors otherwise
+    "style": "--root-bg: transparent; --page-scroll-bg: transparent",
+  },
 });
 
 const clock = useServerClock();

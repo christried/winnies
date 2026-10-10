@@ -23,6 +23,9 @@ export const ICONS = {
   bug: "tabler:bug",
   countOn: "tabler:abacus",
   countOff: "tabler:abacus-off",
+  themeSystem: "tabler:device-desktop",
+  themeLight: "tabler:sun",
+  themeDark: "tabler:moon",
 } as const;
 
 /** Union of the local keys in {@link ICONS}. */

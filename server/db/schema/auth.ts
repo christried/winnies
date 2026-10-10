@@ -8,6 +8,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { THEME_PREFERENCE } from "../../../shared/constants";
 
 export const user = pgTable("user", {
   id: uuid("id")
@@ -22,6 +23,7 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  theme: text("theme", { enum: THEME_PREFERENCE }).default("system").notNull(),
 });
 
 export const session = pgTable(
