@@ -32,17 +32,13 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    "/changelog": { prerender: true },
-  },
-
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
   },
   app: {
     head: {
-      htmlAttrs: { "data-theme": "abyss", "lang": "en" },
+      htmlAttrs: { lang: "en" },
     },
   },
 

@@ -107,5 +107,6 @@ async function copyOverlayLink(close: () => void) {
     </template>
 
     <AccountControl />
+    <ThemeController />
   </header>
 </template>
