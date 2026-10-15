@@ -65,6 +65,9 @@ export default withNuxt(
 
     ignores: [
       "design/**",
+      // Exported design-tool output, kept as reference, not maintained source.
+      "docs/design_handoff_winnies/**",
+      "docs/winnies_full_process/**",
       ".nuxt/**",
       ".output/**",
       "**/migrations/**",
