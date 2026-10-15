@@ -68,6 +68,8 @@ export default withNuxt(
       // Exported design-tool output, kept as reference, not maintained source.
       "docs/design_handoff_winnies/**",
       "docs/winnies_full_process/**",
+      // Agent-written research notes, read once, not maintained.
+      "docs/research/**",
       ".nuxt/**",
       ".output/**",
       "**/migrations/**",

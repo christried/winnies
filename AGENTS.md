@@ -9,7 +9,7 @@ Only what is written here is agreed. Old issues, old commit messages and older n
 
 ## What an agent may do
 
-- **Freely:** read anything; edit planning docs in the working tree (`docs/roadmap.md`, `CONTEXT.md`, `docs/adr/`, `docs/agents/`, ticket drafts).
+- **Freely:** read anything; edit planning docs in the working tree (`docs/roadmap.md`, `CONTEXT.md`, `docs/adr/`, `docs/agents/`, `docs/research/`, ticket drafts).
 - **Only after showing the full batch and getting a go:** anything on GitHub (create, edit, label or close issues; milestones; labels; projects).
 - **Never:** commit, push, open or merge PRs, or change application code, unless the human has handed that ticket to the agent in this session. Even then, never commit.
 

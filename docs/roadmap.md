@@ -8,7 +8,7 @@ Only **Now** has tickets. Everything else lives here until its turn, then become
 
 The whole visual layer rebuilt from `docs/design_handoff_winnies/` (Kawaii Clay). Behaviour stays as is unless a ticket says otherwise (ADR-0001). Built on the `redesign` branch, released as v1.0.0 (ADR-0002).
 
-Not yet ready to ticket. A redesign planning map comes first: the open product questions in `08-open-questions.md`, how today's behaviour differs from the design's assumptions, and what safety net the rebuild needs (dependency update (was #146), unit tests (was #126), e2e tests (was #127), Storybook (was #119)).
+Not yet ready to ticket. A redesign planning map comes first ([Redesign 1.0: Core planning map](https://github.com/christried/winnies/issues/166)): the open product questions in `08-open-questions.md`, how today's behaviour differs from the design's assumptions, and what safety net the rebuild needs (dependency update (was #146), unit tests (was #126), e2e tests (was #127), Storybook (was #119)).
 
 | Phase          | Goal                                                                                                                                                                             | Frames          | Milestone | Status      |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------- | ----------- |
