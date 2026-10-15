@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project.
 title: "[FEAT] <ADD SHORT TITLE HERE>"
-labels: enhancement
+labels: needs-triage, feat
 assignees: christried
 type: Feature
 

@@ -1,15 +1,32 @@
-# Triage Labels
+# Labels
 
-The skills speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker.
+Every label in the tracker is listed here. Phases and feature batches are **milestones**, not labels.
 
-| Label in mattpocock/skills | Label in our tracker | Meaning                                                               |
-| -------------------------- | -------------------- | --------------------------------------------------------------------- |
-| `needs-triage`             | `needs-triage`       | Maintainer needs to evaluate this issue                               |
-| `needs-info`               | `needs-info`         | Waiting on reporter for more information                              |
-| `ready-for-agent`          | `ready-to-implement` | Fully specified; who implements it (agent or human) is decided ad hoc |
-| `ready-for-human`          | `ready-to-implement` | Fully specified; who implements it (agent or human) is decided ad hoc |
-| `wontfix`                  | `wontfix`            | Will not be actioned                                                  |
+## Status
 
-When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
+The skills speak of five canonical triage roles. This table maps them to our labels.
 
-`ready-for-agent` and `ready-for-human` deliberately share one label: whether an issue is implemented by hand or handed to an agent is decided when work starts, not at triage time.
+| Label in mattpocock/skills | Label in our tracker | Meaning                              |
+| -------------------------- | -------------------- | ------------------------------------ |
+| `needs-triage`             | `needs-triage`       | Not evaluated yet                    |
+| `needs-info`               | `needs-info`         | Waiting on the reporter              |
+| `ready-for-agent`          | `ready-to-implement` | Fully specified, ready for the human |
+| `ready-for-human`          | `ready-to-implement` | Fully specified, ready for the human |
+| `wontfix`                  | `wontfix`            | Will not be actioned                 |
+
+The human implements every ticket, sometimes by driving an agent. There is no agent-only work, so both "ready" roles share one label.
+
+`duplicate` marks an issue closed as a duplicate.
+
+## Type
+
+Exactly one per issue, matching the Conventional Commits type of the work it produces:
+
+- `feat`: new or changed behaviour or visuals
+- `fix`: something broken
+- `chore`: tooling, dependencies, tests, refactors
+- `docs`: documentation only
+
+## Planning
+
+Used by `/wayfinder` (see `issue-tracker.md`): `wayfinder:map`, `wayfinder:research`, `wayfinder:prototype`, `wayfinder:grilling`, `wayfinder:task`.
