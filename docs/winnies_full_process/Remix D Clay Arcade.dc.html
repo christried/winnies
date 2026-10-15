@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Chakra+Petch:wght@500;600;700&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#06021A}a{color:#2DE2E6}a:hover{color:#FF3EA5}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#06021A;font-family:'Chakra Petch',sans-serif;color:#FFF4FB">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="rD" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#FFD23F;font:400 46px 'Press Start 2P';color:#3A2600;box-shadow:inset 0 0 0 10px #E6B520,inset 0 -10px 16px rgba(120,70,0,.45),inset 0 10px 14px rgba(255,255,220,.7),0 0 40px rgba(255,210,63,.4)">D</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:400 92px/1 Audiowide;font-style:italic;color:#FFF4FB;text-shadow:0 6px 0 #6C4BF4,0 0 30px rgba(255,62,165,.6)">Clay Arcade</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font:700 16px 'Chakra Petch'">
+        <span style="padding:6px 12px;border-radius:14px;background:#241645">Material #1</span><span style="padding:6px 12px;border-radius:14px;background:#241645">Palette #5 + #1</span><span style="padding:6px 12px;border-radius:14px;background:#241645">Type #5</span><span style="padding:6px 12px;border-radius:14px;background:#241645">Backdrop #5</span><span style="padding:6px 12px;border-radius:14px;background:#241645">Motion #1 + #5</span><span style="padding:6px 12px;border-radius:14px;background:#241645">Ornament #5 + #1</span>
+      </div>
+      <div style="font:600 22px/1.35 'Chakra Petch';color:#C9B6E8">Why: dark claymorphism is having a moment, and the brief says "competitive". Squishy clay controls under neon arcade light, every Winnie a high-score run. Motion on twos, like stop-motion.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="D Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;border-radius:28px;box-sizing:border-box;padding:30px 48px;display:flex;flex-direction:column;gap:22px;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 44%,#5A0F6A 62%,#0A0420 62.2%)">
+  <div style="position:absolute;right:140px;top:420px;width:380px;height:380px;border-radius:50%;background:linear-gradient(180deg,#FFD23F,#FF8A3D 45%,#FF3EA5);-webkit-mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);opacity:.75;pointer-events:none"></div>
+  <div style="position:absolute;left:-30%;right:-30%;bottom:0;height:38%;perspective:500px;pointer-events:none;overflow:hidden"><div data-amb="grid" style="position:absolute;inset:-40% 0 0 0;transform:rotateX(62deg);transform-origin:50% 0;background:linear-gradient(90deg,rgba(45,226,230,.7) 2px,rgba(0,0,0,0) 2px) 0 0/80px 80px,linear-gradient(0deg,rgba(255,62,165,.75) 2px,rgba(0,0,0,0) 2px) 0 0/80px 80px"></div></div>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:16px;height:76px;padding:0 14px 0 28px;border-radius:38px;background:#241645;box-shadow:0 18px 30px -14px rgba(0,0,0,.8),inset 0 -8px 14px rgba(0,0,0,.4),inset 0 6px 10px rgba(255,255,255,.12),0 0 0 2px rgba(255,62,165,.35)">
+    <span style="font:400 40px/1 Audiowide;font-style:italic;color:#FFF4FB;text-shadow:0 4px 0 #6C4BF4,0 0 18px rgba(255,62,165,.7)">WINNIES</span>
+    <button style="margin-left:18px;display:flex;align-items:center;gap:12px;height:50px;padding:0 14px 0 20px;border:0;border-radius:25px;background:#170D33;box-shadow:inset 0 4px 9px rgba(0,0,0,.6),inset 0 -2px 3px rgba(255,255,255,.06);color:#FFF4FB;font:700 17px 'Chakra Petch';cursor:pointer">KITTY VS. THE WORLD<span style="font:400 11px 'Press Start 2P';color:#2DE2E6">03.10.26</span><span style="font-family:'Material Symbols Rounded';font-size:22px">expand_more</span></button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:52px;padding:0 24px;border:0;border-radius:26px;background:#2DE2E6;color:#04282A;font:700 16px 'Chakra Petch';cursor:pointer;box-shadow:0 12px 20px -10px rgba(45,226,230,.7),inset 0 -6px 9px rgba(0,80,90,.45),inset 0 5px 8px rgba(220,255,255,.7)" style-active="transform:scale(.95,.86)"><span style="font-family:'Material Symbols Rounded';font-size:20px">link</span>SHARE</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;gap:4px;padding:4px;border-radius:26px;background:#170D33;box-shadow:inset 0 4px 9px rgba(0,0,0,.6)">
+      <span title="Light" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:#C9B6E8;font-family:'Material Symbols Rounded';font-size:20px">light_mode</span>
+      <span title="System" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:#C9B6E8;font-family:'Material Symbols Rounded';font-size:20px">contrast</span>
+      <span title="Dark" style="width:42px;height:42px;border-radius:21px;display:flex;align-items:center;justify-content:center;background:#6C4BF4;color:#fff;font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' 1;box-shadow:inset 0 -4px 6px rgba(20,0,80,.5),inset 0 3px 5px rgba(200,190,255,.6)">dark_mode</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="display:flex;align-items:center;gap:10px"><span style="font:400 10px/1.6 'Press Start 2P';color:#FFD23F;text-align:right">P1<br><span style="color:#FFF4FB">KITTY</span></span><span style="width:52px;height:52px;border-radius:50%;background:#FF3EA5;display:flex;align-items:center;justify-content:center;font:400 16px 'Press Start 2P';color:#2A0016;box-shadow:inset 0 -6px 9px rgba(120,0,60,.5),inset 0 5px 7px rgba(255,200,230,.7)">K</span></div>
+  </nav>
+
+  <section style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:26px;padding:26px;border-radius:52px;background:#241645;box-shadow:0 34px 60px -24px rgba(0,0,0,.9),inset 0 -12px 20px rgba(0,0,0,.45),inset 0 10px 16px rgba(255,255,255,.12),0 0 0 2px rgba(45,226,230,.3)">
+    <div style="position:relative;border-radius:34px;padding:22px 28px 20px;background:#05010F;box-shadow:inset 0 8px 20px rgba(0,0,0,.9),0 0 0 8px #170D33">
+      <div style="position:absolute;inset:0;border-radius:34px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.04) 0 2px,rgba(0,0,0,0) 2px 4px);pointer-events:none"></div>
+      <div style="position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><span style="font:400 12px 'Press Start 2P';color:#FFD23F">WINNIE · 03.10.26</span><h1 style="margin:0;font:700 40px/1.05 'Chakra Petch';text-transform:uppercase;color:#FFF4FB;text-shadow:0 0 16px rgba(255,62,165,.6)">Kitty vs. the world</h1></div>
+        <span style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:18px;background:rgba(255,62,165,.16);font:700 15px 'Chakra Petch';color:#FF9ACB"><span data-amb="blink" style="width:12px;height:12px;border-radius:50%;background:#FF3EA5;box-shadow:0 0 10px #FF3EA5"></span>{{ runningLabel }}</span>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:20px;margin-top:14px">
+        <span style="font:400 16px 'Press Start 2P';color:#2DE2E6">TIME</span>
+        <div aria-label="Total Timer" style="display:flex;font:400 76px/1 'Press Start 2P';color:#FFFFFF;text-shadow:0 0 14px #2DE2E6,0 0 34px rgba(45,226,230,.7)">
+          <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+        </div>
+      </div>
+      <div style="position:relative;display:flex;align-items:center;gap:16px;margin-top:16px">
+        <span style="font:400 12px 'Press Start 2P';color:#FFD23F">STAGE</span>
+        <div style="display:flex;gap:8px"><sc-for list="{{ coins }}" as="b" hint-placeholder-count="8"><span style="width:30px;height:30px;border-radius:50%;background:{{ b.bg }};box-shadow:{{ b.sh }}"></span></sc-for></div>
+        <span style="font:600 16px 'Chakra Petch';color:#C9B6E8">{{ summary }}</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+      <button onClick="{{ onTotal }}" aria-label="{{ totalBtnLabel }}" style="width:150px;height:150px;border:0;border-radius:50%;cursor:pointer;background:#FF3EA5;color:#2A0016;display:flex;align-items:center;justify-content:center;font-family:'Material Symbols Rounded';font-size:72px;font-variation-settings:'FILL' 1;box-shadow:0 22px 30px -12px rgba(255,62,165,.7),inset 0 -14px 20px rgba(120,0,60,.5),inset 0 12px 16px rgba(255,200,230,.75),0 0 0 10px #170D33,0 0 40px rgba(255,62,165,.4)" style-active="transform:translateY(6px) scale(.97,.88)">{{ totalBtnIcon }}</button>
+      <span style="font:400 13px 'Press Start 2P';text-align:center;line-height:1.5">{{ totalBtnLabel }}</span>
+      <button aria-label="More" style="height:44px;padding:0 20px;border:0;border-radius:22px;background:#3A2766;color:#FFF4FB;cursor:pointer;display:flex;align-items:center;gap:6px;font:700 14px 'Chakra Petch';box-shadow:inset 0 -4px 7px rgba(0,0,0,.4),inset 0 4px 6px rgba(255,255,255,.15)"><span style="font-family:'Material Symbols Rounded';font-size:20px">more_horiz</span>MENU</button>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;padding:18px;border-radius:30px;background:#FFD23F;text-align:center;font:400 22px 'Press Start 2P';color:#3A2600;box-shadow:inset 0 -8px 12px rgba(120,70,0,.4),inset 0 6px 10px rgba(255,255,220,.7)">STAGE CLEAR! ALL CHALLENGES WON <span style="font:600 12px 'Chakra Petch'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:14px;border-radius:36px;background:#241645;box-shadow:0 16px 30px -16px rgba(0,0,0,.8),inset 0 -6px 10px rgba(0,0,0,.4),inset 0 5px 8px rgba(255,255,255,.1)">
+    <div style="flex:1.1;height:52px;border-radius:26px;background:#170D33;box-shadow:inset 0 4px 9px rgba(0,0,0,.6);display:flex;align-items:center;padding:0 22px;font:600 17px 'Chakra Petch';color:#A99BD0">Game</div>
+    <div style="flex:1.5;height:52px;border-radius:26px;background:#170D33;box-shadow:inset 0 4px 9px rgba(0,0,0,.6);display:flex;align-items:center;padding:0 22px;font:600 17px 'Chakra Petch';color:#A99BD0">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:6px;height:52px;padding:0 18px;border:0;border-radius:26px;background:#3A2766;color:#FFF4FB;font:700 15px 'Chakra Petch';cursor:pointer;box-shadow:inset 0 -4px 7px rgba(0,0,0,.4),inset 0 4px 6px rgba(255,255,255,.15)"><span style="font-family:'Material Symbols Rounded';font-size:20px">add</span>COUNTER</button>
+    <div style="width:100px;height:52px;border-radius:26px;background:#170D33;opacity:.55;box-shadow:inset 0 4px 9px rgba(0,0,0,.6);display:flex;align-items:center;padding:0 18px;font:600 17px 'Chakra Petch';color:#A99BD0">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:52px;padding:0 22px 0 16px;border:0;border-radius:26px;background:#FFD23F;color:#3A2600;font:700 16px 'Chakra Petch';cursor:pointer;box-shadow:0 12px 20px -10px rgba(255,210,63,.6),inset 0 -6px 9px rgba(120,70,0,.4),inset 0 5px 8px rgba(255,255,220,.7)" style-active="transform:scale(.95,.86)"><span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1">toll</span>ADD CHALLENGE</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;padding:0 14px;font:400 11px 'Press Start 2P';color:#FFD23F"><span>HIGH SCORES</span><span style="color:#A99BD0">8 / 50 · DRAG TO REORDER</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 56px minmax(0,1fr) 206px 150px 52px 136px 44px;gap:14px;align-items:center;height:74px;padding:0 14px 0 12px;border-radius:37px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .25s cubic-bezier(.3,1.6,.5,1)" style-hover="transform:translateY(-4px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:22px;color:#A99BD0;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span data-beat="{{ r.beat }}" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.coin }};box-shadow:{{ r.coinSh }};font:400 12px 'Press Start 2P';color:{{ r.coinInk }}">{{ r.rank }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <span title="{{ r.statusWord }}" style="flex:none;display:flex;align-items:center;gap:4px;height:24px;padding:0 9px 0 6px;border-radius:12px;background:{{ r.chipBg }};color:{{ r.chipInk }};font:700 12px 'Chakra Petch';letter-spacing:1px"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span>
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;height:24px;padding:0 9px 0 5px;border-radius:12px;background:#6C4BF4;color:#fff;font:700 12px 'Chakra Petch'"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>PINNED</span></sc-if>
+            <span style="font:700 21px/1.1 'Chakra Petch';text-transform:uppercase;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          </div>
+          <span style="font:500 15px/1.2 'Chakra Petch';color:#C9B6E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:36px;height:36px;border:0;border-radius:50%;background:#3A2766;color:#FFF4FB;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;box-shadow:inset 0 -4px 6px rgba(0,0,0,.4),inset 0 3px 5px rgba(255,255,255,.15)" style-active="transform:scale(.86,.78)">remove</button>
+            <span style="min-width:104px;height:38px;border-radius:19px;background:#05010F;box-shadow:inset 0 3px 7px rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;font:400 12px 'Press Start 2P';color:{{ r.countColor }}">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:36px;height:36px;border:0;border-radius:50%;background:#2DE2E6;color:#04282A;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;box-shadow:inset 0 -4px 6px rgba(0,80,90,.45),inset 0 3px 5px rgba(220,255,255,.7)" style-active="transform:scale(.86,.78)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 18px/1 'Press Start 2P';color:{{ r.timeColor }};text-shadow:{{ r.timeGlow }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:{{ r.playInk }};opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:{{ r.playSh }}" style-active="transform:translateY(3px) scale(.92,.82)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:46px;border:0;border-radius:23px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winInk }};font:700 14px 'Chakra Petch';box-shadow:{{ r.winSh }}" style-active="transform:scale(.94,.84)"><span style="font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' 1">toll</span>{{ r.winUp }}</button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:#FFF4FB;font-family:'Material Symbols Rounded';font-size:22px;box-shadow:{{ r.moreSh }}">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:6px;top:68px;width:250px;padding:10px;border-radius:30px;display:flex;flex-direction:column;gap:2px;background:#2E1D58;box-shadow:0 30px 50px -14px rgba(0,0,0,.9),inset 0 -6px 10px rgba(0,0,0,.4),inset 0 6px 10px rgba(255,255,255,.12),0 0 0 2px rgba(255,62,165,.4)">
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:21px;background:{{ m.bg }};box-shadow:{{ m.sh }};color:{{ m.color }};font:700 15px 'Chakra Petch';text-transform:uppercase"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:600 20px 'Chakra Petch';color:#A99BD0">Workspace · mid-run · 1440 · row 2 hovered, row 5 menu open · Start, Mark Won and ± are live</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="D Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;right:56px;top:140px;width:600px;padding:20px;box-sizing:border-box;border-radius:50px;background:#241645;display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 5px #0A0420,0 0 40px rgba(255,62,165,.45),0 30px 60px rgba(0,0,0,.6),inset 0 -12px 20px rgba(0,0,0,.45),inset 0 10px 16px rgba(255,255,255,.12)">
+    <div style="position:relative;border-radius:32px;padding:14px 20px;background:#05010F;box-shadow:inset 0 6px 16px rgba(0,0,0,.9);display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span style="font:400 24px Audiowide;font-style:italic;color:#FFF4FB;text-shadow:0 3px 0 #6C4BF4">WINNIES</span><span style="font:700 18px 'Chakra Petch';text-transform:uppercase;white-space:nowrap">Kitty vs. the world</span></div>
+      <div aria-label="Total Timer" style="display:flex;font:400 54px/1 'Press Start 2P';color:#fff;text-shadow:0 0 12px #2DE2E6,0 0 28px rgba(45,226,230,.7)"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></div>
+    </div>
+    <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+      <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:50px minmax(0,1fr) auto auto;gap:12px;align-items:center;height:64px;padding:0 20px 0 7px;border-radius:32px;background:{{ r.bg }};box-shadow:{{ r.shadow }}">
+        <span style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.coin }};box-shadow:{{ r.coinSh }};font:400 11px 'Press Start 2P';color:{{ r.coinInk }}">{{ r.rank }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:3px"><span style="font:700 22px/1 'Chakra Petch';text-transform:uppercase;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span><span style="display:flex;align-items:center;gap:4px;font:700 13px 'Chakra Petch';color:{{ r.wordGlow }}"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span></div>
+        <span style="font:400 12px 'Press Start 2P';color:#FFD23F">{{ r.countStr }}</span>
+        <span style="display:flex;font:400 18px/1 'Press Start 2P';color:{{ r.timeColor }};text-shadow:{{ r.timeGlow }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+      </div>
+    </sc-for>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 12px">
+      <span style="display:flex;gap:10px;align-items:center"><sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:16px;border-radius:8px;background:{{ p.bg }}"></span></sc-for><span style="font:400 11px 'Press Start 2P';color:#2DE2E6;margin-left:4px">{{ pageLabel }}</span></span>
+      <span style="font:400 11px 'Press Start 2P';color:#FFD23F">{{ wonCount }}/{{ totalCount }} WON</span>
+    </div>
+  </div>
+</div>
+<div style="font:600 20px 'Chakra Petch';color:#A99BD0">Overlay · 1920×1080 · dark clay cabinet with CRT header and coin ranks · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="D Genome" style="padding:44px;border-radius:44px;background:#170D33;box-shadow:inset 0 6px 10px rgba(255,255,255,.08),0 0 0 2px rgba(45,226,230,.25)">
+    <div style="font:400 40px Audiowide;font-style:italic;margin-bottom:26px">GENOME</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#0A0420;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:100px;height:54px;border-radius:27px;background:#241645;box-shadow:inset 0 -6px 10px rgba(0,0,0,.45),inset 0 5px 8px rgba(255,255,255,.14),0 0 0 2px rgba(255,62,165,.4)"></span><span style="width:58px;height:58px;border-radius:50%;background:#FF3EA5;box-shadow:inset 0 -8px 12px rgba(120,0,60,.5),inset 0 6px 9px rgba(255,200,230,.75)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Material</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Chakra Petch'">#1</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Pure Clay's inflated matte shapes in night-violet clay, rim-lit by the neon around them. Buttons are fat arcade clay, not chrome.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:700 11px 'Chakra Petch'"><div style="border-radius:12px;background:#0A0420;box-shadow:inset 0 0 0 1px #2A1A5A;padding:8px;display:flex;align-items:flex-end">Void #5</div><div style="border-radius:12px;background:#241645;padding:8px;display:flex;align-items:flex-end">Night clay</div><div style="border-radius:12px;background:#FF3EA5;color:#2A0016;padding:8px;display:flex;align-items:flex-end">Laser #5</div><div style="border-radius:12px;background:#2DE2E6;color:#04282A;padding:8px;display:flex;align-items:flex-end">Grid #5</div><div style="border-radius:12px;background:#FFD23F;color:#3A2600;padding:8px;display:flex;align-items:flex-end">Coin #5</div><div style="border-radius:12px;background:#6C4BF4;padding:8px;display:flex;align-items:flex-end">Grape #1</div><div style="border-radius:12px;background:#FF8A3D;color:#2A1000;padding:8px;display:flex;align-items:flex-end">Sunset #5</div><div style="border-radius:12px;background:#FFF4FB;color:#241645;padding:8px;display:flex;align-items:flex-end">Cream #1</div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Palette</span><span style="padding:2px 8px;border-radius:8px;background:#FF3EA5;color:#2A0016;font:700 12px 'Chakra Petch'">#5</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Chakra Petch'">#1</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Outrun neons from #5 (Laser = running, Coin = Won, Grid = time) with Pure Clay's Grape for Pinned and a warm cream for text.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#0A0420;display:flex;align-items:center;justify-content:center;gap:18px"><span style="font:400 48px/1 Audiowide;font-style:italic;text-shadow:0 4px 0 #6C4BF4">Aa</span><span style="font:600 40px/1 'Chakra Petch';color:#D8D0F2">Aa</span><span style="font:400 30px/1 'Press Start 2P';color:#fff;text-shadow:0 0 10px #2DE2E6">07</span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Type</span><span style="padding:2px 8px;border-radius:8px;background:#FF3EA5;color:#2A0016;font:700 12px 'Chakra Petch'">#5</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Audiowide Italic (now with a solid grape clay drop instead of chrome), Chakra Petch for text, Press Start 2P for every number and rank.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="position:relative;height:130px;border-radius:26px;overflow:hidden;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 50%,#5A0F6A 62%,#0A0420 62.5%)"><div style="position:absolute;left:50%;top:18px;width:110px;height:110px;margin-left:-55px;border-radius:50%;background:linear-gradient(180deg,#FFD23F,#FF3EA5);-webkit-mask:repeating-linear-gradient(180deg,#000 0 10px,transparent 10px 14px);mask:repeating-linear-gradient(180deg,#000 0 10px,transparent 10px 14px)"></div><div style="position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(90deg,rgba(45,226,230,.8) 1px,rgba(0,0,0,0) 1px) 0 0/24px 24px,linear-gradient(0deg,rgba(255,62,165,.8) 1px,rgba(0,0,0,0) 1px) 0 0/24px 14px,#0A0420"></div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Backdrop</span><span style="padding:2px 8px;border-radius:8px;background:#FF3EA5;color:#2A0016;font:700 12px 'Chakra Petch'">#5</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Synthwave sun and an endless scrolling grid. The clay sits in front of it like toys on an arcade shelf.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#0A0420;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px;box-sizing:border-box"><span data-amb="ontwos" style="width:64px;height:64px;border-radius:50%;background:#FFD23F;transform-origin:50% 100%;box-shadow:inset 0 0 0 6px #E6B520,inset 0 -6px 10px rgba(120,70,0,.4)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Motion</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Chakra Petch'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#FF3EA5;color:#2A0016;font:700 12px 'Chakra Petch'">#5</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Clay squash and stretch (#1), stepped "on twos" like stop-motion so it reads as arcade frames (#5). Score pops for big moments.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#0A0420;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:56px;height:56px;border-radius:50%;background:#FFD23F;display:flex;align-items:center;justify-content:center;font:400 11px 'Press Start 2P';color:#3A2600;box-shadow:inset 0 0 0 5px #E6B520">1ST</span><span style="font:400 13px/1.5 'Press Start 2P';color:#FFD23F">INSERT<br>COIN</span><span style="width:24px;height:24px;border-radius:50%;background:#2DE2E6;box-shadow:inset -3px -3px 5px rgba(0,80,90,.5)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 18px Audiowide">Ornament</span><span style="padding:2px 8px;border-radius:8px;background:#FF3EA5;color:#2A0016;font:700 12px 'Chakra Petch'">#5</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Chakra Petch'">#1</span></div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Clay coins as rank badges, INSERT COIN blinkers (#5), clay beads as confetti and stage dots (#1). No mascot; the cabinet is the character.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="D Dialects" style="padding:44px;border-radius:44px;background:#170D33;display:flex;flex-direction:column;gap:24px;box-shadow:inset 0 6px 10px rgba(255,255,255,.08),0 0 0 2px rgba(45,226,230,.25)">
+    <div style="font:400 40px Audiowide;font-style:italic">DIALECT SKETCH</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:#0A0420;display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:62px;padding:0 16px 0 8px;border-radius:31px;background:#1E1240;box-shadow:inset 0 -4px 8px rgba(0,0,0,.35),inset 0 3px 5px rgba(255,255,255,.08)"><span style="width:46px;height:46px;border-radius:50%;background:#3A2766;display:flex;align-items:center;justify-content:center;font:400 10px 'Press Start 2P'">1ST</span><span style="flex:1;font:700 18px 'Chakra Petch'">ELDEN RING</span><span style="font:400 15px 'Press Start 2P'">3:12:44</span></div></div><div style="font:400 18px Audiowide">Workspace</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Lights down: the grid dims, rim glow only on running, clay stays soft. An operator menu you can live in.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:linear-gradient(135deg,#3a8f3a,#1f5fbf);display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:74px;padding:0 18px 0 8px;border-radius:37px;background:#2A1A55;box-shadow:0 0 0 4px #0A0420,0 0 0 7px #FF3EA5,0 0 30px rgba(255,62,165,.6)"><span style="width:56px;height:56px;border-radius:50%;background:#FF3EA5;display:flex;align-items:center;justify-content:center;font:400 11px 'Press Start 2P';color:#2A0016">1ST</span><span style="flex:1;font:700 22px 'Chakra Petch'">ELDEN RING</span><span style="font:400 19px 'Press Start 2P';text-shadow:0 0 10px #FF3EA5">3:12:44</span></div></div><div style="font:400 18px Audiowide">Broadcast</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Attract mode: full neon rim, black keyline, "+1 WON" pops sized for the stream.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 50%,#5A0F6A 66%,#0A0420 66.3%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px"><span data-amb="ontwos" style="font:400 80px/1 Audiowide;font-style:italic;text-shadow:0 8px 0 #6C4BF4,0 0 24px rgba(255,62,165,.7);transform-origin:50% 100%">WINNIES</span><span data-amb="blink" style="font:400 16px 'Press Start 2P';color:#FFD23F">PRESS START</span></div><div style="font:400 18px Audiowide">Showcase</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">A full attract-mode landing: clay letters bounce on twos down the grid, sign-in is "PRESS START".</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="D Motion" style="padding:44px;border-radius:44px;background:#170D33;display:flex;flex-direction:column;gap:24px;box-shadow:inset 0 6px 10px rgba(255,255,255,.08),0 0 0 2px rgba(45,226,230,.25)">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:400 40px Audiowide;font-style:italic">MOTION SKETCH</div>
+      <div style="display:flex;gap:12px"><button onClick="{{ onReplayWon }}" style="height:52px;padding:0 22px;border:0;border-radius:26px;background:#FFD23F;color:#3A2600;font:700 15px 'Chakra Petch';cursor:pointer;box-shadow:inset 0 -6px 9px rgba(120,70,0,.4),inset 0 5px 8px rgba(255,255,220,.7)" style-active="transform:scale(.95,.86)">REPLAY WON</button><button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 22px;border:0;border-radius:26px;background:#FF3EA5;color:#2A0016;font:700 15px 'Chakra Petch';cursor:pointer;box-shadow:inset 0 -6px 9px rgba(120,0,60,.5),inset 0 5px 8px rgba(255,200,230,.75)" style-active="transform:scale(.95,.86)">REPLAY COMPLETE</button></div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:16px;align-items:center;height:74px;padding:0 22px 0 10px;border-radius:37px;background:#2A2410;box-shadow:inset 0 -5px 8px rgba(0,0,0,.4),inset 0 4px 6px rgba(255,255,255,.08)">
+      <span style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#FFD23F;box-shadow:inset 0 0 0 5px #E6B520;font:400 11px 'Press Start 2P';color:#3A2600">6TH</span>
+      <span style="font:700 21px 'Chakra Petch';text-transform:uppercase">Celeste <span style="font-weight:500;font-size:15px;text-transform:none;color:#C9B6E8">Farewell, golden strawberry · Won</span></span>
+      <span style="font:400 18px 'Press Start 2P';color:#FFD23F">1:02:13</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px">
+      <div><div style="font:400 17px Audiowide;color:#2DE2E6;margin-bottom:8px">TICK</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Changed digits pop up from below and squash on landing, all in 4 stepped frames (on twos). The running rank coin bounces on the beat.</div></div>
+      <div><div style="font:400 17px Audiowide;color:#FFD23F;margin-bottom:8px">WON</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">"+1 WON" pops off the row, clay coins spray and bounce, the row squashes, then slides into the Won ranks and its coin turns gold.</div></div>
+      <div><div style="font:400 17px Audiowide;color:#FF3EA5;margin-bottom:8px">REDUCED MOTION · SOUND</div><div style="font:500 15px/1.5 'Chakra Petch';color:#D8D0F2">Static: gold coin, toll icon, WON chip. Sound (muted): tick = soft coin-op blip, Won = coin drop into a clay cup + jingle, Complete = STAGE CLEAR synth fanfare.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const coinStyle = { boxShadow: 'inset 0 0 0 4px rgba(180,120,0,.8), inset -3px -4px 5px rgba(0,0,0,.25)' };
+    return {
+      wonDelay: 650,
+      amb: {
+        grid: [[{ backgroundPosition: '0 0,0 0' }, { backgroundPosition: '0 80px,0 80px' }], { duration: 900, easing: 'linear' }],
+        blink: [[{ opacity: 1 }, { opacity: .2 }], { duration: 800, easing: 'steps(1,end)' }],
+        ontwos: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.2,.8)', offset: .12 }, { transform: 'translateY(-40px) scale(.9,1.12)', offset: .32 }, { transform: 'translateY(0) scale(1.14,.86)', offset: .52 }, { transform: 'none', offset: .64 }, { transform: 'none' }], { duration: 1800, easing: 'steps(22,end)' }],
+      },
+      tick: (k) => [[{ transform: 'translateY(40%) scale(.9,1.1)', opacity: 0 }, { transform: 'translateY(-12%) scale(.94,1.08)', opacity: 1, offset: .35 }, { transform: 'scale(1.14,.86)', offset: .65 }, { transform: 'none' }], { duration: k === 'total' ? 360 : 300, easing: 'steps(4,end)' }],
+      beat: () => [[{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(-6px) scale(.94,1.08)' }, { transform: 'translateY(0) scale(1.1,.9)' }, { transform: 'none' }], { duration: 360, easing: 'steps(4,end)' }],
+      won: (el, W, ov) => {
+        el.animate([{ transform: 'none' }, { transform: 'scale(1.03,.84)' }, { transform: 'translateY(-10px) scale(.98,1.06)' }, { transform: 'scale(1.02,.96)' }, { transform: 'none' }], { duration: 560, easing: 'steps(1,end)' });
+        W.burst(el, { n: 1, shapes: ['text:+1 WON'], colors: ['#FFD23F'], size: 28, spread: .1, gravity: -90, dur: 1300, ox: .5, font: "'Press Start 2P'", spin: 0, endScale: 1.3, easing: 'steps(10,end)', style: { textShadow: '0 4px 0 #6C4BF4, 0 0 14px #FFD23F', whiteSpace: 'nowrap' } });
+        W.burst(el, { n: ov ? 10 : 18, shapes: ['circle'], colors: ['#FFD23F'], size: 22, spread: 240, gravity: 170, dur: 1100, ox: .8, up: true, cone: 2.4, easing: 'steps(14,end)', style: coinStyle });
+      },
+      land: (el) => el.animate([{ transform: 'translateX(60%) scale(.9,1.1)', opacity: 0 }, { transform: 'translateX(-4%) scale(1.06,.92)', opacity: 1, offset: .6 }, { transform: 'none' }], { duration: 440, easing: 'steps(6,end)' }),
+      complete: (root, W) => {
+        const t = root.querySelector('[data-kind="total"]');
+        if (!t) return;
+        W.burst(t.parentElement, { n: 1, shapes: ['text:STAGE CLEAR!'], colors: ['#FFD23F'], size: 52, spread: .1, gravity: -60, dur: 2400, font: "'Press Start 2P'", spin: 0, endScale: 1.4, easing: 'steps(16,end)', style: { textShadow: '0 6px 0 #6C4BF4, 0 0 24px #FF3EA5', whiteSpace: 'nowrap' } });
+        W.burst(t.parentElement, { n: 50, shapes: ['circle'], colors: ['#FFD23F', '#FF3EA5', '#2DE2E6', '#6C4BF4'], size: 26, spread: 600, gravity: 280, dur: 2000, easing: 'steps(20,end)', style: { boxShadow: 'inset -3px -4px 5px rgba(0,0,0,.3), inset 2px 3px 4px rgba(255,255,255,.5)' } });
+      },
+    };
+  }
+  skin(r) {
+    const ranks = ['1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH'];
+    const CLAY = '0 14px 26px -14px rgba(0,0,0,.85),inset 0 -6px 10px rgba(0,0,0,.4),inset 0 5px 8px rgba(255,255,255,.1)';
+    const st = {
+      running: { bg: '#3A1A4A', shadow: CLAY + ',0 0 0 3px #FF3EA5,0 0 30px rgba(255,62,165,.4)', coin: '#FF3EA5', coinSh: 'inset 0 -6px 9px rgba(120,0,60,.5),inset 0 5px 7px rgba(255,200,230,.75)', coinInk: '#2A0016', chipBg: '#FF3EA5', chipInk: '#2A0016', statusIcon: 'play_arrow', timeColor: '#FFFFFF', timeGlow: '0 0 10px #FF3EA5', gameColor: '#FFF4FB', wordGlow: '#FF9ACB', beat: 'run' },
+      idle: { bg: '#241645', shadow: CLAY, coin: '#3A2766', coinSh: 'inset 0 -5px 8px rgba(0,0,0,.4),inset 0 4px 6px rgba(255,255,255,.15)', coinInk: '#2DE2E6', chipBg: '#3A2766', chipInk: '#D8D0F2', statusIcon: r.untouched ? 'radio_button_unchecked' : 'pause', timeColor: r.untouched ? '#A99BD0' : '#E6F8FF', timeGlow: r.untouched ? 'none' : '0 0 8px rgba(45,226,230,.7)', gameColor: '#FFF4FB', wordGlow: '#C9B6E8', beat: '' },
+      won: { bg: '#2A2410', shadow: '0 6px 12px -8px rgba(0,0,0,.8),inset 0 -3px 6px rgba(0,0,0,.35),inset 0 3px 5px rgba(255,255,255,.06)', coin: '#FFD23F', coinSh: 'inset 0 0 0 5px #E6B520,inset 0 -5px 8px rgba(120,70,0,.4)', coinInk: '#3A2600', chipBg: '#FFD23F', chipInk: '#3A2600', statusIcon: 'toll', timeColor: '#FFD23F', timeGlow: '0 0 8px rgba(255,210,63,.6)', gameColor: '#FFF1C2', wordGlow: '#FFD23F', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      bg: hov ? '#2E1D58' : st.bg, shadow: hov ? '0 24px 36px -14px rgba(0,0,0,.9),inset 0 -6px 10px rgba(0,0,0,.4),inset 0 5px 8px rgba(255,255,255,.14),0 0 0 2px #2DE2E6' : st.shadow,
+      lift: hov ? 'translateY(-5px)' : 'none', gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : 1,
+      rank: ranks[r.n - 1], statusUp: r.statusWord.toUpperCase(), winUp: r.winLabel.toUpperCase(),
+      countColor: r.full ? '#FFD23F' : '#FFF4FB',
+      playBg: r.running ? '#FF3EA5' : '#2DE2E6', playInk: r.running ? '#2A0016' : '#04282A', playOp: r.won ? 0.3 : 1,
+      playSh: r.running ? 'inset 0 -6px 9px rgba(120,0,60,.5),inset 0 5px 7px rgba(255,200,230,.75)' : 'inset 0 -6px 9px rgba(0,80,90,.45),inset 0 5px 7px rgba(220,255,255,.7)',
+      winBg: r.won ? '#FFD23F' : '#170D33', winInk: r.won ? '#3A2600' : '#FFD23F',
+      winSh: r.won ? 'inset 0 -5px 8px rgba(120,70,0,.4),inset 0 4px 6px rgba(255,255,220,.7)' : 'inset 0 3px 7px rgba(0,0,0,.6),0 0 0 2px rgba(255,210,63,.5)',
+      moreBg: r.menu || hov ? '#3A2766' : 'transparent', moreSh: r.menu ? 'inset 0 3px 7px rgba(0,0,0,.5)' : 'none',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? '#170D33' : 'transparent', sh: m.first ? 'inset 0 3px 6px rgba(0,0,0,.5)' : 'none', color: m.danger ? '#FF7FB6' : '#FFF4FB' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.7em' : '1em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      coins: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, bg: i < v.wonCount ? '#FFD23F' : '#241645', sh: i < v.wonCount ? 'inset 0 0 0 4px #E6B520,0 0 10px rgba(255,210,63,.6)' : 'inset 0 3px 6px rgba(0,0,0,.7)' })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.7em' : '1em' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, w: p.on ? '40px' : '16px', bg: p.on ? '#2DE2E6' : '#3A2766' })) };
+  }
+}
+</script>
+</body>
+</html>

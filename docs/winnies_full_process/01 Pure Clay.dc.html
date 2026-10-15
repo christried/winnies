@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Figtree:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#E9E1D6}a{color:#6C4BF4}a:hover{color:#C93A1A}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#E9E1D6;font-family:Figtree,sans-serif;color:#2A2140">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="d1" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:40px;background:#FF5B3A;display:flex;align-items:center;justify-content:center;font:700 72px/1 Fredoka;color:#2A2140;box-shadow:0 18px 30px -12px rgba(200,60,20,.6),inset 0 -8px 14px rgba(140,30,10,.35),inset 0 8px 12px rgba(255,210,190,.7)">01</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font:700 96px/0.95 Fredoka;letter-spacing:-1px">Pure Clay</div>
+      <div style="font:600 24px/1.3 Figtree;color:#5E5373">Parent: claymorphism · Native mode: light · Everything looks squeezable, and everything you press squishes back.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="01 Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;background:#F6EFE6;border-radius:28px;box-sizing:border-box;padding:32px 56px;display:flex;flex-direction:column;gap:24px">
+  <div data-amb="drift" style="position:absolute;left:-160px;top:280px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,140,.55),rgba(255,170,140,0) 70%);pointer-events:none"></div>
+  <div data-amb="drift" data-ad="-3000" style="position:absolute;right:-200px;top:-120px;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle,rgba(170,150,255,.45),rgba(170,150,255,0) 70%);pointer-events:none"></div>
+  <div data-amb="drift" data-ad="-6000" style="position:absolute;right:120px;bottom:-240px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(120,220,180,.4),rgba(120,220,180,0) 70%);pointer-events:none"></div>
+  <div data-amb="float" style="position:absolute;right:420px;top:96px;width:34px;height:34px;border-radius:50%;background:#FFC53D;box-shadow:inset -5px -6px 8px rgba(160,100,0,.35),inset 4px 5px 6px rgba(255,255,255,.7),0 10px 14px -6px rgba(160,100,0,.5);pointer-events:none"></div>
+  <div data-amb="float" data-ad="-1500" style="position:absolute;left:640px;top:70px;width:22px;height:22px;border-radius:50%;background:#2EC98E;box-shadow:inset -4px -4px 6px rgba(0,90,60,.35),inset 3px 3px 5px rgba(255,255,255,.7);pointer-events:none"></div>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:20px;height:72px;padding:0 14px 0 28px;border-radius:36px;background:#FFF9F2;box-shadow:0 16px 32px -14px rgba(120,70,30,.38),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px rgba(255,255,255,.95)">
+    <div style="display:flex;align-items:baseline;font:700 36px/1 Fredoka;letter-spacing:-1px">
+      <span style="color:#FF5B3A;text-shadow:0 3px 0 #C93A1A">w</span><span style="color:#6C4BF4;text-shadow:0 3px 0 #4A2FC4">i</span><span style="color:#2EC98E;text-shadow:0 3px 0 #1A9A6A">n</span><span style="color:#FFC53D;text-shadow:0 3px 0 #D99A10">n</span><span style="color:#FF5B3A;text-shadow:0 3px 0 #C93A1A">i</span><span style="color:#6C4BF4;text-shadow:0 3px 0 #4A2FC4">e</span><span style="color:#2EC98E;text-shadow:0 3px 0 #1A9A6A">s</span>
+    </div>
+    <button style="margin-left:24px;display:flex;align-items:center;gap:12px;height:48px;padding:0 18px 0 22px;border:0;border-radius:24px;background:#F1E7DA;box-shadow:inset 0 3px 8px rgba(120,70,30,.18),inset 0 -2px 4px rgba(255,255,255,.8);font:600 18px/1 Figtree;color:#2A2140;cursor:pointer">
+      <span>Kitty vs. the world</span><span style="font:600 15px/1 Figtree;color:#5E5373">03.10.26</span>
+      <span style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'wght' 600">expand_more</span>
+    </button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#6C4BF4;color:#fff;font:700 18px/1 Figtree;cursor:pointer;box-shadow:0 12px 20px -10px rgba(80,40,200,.7),inset 0 -5px 8px rgba(40,20,140,.4),inset 0 5px 8px rgba(200,190,255,.6)" style-hover="transform:translateY(-2px)" style-active="transform:translateY(2px) scale(.97,.94)">
+      <span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'wght' 600">link</span>Share
+    </button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;gap:4px;padding:4px;border-radius:24px;background:#F1E7DA;box-shadow:inset 0 3px 8px rgba(120,70,30,.18)">
+      <span title="Light" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:#FFF9F2;box-shadow:0 6px 10px -6px rgba(120,70,30,.5),inset 0 -3px 5px rgba(120,70,30,.12);font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1">light_mode</span>
+      <span title="System" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#5E5373;font-family:'Material Symbols Rounded';font-size:22px">contrast</span>
+      <span title="Dark" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#5E5373;font-family:'Material Symbols Rounded';font-size:22px">dark_mode</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:52px;height:52px;border-radius:50%;background:#FFC53D;display:flex;align-items:center;justify-content:center;font:700 22px/1 Fredoka;color:#2A2140;box-shadow:0 10px 16px -8px rgba(160,100,0,.6),inset 0 -5px 8px rgba(160,100,0,.35),inset 0 5px 8px rgba(255,255,255,.7)">K</div>
+  </nav>
+
+  <section style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:center;padding:36px 40px 36px 44px;border-radius:44px;background:#FFF9F2;box-shadow:0 28px 50px -24px rgba(120,70,30,.45),0 4px 10px -4px rgba(120,70,30,.15),inset 0 -10px 18px rgba(120,70,30,.10),inset 0 10px 16px rgba(255,255,255,.95)">
+    <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font:700 14px/1 Figtree;letter-spacing:1.5px;text-transform:uppercase;color:#5E5373">Winnie</span>
+        <span style="font:600 15px/1 Figtree;color:#5E5373">Created 03.10.26</span>
+        <span style="display:flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:16px;background:#FFE3DA;font:700 15px/1 Figtree;color:#A12E12"><span data-amb="pulse" style="width:12px;height:12px;border-radius:50%;background:#FF5B3A;box-shadow:inset -2px -2px 3px rgba(140,30,10,.4)"></span>{{ runningLabel }}</span>
+      </div>
+      <h1 style="margin:0;font:700 68px/1 Fredoka;letter-spacing:-1.5px;text-wrap:pretty">Kitty vs. the world</h1>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="flex:1;max-width:520px;height:28px;border-radius:14px;background:#EFE4D6;box-shadow:inset 0 4px 8px rgba(120,70,30,.22),inset 0 -2px 3px rgba(255,255,255,.8);padding:4px;box-sizing:border-box">
+          <div style="width:{{ pctStr }};height:100%;border-radius:10px;background:#2EC98E;box-shadow:inset 0 -4px 6px rgba(0,90,60,.35),inset 0 3px 5px rgba(255,255,255,.6)"></div>
+        </div>
+        <span style="font:700 20px/1 Figtree">{{ summary }}</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:20px">
+      <div aria-label="Total Timer" style="display:flex;align-items:center;gap:8px">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8">
+          <sc-if value="{{ d.num }}"><span data-chg="{{ d.chg }}" data-kind="total" style="display:flex;align-items:center;justify-content:center;width:68px;height:96px;border-radius:24px;background:#FFF9F2;font:700 64px/1 Fredoka;color:#2A2140;transform-origin:50% 100%;box-shadow:0 14px 22px -12px rgba(120,70,30,.55),inset 0 -6px 10px rgba(120,70,30,.14),inset 0 6px 8px rgba(255,255,255,1)">{{ d.c }}</span></sc-if>
+          <sc-if value="{{ d.sep }}"><span style="display:flex;flex-direction:column;gap:14px;padding:0 2px"><span style="width:14px;height:14px;border-radius:50%;background:#FF5B3A;box-shadow:inset -2px -3px 4px rgba(140,30,10,.4)"></span><span style="width:14px;height:14px;border-radius:50%;background:#FF5B3A;box-shadow:inset -2px -3px 4px rgba(140,30,10,.4)"></span></span></sc-if>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:10px;height:60px;padding:0 30px 0 24px;border:0;border-radius:30px;background:#FF5B3A;color:#2A2140;font:700 22px/1 Fredoka;cursor:pointer;box-shadow:0 16px 24px -12px rgba(200,60,20,.7),inset 0 -7px 10px rgba(140,30,10,.35),inset 0 6px 9px rgba(255,210,190,.75)" style-hover="transform:translateY(-2px)" style-active="transform:translateY(3px) scale(.97,.92)">
+          <span style="font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1,'wght' 700">{{ totalBtnIcon }}</span>{{ totalBtnLabel }}
+        </button>
+        <button aria-label="More" style="width:60px;height:60px;border:0;border-radius:50%;background:#FFF9F2;cursor:pointer;font-family:'Material Symbols Rounded';font-size:28px;color:#2A2140;box-shadow:0 12px 18px -10px rgba(120,70,30,.5),inset 0 -5px 8px rgba(120,70,30,.14),inset 0 5px 8px rgba(255,255,255,1)">more_horiz</button>
+      </div>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;display:flex;align-items:center;gap:16px;padding:18px 24px;border-radius:28px;background:#2EC98E;font:700 26px/1.1 Fredoka;color:#123F2D;box-shadow:inset 0 -6px 10px rgba(0,90,60,.3),inset 0 6px 8px rgba(255,255,255,.5)">
+        <span style="font-family:'Material Symbols Rounded';font-size:36px;font-variation-settings:'FILL' 1">emoji_events</span>Complete. Every Challenge Won. Go outside? No. Do it again. <span style="font:600 14px Figtree;opacity:.8">(new copy)</span>
+      </div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:14px;padding:16px;border-radius:36px;background:#FFF9F2;box-shadow:0 16px 32px -16px rgba(120,70,30,.38),inset 0 -6px 12px rgba(120,70,30,.10),inset 0 6px 10px rgba(255,255,255,.95)">
+    <div style="flex:1.1;height:56px;border-radius:28px;background:#F1E7DA;box-shadow:inset 0 4px 9px rgba(120,70,30,.2),inset 0 -2px 3px rgba(255,255,255,.8);display:flex;align-items:center;padding:0 22px;font:600 18px Figtree;color:#6A5F80">Game</div>
+    <div style="flex:1.5;height:56px;border-radius:28px;background:#F1E7DA;box-shadow:inset 0 4px 9px rgba(120,70,30,.2),inset 0 -2px 3px rgba(255,255,255,.8);display:flex;align-items:center;padding:0 22px;font:600 18px Figtree;color:#6A5F80">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:8px;height:56px;padding:0 20px;border:0;border-radius:28px;background:#FFF9F2;color:#2A2140;font:700 17px Figtree;cursor:pointer;box-shadow:0 10px 16px -10px rgba(120,70,30,.5),inset 0 -4px 7px rgba(120,70,30,.14),inset 0 4px 7px rgba(255,255,255,1)">
+      <span style="font-family:'Material Symbols Rounded';font-size:22px">add</span>Counter
+    </button>
+    <div style="width:120px;height:56px;border-radius:28px;background:#F1E7DA;opacity:.55;box-shadow:inset 0 4px 9px rgba(120,70,30,.2);display:flex;align-items:center;padding:0 20px;font:600 18px Figtree;color:#6A5F80">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:56px;padding:0 26px 0 20px;border:0;border-radius:28px;background:#6C4BF4;color:#fff;font:700 19px Fredoka;cursor:pointer;box-shadow:0 14px 20px -10px rgba(80,40,200,.7),inset 0 -6px 9px rgba(40,20,140,.4),inset 0 5px 8px rgba(200,190,255,.6)" style-active="transform:translateY(3px) scale(.97,.93)">
+      <span style="font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'wght' 700">add</span>Add Challenge
+    </button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 12px;margin-top:-4px">
+    <span style="font:700 22px Fredoka">Challenges</span>
+    <span style="font:600 15px Figtree;color:#5E5373">8 / 50 Challenges · drag to reorder</span>
+  </div>
+
+  <div style="position:relative;display:flex;flex-direction:column;gap:12px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:24px 48px minmax(0,1fr) 210px 130px 52px 148px 44px;gap:16px;align-items:center;height:76px;padding:0 16px 0 14px;border-radius:38px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s" style-hover="transform:translateY(-4px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:24px;color:#6A5F80;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span title="{{ r.statusWord }}" data-beat="{{ r.beat }}" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.statusBg }};color:{{ r.statusColor }};box-shadow:{{ r.statusShadow }};font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'FILL' 1,'wght' 600">{{ r.statusIcon }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:4px;height:24px;padding:0 10px 0 6px;border-radius:12px;background:#6C4BF4;color:#fff;font:700 13px Figtree;box-shadow:inset 0 -3px 5px rgba(40,20,140,.4),inset 0 3px 4px rgba(200,190,255,.6)"><span style="font-family:'Material Symbols Rounded';font-size:16px;font-variation-settings:'FILL' 1">push_pin</span>Pinned</span></sc-if>
+            <span style="font:600 22px/1.1 Fredoka;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <span style="flex:none;font:700 13px Figtree;color:{{ r.wordColor }};text-transform:uppercase;letter-spacing:1px">{{ r.statusWord }}</span>
+          </div>
+          <span style="font:500 15px/1.2 Figtree;color:#5E5373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:36px;height:36px;border:0;border-radius:50%;background:#FFF9F2;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;color:#2A2140;box-shadow:0 6px 10px -6px rgba(120,70,30,.5),inset 0 -3px 5px rgba(120,70,30,.14)" style-active="transform:scale(.88,.8)">remove</button>
+            <span style="min-width:96px;height:40px;border-radius:20px;background:{{ r.wellBg }};box-shadow:inset 0 3px 7px rgba(120,70,30,.2);display:flex;align-items:center;justify-content:center;font:700 18px Fredoka">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:36px;height:36px;border:0;border-radius:50%;background:#FFC53D;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;color:#2A2140;box-shadow:0 6px 10px -6px rgba(160,100,0,.6),inset 0 -3px 5px rgba(160,100,0,.35)" style-active="transform:scale(.88,.8)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:700 24px/1 Fredoka;color:{{ r.timeColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:#2A2140;opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:{{ r.playShadow }}" style-active="transform:scale(.9,.82)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:48px;border:0;border-radius:24px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winColor }};font:700 17px Fredoka;box-shadow:{{ r.winShadow }}" style-active="transform:scale(.95,.86)">
+          <span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' {{ r.winFill }},'wght' 700">check_circle</span>{{ r.winLabel }}
+        </button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:#2A2140;font-family:'Material Symbols Rounded';font-size:24px;box-shadow:{{ r.moreShadow }}">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:8px;top:70px;width:260px;padding:10px;border-radius:28px;background:#FFF9F2;display:flex;flex-direction:column;gap:2px;box-shadow:0 30px 50px -18px rgba(120,70,30,.55),inset 0 -6px 10px rgba(120,70,30,.12),inset 0 6px 10px rgba(255,255,255,1)">
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;background:#F1E7DA;box-shadow:inset 0 3px 6px rgba(120,70,30,.18);font:600 17px Figtree"><span style="font-family:'Material Symbols Rounded';font-size:22px">edit</span>Edit inline</div>
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;font:600 17px Figtree"><span style="font-family:'Material Symbols Rounded';font-size:22px">exposure_plus_1</span>{{ r.counterLabel }}</div>
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;font:600 17px Figtree"><span style="font-family:'Material Symbols Rounded';font-size:22px">push_pin</span>{{ r.pinLabel }}</div>
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;font:600 17px Figtree"><span style="font-family:'Material Symbols Rounded';font-size:22px">restart_alt</span>Reset timer</div>
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;font:600 17px Figtree"><span style="font-family:'Material Symbols Rounded';font-size:22px">content_copy</span>Duplicate</div>
+            <div style="height:2px;margin:4px 12px;border-radius:1px;background:#EADFD0"></div>
+            <div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;font:700 17px Figtree;color:#B0300F"><span style="font-family:'Material Symbols Rounded';font-size:22px">delete</span>Delete</div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:600 20px Figtree;color:#5E5373">Workspace · mid-run · 1440 · row 2 hovered, row 5 overflow menu open · click Start, Mark Won, ± to play</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="01 Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:48px;top:150px;width:600px;padding:26px;box-sizing:border-box;border-radius:44px;background:#FFF9F2;display:flex;flex-direction:column;gap:16px;box-shadow:0 30px 60px -20px rgba(40,20,10,.7),0 0 0 6px rgba(42,33,64,.9),inset 0 -10px 18px rgba(120,70,30,.14),inset 0 10px 16px rgba(255,255,255,1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <span style="font:700 30px/1.05 Fredoka;color:#2A2140;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Kitty vs. the world</span>
+      <span style="font:700 18px/1 Fredoka;color:#5E5373">{{ wonCount }} / {{ totalCount }} won</span>
+    </div>
+    <div aria-label="Total Timer" style="display:flex;align-items:center;gap:6px">
+      <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8">
+        <sc-if value="{{ d.num }}"><span data-chg="{{ d.chg }}" data-kind="total" style="display:flex;align-items:center;justify-content:center;width:62px;height:88px;border-radius:22px;background:#FF5B3A;font:700 60px/1 Fredoka;color:#2A2140;transform-origin:50% 100%;box-shadow:0 12px 18px -10px rgba(200,60,20,.7),inset 0 -6px 10px rgba(140,30,10,.35),inset 0 6px 8px rgba(255,210,190,.75)">{{ d.c }}</span></sc-if>
+        <sc-if value="{{ d.sep }}"><span style="display:flex;flex-direction:column;gap:12px;padding:0 2px"><span style="width:12px;height:12px;border-radius:50%;background:#2A2140"></span><span style="width:12px;height:12px;border-radius:50%;background:#2A2140"></span></span></sc-if>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+        <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:44px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:64px;padding:0 18px 0 10px;border-radius:32px;background:{{ r.bg }};box-shadow:{{ r.shadow }}">
+          <span title="{{ r.statusWord }}" data-beat="{{ r.beat }}" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.statusBg }};color:{{ r.statusColor }};font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'FILL' 1,'wght' 600;box-shadow:{{ r.statusShadow }}">{{ r.statusIcon }}</span>
+          <span style="font:600 24px/1 Fredoka;color:#2A2140;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          <span style="font:700 18px/1 Fredoka;color:#5E5373">{{ r.countStr }}</span>
+          <span style="display:flex;font:700 24px/1 Fredoka;color:{{ r.timeColor }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+      <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:16px;border-radius:8px;background:{{ p.bg }};box-shadow:inset 0 -3px 4px rgba(0,0,0,.2)"></span></sc-for>
+      <span style="font:700 16px Figtree;color:#5E5373;margin-left:6px">Page {{ pageLabel }}</span>
+    </div>
+  </div>
+</div>
+<div style="font:600 20px Figtree;color:#5E5373">Overlay · 1920×1080 · transparent background over a gameplay stand-in · page 1 of 2 (rotates every 10s in production)</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+
+  <section data-screen-label="01 Genome" style="padding:48px;border-radius:44px;background:#F6EFE6;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="font:700 48px Fredoka;margin-bottom:28px">Genome</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="height:150px;border-radius:28px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:18px">
+          <span style="width:110px;height:56px;border-radius:28px;background:#FFF9F2;box-shadow:0 14px 22px -12px rgba(120,70,30,.55),inset 0 -6px 10px rgba(120,70,30,.14),inset 0 6px 8px #fff"></span>
+          <span style="width:56px;height:56px;border-radius:50%;background:#FF5B3A;box-shadow:0 14px 22px -12px rgba(200,60,20,.7),inset 0 -6px 10px rgba(140,30,10,.35),inset 0 6px 8px rgba(255,210,190,.75)"></span>
+          <span style="width:56px;height:56px;border-radius:50%;background:#D9F4E7;box-shadow:0 3px 6px -4px rgba(20,90,60,.35),inset 0 -3px 6px rgba(20,90,60,.12)"></span>
+        </div>
+        <div style="font:700 24px Fredoka">Material</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">Matte, inflated clay. Every surface has a bright top lip, a darker underside and a warm cast shadow. Pressed or Won things flatten and lose their shadow.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          <div style="border-radius:18px;background:#F6EFE6;box-shadow:inset 0 0 0 2px #E2D6C6;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Cream<br>#F6EFE6</div>
+          <div style="border-radius:18px;background:#FF5B3A;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Tomato<br>#FF5B3A</div>
+          <div style="border-radius:18px;background:#6C4BF4;color:#fff;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Grape<br>#6C4BF4</div>
+          <div style="border-radius:18px;background:#2EC98E;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Mint<br>#2EC98E</div>
+          <div style="border-radius:18px;background:#FFF9F2;box-shadow:inset 0 0 0 2px #E2D6C6;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Clay<br>#FFF9F2</div>
+          <div style="border-radius:18px;background:#C93A1A;color:#fff;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Brick<br>#C93A1A</div>
+          <div style="border-radius:18px;background:#FFC53D;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Butter<br>#FFC53D</div>
+          <div style="border-radius:18px;background:#2A2140;color:#fff;padding:10px;font:700 12px Figtree;display:flex;align-items:flex-end">Ink<br>#2A2140</div>
+        </div>
+        <div style="font:700 24px Fredoka">Palette</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">Toy-box primaries on warm cream. Tomato = running, Mint = Won, Grape = Pinned and primary actions, Butter = counters. Brick is the AA-safe text red.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="height:150px;border-radius:28px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:22px">
+          <span style="font:700 72px/1 Fredoka">Aa</span><span style="font:600 56px/1 Figtree;color:#5E5373">Aa</span>
+          <span style="display:flex;gap:4px"><span style="width:44px;height:62px;border-radius:16px;background:#FFF9F2;display:flex;align-items:center;justify-content:center;font:700 40px Fredoka;box-shadow:0 10px 14px -8px rgba(120,70,30,.55),inset 0 -4px 6px rgba(120,70,30,.14)">0</span><span style="width:44px;height:62px;border-radius:16px;background:#FFF9F2;display:flex;align-items:center;justify-content:center;font:700 40px Fredoka;box-shadow:0 10px 14px -8px rgba(120,70,30,.55),inset 0 -4px 6px rgba(120,70,30,.14)">7</span></span>
+        </div>
+        <div style="font:700 24px Fredoka">Type</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">Fredoka for display, Figtree for text. Total Timer digits sit on their own fixed-width clay tiles with clay-bead colons; row timers use fixed-width digit cells so nothing jumps.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="position:relative;height:150px;border-radius:28px;overflow:hidden;background:#F6EFE6">
+          <div style="position:absolute;left:-40px;top:20px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,140,.7),rgba(255,170,140,0) 70%)"></div>
+          <div style="position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(170,150,255,.6),rgba(170,150,255,0) 70%)"></div>
+          <div style="position:absolute;left:58%;top:60%;width:26px;height:26px;border-radius:50%;background:#FFC53D;box-shadow:inset -4px -4px 6px rgba(160,100,0,.35)"></div>
+        </div>
+        <div style="font:700 24px Fredoka">Backdrop</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">A warm cream tabletop with slow, blurred clay-coloured glows and a few floating pebbles. No texture, no noise: the objects carry all the detail.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="height:150px;border-radius:28px;background:#EFE4D6;display:flex;align-items:flex-end;justify-content:center;padding-bottom:24px;box-sizing:border-box">
+          <span data-amb="squish" style="width:70px;height:70px;border-radius:50%;background:#6C4BF4;transform-origin:50% 100%;box-shadow:inset 0 -8px 12px rgba(40,20,140,.45),inset 0 7px 10px rgba(200,190,255,.6)"></span>
+        </div>
+        <div style="font:700 24px Fredoka">Motion character</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">Springy squash-and-stretch: everything is a little heavy, overshoots once and settles with a wobble.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="height:150px;border-radius:28px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:14px">
+          <span style="width:40px;height:40px;border-radius:50%;background:#FFC53D;box-shadow:inset -5px -6px 8px rgba(160,100,0,.35),inset 4px 5px 6px rgba(255,255,255,.7)"></span>
+          <span style="width:90px;height:30px;border-radius:15px;background:#2EC98E;box-shadow:inset 0 -5px 7px rgba(0,90,60,.35),inset 0 4px 6px rgba(255,255,255,.5)"></span>
+          <span style="width:54px;height:54px;border-radius:50%;border:12px solid #FF5B3A;box-sizing:border-box;box-shadow:inset 0 -3px 5px rgba(140,30,10,.4)"></span>
+          <span style="width:26px;height:26px;border-radius:50%;background:#6C4BF4"></span>
+        </div>
+        <div style="font:700 24px Fredoka">Ornament / mascot</div>
+        <div style="font:500 18px/1.45 Figtree;color:#4A405C">Clay beads, pebbles, rings and pills. No mascot: the squishy shapes are the characters, and Won confetti is made of the same beads.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="01 Wordmark" style="padding:48px;border-radius:44px;background:#F6EFE6;display:flex;flex-direction:column;gap:32px;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="font:700 48px Fredoka">Wordmark</div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;border-radius:36px;background:#FFF9F2;min-height:380px;box-shadow:inset 0 -10px 18px rgba(120,70,30,.1),inset 0 10px 16px #fff">
+      <div style="display:flex;align-items:baseline;font:700 230px/1 Fredoka;letter-spacing:-6px">
+        <span data-amb="bob" style="display:inline-block;color:#FF5B3A;text-shadow:0 8px 0 #C93A1A,0 30px 30px rgba(200,60,20,.35)">w</span><span data-amb="bob" data-ad="-200" style="display:inline-block;color:#6C4BF4;text-shadow:0 8px 0 #4A2FC4,0 30px 30px rgba(80,40,200,.35)">i</span><span data-amb="bob" data-ad="-400" style="display:inline-block;color:#2EC98E;text-shadow:0 8px 0 #1A9A6A,0 30px 30px rgba(0,120,80,.35)">n</span><span data-amb="bob" data-ad="-600" style="display:inline-block;color:#FFC53D;text-shadow:0 8px 0 #D99A10,0 30px 30px rgba(180,120,0,.35)">n</span><span data-amb="bob" data-ad="-800" style="display:inline-block;color:#FF5B3A;text-shadow:0 8px 0 #C93A1A,0 30px 30px rgba(200,60,20,.35)">i</span><span data-amb="bob" data-ad="-1000" style="display:inline-block;color:#6C4BF4;text-shadow:0 8px 0 #4A2FC4,0 30px 30px rgba(80,40,200,.35)">e</span><span data-amb="bob" data-ad="-1200" style="display:inline-block;color:#2EC98E;text-shadow:0 8px 0 #1A9A6A,0 30px 30px rgba(0,120,80,.35)">s</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px;align-items:stretch">
+      <div style="height:150px;border-radius:30px;background:#FF5B3A;display:flex;align-items:center;justify-content:center;font:700 72px/1 Fredoka;color:#2A2140;letter-spacing:-2px;box-shadow:inset 0 -8px 12px rgba(140,30,10,.35),inset 0 7px 10px rgba(255,210,190,.7)">winnies</div>
+      <div style="height:150px;border-radius:30px;background:#2A2140;display:flex;align-items:center;justify-content:center;font:700 72px/1 Fredoka;color:#FFF9F2;letter-spacing:-2px">winnies</div>
+      <div style="font:500 18px/1.5 Figtree;color:#4A405C;align-self:center">Lowercase Fredoka, tight tracking, every letter its own lump of clay in the four core colours with a solid "thickness" shadow. Letters bob out of phase. Single-colour versions for small sizes.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="01 Motion" style="padding:48px;border-radius:44px;background:#F6EFE6;display:flex;flex-direction:column;gap:28px;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font:700 48px Fredoka">Motion sketch</div>
+      <div style="display:flex;gap:12px">
+        <button onClick="{{ onReplayWon }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#2EC98E;color:#123F2D;font:700 19px Fredoka;cursor:pointer;box-shadow:0 12px 18px -10px rgba(0,120,80,.6),inset 0 -5px 8px rgba(0,90,60,.3),inset 0 5px 7px rgba(255,255,255,.5)" style-active="transform:scale(.95,.88)">Replay Won</button>
+        <button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#FFC53D;color:#2A2140;font:700 19px Fredoka;cursor:pointer;box-shadow:0 12px 18px -10px rgba(160,100,0,.6),inset 0 -5px 8px rgba(160,100,0,.35)" style-active="transform:scale(.95,.88)">Replay Complete</button>
+      </div>
+    </div>
+    <div data-demo="1" style="display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:18px;align-items:center;height:80px;padding:0 24px 0 16px;border-radius:40px;background:#FFF9F2;box-shadow:0 16px 32px -14px rgba(120,70,30,.38),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px #fff">
+      <span style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2EC98E;font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'FILL' 1">emoji_events</span>
+      <span style="font:600 24px Fredoka">Celeste <span style="font:500 16px Figtree;color:#5E5373">Farewell, golden strawberry</span></span>
+      <span style="font:700 24px Fredoka">1:02:13</span>
+      <span style="height:46px;padding:0 20px;border-radius:23px;background:#2EC98E;display:flex;align-items:center;font:700 17px Fredoka">Won</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="display:flex;flex-direction:column;gap:8px"><div style="font:700 22px Fredoka;color:#C93A1A">Tick · Total + running Challenge</div><div style="font:500 17px/1.45 Figtree;color:#4A405C">Each changed digit tile squashes 18% from its base and springs back (520ms, one overshoot). The running row's status bead pulses on the beat. Watch the Workspace and Overlay above.</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><div style="font:700 22px Fredoka;color:#1A7A55">Won</div><div style="font:500 17px/1.45 Figtree;color:#4A405C">Row squashes flat, pops up, clay beads burst and fall. The row then sinks to the Won group and lands with a squish, flattened and shadowless.</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><div style="font:700 22px Fredoka;color:#4A2FC4">Reduced motion · Sound</div><div style="font:500 17px/1.45 Figtree;color:#4A405C">Static: digits swap, row recolours, trophy icon and "Won" word carry the state. Sound (muted): tick = soft clay tap, Won = squelchy pop, Complete = kazoo fanfare.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="01 Dialects" style="padding:48px;border-radius:44px;background:#F6EFE6;display:flex;flex-direction:column;gap:24px;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="font:700 48px Fredoka">Dialect lean</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="padding:28px;border-radius:32px;background:#FFF9F2;display:flex;flex-direction:column;gap:10px;box-shadow:0 14px 26px -16px rgba(120,70,30,.4)"><div style="font:700 26px Fredoka">Workspace</div><div style="font:500 18px/1.5 Figtree;color:#4A405C">Low-inflation clay: shallower shadows and smaller squish so hours of clicking stay calm. Everything still gives under the thumb.</div></div>
+      <div style="padding:28px;border-radius:32px;background:#FF5B3A;display:flex;flex-direction:column;gap:10px"><div style="font:700 26px Fredoka">Broadcast</div><div style="font:500 18px/1.5 Figtree;color:#2A2140">Fully opaque chunky slabs with an ink outline so clay reads over any game; tiles get bigger, motion gets bouncier.</div></div>
+      <div style="padding:28px;border-radius:32px;background:#6C4BF4;color:#fff;display:flex;flex-direction:column;gap:10px"><div style="font:700 26px Fredoka">Showcase</div><div style="font:500 18px/1.5 Figtree">Giant inflated 3D-ish clay letters and pebbles tumbling across the page, physics-y stacking, scroll squishes the hero.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const spring = 'cubic-bezier(.3,1.5,.5,1)';
+    return {
+      wonDelay: 650,
+      amb: {
+        drift: [[{ transform: 'translate(0,0) scale(1)' }, { transform: 'translate(60px,-40px) scale(1.08)' }, { transform: 'translate(0,0) scale(1)' }], { duration: 14000, easing: 'ease-in-out' }],
+        float: [[{ transform: 'translateY(0)' }, { transform: 'translateY(-16px)' }, { transform: 'translateY(0)' }], { duration: 4200, easing: 'ease-in-out' }],
+        pulse: [[{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 1000, easing: 'ease-in-out' }],
+        bob: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(-14px) scale(.97,1.04)' }, { transform: 'translateY(0) scale(1.04,.96)', offset: .85 }, { transform: 'translateY(0) scale(1,1)' }], { duration: 2400, easing: 'ease-in-out' }],
+        squish: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.3,.7)', offset: .1 }, { transform: 'translateY(-60px) scale(.85,1.15)', offset: .4 }, { transform: 'translateY(0) scale(1,1)', offset: .7 }, { transform: 'translateY(0) scale(1.15,.85)', offset: .8 }, { transform: 'translateY(0) scale(1,1)' }], { duration: 1600, easing: 'ease-in-out' }],
+      },
+      tick: (k) => k === 'total'
+        ? [[{ transform: 'scale(1,1)' }, { transform: 'scale(1.12,.82)', offset: .22 }, { transform: 'scale(.95,1.07)', offset: .55 }, { transform: 'scale(1,1)' }], { duration: 520, easing: 'ease-out' }]
+        : [[{ transform: 'scale(1,1)' }, { transform: 'scale(1.15,.8)', offset: .25 }, { transform: 'scale(1,1)' }], { duration: 380, easing: spring }],
+      beat: () => [[{ transform: 'scale(1)' }, { transform: 'scale(1.14,.88)', offset: .3 }, { transform: 'scale(1)' }], { duration: 450, easing: spring }],
+      won: (el, W, ov) => {
+        el.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.03,.82)', offset: .25 }, { transform: 'translateY(-14px) scale(.98,1.06)', offset: .6 }, { transform: 'scale(1,1)' }], { duration: 650, easing: 'ease-out' });
+        W.burst(el, { n: ov ? 16 : 26, shapes: ['circle'], colors: ['#2EC98E', '#FFC53D', '#FF5B3A', '#6C4BF4'], size: 18, spread: 220, gravity: 160, dur: 1200, ox: .8, up: true, cone: 2.6,
+          style: (c) => ({ boxShadow: 'inset -3px -4px 5px rgba(0,0,0,.25), inset 2px 3px 4px rgba(255,255,255,.6)' }) });
+      },
+      land: (el) => el.animate([{ transform: 'translateY(-26px) scale(.97,1.04)', opacity: .4 }, { transform: 'translateY(3px) scale(1.02,.92)', offset: .6, opacity: 1 }, { transform: 'none' }], { duration: 520, easing: 'ease-out' }),
+      complete: (root, W) => {
+        const t = root.querySelector('[data-kind="total"]');
+        const box = t ? t.parentElement : root;
+        W.burst(box, { n: 70, shapes: ['circle'], colors: ['#2EC98E', '#FFC53D', '#FF5B3A', '#6C4BF4'], size: 26, spread: 520, gravity: 300, dur: 2000, style: () => ({ boxShadow: 'inset -4px -5px 6px rgba(0,0,0,.25), inset 3px 4px 5px rgba(255,255,255,.6)' }) });
+        root.querySelectorAll('[data-kind="total"]').forEach((d, i) => d.animate([{ transform: 'none' }, { transform: 'translateY(-30px) scale(.9,1.15)', offset: .4 }, { transform: 'scale(1.1,.85)', offset: .7 }, { transform: 'none' }], { duration: 800, delay: i * 70, easing: 'ease-out' }));
+      },
+    };
+  }
+  skin(r) {
+    const SURF = '0 16px 32px -14px rgba(120,70,30,.38),0 4px 8px -4px rgba(120,70,30,.15),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px rgba(255,255,255,.95)';
+    const BALL = '0 8px 12px -8px rgba(120,70,30,.5),inset 0 -4px 7px rgba(120,70,30,.14),inset 0 4px 7px rgba(255,255,255,1)';
+    const st = {
+      running: { bg: '#FFFFFF', shadow: '0 0 0 4px #FF5B3A,0 22px 36px -14px rgba(200,60,20,.45),inset 0 -6px 12px rgba(120,70,30,.10),inset 0 6px 10px #fff', statusBg: '#FF5B3A', statusColor: '#fff', statusIcon: 'bolt', statusShadow: 'inset 0 -5px 8px rgba(140,30,10,.35),inset 0 5px 7px rgba(255,210,190,.7)', timeColor: '#C93A1A', wordColor: '#B0300F' },
+      idle: { bg: '#FFF9F2', shadow: SURF, statusBg: '#F1E7DA', statusColor: '#5E5373', statusIcon: r.untouched ? 'radio_button_unchecked' : 'hourglass_empty', statusShadow: 'inset 0 3px 7px rgba(120,70,30,.22)', timeColor: r.untouched ? '#6A5F80' : '#2A2140', wordColor: '#5E5373' },
+      won: { bg: '#D9F4E7', shadow: '0 4px 8px -6px rgba(20,90,60,.4),inset 0 -3px 6px rgba(20,90,60,.10),inset 0 3px 6px rgba(255,255,255,.7)', statusBg: '#2EC98E', statusColor: '#123F2D', statusIcon: 'emoji_events', statusShadow: 'inset 0 -4px 6px rgba(0,90,60,.3),inset 0 4px 6px rgba(255,255,255,.5)', timeColor: '#1A6A4A', wordColor: '#17684A' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      shadow: hov ? '0 30px 44px -16px rgba(120,70,30,.5),0 6px 12px -6px rgba(120,70,30,.2),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px #fff' : st.shadow,
+      lift: hov ? 'translateY(-5px)' : 'none', gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : 1,
+      beat: r.running ? 'run' : '',
+      wellBg: r.full ? '#BDEBD5' : '#F1E7DA',
+      playBg: r.running ? '#FF5B3A' : '#FFF9F2', playOp: r.won ? 0.35 : 1,
+      playShadow: r.running ? '0 10px 16px -8px rgba(200,60,20,.7),inset 0 -5px 8px rgba(140,30,10,.35),inset 0 5px 7px rgba(255,210,190,.7)' : BALL,
+      winBg: r.won ? '#2EC98E' : '#FFF9F2', winColor: r.won ? '#123F2D' : '#2A2140', winFill: r.won ? 1 : 0,
+      winShadow: r.won ? 'inset 0 3px 7px rgba(0,90,60,.35)' : BALL,
+      moreBg: r.menu || hov ? '#FFF9F2' : 'transparent', moreShadow: r.menu ? 'inset 0 3px 7px rgba(120,70,30,.25)' : hov ? BALL : 'none',
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.32em' : '0.6em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      pageDots: v.pageDots.map((p) => ({ ...p, w: p.on ? '44px' : '16px', bg: p.on ? '#FF5B3A' : '#D8CBB9' })) };
+  }
+}
+</script>
+</body>
+</html>

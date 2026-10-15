@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+</helmet>
+<div ref="{{ rootRef }}" data-settings="1" style="position:relative;font-family:var(--font-body);color:var(--color-text)">
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:visible"></div>
+  <section aria-labelledby="ws-set-title" style="position:relative;display:flex;flex-direction:column;gap:20px;padding:22px 26px 28px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised-lg)">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <span aria-hidden="true" style="flex:none;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-pinned);color:var(--color-on-accent);font-family:var(--font-icon);font-size:27px;font-variation-settings:'FILL' 1;box-shadow:0 4px 0 -1px var(--color-pinned-lip)">settings</span>
+      <div style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:2px">
+        <h2 id="ws-set-title" style="margin:0;font:400 25px/1.4 var(--font-display)">{{ t.title }}</h2>
+        <span style="font:700 14px/1.45 var(--font-body);color:var(--color-text-muted)">{{ t.sub }}</span>
+      </div>
+      <div role="tablist" aria-label="{{ t.sections }}" style="flex:none;display:flex;gap:4px;padding:5px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+        <sc-for list="{{ secs }}" as="s" hint-placeholder-count="4"><button data-press="1" data-sec="{{ s.k }}" role="tab" aria-selected="{{ s.sel }}" aria-controls="set-pane" onClick="{{ s.on }}" style="position:relative;display:flex;align-items:center;gap:7px;height:44px;padding:0 16px 0 12px;border:0;border-radius:22px;cursor:pointer;background:{{ s.bg }};color:{{ s.c }};box-shadow:{{ s.sh }};font:400 15px/1.45 var(--font-display);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">{{ s.icon }}</span>{{ s.label }}<sc-if value="{{ s.soon }}"><span style="height:22px;padding:0 8px;border-radius:11px;background:var(--color-surface-sunken);color:var(--color-text);font:800 11px/22px var(--font-body)">{{ t.soon }}</span></sc-if><sc-if value="{{ s.alert }}"><span aria-label="{{ t.attention }}" style="position:absolute;right:-4px;top:-6px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-danger);color:#fff;font-family:var(--font-icon);font-size:15px;font-variation-settings:'wght' 700;box-shadow:0 0 0 3px var(--color-surface)">priority_high</span></sc-if></button></sc-for>
+      </div>
+    </div>
+    <span aria-hidden="true" style="height:3px;border-radius:2px;background:var(--color-surface-sunken)"></span>
+
+    <sc-if value="{{ secPlayers }}" hint-placeholder-val="{{ true }}">
+      <div id="set-pane" data-pane="1" role="tabpanel" style="display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:28px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div style="display:flex;align-items:center;gap:16px;padding:14px 16px 14px 14px;border-radius:30px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <span aria-hidden="true" style="flex:none;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-pinned);color:var(--color-on-accent);font-family:var(--font-icon);font-size:25px;font-variation-settings:'FILL' 1;box-shadow:0 4px 0 -1px var(--color-pinned-lip)">group</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font:400 19px/1.4 var(--font-display)">{{ t.players }}</span><span style="font:600 14px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.playersDesc }}</span></div>
+            <span style="flex:none;font:800 14px var(--font-body);color:var(--color-text-muted)">{{ plSw.word }}</span>
+            <button data-press="1" data-sw="players" role="switch" aria-checked="{{ plSw.on }}" aria-label="{{ plSw.label }}" onClick="{{ plSw.toggle }}" style="flex:none;position:relative;width:68px;height:40px;padding:0;border:0;border-radius:20px;cursor:pointer;background:{{ plSw.track }};box-shadow:{{ plSw.trackSh }}"><span data-thumb="1" style="position:absolute;top:4px;left:{{ plSw.left }};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface-raised);color:{{ plSw.ic }};font-family:var(--font-icon);font-size:20px;font-variation-settings:'wght' 700;box-shadow:0 3px 0 -1px var(--color-control-lip);transition:left var(--dur-base) var(--spring-bouncy)">{{ plSw.icon }}</span></button>
+          </div>
+          <sc-if value="{{ playersOn }}" hint-placeholder-val="{{ true }}">
+            <div role="list" aria-label="{{ t.players }}" style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ plRows }}" as="p" hint-placeholder-count="4">
+                <div data-plrow="{{ p.id }}" role="listitem" style="position:relative;z-index:{{ p.z }};display:grid;grid-template-columns:54px minmax(0,1fr) auto 44px;gap:14px;align-items:center;padding:8px 10px 8px 10px;border-radius:32px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+                  <div style="position:relative;display:flex">
+                    <button data-press="1" data-menubtn="1" data-pcolor="{{ p.id }}" onClick="{{ p.onColor }}" aria-haspopup="dialog" aria-expanded="{{ p.open }}" aria-label="{{ p.colorAria }}" style="width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;background:{{ p.bg }};color:{{ p.ink }};font:400 19px/1 var(--font-display);box-shadow:0 0 0 3px var(--color-surface-raised),0 0 0 4px var(--color-keyline),0 5px 0 1px var(--color-keyline)">{{ p.i }}</button>
+                    <sc-if value="{{ p.open }}">
+                      <div data-menu="1" role="dialog" aria-label="{{ p.colorAria }}" style="position:absolute;left:-8px;top:62px;z-index:30;width:300px;padding:14px;box-sizing:border-box;border-radius:28px;background:var(--color-surface-raised);box-shadow:var(--shadow-popover);display:flex;flex-direction:column;gap:12px;transform-origin:10% 0">
+                        <span style="font:800 13px/1.3 var(--font-body);color:var(--color-text-muted)">{{ t.pickColour }}</span>
+                        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+                          <sc-for list="{{ p.swatches }}" as="w"><button onClick="{{ w.on }}" disabled="{{ w.taken }}" aria-label="{{ w.aria }}" aria-pressed="{{ w.sel }}" style="height:50px;border:0;border-radius:25px;cursor:{{ w.cur }};background:{{ w.bg }};color:{{ w.ink }};opacity:{{ w.op }};box-shadow:{{ w.sh }};display:flex;align-items:center;justify-content:center"><sc-if value="{{ w.sel }}"><span style="font-family:var(--font-icon);font-size:24px;font-variation-settings:'wght' 700">check</span></sc-if><sc-if value="{{ w.plain }}"><span style="font:400 15px/1 var(--font-display)">{{ w.label }}</span></sc-if></button></sc-for>
+                        </div>
+                        <span style="font:600 12px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.colourHint }}</span>
+                      </div>
+                    </sc-if>
+                  </div>
+                  <label style="min-width:0;display:flex;flex-direction:column;gap:3px">
+                    <span style="padding-left:16px;font:800 12px/1.3 var(--font-body);color:var(--color-text-muted)">{{ p.num }}</span>
+                    <input data-pname="{{ p.id }}" value="{{ p.name }}" onChange="{{ p.onName }}" maxLength="16" aria-label="{{ p.nameAria }}" style="height:44px;min-width:0;box-sizing:border-box;border:0;border-radius:22px;padding:0 16px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);color:var(--color-text);font:400 17px var(--font-display)">
+                  </label>
+                  <span style="display:flex;align-items:center;gap:6px;max-width:260px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ p.whereBg }};color:{{ p.whereC }};box-shadow:{{ p.whereSh }};font:800 13px/1 var(--font-body);white-space:nowrap;overflow:hidden"><span style="flex:none;font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ p.whereIcon }}</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ p.where }}</span></span>
+                  <button data-press="1" onClick="{{ p.onRemove }}" aria-label="{{ p.removeAria }}" data-tip="{{ p.removeAria }}" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:transparent;color:var(--color-text);font-family:var(--font-icon);font-size:22px" style-hover="background:var(--color-surface-sunken)">person_remove</button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-left:4px">
+              <button data-press="1" data-addpl="1" onClick="{{ onAddPlayer }}" disabled="{{ plFull }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 22px 0 16px;border:0;border-radius:24px;cursor:{{ plAddCur }};opacity:{{ plAddOp }};background:var(--color-pinned);color:var(--color-on-accent);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-pinned-lip)" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-pinned-lip)"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'wght' 700">person_add</span>{{ t.addPlayer }}</button>
+              <span style="font:800 14px/1.4 var(--font-body);color:var(--color-text-muted)">{{ plCount }}</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ playersOff }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:14px;padding:22px 24px;border-radius:30px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:600 16px/1.55 var(--font-body);color:var(--color-text);text-wrap:pretty"><span style="flex:none;font-family:var(--font-icon);font-size:26px;color:var(--color-text-muted)">group_off</span>{{ t.playersOff }}</div>
+          </sc-if>
+        </div>
+        <aside style="display:flex;flex-direction:column;gap:14px;padding:20px 22px 22px;border-radius:32px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+          <h3 style="margin:0;font:400 18px/1.4 var(--font-display)">{{ t.howTitle }}</h3>
+          <sc-for list="{{ how }}" as="h" hint-placeholder-count="3"><div style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ h.bg }};color:var(--color-on-accent);font:400 14px/1 var(--font-display);box-shadow:0 3px 0 -1px {{ h.lip }}">{{ h.n }}</span><span style="font:600 15px/1.5 var(--font-body);text-wrap:pretty">{{ h.text }}</span></div></sc-for>
+          <div aria-hidden="true" style="display:flex;align-items:center;gap:12px;height:56px;padding:0 16px 0 10px;border-radius:28px;background:var(--color-surface);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <dc-import name="ClayFace" status="running" secs="11564" size="38" hint-size="38px,38px"></dc-import>
+            <span style="font:400 16px/1.4 var(--font-display)">Elden Ring</span>
+            <span style="display:flex;padding-left:4px"><span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--player-1);color:var(--player-1-ink);font:400 12px/1 var(--font-display);box-shadow:0 0 0 3px var(--color-surface),0 0 0 4px var(--color-keyline)">K</span><span style="width:28px;height:28px;margin-left:-6px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--player-2);color:var(--player-2-ink);font:400 12px/1 var(--font-display);box-shadow:0 0 0 3px var(--color-surface),0 0 0 4px var(--color-keyline)">B</span></span>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ secDiscord }}" hint-placeholder-val="{{ false }}">
+      <div id="set-pane" data-pane="1" role="tabpanel" style="display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:28px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <span aria-hidden="true" style="flex:none;width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-control-lip)"><img src="{{ discordLogo }}" alt="" width="30" height="30" style="display:block"></span>
+            <div style="flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font:400 21px/1.4 var(--font-display)">{{ t.discord }}</span><span style="font:600 14px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.discordDesc }}</span></div>
+            <span data-dchip="1" role="status" style="flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ dChipBg }};color:{{ dChipC }};box-shadow:{{ dChipSh }};font:800 14px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:19px;font-variation-settings:'FILL' 1">{{ dChipIcon }}</span>{{ dChip }}</span>
+          </div>
+
+          <sc-if value="{{ dFailing }}" hint-placeholder-val="{{ false }}">
+            <div data-dfail="1" role="alert" style="display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-radius:28px;background:var(--color-danger-surface);box-shadow:0 0 0 3px var(--color-danger)">
+              <span aria-hidden="true" style="flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-danger);color:#fff;font-family:var(--font-icon);font-size:23px;font-variation-settings:'FILL' 1">sync_problem</span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+                <span style="font:800 17px/1.4 var(--font-body);color:var(--color-danger-text)">{{ t.failT }}</span>
+                <span style="font:600 15px/1.5 var(--font-body);color:var(--color-text);text-wrap:pretty">{{ t.failB }}</span>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+                  <button data-press="1" onClick="{{ onReplace }}" style="display:flex;align-items:center;gap:6px;height:42px;padding:0 18px 0 12px;border:0;border-radius:21px;cursor:pointer;background:var(--color-accent);color:var(--color-on-accent);font:400 15px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 5px 0 -1px var(--color-accent-lip)" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-accent-lip)"><span style="font-family:var(--font-icon);font-size:20px">swap_horiz</span>{{ t.replace }}</button>
+                  <button data-press="1" onClick="{{ onTest }}" disabled="{{ dTesting }}" style="display:flex;align-items:center;gap:6px;height:42px;padding:0 18px 0 12px;border:0;border-radius:21px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 15px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 5px 0 -1px var(--color-control-lip)" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-control-lip)"><span style="font-family:var(--font-icon);font-size:20px">send</span>{{ t.test }}</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div data-dblock="1" style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:30px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <sc-if value="{{ dEditing }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:0 8px">
+                <label for="wh-url" style="font:800 15px/1.4 var(--font-body)">{{ dLabel }}</label>
+                <span style="flex:1"></span>
+                <a href="#" onClick="{{ noop }}" style="display:flex;align-items:center;gap:4px;font:700 14px/1.4 var(--font-body);color:var(--color-text-accent);text-decoration:underline;text-underline-offset:3px">{{ t.whHelp }}<span style="font-family:var(--font-icon);font-size:16px">open_in_new</span></a>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <input id="wh-url" data-whinput="1" value="{{ dUrl }}" onChange="{{ onUrl }}" onKeyDown="{{ onUrlKey }}" disabled="{{ dSaving }}" placeholder="{{ t.whPh }}" autocomplete="off" spellcheck="false" aria-invalid="{{ dInvalid }}" aria-describedby="wh-msg" style="flex:1 1 300px;min-width:0;height:54px;box-sizing:border-box;border:0;border-radius:27px;padding:0 22px;background:var(--color-surface-sunken);color:var(--color-text);font:700 16px var(--font-body);box-shadow:{{ dInSh }};opacity:{{ dInOp }}">
+                <button data-press="1" data-dsave="1" onClick="{{ onSave }}" disabled="{{ dSaving }}" aria-busy="{{ dSaving }}" style="flex:none;display:flex;align-items:center;gap:8px;height:54px;padding:0 24px 0 18px;border:0;border-radius:27px;cursor:{{ dSaveCur }};background:var(--color-accent);color:var(--color-on-accent);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-accent-lip)" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-accent-lip)"><sc-if value="{{ dSaving }}" hint-placeholder-val="{{ false }}"><span data-loop="spin" aria-hidden="true" style="display:inline-block;width:22px;height:22px;font-family:var(--font-icon);font-size:22px;line-height:22px">progress_activity</span></sc-if><sc-if value="{{ dNotSaving }}" hint-placeholder-val="{{ true }}"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'wght' 700">check</span></sc-if>{{ dSaveLabel }}</button>
+                <sc-if value="{{ dReplacing }}" hint-placeholder-val="{{ false }}"><button data-press="1" onClick="{{ onKeep }}" disabled="{{ dSaving }}" style="flex:none;height:54px;padding:0 20px;border:0;border-radius:27px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-control-lip)" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-control-lip)">{{ t.keep }}</button></sc-if>
+              </div>
+              <span id="wh-msg" data-dmsg="1" role="{{ dMsgRole }}" style="display:flex;align-items:flex-start;gap:6px;padding:0 8px;font:700 14px/1.45 var(--font-body);color:{{ dMsgC }};text-wrap:pretty"><span style="flex:none;font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1;line-height:20px">{{ dMsgIcon }}</span>{{ dMsg }}</span>
+            </sc-if>
+            <sc-if value="{{ dConfigured }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <span data-dcfg="1" style="flex:none;display:flex;align-items:center;gap:6px;height:36px;padding:0 15px 0 10px;border-radius:18px;background:var(--color-won);color:var(--color-on-accent);font:800 14px/1 var(--font-body);box-shadow:0 4px 0 -1px var(--color-won-lip)"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">link</span>{{ t.configured }}</span>
+                <span aria-label="{{ t.maskAria }}" style="flex:1 1 280px;min-width:0;height:46px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 18px 0 14px;border-radius:23px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:700 15px var(--font-body);white-space:nowrap;overflow:hidden"><span style="flex:none;font-family:var(--font-icon);font-size:19px;color:var(--color-text-muted);font-variation-settings:'FILL' 1">lock</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ dHint }}</span></span>
+              </div>
+              <span style="padding:0 8px;font:600 13px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ dSavedLine }}</span>
+              <sc-if value="{{ dConfirm }}" hint-placeholder-val="{{ false }}">
+                <div data-dconfirm="1" role="alertdialog" aria-label="{{ t.removeQ }}" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 12px 12px 18px;border-radius:26px;background:var(--color-danger-surface);box-shadow:0 0 0 2px var(--color-danger)">
+                  <span style="flex:1 1 220px;font:800 15px/1.45 var(--font-body);color:var(--color-danger-text)">{{ t.removeQ }}</span>
+                  <button data-press="1" onClick="{{ onRemoveNo }}" style="height:44px;padding:0 18px;border:0;border-radius:22px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 15px/1.45 var(--font-display);box-shadow:0 5px 0 -1px var(--color-control-lip)" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-control-lip)">{{ t.cancel }}</button>
+                  <button data-press="1" onClick="{{ onRemoveYes }}" style="display:flex;align-items:center;gap:6px;height:44px;padding:0 18px 0 12px;border:0;border-radius:22px;cursor:pointer;background:var(--color-danger-surface);color:var(--color-danger-text);font:400 15px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 0 0 2px var(--color-danger),0 5px 0 0 var(--color-danger)" style-active="transform:translateY(4px)"><span style="font-family:var(--font-icon);font-size:20px">link_off</span>{{ t.removeYes }}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ dNoConfirm }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <button data-press="1" data-dtest="1" onClick="{{ onTest }}" disabled="{{ dTesting }}" aria-busy="{{ dTesting }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 22px 0 16px;border:0;border-radius:24px;cursor:{{ dTestCur }};background:{{ dTestBg }};color:var(--color-on-accent);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px {{ dTestLip }}" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-accent-lip)"><sc-if value="{{ dTesting }}" hint-placeholder-val="{{ false }}"><span data-loop="spin" aria-hidden="true" style="display:inline-block;width:22px;height:22px;font-family:var(--font-icon);font-size:22px;line-height:22px">progress_activity</span></sc-if><sc-if value="{{ dNotTesting }}" hint-placeholder-val="{{ true }}"><span data-dti="1" style="display:inline-block;font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ dTestIcon }}</span></sc-if><span aria-live="polite">{{ dTestLabel }}</span></button>
+                  <button data-press="1" onClick="{{ onReplace }}" style="display:flex;align-items:center;gap:6px;height:48px;padding:0 20px 0 14px;border:0;border-radius:24px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-control-lip)" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-control-lip)"><span style="font-family:var(--font-icon);font-size:21px">swap_horiz</span>{{ t.replace }}</button>
+                  <button data-press="1" onClick="{{ onRemove }}" style="display:flex;align-items:center;gap:6px;height:48px;padding:0 18px 0 12px;border:0;border-radius:24px;cursor:pointer;background:transparent;color:var(--color-danger-text);font:400 16px/1.45 var(--font-display);white-space:nowrap" style-hover="background:var(--color-danger-surface)"><span style="font-family:var(--font-icon);font-size:21px">delete</span>{{ t.remove }}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ dTestSent }}" hint-placeholder-val="{{ false }}">
+                <div data-dres="1" role="status" style="display:flex;align-items:center;gap:12px;padding:12px 16px 12px 12px;border-radius:24px;background:var(--color-won-surface);box-shadow:0 3px 0 -1px var(--color-won-surface-lip)"><span aria-hidden="true" style="flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-won);color:var(--color-on-accent);font-family:var(--font-icon);font-size:21px;font-variation-settings:'wght' 700">check</span><span style="font:700 15px/1.45 var(--font-body);color:var(--color-won-text);text-wrap:pretty">{{ t.testOk }}</span></div>
+              </sc-if>
+              <sc-if value="{{ dTestFailed }}" hint-placeholder-val="{{ false }}">
+                <div data-dres="1" role="alert" style="display:flex;align-items:flex-start;gap:12px;padding:12px 8px 12px 12px;border-radius:24px;background:var(--color-danger-surface);box-shadow:0 0 0 2px var(--color-danger)"><span aria-hidden="true" style="flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-danger);color:#fff;font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">error</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font:800 15px/1.45 var(--font-body);color:var(--color-danger-text)">{{ t.testFailT }}</span><span style="font:600 14px/1.45 var(--font-body);text-wrap:pretty">{{ t.testFailB }}</span></div><button onClick="{{ onTestDismiss }}" aria-label="{{ t.dismiss }}" style="flex:none;width:34px;height:34px;border:0;border-radius:50%;cursor:pointer;background:transparent;color:var(--color-text);font-family:var(--font-icon);font-size:20px" style-hover="background:var(--color-surface)">close</button></div>
+              </sc-if>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px;padding:16px 14px 14px;border-radius:30px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <div style="display:flex;align-items:center;gap:10px;padding:0 6px 4px">
+              <h3 style="flex:1;margin:0;font:400 18px/1.4 var(--font-display)">{{ t.evTitle }}</h3>
+              <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">{{ dOnCount }}</span>
+            </div>
+            <sc-if value="{{ dNoHook }}" hint-placeholder-val="{{ true }}"><span style="display:flex;align-items:center;gap:6px;padding:0 6px 4px;font:700 14px/1.45 var(--font-body);color:var(--color-text-muted)"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">lock</span>{{ t.evNone }}</span></sc-if>
+            <sc-for list="{{ events }}" as="e" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:14px;min-height:62px;padding:8px 10px 8px 10px;border-radius:24px;background:{{ e.bg }}">
+                <span aria-hidden="true" style="flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ e.disc }};color:{{ e.discC }};font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1;box-shadow:{{ e.discSh }}">{{ e.icon }}</span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font:800 15px/1.4 var(--font-body);color:{{ e.c }}">{{ e.label }}</span><span style="font:600 13px/1.4 var(--font-body);color:var(--color-text-muted)">{{ e.desc }}</span></div>
+                <sc-if value="{{ e.later }}"><span style="flex:none;height:28px;padding:0 12px;border-radius:14px;display:flex;align-items:center;background:var(--color-surface-sunken);font:800 12px/1 var(--font-body);color:var(--color-text);white-space:nowrap">{{ t.later }}</span></sc-if>
+                <sc-if value="{{ e.now }}"><span style="flex:none;font:800 14px var(--font-body);color:var(--color-text-muted)">{{ e.sw.word }}</span><button data-press="1" data-sw="{{ e.k }}" role="switch" aria-checked="{{ e.sw.on }}" aria-label="{{ e.label }}" onClick="{{ e.sw.toggle }}" disabled="{{ e.sw.dis }}" style="flex:none;position:relative;width:68px;height:40px;padding:0;border:0;border-radius:20px;cursor:{{ e.sw.cur }};opacity:{{ e.sw.op }};background:{{ e.sw.track }};box-shadow:{{ e.sw.trackSh }}"><span data-thumb="1" style="position:absolute;top:4px;left:{{ e.sw.left }};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface-raised);color:{{ e.sw.ic }};font-family:var(--font-icon);font-size:20px;font-variation-settings:'wght' 700;box-shadow:0 3px 0 -1px var(--color-control-lip);transition:left var(--dur-base) var(--spring-bouncy)">{{ e.sw.icon }}</span></button></sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ dAllOff }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:6px;padding:4px 6px 0;font:700 14px/1.45 var(--font-body);color:var(--color-text)"><span style="font-family:var(--font-icon);font-size:18px;color:var(--color-text-muted);font-variation-settings:'FILL' 1">info</span>{{ t.evAllOff }}</span></sc-if>
+          </div>
+        </div>
+
+        <aside style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:12px;padding:18px 18px 20px;border-radius:32px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+            <span style="padding:0 4px;font:800 14px/1.3 var(--font-body);color:var(--color-text-muted)">{{ t.previewLabel }}</span>
+            <sc-if value="{{ hasPreview }}" hint-placeholder-val="{{ false }}">
+              <div data-dprev="1" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px 16px 14px;border-radius:26px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+                <span aria-hidden="true" style="flex:none;width:44px;height:44px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--color-surface);box-shadow:0 3px 0 -1px var(--color-lip);font:400 26px/1 var(--font-display);color:#FF6FAE;text-shadow:0 2px 0 #B0175A,0 3px 0 #B0175A">w</span>
+                <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+                  <div style="display:flex;align-items:baseline;gap:8px"><span style="font:800 15px/1.3 var(--font-body)">Winnies</span><span style="font:700 12px/1.3 var(--font-body);color:var(--color-text-muted)">{{ t.today }}</span></div>
+                  <span style="font:600 15px/1.5 var(--font-body);text-wrap:pretty">{{ previewText }}</span>
+                  <span style="display:flex;align-items:center;gap:4px;font:700 13px/1.4 var(--font-body);color:var(--color-text-accent)"><span style="font-family:var(--font-icon);font-size:16px">visibility</span>{{ t.watch }}</span>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noPreview }}" hint-placeholder-val="{{ true }}"><span style="padding:4px 4px 2px;font:600 15px/1.5 var(--font-body);color:var(--color-text);text-wrap:pretty">{{ t.noPreview }}</span></sc-if>
+          </div>
+          <sc-if value="{{ hasLog }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:16px 16px 14px;border-radius:30px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+              <span style="padding:0 4px 2px;font:800 15px/1.3 var(--font-body)">{{ t.logTitle }}</span>
+              <sc-for list="{{ log }}" as="l" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:38px;padding:0 4px"><span style="font:400 13px/1 var(--font-display);color:var(--color-text-muted)">{{ l.t }}</span><span style="min-width:0;font:700 14px/1.35 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.ev }}</span><span style="display:flex;align-items:center;gap:4px;height:28px;padding:0 10px 0 7px;border-radius:14px;background:{{ l.bg }};color:{{ l.c }};box-shadow:{{ l.sh }};font:800 12px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:16px;font-variation-settings:'FILL' 1">{{ l.icon }}</span>{{ l.word }}</span></div></sc-for>
+            </div>
+          </sc-if>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ secOverlay }}" hint-placeholder-val="{{ false }}">
+      <div id="set-pane" data-pane="1" role="tabpanel" style="display:grid;grid-template-columns:400px minmax(0,1fr);gap:28px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div style="display:flex;flex-direction:column;gap:10px;padding:14px 14px 14px;border-radius:28px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <span style="padding:0 6px;font:800 15px/1.4 var(--font-body)">{{ t.placement }}</span>
+            <div role="radiogroup" aria-label="{{ t.placement }}" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <sc-for list="{{ placements }}" as="o" hint-placeholder-count="2"><button data-press="1" role="radio" aria-checked="{{ o.sel }}" onClick="{{ o.on }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 10px 10px;border:0;border-radius:24px;cursor:pointer;background:{{ o.bg }};box-shadow:{{ o.sh }};color:var(--color-text);font:400 15px/1.45 var(--font-display)"><span aria-hidden="true" style="position:relative;width:132px;height:74px;border-radius:12px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);overflow:hidden"><span style="position:absolute;left:{{ o.l }};top:{{ o.tp }};width:{{ o.w }};height:{{ o.h }};border-radius:6px;background:{{ o.blk }};box-shadow:0 0 0 2px var(--color-keyline)"></span></span><span style="display:flex;align-items:center;gap:6px"><sc-if value="{{ o.sel }}"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'wght' 700">check</span></sc-if>{{ o.label }}</span></button></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:28px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <span style="padding:0 6px;font:800 15px/1.4 var(--font-body)">{{ t.perPage }}</span>
+            <div role="radiogroup" aria-label="{{ t.perPage }}" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+              <sc-for list="{{ pers }}" as="o" hint-placeholder-count="5"><button data-press="1" role="radio" aria-checked="{{ o.sel }}" aria-label="{{ o.aria }}" onClick="{{ o.on }}" style="height:42px;border:0;border-radius:21px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:400 17px/1 var(--font-display)">{{ o.n }}</button></sc-for>
+            </div>
+            <span style="padding:0 6px;font:600 13px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ perHint }}</span>
+          </div>
+          <sc-for list="{{ ovToggles }}" as="e" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 12px 12px 12px;border-radius:28px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+              <span aria-hidden="true" style="flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ e.disc }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1;box-shadow:0 3px 0 -1px {{ e.lip }}">{{ e.icon }}</span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font:800 15px/1.4 var(--font-body)">{{ e.label }}</span><span style="font:600 13px/1.4 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ e.desc }}</span></div>
+              <span style="flex:none;font:800 14px var(--font-body);color:var(--color-text-muted)">{{ e.sw.word }}</span>
+              <button data-press="1" data-sw="{{ e.k }}" role="switch" aria-checked="{{ e.sw.on }}" aria-label="{{ e.label }}" onClick="{{ e.sw.toggle }}" style="flex:none;position:relative;width:68px;height:40px;padding:0;border:0;border-radius:20px;cursor:pointer;background:{{ e.sw.track }};box-shadow:{{ e.sw.trackSh }}"><span data-thumb="1" style="position:absolute;top:4px;left:{{ e.sw.left }};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface-raised);color:{{ e.sw.ic }};font-family:var(--font-icon);font-size:20px;font-variation-settings:'wght' 700;box-shadow:0 3px 0 -1px var(--color-control-lip);transition:left var(--dur-base) var(--spring-bouncy)">{{ e.sw.icon }}</span></button>
+            </div>
+          </sc-for>
+          <sc-if value="{{ playersOn }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:8px;padding:2px 10px;font:700 14px/1.45 var(--font-body);color:var(--color-text)"><span style="font-family:var(--font-icon);font-size:19px;color:var(--color-text-muted);font-variation-settings:'FILL' 1">group</span>{{ t.plMarkers }}</span></sc-if>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:30px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip)">
+            <span aria-label="{{ t.link }}" style="flex:1;min-width:0;height:44px;display:flex;align-items:center;padding:0 16px;border-radius:22px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:700 14px var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;user-select:all">winnies.app/overlay/k7Hq2xR9vLp3mT8w</span>
+            <button data-press="1" data-ovcopy="1" onClick="{{ onCopy }}" style="flex:none;display:flex;align-items:center;gap:6px;height:44px;padding:0 16px 0 12px;border:0;border-radius:22px;cursor:pointer;background:{{ copyBg }};color:var(--color-text);font:400 14px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 4px 0 -1px {{ copyLip }}" style-active="transform:translateY(3px);box-shadow:0 1px 0 -1px var(--color-control-lip)"><span data-ci="1" style="display:inline-block;font-family:var(--font-icon);font-size:19px;font-variation-settings:'wght' 600">{{ copyIcon }}</span>{{ copyLabel }}</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;flex-direction:column;gap:1px"><span style="font:400 18px/1.4 var(--font-display)">{{ t.livePrev }}</span><span style="font:700 13px/1.4 var(--font-body);color:var(--color-text-muted)">{{ t.prevSize }}</span></div>
+            <span data-ovsaved="1" role="status" style="display:flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 8px;border-radius:15px;background:{{ savedBg }};color:{{ savedC }};box-shadow:{{ savedSh }};font:800 13px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ savedIcon }}</span>{{ savedLabel }}</span>
+            <span style="flex:1"></span>
+            <div role="radiogroup" aria-label="{{ t.bg }}" style="display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+              <sc-for list="{{ bgs }}" as="o" hint-placeholder-count="3"><button role="radio" aria-checked="{{ o.sel }}" onClick="{{ o.on }}" style="height:34px;padding:0 13px;border:0;border-radius:17px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:800 13px/1 var(--font-body);white-space:nowrap">{{ o.label }}</button></sc-for>
+            </div>
+          </div>
+          <div ref="{{ prevRef }}" data-ovprev="1" style="position:relative;width:100%;aspect-ratio:16 / 9;border-radius:22px;overflow:hidden;background:#140A11;box-shadow:0 0 0 4px var(--color-keyline),0 9px 0 1px var(--color-keyline),0 24px 40px -18px var(--color-drop)">
+            <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;transform:scale({{ ovScale }})"><dc-import name="OverlayFrameP6" scenario="pages" theme="{{ theme }}" placement="{{ ovPlacement }}" bg="{{ ovBg }}" per-page="{{ ovPer }}" timers="{{ ovTimers }}" calm="{{ ovCalm }}" players="{{ playersOn }}" reduced="{{ reduced }}" hint-size="1920px,1080px"></dc-import></div>
+          </div>
+          <span style="display:flex;align-items:center;gap:6px;font:700 13px/1.45 var(--font-body);color:var(--color-text-muted)"><span style="font-family:var(--font-icon);font-size:17px">cast</span>{{ t.prevNote }}</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ secMode }}" hint-placeholder-val="{{ false }}">
+      <div id="set-pane" data-pane="1" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
+        <p style="margin:0;max-width:720px;font:600 16px/1.55 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.modeDesc }}</p>
+        <div role="radiogroup" aria-label="{{ t.mode }}" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+          <sc-for list="{{ modes }}" as="o" hint-placeholder-count="3"><div role="radio" aria-checked="{{ o.sel }}" aria-disabled="{{ o.locked }}" tabindex="{{ o.tab }}" style="position:relative;display:flex;flex-direction:column;gap:10px;padding:18px 20px 20px;border-radius:32px;background:{{ o.bg }};box-shadow:{{ o.sh }}">
+            <div style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ o.disc }};color:{{ o.discC }};font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1;box-shadow:{{ o.discSh }}">{{ o.icon }}</span><span style="flex:1;font:400 19px/1.4 var(--font-display)">{{ o.label }}</span><span style="display:flex;align-items:center;gap:4px;height:28px;padding:0 11px 0 8px;border-radius:14px;background:{{ o.chipBg }};color:{{ o.chipC }};font:800 12px/1 var(--font-body);white-space:nowrap;box-shadow:{{ o.chipSh }}"><span style="font-family:var(--font-icon);font-size:16px;font-variation-settings:'FILL' 1">{{ o.chipIcon }}</span>{{ o.chip }}</span></div>
+            <span style="font:600 15px/1.5 var(--font-body);color:{{ o.c }};text-wrap:pretty">{{ o.desc }}</span>
+          </div></sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1376,&quot;height&quot;:820},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;de&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'de'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;section&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;players&quot;,&quot;discord&quot;,&quot;overlay&quot;,&quot;mode&quot;],&quot;default&quot;:&quot;players&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;discord&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;empty&quot;,&quot;invalid&quot;,&quot;saved&quot;,&quot;test-sent&quot;,&quot;test-failed&quot;,&quot;failing&quot;],&quot;default&quot;:&quot;empty&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;playersOn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;players&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{id:number,name:string,c:number,on:number|null}&gt;&quot;},&quot;games&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{id:number,game:string}&gt;&quot;},&quot;onPlayers&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(list) =&gt; void&quot;},&quot;onPlayersOn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(on:boolean) =&gt; void&quot;},&quot;onDiscord&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(status:string) =&gt; void&quot;},&quot;nav&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Kitty vs. the world&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;nCh&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;tsType&quot;:&quot;number&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  prevRef = React.createRef();
+  static L = {
+    en: { title: 'Winnie settings', sub: 'Only you see these. Changes save on their own.', sections: 'Settings sections', s_players: 'Players', s_discord: 'Discord', s_overlay: 'Overlay', s_mode: 'Game Mode', soon: 'Soon', attention: 'Needs attention', on: 'On', off: 'Off',
+      players: 'Players', playersDesc: 'Put names on Challenges. Great for co-op, relays and couch races. Off by default.', playersOff: 'Players are off, so your Challenges look exactly like before. Turn them on to add up to 8 people.',
+      pickColour: 'Pick a colour', colourHint: 'Every Player gets a colour and their initial, so nobody is just a colour.', playerN: (n) => 'Player ' + n, nameAria: (n) => 'Name of Player ' + n, colorAria: (nm) => 'Colour for ' + nm, removeAria: (nm) => 'Remove ' + nm, swAria: (n, by) => (by ? `Colour ${n}, taken by ${by}` : `Colour ${n}`),
+      onCh: (g) => 'On ' + g, onBench: 'On the bench', addPlayer: 'Add Player', plCount: (n) => n + ' / 8 Players', plFull: 'That’s 8. The couch is full.',
+      howTitle: 'How Players work', how1: 'Add Players here. Each gets a colour and an initial.', how2: 'Drag a Player from the bench onto a Challenge. One Challenge per Player, as many Players per Challenge as you like.', how3: 'Viewers and the Overlay see who’s on what. Drop a Player anywhere off the list to bench them.',
+      discord: 'Discord notifications', discordDesc: 'Post to one Discord channel when something big happens in this Winnie.', st_none: 'Not set up', st_ok: 'Configured', st_fail: 'Failing',
+      whLabel: 'Webhook URL', whLabelNew: 'New webhook URL', whHelp: 'Where do I find this?', whPh: 'https://discord.com/api/webhooks/…', save: 'Save webhook', saving: 'Checking…', keep: 'Keep current',
+      err_empty: 'Paste a webhook URL first.', err_invite: 'That’s an invite link, not a webhook. In Discord: Edit Channel → Integrations → Webhooks → Copy Webhook URL.', err_format: 'That doesn’t look like a Discord webhook. It starts with https://discord.com/api/webhooks/',
+      hint: 'In Discord: Edit Channel → Integrations → Webhooks → Copy Webhook URL.', hintReplace: 'Paste the new webhook. The current one keeps working until you save.',
+      configured: 'Configured', maskAria: 'Saved webhook, mostly hidden', savedLine: (d) => `Saved ${d}. Write-only: nobody sees the full URL again, not even you.`,
+      test: 'Send test message', testing: 'Sending…', sent: 'Sent!', replace: 'Replace webhook', remove: 'Remove', removeQ: 'Remove this webhook? Notifications stop right away.', cancel: 'Cancel', removeYes: 'Remove webhook',
+      testOk: 'Test message sent. Go look, Winnies just said hi in your channel.', testFailT: 'Discord didn’t take the test message.', testFailB: 'It answered 404 (Unknown Webhook), so the webhook was probably deleted on Discord’s side. Replace it with a fresh one.', dismiss: 'Dismiss',
+      failT: 'Notifications are failing', failB: 'The last 3 didn’t reach Discord. Since 13:20 it answers 404 (Unknown Webhook). We’ll keep trying with each new event and pause after 10 misses in a row.',
+      evTitle: 'Send a message when…', evNone: 'Save a webhook first, then pick what gets posted.', evAllOff: 'Everything starts off. Pick at least one, or Discord stays quiet.', evOn: (n) => n + ' on',
+      ev_won: 'A Challenge is Won', ev_wonD: 'One message per Won Challenge.', ev_complete: 'The Winnie is Complete', ev_completeD: 'Once, when every Challenge is Won.', ev_reset: 'Gauntlet reset', ev_resetD: 'When a Gauntlet starts over.', ev_conf: 'Confirmation failed', ev_confD: 'When a Win doesn’t get confirmed.', later: 'Comes with Game Modes',
+      previewLabel: 'What gets posted', noPreview: 'Turn on an event to see the message.', today: 'Today at 14:31', prevWon: (w) => `Hades is Won in ${w}! 3 / 8 won · 38%.`, prevComplete: (w) => `${w} is Complete! Every Challenge Won, Total Timer 14:32:07.`, watch: 'Watch live',
+      logTitle: 'Recent deliveries', delivered: 'Delivered', failed: (c) => 'Failed · ' + c, testMsg: 'Test message', wonEv: (g) => g + ' · Won',
+      placement: 'Placement', corner: 'Corner', sidebar: 'Sidebar', perPage: 'Challenges per page', perAria: (n) => n + ' per page', perHint: (n, p) => (p > 1 ? `${n} Challenges → ${p} pages, flipping every 10 s.` : `All ${n} Challenges fit on one page.`), timers: 'Show timers', timersD: 'Total Timer and Challenge Timers.', calm: 'Calm preset', calmD: 'Quieter ticks, no confetti, slower idle life. For long streams.', plMarkers: 'Player markers show on rows while Players are on.', link: 'Overlay link', copy: 'Copy', copied: 'Copied',
+      livePrev: 'Live preview', prevSize: '1920 × 1080 · transparent background', saved: 'Saved', autoSave: 'Saves on its own', bg: 'Preview background', bright: 'Bright', dark: 'Dark', busy: 'Busy', prevNote: 'OBS picks up changes within 5 seconds. No refresh needed.',
+      mode: 'Game Mode', modeDesc: 'A Game Mode is the ruleset for this Winnie. Everything runs on Standard for now. More are coming.', standard: 'Standard', standardD: 'Win every Challenge, in any order. Losses never count against you.', inUse: 'In use', gauntlet: 'Gauntlet', confirmation: 'Confirmation', comingLater: 'Coming later', oven: 'Rules still in the oven.' },
+    de: { title: 'Winnie-Einstellungen', sub: 'Nur du siehst das. Änderungen speichern sich von selbst.', sections: 'Bereiche der Einstellungen', s_players: 'Spieler', s_discord: 'Discord', s_overlay: 'Overlay', s_mode: 'Spielmodus', soon: 'Bald', attention: 'Braucht Aufmerksamkeit', on: 'An', off: 'Aus',
+      players: 'Spieler', playersDesc: 'Namen auf Challenges setzen. Super für Koop, Staffeln und Couch-Rennen. Standardmäßig aus.', playersOff: 'Spieler sind aus, deine Challenges sehen aus wie immer. Schalte sie an, um bis zu 8 Leute hinzuzufügen.',
+      pickColour: 'Farbe wählen', colourHint: 'Jeder Spieler bekommt eine Farbe und seinen Anfangsbuchstaben, damit niemand nur eine Farbe ist.', playerN: (n) => 'Spieler ' + n, nameAria: (n) => 'Name von Spieler ' + n, colorAria: (nm) => 'Farbe für ' + nm, removeAria: (nm) => nm + ' entfernen', swAria: (n, by) => (by ? `Farbe ${n}, vergeben an ${by}` : `Farbe ${n}`),
+      onCh: (g) => 'Auf ' + g, onBench: 'Auf der Bank', addPlayer: 'Spieler hinzufügen', plCount: (n) => n + ' / 8 Spieler', plFull: 'Das sind 8. Die Couch ist voll.',
+      howTitle: 'So funktionieren Spieler', how1: 'Füg hier Spieler hinzu. Jeder bekommt eine Farbe und einen Anfangsbuchstaben.', how2: 'Zieh Spieler von der Bank auf eine Challenge. Eine Challenge pro Spieler, beliebig viele Spieler pro Challenge.', how3: 'Zuschauer und das Overlay sehen, wer was spielt. Lass Spieler neben der Liste los, um sie auf die Bank zu setzen.',
+      discord: 'Discord-Benachrichtigungen', discordDesc: 'Poste in einen Discord-Kanal, wenn in diesem Winnie etwas Großes passiert.', st_none: 'Nicht eingerichtet', st_ok: 'Eingerichtet', st_fail: 'Fehlerhaft',
+      whLabel: 'Webhook-URL', whLabelNew: 'Neue Webhook-URL', whHelp: 'Wo finde ich die?', whPh: 'https://discord.com/api/webhooks/…', save: 'Webhook speichern', saving: 'Wird geprüft…', keep: 'Aktuellen behalten',
+      err_empty: 'Füg zuerst eine Webhook-URL ein.', err_invite: 'Das ist ein Einladungslink, kein Webhook. In Discord: Kanal bearbeiten → Integrationen → Webhooks → Webhook-URL kopieren.', err_format: 'Das sieht nicht nach einem Discord-Webhook aus. Er beginnt mit https://discord.com/api/webhooks/',
+      hint: 'In Discord: Kanal bearbeiten → Integrationen → Webhooks → Webhook-URL kopieren.', hintReplace: 'Füg den neuen Webhook ein. Der aktuelle funktioniert, bis du speicherst.',
+      configured: 'Eingerichtet', maskAria: 'Gespeicherter Webhook, größtenteils verborgen', savedLine: (d) => `Gespeichert am ${d}. Nur schreibbar: Niemand sieht die ganze URL wieder, nicht mal du.`,
+      test: 'Testnachricht senden', testing: 'Wird gesendet…', sent: 'Gesendet!', replace: 'Webhook ersetzen', remove: 'Entfernen', removeQ: 'Diesen Webhook entfernen? Benachrichtigungen stoppen sofort.', cancel: 'Abbrechen', removeYes: 'Webhook entfernen',
+      testOk: 'Testnachricht gesendet. Schau nach, Winnies hat gerade Hallo gesagt.', testFailT: 'Discord hat die Testnachricht nicht angenommen.', testFailB: 'Die Antwort war 404 (Unknown Webhook), der Webhook wurde wohl in Discord gelöscht. Ersetz ihn durch einen neuen.', dismiss: 'Schließen',
+      failT: 'Benachrichtigungen schlagen fehl', failB: 'Die letzten 3 sind nicht bei Discord angekommen. Seit 13:20 kommt 404 (Unknown Webhook). Wir versuchen es bei jedem neuen Ereignis weiter und pausieren nach 10 Fehlschlägen am Stück.',
+      evTitle: 'Eine Nachricht senden, wenn…', evNone: 'Speichere zuerst einen Webhook und wähl dann, was gepostet wird.', evAllOff: 'Alles startet aus. Wähl mindestens eins, sonst bleibt Discord still.', evOn: (n) => n + ' an',
+      ev_won: 'Eine Challenge gewonnen ist', ev_wonD: 'Eine Nachricht pro gewonnener Challenge.', ev_complete: 'Der Winnie komplett ist', ev_completeD: 'Einmal, wenn jede Challenge gewonnen ist.', ev_reset: 'Gauntlet zurückgesetzt', ev_resetD: 'Wenn ein Gauntlet von vorn beginnt.', ev_conf: 'Bestätigung fehlgeschlagen', ev_confD: 'Wenn ein Sieg nicht bestätigt wird.', later: 'Kommt mit Spielmodi',
+      previewLabel: 'Was gepostet wird', noPreview: 'Schalte ein Ereignis an, um die Nachricht zu sehen.', today: 'Heute um 14:31', prevWon: (w) => `Hades ist gewonnen in ${w}! 3 / 8 gewonnen · 38 %.`, prevComplete: (w) => `${w} ist komplett! Jede Challenge gewonnen, Gesamt-Timer 14:32:07.`, watch: 'Live zuschauen',
+      logTitle: 'Letzte Zustellungen', delivered: 'Zugestellt', failed: (c) => 'Fehler · ' + c, testMsg: 'Testnachricht', wonEv: (g) => g + ' · Gewonnen',
+      placement: 'Position', corner: 'Ecke', sidebar: 'Seitenleiste', perPage: 'Challenges pro Seite', perAria: (n) => n + ' pro Seite', perHint: (n, p) => (p > 1 ? `${n} Challenges → ${p} Seiten, Wechsel alle 10 s.` : `Alle ${n} Challenges passen auf eine Seite.`), timers: 'Timer zeigen', timersD: 'Gesamt-Timer und Challenge-Timer.', calm: 'Ruhig-Modus', calmD: 'Leisere Ticks, kein Konfetti, gemächlicheres Leben. Für lange Streams.', plMarkers: 'Spieler-Marker erscheinen, solange Spieler an sind.', link: 'Overlay-Link', copy: 'Kopieren', copied: 'Kopiert',
+      livePrev: 'Live-Vorschau', prevSize: '1920 × 1080 · transparenter Hintergrund', saved: 'Gespeichert', autoSave: 'Speichert sich selbst', bg: 'Vorschau-Hintergrund', bright: 'Hell', dark: 'Dunkel', busy: 'Wild', prevNote: 'OBS übernimmt Änderungen in 5 Sekunden. Kein Neuladen nötig.',
+      mode: 'Spielmodus', modeDesc: 'Ein Spielmodus ist das Regelwerk für diesen Winnie. Vorerst läuft alles auf Standard. Mehr kommt.', standard: 'Standard', standardD: 'Gewinn jede Challenge, in beliebiger Reihenfolge. Niederlagen zählen nie gegen dich.', inUse: 'Aktiv', gauntlet: 'Gauntlet', confirmation: 'Bestätigung', comingLater: 'Kommt später', oven: 'Die Regeln sind noch im Ofen.' },
+  };
+  static dSeed(k) {
+    const base = { mode: 'empty', url: '', err: null, busy: null, hint: '', savedAt: '', test: null, failing: false, failTest: false, confirm: false, ev: { won: false, complete: false }, log: [], replacing: false, flash: false };
+    const cfg = { mode: 'configured', hint: 'discord.com/api/webhooks/1189…••••••Xk3Q', savedAt: '03.10.26' };
+    const ok = { t: '12:02', ev: 'test', ok: true };
+    switch (k) {
+      case 'invalid': return { ...base, url: 'https://discord.gg/kittyspeedruns', err: 'invite' };
+      case 'saved': return { ...base, ...cfg, savedAt: '14.10.26' };
+      case 'test-sent': return { ...base, ...cfg, ev: { won: true, complete: true }, test: 'sent', log: [{ t: '14:31', ev: 'test', ok: true }] };
+      case 'test-failed': return { ...base, ...cfg, ev: { won: true, complete: false }, test: 'failed', failTest: true, log: [{ t: '14:31', ev: 'test', ok: false, code: '404' }, ok] };
+      case 'failing': return { ...base, ...cfg, ev: { won: true, complete: true }, failing: true, failTest: true, log: [{ t: '14:31', ev: 'Tetris Effect', ok: false, code: '404' }, { t: '13:58', ev: 'Hades', ok: false, code: '404' }, { t: '13:20', ev: 'Hollow Knight', ok: false, code: '404' }, ok] };
+      default: return base;
+    }
+  }
+  state = { sec: this.props.section || 'players', d: Component.dSeed(this.props.discord || 'empty'), ov: { placement: 'corner', per: 5, timers: true, calm: false, bg: 'busy' }, ovN: 0, colorFor: null, copied: false, pw: 880 };
+
+  root() { return this.rootRef.current; }
+  q(s) { const r = this.root(); return r ? r.querySelector(s) : null; }
+  qa(s) { const r = this.root(); return r ? [...r.querySelectorAll(s)] : []; }
+  L() { return Component.L[this.props.lang] || Component.L.en; }
+  sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  reduced() { const r = this.root(); return !!this.props.reduced || !!(r && r.closest('[data-motion="reduce"]')) || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  setD(p, cb) { this.setState((s) => ({ d: { ...s.d, ...(typeof p === 'function' ? p(s.d) : p) } }), cb); }
+
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.root(), fx: () => this.q('[data-fx]'), cfg: () => ({ amb: true, resp: true, cel: true, reduced: this.reduced(), dialect: 'workspace', calm: false, interval: 1000 }), cue: () => {} });
+      this.m.refresh(this.root()); this.m.syncLoops(true);
+      setTimeout(() => { if (this.m) { this.m.refresh(this.root()); this.m.syncLoops(true); } }, 800);
+      this.intro();
+    };
+    boot();
+    this._onClick = (e) => { const b = e.target.closest('[data-press]'); if (b && this.m && !b.disabled) this.m.release(b); };
+    this._onDown = (e) => { if (this.state.colorFor != null && !e.target.closest('[data-menu],[data-menubtn]')) this.setState({ colorFor: null }); };
+    this._onKey = (e) => { if (e.key === 'Escape' && this.state.colorFor != null) this.setState({ colorFor: null }); };
+    const r = this.root(); r.addEventListener('click', this._onClick); r.addEventListener('pointerdown', this._onDown, true); r.addEventListener('keydown', this._onKey);
+    this.observe();
+  }
+  componentWillUnmount() {
+    clearTimeout(this._bt); clearTimeout(this._cp); clearTimeout(this._fl); this._ro && this._ro.disconnect();
+    const r = this.root(); if (r) { r.removeEventListener('click', this._onClick); r.removeEventListener('pointerdown', this._onDown, true); r.removeEventListener('keydown', this._onKey); }
+  }
+  componentDidUpdate(pp) {
+    if (pp.nav !== this.props.nav || pp.section !== this.props.section) this.setSec(this.props.section || 'players');
+    if (pp.discord !== this.props.discord) this.setState({ d: Component.dSeed(this.props.discord || 'empty') });
+    this.observe();
+    if (this.m) this.m.syncLoops(false);
+  }
+  observe() {
+    const el = this.prevRef.current;
+    if (el === this._obs) return;
+    this._ro && this._ro.disconnect(); this._obs = el;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    this._ro = new ResizeObserver(() => { const w = el.offsetWidth; if (w && Math.abs(w - this.state.pw) > 1) this.setState({ pw: w }); });
+    this._ro.observe(el);
+  }
+  intro() {
+    const m = this.m; if (!m) return;
+    const d = this.state.d;
+    if (d.failing) setTimeout(() => m.shake(this.q('[data-dfail]')), 500);
+    if (d.err) setTimeout(() => { m.shake(this.q('[data-whinput]')); m.shake(this.q('[data-dmsg]')); }, 500);
+    if (d.test === 'sent') setTimeout(() => { m.jelly('resp', this.q('[data-dres]'), 0.6); m.burst('resp', this.q('[data-dres]'), { ox: 0.05, n: 10, shapes: ['spark', 'circle'], colors: ['#9BE3B4', '#FFFFFF', '#FFC23D'], size: 14, spread: 100, up: false, gravity: 0 }); }, 500);
+    if (d.test === 'failed') setTimeout(() => m.shake(this.q('[data-dres]')), 500);
+  }
+  setSec(k) {
+    if (k === this.state.sec) return;
+    this.setState({ sec: k, colorFor: null }, () => { if (!this.m) return; this.m.stagIn([this.q('[data-pane]')]); this.m.pop(this.q(`[data-sec="${k}"]`), 1.08); });
+  }
+  thumb(key) { const b = this.q(`[data-sw="${key}"] [data-thumb]`); if (b && this.m) this.m.jelly('resp', b, 1.4, this.m.T().D.land); }
+
+  // discord
+  async save() {
+    const d = this.state.d, v = d.url.trim();
+    let err = null;
+    if (!v) err = 'empty'; else if (/discord(app)?\.(gg|com\/invite)\//i.test(v)) err = 'invite'; else if (!/^https:\/\/(ptb\.|canary\.)?discord(app)?\.com\/api\/webhooks\/\d{5,}\/[\w-]{20,}$/.test(v)) err = 'format';
+    if (err) { this.setD({ err }, () => { const i = this.q('[data-whinput]'); this.m && this.m.shake(i); this.m && this.m.shake(this.q('[data-dmsg]')); i && i.focus({ preventScroll: true }); }); return; }
+    this.setD({ busy: 'save', err: null });
+    await this.sleep(900);
+    const mm = v.match(/webhooks\/(\d+)\/([\w-]+)/);
+    this.setD({ mode: 'configured', busy: null, url: '', replacing: false, hint: `discord.com/api/webhooks/${mm[1].slice(0, 4)}…••••••${mm[2].slice(-4)}`, savedAt: '14.10.26', failing: false, failTest: false, test: null, confirm: false }, () => {
+      if (!this.m) return;
+      const c = this.q('[data-dcfg]'); this.m.pop(c, 1.3); this.m.jelly('resp', this.q('[data-dblock]'), 0.4);
+      this.m.burst('resp', c, { n: 10, shapes: ['spark', 'circle'], colors: ['#9BE3B4', '#FFFFFF', '#CDB8FF'], size: 14, spread: 90, up: false, gravity: 0 });
+      this.m.cue('discord.saved', 'R40');
+    });
+    this.props.onDiscord && this.props.onDiscord('ok');
+  }
+  async test() {
+    if (this.state.d.busy) return;
+    this.setD({ busy: 'test', test: null });
+    await this.sleep(1100);
+    const fail = this.state.d.failTest;
+    this.setD((d) => ({ busy: null, test: fail ? 'failed' : 'sent', flash: !fail, log: [{ t: '14:32', ev: 'test', ok: !fail, code: fail ? '404' : '' }, ...d.log].slice(0, 5) }), () => {
+      if (!this.m) return;
+      const r = this.q('[data-dres]');
+      if (fail) { this.m.shake(r); this.m.cue('discord.fail', 'R42'); }
+      else { this.m.morph(this.q('[data-dti]')); this.m.jelly('resp', r, 0.6); this.m.burst('resp', this.q('[data-dtest]'), { n: 10, shapes: ['spark', 'circle'], colors: ['#9BE3B4', '#FFFFFF', '#FFC23D'], size: 14, spread: 100, up: false, gravity: 0 }); this.m.cue('discord.sent', 'R41'); }
+    });
+    clearTimeout(this._fl); if (!fail) this._fl = setTimeout(() => this.setD({ flash: false }), 2200);
+  }
+  replace() { this.setD({ mode: 'edit', replacing: true, url: '', err: null, test: null, confirm: false }, () => { const i = this.q('[data-whinput]'); if (i) { i.focus({ preventScroll: true }); this.m && this.m.editIn(this.q('[data-dblock]')); } }); }
+  removeYes() {
+    this.setState({ d: Component.dSeed('empty') }, () => this.m && this.m.jelly('resp', this.q('[data-dblock]'), 0.5));
+    this.props.onDiscord && this.props.onDiscord('none');
+  }
+  toggleEv(k) { this.setD((d) => ({ ev: { ...d.ev, [k]: !d.ev[k] } }), () => { this.thumb(k); this.m && this.m.jelly('resp', this.q('[data-dprev]'), 0.35); }); }
+
+  // overlay
+  setOv(p, key) {
+    this.setState((s) => ({ ov: { ...s.ov, ...p }, ovN: s.ovN + 1 }), () => {
+      if (!this.m) return;
+      if (key) this.thumb(key);
+      this.m.pop(this.q('[data-ovsaved]'), 1.25); this.m.jelly('resp', this.q('[data-ovprev]'), 0.18);
+    });
+  }
+  copy() {
+    try { navigator.clipboard && navigator.clipboard.writeText('https://winnies.app/overlay/k7Hq2xR9vLp3mT8w').catch(() => {}); } catch (e) {}
+    this.setState({ copied: true }, () => { const b = this.q('[data-ovcopy]'); if (b && this.m) { this.m.morph(b.querySelector('[data-ci]')); this.m.burst('resp', b, { n: 6, shapes: ['spark'], colors: ['#FFC23D', '#FFFFFF', '#CDB8FF'], size: 14, spread: 80, up: false, gravity: 0 }); } });
+    clearTimeout(this._cp); this._cp = setTimeout(() => this.setState({ copied: false }), 2000);
+  }
+
+  // players
+  pl() { return this.props.players || []; }
+  setPl(list, cb) { this.props.onPlayers && this.props.onPlayers(list); if (cb) setTimeout(cb, 30); }
+  addPlayer() {
+    const list = this.pl(); if (list.length >= 8) return;
+    const used = list.map((p) => p.c), c = [1, 2, 3, 4, 5, 6, 7, 8].find((x) => !used.includes(x)), id = Math.max(0, ...list.map((p) => p.id)) + 1;
+    this.setPl([...list, { id, name: this.L().playerN(list.length + 1), c, on: null }], () => {
+      const row = this.q(`[data-plrow="${id}"]`); if (row && this.m) this.m.enterRow(row);
+      const i = this.q(`[data-pname="${id}"]`); if (i) { i.focus({ preventScroll: true }); i.select(); }
+    });
+  }
+  async removePlayer(id) {
+    const row = this.q(`[data-plrow="${id}"]`);
+    if (row && this.m) await this.m.exitRow(row);
+    this.setPl(this.pl().filter((p) => p.id !== id));
+  }
+  setColor(id, c) {
+    this.setState({ colorFor: null });
+    this.setPl(this.pl().map((p) => (p.id === id ? { ...p, c } : p)), () => { const b = this.q(`[data-pcolor="${id}"]`); if (b && this.m) { this.m.jelly('resp', b, 1.2); this.m.burst('resp', b, { n: 8, shapes: ['circle'], colors: ['var(--player-' + c + ')', '#FFFFFF'], size: 12, spread: 70, up: false, gravity: 0 }); } });
+  }
+  openColor(id) { this.setState((s) => ({ colorFor: s.colorFor === id ? null : id }), () => { if (this.state.colorFor != null && this.m) this.m.menuIn(this.q('[data-menu]')); }); }
+  togglePlayers() { this.props.onPlayersOn && this.props.onPlayersOn(!this.props.playersOn); setTimeout(() => this.thumb('players'), 30); }
+
+  renderVals() {
+    const L = this.L(), s = this.state, d = s.d, ov = s.ov, pOn = !!this.props.playersOn, list = this.pl(), games = this.props.games || [];
+    const tabsel = (on) => ({ bg: on ? 'var(--color-control)' : 'transparent', c: on ? 'var(--color-text)' : 'var(--color-text-muted)', sh: on ? '0 4px 0 -1px var(--color-control-lip)' : 'none' });
+    const sw = (on, fn, dis, label) => ({ on: !!on, toggle: fn, dis: !!dis, label, word: on ? L.on : L.off, left: on ? '32px' : '4px', icon: on ? 'check' : 'close', ic: on ? 'var(--color-won-text)' : 'var(--color-text-muted)', track: on ? 'var(--color-won)' : 'var(--color-surface-sunken)', trackSh: on ? 'inset 0 0 0 2px var(--color-won-lip)' : 'var(--shadow-well),inset 0 0 0 2px var(--color-control-lip)', op: dis ? 0.5 : 1, cur: dis ? 'not-allowed' : 'pointer' });
+    const hasHook = d.mode === 'configured' || d.replacing, configured = d.mode === 'configured', editing = !configured;
+    const chip = d.failing ? ['var(--color-danger-surface)', 'var(--color-danger-text)', '0 0 0 2px var(--color-danger)', 'error', L.st_fail] : configured || d.replacing ? ['var(--color-won)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-won-lip)', 'check_circle', L.st_ok] : ['var(--color-surface-sunken)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-border)', 'link_off', L.st_none];
+    const msg = d.err ? ['alert', 'var(--color-danger-text)', 'error', L['err_' + d.err]] : ['status', 'var(--color-text-muted)', 'info', d.replacing ? L.hintReplace : L.hint];
+    const evs = [['won', 'check_circle', L.ev_won, L.ev_wonD, false], ['complete', 'emoji_events', L.ev_complete, L.ev_completeD, false], ['reset', 'restart_alt', L.ev_reset, L.ev_resetD, true], ['conf', 'fact_check', L.ev_conf, L.ev_confD, true]];
+    const onN = (d.ev.won ? 1 : 0) + (d.ev.complete ? 1 : 0);
+    const title = this.props.title || 'Kitty vs. the world';
+    const n = this.props.nCh ?? 8, pages = Math.ceil(n / ov.per);
+    const dark = this.props.theme === 'dark';
+    return {
+      rootRef: this.rootRef, prevRef: this.prevRef, t: L, noop: (e) => e.preventDefault(), theme: dark ? 'dark' : 'light', reduced: !!this.props.reduced,
+      secs: [['players', 'group', L.s_players], ['discord', 'notifications', L.s_discord], ['overlay', 'cast', L.s_overlay], ['mode', 'stadia_controller', L.s_mode]].map(([k, icon, label]) => ({ k, icon, label, sel: s.sec === k, soon: k === 'mode', alert: k === 'discord' && d.failing, on: () => this.setSec(k), ...tabsel(s.sec === k) })),
+      secPlayers: s.sec === 'players', secDiscord: s.sec === 'discord', secOverlay: s.sec === 'overlay', secMode: s.sec === 'mode',
+      plSw: sw(pOn, () => this.togglePlayers(), false, L.players), playersOn: pOn, playersOff: !pOn,
+      plRows: list.map((p, i) => {
+        const g = p.on != null ? games.find((x) => x.id === p.on) : null;
+        return {
+          id: p.id, name: p.name, i: (p.name.trim()[0] || '?').toUpperCase(), bg: 'var(--player-' + p.c + ')', ink: 'var(--player-' + p.c + '-ink)', num: L.playerN(i + 1), z: s.colorFor === p.id ? 10 : 1,
+          open: s.colorFor === p.id, colorAria: L.colorAria(p.name || L.playerN(i + 1)), nameAria: L.nameAria(i + 1), removeAria: L.removeAria(p.name || L.playerN(i + 1)),
+          where: g ? L.onCh(g.game) : L.onBench, whereIcon: g ? 'sports_esports' : 'weekend', whereBg: g ? 'var(--color-pinned)' : 'var(--color-surface-sunken)', whereC: g ? 'var(--color-on-accent)' : 'var(--color-text)', whereSh: g ? '0 3px 0 -1px var(--color-pinned-lip)' : 'inset 0 0 0 2px var(--color-border)',
+          onColor: () => this.openColor(p.id), onName: (e) => this.setPl(list.map((x) => (x.id === p.id ? { ...x, name: e.target.value } : x))), onRemove: () => this.removePlayer(p.id),
+          swatches: [1, 2, 3, 4, 5, 6, 7, 8].map((c) => { const by = list.find((x) => x.c === c && x.id !== p.id), sel = p.c === c; return { k: c, sel, taken: !!by, plain: !sel, label: by ? (by.name[0] || '?').toUpperCase() : String(c), aria: L.swAria(c, by ? by.name : ''), bg: 'var(--player-' + c + ')', ink: 'var(--player-' + c + '-ink)', op: by ? 0.4 : 1, cur: by ? 'not-allowed' : 'pointer', sh: sel ? '0 0 0 3px var(--color-surface-raised),0 0 0 6px var(--color-focus)' : '0 4px 0 -1px rgba(0,0,0,.25)', on: () => this.setColor(p.id, c) }; }),
+        };
+      }),
+      onAddPlayer: () => this.addPlayer(), plFull: list.length >= 8, plAddOp: list.length >= 8 ? 0.45 : 1, plAddCur: list.length >= 8 ? 'not-allowed' : 'pointer', plCount: list.length >= 8 ? L.plFull : L.plCount(list.length),
+      how: [[L.how1, 'var(--color-pinned)', 'var(--color-pinned-lip)'], [L.how2, 'var(--color-accent)', 'var(--color-accent-lip)'], [L.how3, 'var(--color-ready)', 'var(--color-ready-lip)']].map(([text, bg, lip], k) => ({ k, n: k + 1, text, bg, lip })),
+      discordLogo: 'https://cdn.simpleicons.org/discord/' + (dark ? 'FFEEF5' : '4A2B3A'),
+      dChipBg: chip[0], dChipC: chip[1], dChipSh: chip[2], dChipIcon: chip[3], dChip: chip[4], dFailing: d.failing && configured,
+      dEditing: editing, dConfigured: configured, dReplacing: !!d.replacing, dLabel: d.replacing ? L.whLabelNew : L.whLabel, dUrl: d.url, dInvalid: !!d.err,
+      dSaving: d.busy === 'save', dNotSaving: d.busy !== 'save', dSaveCur: d.busy === 'save' ? 'progress' : 'pointer', dSaveLabel: d.busy === 'save' ? L.saving : L.save,
+      dInSh: d.err ? 'var(--shadow-well),0 0 0 3px var(--color-danger)' : 'var(--shadow-well)', dInOp: d.busy === 'save' ? 0.6 : 1,
+      dMsgRole: msg[0], dMsgC: msg[1], dMsgIcon: msg[2], dMsg: msg[3],
+      onUrl: (e) => this.setD({ url: e.target.value, err: null }), onUrlKey: (e) => { if (e.key === 'Enter') this.save(); if (e.key === 'Escape' && d.replacing) this.setD({ mode: 'configured', replacing: false, err: null }); },
+      onSave: () => this.save(), onKeep: () => this.setD({ mode: 'configured', replacing: false, err: null, url: '' }),
+      dHint: d.hint, dSavedLine: L.savedLine(d.savedAt), dConfirm: !!d.confirm, dNoConfirm: !d.confirm,
+      onRemove: () => this.setD({ confirm: true }, () => this.m && this.m.jelly('resp', this.q('[data-dconfirm]'), 0.5)), onRemoveNo: () => this.setD({ confirm: false }), onRemoveYes: () => this.removeYes(),
+      dTesting: d.busy === 'test', dNotTesting: d.busy !== 'test', dTestCur: d.busy === 'test' ? 'progress' : 'pointer', dTestLabel: d.busy === 'test' ? L.testing : d.flash ? L.sent : L.test, dTestIcon: d.flash ? 'check' : 'send',
+      dTestBg: d.flash ? 'var(--color-won)' : 'var(--color-accent)', dTestLip: d.flash ? 'var(--color-won-lip)' : 'var(--color-accent-lip)',
+      dTestSent: d.test === 'sent', dTestFailed: d.test === 'failed', onTest: () => this.test(), onTestDismiss: () => this.setD({ test: null }), onReplace: () => this.replace(),
+      dNoHook: !hasHook, dOnCount: hasHook ? L.evOn(onN) : '', dAllOff: hasHook && onN === 0,
+      events: evs.map(([k, icon, label, desc, later]) => { const on = !later && !!d.ev[k], dis = !hasHook; return { k, icon, label, desc, later, now: !later, sw: sw(on, () => this.toggleEv(k), dis, label), bg: later ? 'transparent' : 'var(--color-surface)', c: later ? 'var(--color-text-muted)' : 'var(--color-text)', disc: later ? 'var(--color-surface-sunken)' : on ? 'var(--color-won)' : 'var(--color-control)', discC: later ? 'var(--color-text-muted)' : on ? 'var(--color-on-accent)' : 'var(--color-text)', discSh: later ? 'inset 0 0 0 2px var(--color-border)' : on ? '0 3px 0 -1px var(--color-won-lip)' : '0 3px 0 -1px var(--color-control-lip)' }; }),
+      hasPreview: hasHook && onN > 0, noPreview: !(hasHook && onN > 0), previewText: d.ev.won ? L.prevWon(title) : L.prevComplete(title),
+      hasLog: d.log.length > 0, log: d.log.map((l, k) => ({ k, t: l.t, ev: l.ev === 'test' ? L.testMsg : L.wonEv(l.ev), word: l.ok ? L.delivered : L.failed(l.code), icon: l.ok ? 'check_circle' : 'error', bg: l.ok ? 'var(--color-won)' : 'var(--color-danger-surface)', c: l.ok ? 'var(--color-on-accent)' : 'var(--color-danger-text)', sh: l.ok ? '0 2px 0 -1px var(--color-won-lip)' : 'inset 0 0 0 2px var(--color-danger)' })),
+      placements: [['corner', L.corner, '84px', '42px', '40px', '26px'], ['sidebar', L.sidebar, '98px', '6px', '28px', '62px']].map(([k, label, l, tp, w, h]) => { const on = ov.placement === k; return { k, label, l, tp, w, h, sel: on, blk: on ? 'var(--color-accent)' : 'var(--color-control)', bg: on ? 'var(--color-surface)' : 'transparent', sh: on ? '0 0 0 3px var(--color-focus),0 5px 0 0 var(--color-lip)' : 'inset 0 0 0 2px var(--color-border)', on: () => this.setOv({ placement: k }) }; }),
+      pers: [1, 2, 3, 4, 5].map((k) => { const on = ov.per === k; return { k, n: k, sel: on, aria: L.perAria(k), on: () => this.setOv({ per: k }), ...tabsel(on) }; }),
+      perHint: L.perHint(n, pages),
+      ovToggles: [['timers', 'timer', L.timers, L.timersD, ov.timers, 'var(--color-accent)', 'var(--color-accent-lip)'], ['calm', 'spa', L.calm, L.calmD, ov.calm, 'var(--color-ready)', 'var(--color-ready-lip)']].map(([k, icon, label, desc, on, disc, lip]) => ({ k, icon, label, desc, disc, lip, sw: sw(on, () => this.setOv({ [k]: !on }, k), false, label) })),
+      copyIcon: s.copied ? 'check' : 'content_copy', copyLabel: s.copied ? L.copied : L.copy, copyBg: s.copied ? 'var(--color-won)' : 'var(--color-control)', copyLip: s.copied ? 'var(--color-won-lip)' : 'var(--color-control-lip)', onCopy: () => this.copy(),
+      savedBg: s.ovN ? 'var(--color-won)' : 'var(--color-surface-sunken)', savedC: s.ovN ? 'var(--color-on-accent)' : 'var(--color-text)', savedSh: s.ovN ? '0 3px 0 -1px var(--color-won-lip)' : 'inset 0 0 0 2px var(--color-border)', savedIcon: s.ovN ? 'cloud_done' : 'cloud', savedLabel: s.ovN ? L.saved : L.autoSave,
+      bgs: [['bright', L.bright], ['dark', L.dark], ['busy', L.busy]].map(([k, label]) => ({ k, label, sel: ov.bg === k, on: () => this.setState((st) => ({ ov: { ...st.ov, bg: k } })), ...tabsel(ov.bg === k) })),
+      ovScale: String(Math.max(0.1, s.pw / 1920)), ovPlacement: ov.placement, ovBg: ov.bg, ovPer: ov.per, ovTimers: ov.timers, ovCalm: ov.calm,
+      modes: [['standard', 'flag', L.standard, L.standardD, false], ['gauntlet', 'local_fire_department', L.gauntlet, L.oven, true], ['confirmation', 'fact_check', L.confirmation, L.oven, true]].map(([k, icon, label, desc, locked]) => ({ k, icon, label, desc, locked, sel: !locked, tab: locked ? '-1' : '0', bg: locked ? 'var(--color-surface-sunken)' : 'var(--color-surface-raised)', sh: locked ? 'inset 0 0 0 2px var(--color-border)' : '0 0 0 3px var(--color-focus),0 6px 0 0 var(--color-lip)', disc: locked ? 'var(--color-surface)' : 'var(--color-accent)', discC: locked ? 'var(--color-text-muted)' : 'var(--color-on-accent)', discSh: locked ? 'inset 0 0 0 2px var(--color-border)' : '0 3px 0 -1px var(--color-accent-lip)', chip: locked ? L.comingLater : L.inUse, chipIcon: locked ? 'lock' : 'check', chipBg: locked ? 'var(--color-surface)' : 'var(--color-won)', chipC: locked ? 'var(--color-text)' : 'var(--color-on-accent)', chipSh: locked ? 'inset 0 0 0 2px var(--color-border)' : '0 2px 0 -1px var(--color-won-lip)', c: locked ? 'var(--color-text-muted)' : 'var(--color-text)' })),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>body{margin:0}a{color:#B0175A}a:hover{color:#4A2B3A}[data-theme="dark"] a{color:#FFB3D2}[data-s6] :focus-visible{outline:3px solid var(--color-focus);outline-offset:3px}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-s6="1" data-theme="{{ theme }}" data-dialect="broadcast" style="position:relative;width:100%;min-height:1100px;overflow:hidden;display:flex;flex-direction:column;background:var(--color-page);color:var(--color-text);font-family:var(--font-body);-webkit-font-smoothing:antialiased">
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;pointer-events:none"><div data-amb="drift" style="position:absolute;inset:-52px;background:radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0/52px 52px,radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px/52px 52px"></div></div>
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+  <sc-if value="{{ tense }}" hint-placeholder-val="{{ false }}"><div data-vig="1" aria-hidden="true" style="position:absolute;inset:0;z-index:55;pointer-events:none;box-shadow:inset 0 0 0 6px var(--color-danger),inset 0 0 180px 30px rgba(224,36,94,.32);opacity:.5"></div></sc-if>
+
+  <div data-page="1" style="position:relative;flex:1;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:24px 32px 36px;display:flex;flex-direction:column;gap:26px">
+    <header style="position:relative;z-index:20;display:flex;align-items:center;gap:14px;height:76px;box-sizing:border-box;padding:0 12px 0 26px;border-radius:38px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+      <span aria-label="winnies" style="flex:none;display:flex;align-items:baseline;font:400 30px/1.2 var(--font-display);padding-bottom:4px">
+        <span style="display:inline-block;transform:rotate(-5deg);color:var(--p-wm-w);text-shadow:0 1.5px 0 var(--p-wm-w-lip),0 3px 0 var(--p-wm-w-lip),0 4.5px 0 var(--p-wm-w-lip)">w</span><span style="display:inline-block;transform:rotate(3deg);color:var(--p-wm-i);text-shadow:0 1.5px 0 var(--p-wm-i-lip),0 3px 0 var(--p-wm-i-lip),0 4.5px 0 var(--p-wm-i-lip)">i</span><span style="display:inline-block;transform:rotate(-2deg);color:var(--p-wm-n1);text-shadow:0 1.5px 0 var(--p-wm-n1-lip),0 3px 0 var(--p-wm-n1-lip),0 4.5px 0 var(--p-wm-n1-lip)">n</span><span style="display:inline-block;transform:rotate(5deg);color:var(--p-wm-n2);text-shadow:0 1.5px 0 var(--p-wm-n2-lip),0 3px 0 var(--p-wm-n2-lip),0 4.5px 0 var(--p-wm-n2-lip)">n</span><span style="display:inline-block;transform:rotate(-3deg);color:var(--p-wm-i2);text-shadow:0 1.5px 0 var(--p-wm-i2-lip),0 3px 0 var(--p-wm-i2-lip),0 4.5px 0 var(--p-wm-i2-lip)">i</span><span style="display:inline-block;transform:rotate(2deg);color:var(--p-wm-e);text-shadow:0 1.5px 0 var(--p-wm-e-lip),0 3px 0 var(--p-wm-e-lip),0 4.5px 0 var(--p-wm-e-lip)">e</span><span style="display:inline-block;transform:rotate(-4deg);color:var(--p-wm-s);text-shadow:0 1.5px 0 var(--p-wm-s-lip),0 3px 0 var(--p-wm-s-lip),0 4.5px 0 var(--p-wm-s-lip)">s</span>
+      </span>
+      <span style="flex:none;display:flex;align-items:center;gap:8px;height:38px;padding:0 16px 0 12px;border-radius:19px;background:var(--color-ready);color:var(--color-on-accent);font:800 15px/1 var(--font-body);white-space:nowrap;box-shadow:0 4px 0 -1px var(--color-ready-lip)"><span style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">visibility</span>View only</span>
+      <div style="flex:1"></div>
+      <span role="status" style="flex:none;display:flex;align-items:center;gap:8px;font:700 15px var(--font-body);color:var(--color-text-muted)"><span data-amb="glow" style="width:10px;height:10px;border-radius:50%;background:var(--color-won-lip)"></span>{{ fresh }}</span>
+      <button data-press="1" style="flex:none;display:flex;align-items:center;gap:8px;height:52px;padding:0 22px 0 16px;border:0;border-radius:26px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 0 0 4px var(--color-keyline),0 7px 0 2px var(--color-keyline)" style-active="transform:translateY(5px);box-shadow:0 0 0 4px var(--color-keyline),0 2px 0 2px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:22px">content_copy</span>Copy link</button>
+    </header>
+
+    <sc-if value="{{ annOn }}" hint-placeholder-val="{{ false }}">
+      <section data-ann="1" role="alert" style="position:relative;z-index:6;display:flex;align-items:center;gap:28px;margin-top:22px;padding:26px 34px 26px 30px;border-radius:52px;background:var(--color-danger-surface);box-shadow:0 0 0 5px var(--color-keyline),0 12px 0 1px var(--color-keyline),0 30px 50px -10px rgba(0,0,0,.35)">
+        <div data-annbanner="1" style="position:absolute;left:34px;top:-34px;display:flex;align-items:center;gap:12px;height:68px;padding:0 30px 0 20px;border-radius:34px;background:var(--color-danger);color:var(--p-white);font:400 36px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 5px var(--color-keyline),0 9px 0 2px var(--color-keyline);transform:rotate(-3deg)"><span style="font-family:var(--font-icon);font-size:40px;font-variation-settings:'FILL' 1">swords</span>Gauntlet over</div>
+        <div data-culprit="1" style="flex:none;margin-top:30px;display:flex;align-items:center;gap:14px;padding:10px 22px 10px 10px;border-radius:40px;background:var(--color-surface);box-shadow:0 0 0 4px var(--color-keyline)">
+          <dc-import name="ClayFace" mood="fuming" size="60" hint-size="60px,60px"></dc-import>
+          <span style="display:flex;flex-direction:column"><span style="font:400 24px/1.4 var(--font-display)">Cuphead</span><span style="font:800 15px/1.3 var(--font-body);color:var(--color-danger-text)">Expert, every boss · attempt 5 of 5</span></span>
+        </div>
+        <div style="flex:1;min-width:0;margin-top:30px;display:flex;flex-direction:column;gap:6px">
+          <h2 style="margin:0;font:400 32px/1.3 var(--font-display);text-wrap:balance">Cuphead took Kitty’s last attempt.</h2>
+          <p style="margin:0;font:700 18px/1.5 var(--font-body);text-wrap:pretty">Everything resets: 3 Wins, 2 Counters, 8 Challenge Timers. The Total Timer keeps its 14:32:07. Stay for the comeback.</p>
+        </div>
+        <span style="flex:none;align-self:flex-start;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:var(--color-surface);font:800 14px/1 var(--font-body);box-shadow:0 0 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:18px">schedule</span>12s ago</span>
+      </section>
+    </sc-if>
+
+    <section data-hero="1" style="position:relative;z-index:3;display:flex;flex-direction:column;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised);overflow:hidden">
+      <div style="display:flex;align-items:center;gap:32px;padding:30px 30px 26px 36px">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <span style="display:flex;align-items:center;gap:10px;font:800 15px/1 var(--font-body);color:var(--color-text-muted)"><span style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-pinned);color:var(--color-on-accent);font:400 13px/1 var(--font-display)">K</span>kittyspeedruns · created 03.10.26</span>
+          <h1 style="margin:0;font:400 50px/1.2 var(--font-display)">Kitty vs. the world</h1>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div aria-hidden="true" style="flex:1;min-width:160px;max-width:380px;height:30px;border-radius:15px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:4px;box-sizing:border-box"><div style="position:relative;height:100%;border-radius:11px;overflow:hidden"><div style="position:absolute;inset:0;transform:translateX({{ fillX }});background:var(--texture-stripes-won);transition:transform var(--dur-travel) var(--spring-snappy)"></div></div></div>
+            <span style="font:400 22px/1.45 var(--font-display);white-space:nowrap">{{ summary }}</span>
+            <span style="display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ pillBg }};color:{{ pillC }};font:800 15px/1 var(--font-body);white-space:nowrap;box-shadow:{{ pillSh }}"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ pillIcon }}</span>{{ pillLabel }}</span>
+          </div>
+        </div>
+        <div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+          <sc-if value="{{ tb }}" hint-placeholder-val="{{ false }}"><span data-lastchip="1" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ tbBg }};color:{{ tbC }};font:800 15px/1 var(--font-body);white-space:nowrap;box-shadow:0 0 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ tbIcon }}</span>{{ tbText }}</span></sc-if>
+          <div data-well="1" role="timer" aria-label="{{ timerAria }}" style="display:flex;align-items:center;gap:14px;height:104px;padding:0 32px 0 {{ wellPadL }};border-radius:52px;background:{{ wellBg }};box-shadow:{{ wellSh }};font:400 70px/1 var(--font-display);color:{{ totalC }}">
+            <sc-if value="{{ tb }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="flex:none;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-complete);color:var(--color-on-accent);font-family:var(--font-icon);font-size:34px;font-variation-settings:'FILL' 1;box-shadow:0 0 0 3px var(--color-keyline)">hourglass_top</span></sc-if>
+            <span aria-hidden="true" style="display:flex"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{ hasMode }}" hint-placeholder-val="{{ true }}">
+        <div data-rules="1" style="display:flex;align-items:center;gap:22px;padding:18px 30px 20px 26px;background:var(--color-surface-sunken);border-top:4px solid var(--color-keyline)">
+          <span data-ribbon="1" style="flex:none;display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 24px 0 7px;border-radius:27px;background:var(--color-text);color:var(--color-surface);font:400 22px/1.45 var(--font-display);white-space:nowrap;transform:rotate(-2deg);box-shadow:0 5px 0 -1px var(--color-control-lip)"><span style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ mode.disc }};color:{{ mode.ink }};font-family:var(--font-icon);font-size:27px;font-variation-settings:'FILL' 1">{{ mode.icon }}</span>{{ mode.name }}</span>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+            <span style="font:800 13px/1.3 var(--font-body);color:var(--color-text-muted)">House rules</span>
+            <span style="font:700 18px/1.45 var(--font-body);text-wrap:pretty">{{ mode.rule }}</span>
+          </div>
+          <sc-if value="{{ mG }}" hint-placeholder-val="{{ false }}">
+            <div data-meter="1" role="img" aria-label="{{ attemptsLabel }}" style="flex:none;display:flex;align-items:center;gap:12px;height:54px;padding:0 20px 0 8px;border-radius:27px;background:var(--color-danger-surface);box-shadow:0 0 0 3px var(--color-keyline)">
+              <span style="display:flex;gap:5px"><sc-for list="{{ tokens }}" as="t" hint-placeholder-count="5"><span data-token="{{ t.k }}" style="width:38px;height:38px;box-sizing:border-box;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:var(--color-danger-text);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1,'wght' 700;box-shadow:{{ t.sh }};opacity:{{ t.op }}">{{ t.icon }}</span></sc-for></span>
+              <span style="font:400 20px/1.4 var(--font-display);color:var(--color-danger-text);white-space:nowrap">{{ attemptsShort }}</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ mC }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:8px;height:50px;padding:0 20px 0 14px;border-radius:25px;background:var(--color-ready);color:var(--color-on-accent);font:800 16px/1 var(--font-body);white-space:nowrap;box-shadow:0 0 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">verified</span>Hades waiting to confirm</span></sc-if>
+          <sc-if value="{{ mK }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:10px;height:54px;padding:0 20px 0 8px;border-radius:27px;background:var(--color-pinned);color:var(--color-on-accent);font:400 20px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 3px var(--color-keyline)"><span style="display:flex;gap:4px"><span style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-surface);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">skull</span><span style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-surface);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">skull</span><span style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-surface);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">skull</span></span>Curse 3</span></sc-if>
+        </div>
+      </sc-if>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+        <div data-row="{{ r.id }}" role="listitem" aria-label="{{ r.aria }}" style="position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto auto 132px 120px;gap:16px;align-items:center;min-height:68px;padding:8px 18px 8px 12px;box-sizing:border-box;border-radius:34px;background:{{ r.bg }};box-shadow:{{ r.sh }}">
+          <sc-if value="{{ r.running }}"><span data-amb="ring" aria-hidden="true" style="position:absolute;inset:-7px;border-radius:41px;box-shadow:0 0 24px 6px var(--color-accent);opacity:.55;pointer-events:none"></span></sc-if>
+          <span data-face="{{ r.id }}" aria-hidden="true" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="48" hint-size="48px,48px"></dc-import></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+            <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="min-width:0;font:400 22px/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span><sc-if value="{{ r.pinned }}"><span aria-label="Pinned" style="flex:none;font-family:var(--font-icon);font-size:20px;color:var(--color-pinned-text);font-variation-settings:'FILL' 1">push_pin</span></sc-if></span>
+            <span style="font:600 15px/1.35 var(--font-body);color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}<sc-if value="{{ r.hasCurse }}"><span style="font-weight:800;color:var(--color-pinned-text)"> · {{ r.curseLine }}</span></sc-if></span>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end"><sc-for list="{{ r.chips }}" as="c"><span style="display:flex;align-items:center;gap:6px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:{{ c.bg }};color:{{ c.c }};font:800 14px/1 var(--font-body);white-space:nowrap;box-shadow:{{ c.sh }}"><span style="font-family:var(--font-icon);font-size:19px;font-variation-settings:'FILL' 1">{{ c.icon }}</span>{{ c.label }}</span></sc-for></div>
+          <div style="display:flex;justify-content:flex-end"><sc-if value="{{ r.hasCounter }}"><span data-cwell="{{ r.id }}" style="display:flex;align-items:center;gap:5px;height:40px;padding:0 15px;border-radius:20px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:var(--shadow-well);font:400 19px/1 var(--font-display);white-space:nowrap">{{ r.count }} / {{ r.target }}</span></sc-if></div>
+          <span aria-hidden="true" style="display:flex;justify-content:flex-end;font:400 24px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+          <span style="justify-self:end;display:flex;align-items:center;gap:6px;height:38px;padding:0 14px 0 10px;border-radius:19px;background:{{ r.wBg }};color:{{ r.wC }};font:800 14px/1 var(--font-body);white-space:nowrap;box-shadow:{{ r.wSh }}"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ r.wIcon }}</span>{{ r.word }}</span>
+          <sc-if value="{{ r.won }}"><span data-amb="stick" aria-hidden="true" style="position:absolute;left:44px;top:-12px;width:30px;height:30px;border-radius:50%;background:var(--color-complete);border:3px solid #fff;box-shadow:var(--shadow-sticker);display:flex;align-items:center;justify-content:center;font:800 16px var(--font-body);color:var(--p-pink-700);transform:rotate(12deg)">★</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1100},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gauntlet&quot;,&quot;gauntlet-reset&quot;,&quot;timebox-last&quot;,&quot;confirm&quot;,&quot;cursed&quot;],&quot;default&quot;:&quot;gauntlet&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { sc: null };
+  MODES = {
+    gauntlet: { name: 'Gauntlet', icon: 'swords', disc: 'var(--p-cherry-100)', ink: 'var(--p-cherry-700)', rule: '5 attempts for the whole Winnie. Every loss spends one. Lose the last one and everything resets.' },
+    timeboxed: { name: 'Timeboxed', icon: 'hourglass_top', disc: 'var(--p-butter-gold)', ink: 'var(--p-cocoa-900)', rule: 'Every Challenge has to be Won inside 6:00:00. When the countdown hits zero, this Winnie is lost for good.' },
+    confirmation: { name: 'Confirmation', icon: 'verified', disc: 'var(--p-sky-300)', ink: 'var(--p-cocoa-900)', rule: 'A win only counts once Kitty beats Celeste, the Confirmation Challenge. Fail it and that Challenge resets.' },
+    cursed: { name: 'Cursed Incremental', icon: 'skull', disc: 'var(--p-lilac-300)', ink: 'var(--p-cocoa-900)', rule: 'Every loss curses what’s left: every open Target grows 10% and one more house rule joins in.' },
+  };
+  CURSES = ['no healing', 'no upgrades', 'one-hit'];
+  componentDidMount() {
+    this.setState(this.init(this.props.scenario || 'gauntlet'));
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.rootRef.current, fx: () => this.q('[data-fx]'), cfg: () => ({ amb: true, resp: true, cel: true, reduced: this.rm(), dialect: 'broadcast', calm: false, interval: 1000 }), cue: () => {} });
+      this.refresh(); this.later(() => this.refresh(), 800); this.later(() => this.intro(), 500);
+    };
+    boot();
+    this._iv = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() { clearInterval(this._iv); clearTimeout(this._bt); (this._ts || []).forEach(clearTimeout); }
+  componentDidUpdate(pp) {
+    if (pp.scenario !== this.props.scenario) { this.setState(this.init(this.props.scenario)); return; }
+    if (pp.theme !== this.props.theme) this.later(() => this.refresh(), 30); else if (this.m) this.m.syncLoops(false);
+    if (this.state.tickN !== this._lt) { this._lt = this.state.tickN; this.runTick(); }
+  }
+  q(s) { const r = this.rootRef.current; return r && r.querySelector(s); }
+  qa(s) { const r = this.rootRef.current; return r ? [...r.querySelectorAll(s)] : []; }
+  rm() { return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  refresh() { const r = this.rootRef.current; if (this.m && r) { this.m.refresh(r); this.m.syncLoops(true); } }
+  later(fn, ms) { (this._ts = this._ts || []).push(setTimeout(fn, ms)); }
+  anim(el, kf, o) { return el && !this.rm() ? el.animate(kf, o) : null; }
+  p2(n) { return String(n).padStart(2, '0'); }
+  fmt(s) { return !s ? '00:00' : Math.floor(s / 3600) + ':' + this.p2(Math.floor((s % 3600) / 60)) + ':' + this.p2(s % 60); }
+  fmtT(s) { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return h ? h + ':' + this.p2(m) + ':' + this.p2(x) : this.p2(m) + ':' + this.p2(x); }
+  digits(str, prev) { const off = prev ? prev.length - str.length : 0; return str.split('').map((c, i) => ({ k: i, c, pos: i, w: c === ':' ? 'var(--timer-colon-w)' : 'var(--timer-digit-w)', col: c === ':' ? 'var(--color-text-muted)' : 'inherit', chg: prev && prev[i + off] !== c ? '1' : '0' })); }
+  init(sc) {
+    const B = [
+      { id: 1, game: 'Elden Ring', cond: 'Malenia, no summons', secs: 11564, pinned: true, running: true },
+      { id: 2, game: 'Super Mario 64', cond: 'All stars', count: 87, target: 120, secs: 14470 },
+      { id: 3, game: 'Cuphead', cond: 'Expert, every boss', count: 12, target: 19, secs: 6482 },
+      { id: 4, game: 'Celeste', cond: 'Farewell, golden strawberry', secs: 0 },
+      { id: 5, game: 'Dark Souls III', cond: 'Soul Level 1 Nameless King', secs: 8431 },
+      { id: 6, game: 'Hollow Knight', cond: 'Pantheon of Hallownest', secs: 4509, won: true },
+      { id: 7, game: 'Hades', cond: 'Heat 16 clear', secs: 3160, won: true },
+      { id: 8, game: 'Tetris Effect', cond: '150 lines, Marathon', count: 150, target: 150, secs: 2511, won: true },
+    ].map((q, i) => ({ count: null, target: null, pinned: false, running: false, won: false, used: 0, order: i, ...q }));
+    const by = (id, p) => Object.assign(B.find((x) => x.id === id), p);
+    const mode = { gauntlet: 'gauntlet', 'gauntlet-reset': 'gauntlet', 'timebox-last': 'timeboxed', confirm: 'confirmation', cursed: 'cursed' }[sc] || 'gauntlet';
+    const s = { sc, mode, ch: B, total: 52327, left: 0, used: 3, max: 5, ann: false, tickN: 0, fresh: 0 };
+    if (sc === 'gauntlet') { by(1, { used: 2 }); by(3, { used: 1 }); }
+    if (sc === 'gauntlet-reset') { s.used = 0; s.ann = true; s.ch = B.map((q) => ({ ...q, won: false, running: false, secs: 0, count: q.target != null ? 0 : null })); }
+    if (sc === 'timebox-last') { [[1, 7100], [2, 4205], [3, 2882], [4, 0], [5, 1351], [6, 3130], [7, 1900], [8, 991]].forEach(([id, secs]) => by(id, { secs })); s.left = 50; }
+    if (sc === 'confirm') { by(4, { conf: true }); by(7, { won: false, pending: true }); }
+    return s;
+  }
+  live(s) { return !s.ann && s.ch.some((q) => q.running && !q.won) && !(s.mode === 'timeboxed' && s.left <= 0); }
+  tick() {
+    const s = this.state; if (!s.sc) return;
+    if (!this.live(s)) { if (s.mode === 'timeboxed' && s.left <= 0) { this._z = (this._z || 0) + 1; if (this._z > 6) { this._z = 0; this.setState(this.init(s.sc)); } } else this.setState({ fresh: s.fresh + 1 }); return; }
+    const p = { tickN: s.tickN + 1, fresh: 0, ch: s.ch.map((q) => (q.running && !q.won ? { ...q, secs: q.secs + 1, _p: q.secs } : q)) };
+    if (s.mode === 'timeboxed') { p.left = s.left - 1; p.prevT = s.left; } else { p.total = s.total + 1; p.prevT = s.total; }
+    this.setState(p);
+  }
+  runTick() {
+    if (!this.m) return;
+    const rows = this.qa('[data-kind="row"][data-chg="1"]'); if (rows.length) this.m.tick(rows, 'row', 'sec');
+    const tot = this.qa('[data-kind="total"][data-chg="1"]'); if (tot.length) this.m.tick(tot, 'total', 'sec', this.q('[data-well]'));
+    const s = this.state;
+    if (s.mode === 'timeboxed' && s.left <= 60 && s.left > 0) {
+      this.anim(this.q('[data-vig]'), [{ opacity: 0.3 }, { opacity: 1, offset: 0.15 }, { opacity: 0.3 }], { duration: 900 });
+      this.anim(this.q('[data-well]'), [{ transform: 'none' }, { transform: 'translateX(-5px) rotate(-1deg)', offset: 0.2 }, { transform: 'translateX(5px) rotate(1deg)', offset: 0.45 }, { transform: 'none' }], { duration: 420 });
+    }
+    if (s.mode === 'timeboxed' && s.left === 0) this.anim(this.q('[data-well]'), [{ transform: 'scale(1.2) rotate(-4deg)' }, { transform: 'scale(.95)', offset: 0.5 }, { transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+  }
+  intro() {
+    const s = this.state;
+    this.anim(this.q('[data-ribbon]'), [{ transform: 'rotate(-14deg) scale(1.5)', opacity: 0 }, { transform: 'rotate(-2deg)', opacity: 1 }], { duration: 640, easing: 'cubic-bezier(.3,1.7,.5,1)', fill: 'backwards' });
+    if (!s.ann) return;
+    this.anim(this.q('[data-ann]'), [{ transform: 'translateY(-60px) scale(.8)', opacity: 0 }, { transform: 'translateY(8px) scale(1.02)', opacity: 1, offset: 0.6 }, { transform: 'none', opacity: 1 }], { duration: 720, easing: 'cubic-bezier(.2,.9,.3,1)' });
+    this.anim(this.q('[data-annbanner]'), [{ transform: 'scale(2.4) rotate(-16deg)', opacity: 0 }, { transform: 'scale(.92) rotate(-3deg)', opacity: 1, offset: 0.6 }, { transform: 'rotate(-3deg)', opacity: 1 }], { duration: 640, delay: 300, easing: 'cubic-bezier(.3,1.6,.5,1)', fill: 'backwards' });
+    this.later(() => { const p = this.q('[data-page]'); this.anim(p, [{ transform: 'none' }, { transform: 'translate(-12px,4px)' }, { transform: 'translate(10px,-3px)' }, { transform: 'translate(-6px,2px)' }, { transform: 'none' }], { duration: 460 }); if (this.m) this.m.burst('cel', this.q('[data-annbanner]'), { n: 28, shapes: ['spark', 'circle'], colors: ['#E0245E', '#FF6FAE', '#4A2B3A', '#FFFFFF'], size: 18, spread: 280, up: false, gravity: 120 }); }, 620);
+    this.qa('[data-row]').forEach((el, i) => this.anim(el, [{ transform: 'none' }, { transform: 'translateX(-8px) rotate(-1deg)', offset: 0.3 }, { transform: 'translateX(6px)', offset: 0.6 }, { transform: 'none' }], { duration: 480, delay: 900 + i * 70 }));
+  }
+  renderVals() {
+    const s = this.state.sc ? this.state : this.init(this.props.scenario || 'gauntlet');
+    const theme = this.props.theme === 'dark' ? 'dark' : 'light', M = s.mode, MD = this.MODES[M], live = this.live(s);
+    const tb = M === 'timeboxed', last = tb && s.left <= 60, lost = tb && s.left <= 0;
+    const rank = (q) => (q.won ? 2 : q.pinned ? 0 : 1);
+    const rows = [...s.ch].sort((a, b) => rank(a) - rank(b) || a.order - b.order).map((q) => {
+      const running = q.running && !q.won && live, t = this.fmt(q.secs), chips = [];
+      const add = (icon, label, bg, c, sh) => chips.push({ k: chips.length, icon, label, bg, c, sh });
+      if (M === 'gauntlet' && q.used) add('swords', q.used + ' lost', 'var(--color-danger-surface)', 'var(--color-danger-text)', 'inset 0 0 0 2px var(--color-danger)');
+      if (q.conf) add('verified', 'Confirmation · not counted', 'var(--color-ready)', 'var(--color-on-accent)', '0 0 0 2px var(--color-keyline)');
+      if (M === 'cursed' && !q.won) add('skull', 'Curse 3', 'var(--color-pinned)', 'var(--color-on-accent)', '0 0 0 2px var(--color-keyline)');
+      const hasCurse = M === 'cursed' && !q.won, tgt = hasCurse && q.target != null ? Math.ceil(q.target * 1.3) : q.target;
+      const st = lost && !q.won ? ['lock', 'Frozen', 'var(--color-gone-surface)', 'var(--color-gone-text)', 'inset 0 0 0 2px var(--color-gone-border)'] : q.pending ? ['hourglass_top', 'Waiting to confirm', 'var(--color-ready)', 'var(--color-on-accent)', '0 0 0 2px var(--color-keyline)'] : q.won ? ['check_circle', 'Won', 'var(--color-won)', 'var(--color-on-accent)', '0 0 0 2px var(--color-keyline)'] : running ? ['timer', 'Running', 'var(--color-accent)', 'var(--color-on-accent)', '0 0 0 2px var(--color-keyline)'] : ['radio_button_unchecked', 'Open', 'var(--color-surface-raised)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-control-lip)'];
+      return { id: q.id, game: q.game, cond: q.cond, status: q.won ? 'won' : running ? 'running' : 'idle', secs: q.secs, untouched: !q.secs, running, won: q.won, pinned: q.pinned && !q.won,
+        bg: lost && !q.won ? 'var(--color-gone-surface)' : q.won || q.pending ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface)',
+        sh: q.won ? '0 0 0 4px var(--color-keyline),0 6px 0 0 var(--color-keyline)' : 'var(--shadow-raised)', chips, hasCurse, curseLine: '+3: ' + this.CURSES.join(', '),
+        hasCounter: q.target != null, count: q.count, target: tgt, cBg: q.target != null && q.count >= tgt ? 'var(--color-won)' : 'var(--color-complete-surface)', cC: q.target != null && q.count >= tgt ? 'var(--color-on-accent)' : 'var(--color-text)',
+        td: this.digits(t, running && q._p != null ? this.fmt(q._p) : null), timeC: q.won ? 'var(--color-won-text)' : running ? 'var(--color-running-text)' : 'var(--color-text)',
+        wIcon: st[0], word: st[1], wBg: st[2], wC: st[3], wSh: st[4], aria: `${q.game}, ${st[1]}, ${t}` };
+    });
+    const countable = s.ch.filter((q) => !q.conf), won = countable.filter((q) => q.won).length, pct = Math.round((won / countable.length) * 100);
+    const runN = rows.filter((r) => r.running).length;
+    const pill = lost ? ['lock', 'Lost', 'var(--color-gone-surface)', 'var(--color-gone-text)', 'inset 0 0 0 2px var(--color-gone-border)'] : s.ann ? ['restart_alt', 'Just reset', 'var(--color-danger-surface)', 'var(--color-danger-text)', '0 0 0 3px var(--color-keyline)'] : live ? ['timer', runN + ' running', 'var(--color-accent)', 'var(--color-on-accent)', '0 0 0 3px var(--color-keyline)'] : ['bedtime', 'Paused', 'var(--color-surface-sunken)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-control-lip)'];
+    const tv = tb ? Math.max(0, s.left) : s.total, tstr = this.fmtT(tv);
+    const left = s.max - s.used;
+    return {
+      rootRef: this.rootRef, theme, mode: MD, hasMode: true, annOn: s.ann,
+      fresh: s.fresh < 3 ? 'Updated just now' : `Updated ${s.fresh}s ago`,
+      fillX: '-' + (100 - pct) + '%', summary: `${won} / ${countable.length} won · ${pct}%`,
+      pillIcon: pill[0], pillLabel: pill[1], pillBg: pill[2], pillC: pill[3], pillSh: pill[4],
+      tb, tense: last && !lost, tbBg: lost ? 'var(--color-gone-surface)' : last ? 'var(--color-danger)' : 'var(--color-surface-raised)', tbC: lost ? 'var(--color-gone-text)' : last ? 'var(--p-white)' : 'var(--color-text)',
+      tbIcon: lost ? 'lock' : last ? 'alarm' : 'south', tbText: lost ? 'Time’s up · lost for good' : last ? 'Last minute!' : 'Counting down · limit 6:00:00',
+      wellPadL: tb ? '22px' : '32px', wellBg: lost ? 'var(--color-gone-surface)' : last ? 'var(--color-danger-surface)' : 'var(--color-surface-sunken)', wellSh: last && !lost ? 'var(--shadow-well),0 0 0 4px var(--color-danger)' : 'var(--shadow-well)',
+      totalC: lost ? 'var(--color-gone-text)' : last ? 'var(--color-danger-text)' : live ? 'var(--color-running-text)' : 'var(--color-text)',
+      totalDigits: this.digits(tstr, s.prevT != null && live ? this.fmtT(s.prevT) : null), timerAria: tb ? `Time left ${tstr}` : `Total Timer ${tstr}`,
+      mG: M === 'gauntlet', mC: M === 'confirmation', mK: M === 'cursed',
+      tokens: Array.from({ length: s.max }, (_, k) => { const ok = k >= s.used; return { k, icon: ok ? 'shield' : 'close', bg: ok ? 'var(--color-surface-raised)' : 'transparent', sh: ok ? '0 0 0 2px var(--color-keyline)' : 'inset 0 0 0 3px var(--color-danger)', op: ok ? 1 : 0.75 }; }),
+      attemptsLabel: `${left} of ${s.max} attempts left`, attemptsShort: `${left} of ${s.max} left`,
+      rows,
+    };
+  }
+}
+</script>
+</body>
+</html>

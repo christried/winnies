@@ -1,0 +1,404 @@
+/* ==========================================================================
+   Winnies design tokens · Kawaii Clay · v1.2 (Phase 7 handoff, final)
+   Layers: 1 primitives → 2 semantic (shared / light / dark) → 3 component → 4 dialects, presets, reduced motion
+   Rule: components read ONLY layer 2 or 3. A new skin = swap layers 1 + 2 (see "Skins" in 02-tokens.md).
+   Theme:   <html data-theme="light|dark">  (System = JS resolves prefers-color-scheme and writes it)
+   Dialect: <body data-dialect="workspace|broadcast|showcase">  (workspace = default)
+   Motion:  <html data-motion="reduce"> (in-app) or the OS media query · Overlay preset: data-motion-preset="calm"
+   Tailwind v4: import this file UNLAYERED, then tailwind-theme.css. Names already follow Tailwind's namespaces.
+
+   v1.2 changes (all additive except Overlay sizes):
+   · Overlay: --overlay-card-w 600→660, --overlay-row-h 60→66, --overlay-pad 24→22, --timer-overlay-size 58→68,
+     --timer-overlay-h 88→96; new --overlay-sidebar-w, --overlay-safe, --overlay-title-size, --overlay-game-size,
+     --overlay-stamp-size, --overlay-banner-size (Phase 5: the glance layer must survive a portrait phone).
+   · New: --color-link(-hover), --color-tape(-stripe), --confetti-*, Nini + blob primitives, --mode-* (planned
+     Game Modes, Phase 6b), dark Showcase backdrop.
+   v1.1 (Phase 4): motion primitives, springs as linear(), dialect motion knobs.  v1.0 (Phase 3): first lock.
+   ========================================================================== */
+
+/* ---------- 1 · PRIMITIVES ---------------------------------------------- */
+:root {
+  /* pink (milk → berry) */
+  --p-pink-50: #FFF8FB;  --p-pink-100: #FFE3EC; --p-pink-150: #FFD2E5; --p-pink-200: #FFCADD;
+  --p-pink-300: #F5B8CF; --p-pink-400: #FF9FC8; --p-pink-500: #FF6FAE; --p-pink-600: #D9478A;
+  --p-pink-650: #B86A8E; --p-pink-700: #B0175A; --p-pink-800: #9E1450; --p-pink-900: #80103F;
+  /* cocoa (ink) */
+  --p-cocoa-900: #4A2B3A; --p-cocoa-700: #7A5566; --p-cocoa-600: #6E4558;
+  /* night (dark clay) */
+  --p-night-1000: #140A11; --p-night-950: #1A0F17; --p-night-900: #231520; --p-night-850: #2A1823;
+  --p-night-800: #2E1B29; --p-night-700: #352230; --p-night-600: #4A3644; --p-night-400: #A07890;
+  --p-night-ink: #FFEEF5; --p-night-muted: #CFA9BB;
+  --p-night-run: #4A2238; --p-night-run-lip: #7A1F4D; --p-night-run-text: #FFB3D2;
+  /* matcha */
+  --p-matcha-100: #D6F5E0; --p-matcha-300: #9BE3B4; --p-matcha-500: #6CC48D; --p-matcha-800: #2E6B45; --p-matcha-900: #1F5233;
+  --p-matcha-night: #1E3A2A; --p-matcha-night-lip: #0C2216; --p-matcha-night-text: #A8EFC2;
+  /* lilac */
+  --p-lilac-100: #EEE6FF; --p-lilac-300: #CDB8FF; --p-lilac-500: #A68BE8; --p-lilac-600: #8B6BE0; --p-lilac-700: #6A44C9;
+  /* butter */
+  --p-butter-100: #FFF4CC; --p-butter-300: #FFEFA1; --p-butter-500: #E8C860; --p-butter-gold: #FFC23D;
+  /* sky */
+  --p-sky-100: #E3F4FF; --p-sky-300: #A8DEFF; --p-sky-500: #74B8E0; --p-sky-tear: #8FD3FF;
+  /* cherry (danger) */
+  --p-cherry-100: #FFE0E6; --p-cherry-500: #E0245E; --p-cherry-700: #A3123F; --p-cherry-night: #4A1426; --p-cherry-night-text: #FF8FB8;
+  /* mist (gone / offline) */
+  --p-mist-100: #F3ECF0; --p-mist-300: #DCCFD6; --p-mist-600: #8C7A84; --p-mist-700: #66575F; --p-mist-night: #2C2329; --p-mist-night-text: #BBA9B3;
+  /* fatigue ramp (running face discs, 0 → 5) */
+  --p-fatigue-0: #FFA6CB; --p-fatigue-1: #FF92BF; --p-fatigue-2: #FF8BB5;
+  --p-fatigue-3: #E7A9C8; --p-fatigue-4: #FF8296; --p-fatigue-5: #FF6372;
+  --p-fatigue-lip-0: #E0679E; --p-fatigue-lip-1: #D9478A; --p-fatigue-lip-2: #D2477F;
+  --p-fatigue-lip-3: #BE7A9E; --p-fatigue-lip-4: #D84A63; --p-fatigue-lip-5: #C22F45;
+  /* wordmark letters (fill / lip) — fixed, never themed */
+  --p-wm-w: #FF6FAE; --p-wm-w-lip: #B0175A; --p-wm-i: #FFB547; --p-wm-i-lip: #B86A12;
+  --p-wm-n1: #FFD84D; --p-wm-n1-lip: #B88A00; --p-wm-n2: #4FD18B; --p-wm-n2-lip: #1F8A52;
+  --p-wm-i2: #5CB8FF; --p-wm-i2-lip: #1F6FB8; --p-wm-e: #A985FF; --p-wm-e-lip: #6A44C9;
+  --p-wm-s: #FF6FAE; --p-wm-s-lip: #B0175A;
+  /* players (fill / ink) */
+  --p-player-1: #FF7A1A; --p-player-1-ink: #4A2B3A;
+  --p-player-2: #0A7F86; --p-player-2-ink: #FFFFFF;
+  --p-player-3: #3B5BFF; --p-player-3-ink: #FFFFFF;
+  --p-player-4: #8A3FFC; --p-player-4-ink: #FFFFFF;
+  --p-player-5: #9C5A22; --p-player-5-ink: #FFFFFF;
+  --p-player-6: #5C7A12; --p-player-6-ink: #FFFFFF;
+  --p-player-7: #4E5D7A; --p-player-7-ink: #FFFFFF;
+  --p-player-8: #C2298A; --p-player-8-ink: #FFFFFF;
+  --p-white: #FFFFFF; --p-black: #000000;
+  /* v1.2 additions */
+  --p-lilac-200: #E4D9FF;                                        /* pinned tape stripe */
+  --p-blob-pink: #FFC2DA; --p-blob-lilac: #E3D4FF;               /* Showcase clay-swirl blobs · light */
+  --p-blob-pink-night: #4A2140; --p-blob-lilac-night: #2E2350;   /* Showcase clay-swirl blobs · dark */
+  /* Nini (mascot) · fixed, never themed: she stays white in dark mode */
+  --p-nini-hi: #FFFFFF; --p-nini-mid: #FFEFF5; --p-nini-low: #FAD0DF; --p-nini-lip: #F2B3CB; --p-nini-lip-angry: #E88A9A;
+  --p-nini-band: #FF6FAE; --p-nini-band-knot: #E0558F; --p-nini-crown: #FFC23D;
+  /* confetti particles (♥ ★ ● ✿) */
+  --p-confetti-1: #FF6FAE; --p-confetti-2: #FFC23D; --p-confetti-3: #9BE3B4; --p-confetti-4: #CDB8FF; --p-confetti-5: #A8DEFF;
+
+  /* type families */
+  --p-font-display: 'Mochiy Pop One', 'M PLUS Rounded 1c', ui-rounded, system-ui, sans-serif;
+  --p-font-body: 'M PLUS Rounded 1c', ui-rounded, system-ui, sans-serif;
+  --p-font-icon: 'Material Symbols Rounded';
+
+  /* raw sizes */
+  --p-size-2: 2px; --p-size-3: 3px; --p-size-4: 4px; --p-size-5: 5px; --p-size-6: 6px; --p-size-8: 8px;
+  --p-size-10: 10px; --p-size-12: 12px; --p-size-14: 14px; --p-size-16: 16px; --p-size-18: 18px;
+  --p-size-20: 20px; --p-size-22: 22px; --p-size-24: 24px; --p-size-28: 28px; --p-size-30: 30px;
+  --p-size-36: 36px; --p-size-40: 40px; --p-size-48: 48px; --p-size-56: 56px; --p-size-64: 64px; --p-size-80: 80px;
+}
+
+/* ---------- 2 · SEMANTIC · shared by both modes -------------------------- */
+:root {
+  /* spacing */
+  --space-0-5: 2px; --space-1: 4px; --space-1-5: 6px; --space-2: 8px; --space-2-5: 10px; --space-3: 12px;
+  --space-3-5: 14px; --space-4: 16px; --space-4-5: 18px; --space-5: 20px; --space-5-5: 22px; --space-6: 24px;
+  --space-7: 28px; --space-7-5: 30px; --space-9: 36px; --space-10: 40px; --space-12: 48px; --space-14: 56px;
+  --space-16: 64px; --space-20: 80px;
+
+  /* radius */
+  --radius-xs: 10px; --radius-sm: 14px; --radius-md: 20px; --radius-lg: 24px; --radius-xl: 30px;
+  --radius-2xl: 38px; --radius-3xl: 48px; --radius-4xl: 52px; --radius-pill: 999px; --radius-round: 50%;
+  --radius-mochi: 50% 50% 44% 44% / 62% 62% 38% 38%;
+
+  /* border */
+  --border-hairline: 1px; --border-thin: 2px; --border-ring: 3px; --border-state: 4px; --border-keyline: 5px;
+  --focus-width: 3px; --focus-offset: 3px;
+
+  /* lips (solid clay thickness) */
+  --lip-xs: 3px; --lip-sm: 4px; --lip-md: 5px; --lip-lg: 8px; --lip-xl: 12px;
+
+  /* typography */
+  --font-display: var(--p-font-display);
+  --font-body: var(--p-font-body);
+  --font-icon: var(--p-font-icon);
+  --font-weight-body: 500; --font-weight-strong: 700; --font-weight-heavy: 800; --font-weight-display: 400;
+  --text-2xs: 11px; --text-xs: 13px; --text-sm: 15px; --text-md: 16px; --text-base: 17px; --text-lg: 18px;
+  --text-xl: 21px; --text-2xl: 22px; --text-3xl: 24px; --text-4xl: 34px; --text-5xl: 44px; --text-6xl: 54px;
+  --text-7xl: 92px; --text-8xl: 120px;
+  --leading-tight: 1.08; --leading-label: 1.45; /* Mochiy single-line labels need ≥1.4 */ --leading-body: 1.55;
+  --icon-sm: 18px; --icon-md: 22px; --icon-lg: 28px; --icon-xl: 30px;
+
+  /* timer typography (Mochiy has no tnum → fixed slots per char) */
+  --timer-font: var(--p-font-display);
+  --timer-numeric: tabular-nums;
+  --timer-digit-w: 0.7em; --timer-colon-w: 0.36em;
+  --timer-total-size: 66px; --timer-total-h: 100px; --timer-total-pad-x: 30px;
+  --timer-row-size: 22px;
+  --timer-overlay-size: 68px; --timer-overlay-h: 96px;
+
+  /* z-index */
+  --z-base: 0; --z-raised: 1; --z-sticky: 10; --z-dropdown: 20; --z-popover: 30; --z-scrim: 40;
+  --z-modal: 50; --z-toast: 60; --z-tooltip: 70; --z-confetti: 80;
+
+  /* motion primitives · v1.1 (Phase 4) — mirrored 1:1 in motion/winnies-motion.js (D / E tables) */
+  --dur-instant: 90ms; --dur-fast: 160ms; --dur-base: 240ms; --dur-hover: 300ms; --dur-toast: 360ms; --dur-flick: 380ms;
+  --dur-modal: 420ms; --dur-page-x: 460ms; --dur-tick: 480ms; --dur-travel: 560ms; --dur-theme: 560ms; --dur-land: 600ms;
+  --dur-jelly: 700ms; --dur-minute: 720ms; --dur-stamp: 900ms; --dur-droop: 950ms; --dur-burst: 1300ms; --dur-hour: 1400ms;
+  --dur-cheer: 1800ms; --dur-breathe: 2200ms; --dur-celebrate: 2400ms; --dur-wave: 2600ms; --dur-highlight: 3000ms;
+  --dur-float: 4800ms; --dur-shimmer: 9000ms; --dur-page: 10000ms; --dur-drift: 60000ms;
+  --ease-spring: cubic-bezier(.3, 1.7, .5, 1);
+  --ease-hover: cubic-bezier(.3, 1.8, .5, 1);
+  --ease-out: cubic-bezier(.15, .7, .3, 1);
+  --ease-in: cubic-bezier(.55, 0, .75, .2);  /* exits only */
+  --ease-in-out: cubic-bezier(.45, 0, .55, 1);
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --ease-stepped: steps(6, end);           /* steam, vibrate: “on twos” */
+  /* springs as linear(): real overshoot + settle, no JS physics needed */
+  --spring-snappy: linear(0, .2 4%, .6 10%, .88 16%, 1.02 22%, 1.06 28%, 1.04 36%, 1 46%, .995 60%, 1);
+  --spring-bouncy: linear(0, .3 6%, .8 13%, 1.1 20%, 1.15 25%, 1.1 30%, .97 40%, .95 46%, 1 56%, 1.02 64%, 1 78%, 1);
+  --spring-soft: linear(0, .12 5%, .4 14%, .7 24%, .92 34%, 1.02 44%, 1.03 52%, 1.01 66%, 1);
+  --stagger-wordmark: 110ms; --stagger-burst: 60ms; --stagger-list: 40ms; --stagger-digit: 50ms; --stagger-menu: 30ms;
+  /* motion character — layer 4 (dialects, presets, reduce) overrides these */
+  --motion-gain: 1;          /* amplitude multiplier for every recipe */
+  --tick-hop: -6px;          /* Total digit hop height */
+  --tick-squash: .04;        /* Total digit squash amount */
+  --amb-rate: 1;             /* playbackRate for ambient loops */
+  --particle-count: 24;      /* Won fountain particle count */
+  --squash: scale(1.1, .9); --stretch: scale(.92, 1.1);
+  --hop-total: -12px; --hop-row: -7px; --hop-wordmark: -14px; --lift-hover: -4px; --tilt-hover: -0.4deg;
+
+  /* textures */
+  --texture-grain: radial-gradient(rgba(74,43,58,.05) 1px, transparent 1.6px) 0 0 / 6px 6px,
+                   radial-gradient(rgba(255,255,255,.18) 1px, transparent 1.6px) 3px 2px / 9px 9px;
+  --texture-fingerprint: repeating-radial-gradient(circle at 84% 22%, rgba(74,43,58,.035) 0 1.5px, transparent 1.5px 5px);
+  --texture-fingerprint-mask: radial-gradient(circle at 84% 22%, #000 0 60px, transparent 110px);
+  --texture-stripes-won: repeating-linear-gradient(-45deg, var(--p-matcha-300) 0 10px, #B9EEC9 10px 20px);
+  --texture-gloss: radial-gradient(ellipse 16px 8px at 20px 13px, rgba(255,255,255,.75), transparent 70%);
+  --texture-shimmer: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.45) 50%, transparent 80%);
+
+  /* accents are mode-independent and always take cocoa ink */
+  --color-on-accent: var(--p-cocoa-900);
+  --color-accent: var(--p-pink-500);      --color-accent-lip: var(--p-pink-600);
+  --color-won: var(--p-matcha-300);       --color-won-lip: var(--p-matcha-500);
+  --color-pinned: var(--p-lilac-300);     --color-pinned-lip: var(--p-lilac-500);
+  --color-complete: var(--p-butter-300);  --color-complete-lip: var(--p-butter-500);
+  --color-ready: var(--p-sky-300);        --color-ready-lip: var(--p-sky-500);
+  --color-snooze: var(--p-butter-300);    --color-snooze-lip: var(--p-butter-500);
+  --color-highlight-gold: var(--p-butter-gold);
+  --color-tear: var(--p-sky-tear);
+  --color-vein: var(--p-cherry-500);
+  --fatigue-0: var(--p-fatigue-0); --fatigue-1: var(--p-fatigue-1); --fatigue-2: var(--p-fatigue-2);
+  --fatigue-3: var(--p-fatigue-3); --fatigue-4: var(--p-fatigue-4); --fatigue-5: var(--p-fatigue-5);
+  --fatigue-lip-0: var(--p-fatigue-lip-0); --fatigue-lip-1: var(--p-fatigue-lip-1); --fatigue-lip-2: var(--p-fatigue-lip-2);
+  --fatigue-lip-3: var(--p-fatigue-lip-3); --fatigue-lip-4: var(--p-fatigue-lip-4); --fatigue-lip-5: var(--p-fatigue-lip-5);
+  --fatigue-threshold-1: 1200s; --fatigue-threshold-2: 3600s; --fatigue-threshold-3: 7200s;
+  --fatigue-threshold-4: 10800s; --fatigue-threshold-5: 14400s;
+  --player-1: var(--p-player-1); --player-1-ink: var(--p-player-1-ink); --player-2: var(--p-player-2); --player-2-ink: var(--p-player-2-ink);
+  --player-3: var(--p-player-3); --player-3-ink: var(--p-player-3-ink); --player-4: var(--p-player-4); --player-4-ink: var(--p-player-4-ink);
+  --player-5: var(--p-player-5); --player-5-ink: var(--p-player-5-ink); --player-6: var(--p-player-6); --player-6-ink: var(--p-player-6-ink);
+  --player-7: var(--p-player-7); --player-7-ink: var(--p-player-7-ink); --player-8: var(--p-player-8); --player-8-ink: var(--p-player-8-ink);
+  /* v1.2 */
+  --color-tape: var(--p-lilac-300); --color-tape-stripe: var(--p-lilac-200);
+  --confetti-1: var(--p-confetti-1); --confetti-2: var(--p-confetti-2); --confetti-3: var(--p-confetti-3);
+  --confetti-4: var(--p-confetti-4); --confetti-5: var(--p-confetti-5);
+  /* Game Mode identity (planned, Phase 6b). Discs are pastel in both modes, so they keep their own ink. */
+  --mode-standard-disc: var(--p-pink-200);       --mode-standard-ink: var(--p-cocoa-900);
+  --mode-confirmation-disc: var(--p-sky-300);    --mode-confirmation-ink: var(--p-cocoa-900);
+  --mode-gauntlet-disc: var(--p-cherry-100);     --mode-gauntlet-ink: var(--p-cherry-700);
+  --mode-timeboxed-disc: var(--p-butter-gold);   --mode-timeboxed-ink: var(--p-cocoa-900);
+  --mode-cursed-disc: var(--p-lilac-300);        --mode-cursed-ink: var(--p-cocoa-900);
+}
+
+/* ---------- 2 · SEMANTIC · LIGHT ---------------------------------------- */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --color-page: var(--p-pink-100);
+  --color-page-pattern: var(--p-pink-200);
+  --color-surface: var(--p-pink-50);
+  --color-surface-raised: var(--p-white);
+  --color-surface-sunken: var(--p-pink-100);
+  --color-lip: var(--p-pink-300);
+  --color-text: var(--p-cocoa-900);
+  --color-text-muted: var(--p-cocoa-700);
+  --color-text-accent: var(--p-pink-700);
+  --color-link: var(--p-pink-700); --color-link-hover: var(--p-cocoa-900);
+  --color-control: var(--p-white);
+  --color-control-lip: var(--p-pink-650);        /* ≥3:1 boundary on surface + page */
+  --color-control-hover: var(--p-pink-50);
+  --color-border: var(--p-pink-300);
+  --color-focus: var(--p-lilac-700);
+  --color-danger: var(--p-cherry-500);
+  --color-danger-surface: var(--p-cherry-100);
+  --color-danger-text: var(--p-cherry-700);
+  --color-running-surface: var(--p-pink-150);
+  --color-running-ring: var(--p-pink-600);     /* 3.3:1+ on page/surface */
+  --color-running-lip: var(--p-pink-600);
+  --color-running-text: var(--p-pink-900);     /* AAA 7.5 on running row */
+  --color-won-surface: var(--p-matcha-100);
+  --color-won-surface-lip: var(--p-matcha-300);
+  --color-won-text: var(--p-matcha-900);       /* AAA 7.8 on won row */
+  --color-pinned-text: var(--p-lilac-700);
+  --color-complete-surface: var(--p-butter-100);
+  --color-gone-surface: var(--p-mist-100);
+  --color-gone-border: var(--p-mist-600);
+  --color-gone-text: var(--p-mist-700);
+  --color-offline-surface: var(--p-mist-100);
+  --color-offline-text: var(--p-cocoa-700);
+  --color-skeleton: var(--p-pink-150);
+  --color-scrim: rgba(74, 43, 58, .45);
+  --color-drop: rgba(220, 80, 140, .35);
+  --color-drop-strong: rgba(220, 80, 140, .5);
+  --color-highlight: rgba(255, 255, 255, .9);
+  --color-shade: rgba(220, 80, 140, .10);
+  --color-well-shade: rgba(220, 100, 150, .22);
+  --color-rim: transparent;
+  --color-keyline: var(--p-cocoa-900);
+
+  /* material composites */
+  --shadow-raised: 0 var(--lip-lg) 0 -2px var(--color-lip), 0 16px 26px -12px var(--color-drop),
+                   inset 0 5px 7px var(--color-highlight), inset 0 -5px 9px var(--color-shade);
+  --shadow-raised-lg: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 40px -16px rgba(220, 80, 140, .4),
+                      inset 0 -8px 14px rgba(220, 80, 140, .12), inset 0 8px 12px rgba(255, 255, 255, .95);
+  --shadow-raised-hover: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 34px -14px var(--color-drop-strong), inset 0 5px 8px var(--p-white);
+  --shadow-well: inset 0 4px 8px var(--color-well-shade);
+  --shadow-popover: var(--shadow-raised-lg);
+  --shadow-sticker: 0 3px 6px rgba(176, 23, 90, .25);
+  --backdrop-dots: radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0 / 52px 52px,
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px / 52px 52px,
+                   var(--color-page);
+}
+
+/* ---------- 2 · SEMANTIC · DARK ----------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-page: var(--p-night-900);
+  --color-page-pattern: var(--p-night-800);
+  --color-surface: var(--p-night-700);
+  --color-surface-raised: var(--p-night-600);
+  --color-surface-sunken: var(--p-night-850);
+  --color-lip: var(--p-night-1000);
+  --color-text: var(--p-night-ink);
+  --color-text-muted: var(--p-night-muted);
+  --color-text-accent: var(--p-night-run-text);
+  --color-link: var(--p-night-run-text); --color-link-hover: var(--p-night-ink);
+  --color-control: var(--p-night-600);
+  --color-control-lip: var(--p-night-400);       /* ≥3:1 boundary on night surfaces */
+  --color-control-hover: #574050;
+  --color-border: var(--p-night-600);
+  --color-focus: var(--p-lilac-300);
+  --color-danger: var(--p-cherry-500);
+  --color-danger-surface: var(--p-cherry-night);
+  --color-danger-text: var(--p-cherry-night-text);
+  --color-running-surface: var(--p-night-run);
+  --color-running-ring: var(--p-pink-500);
+  --color-running-lip: var(--p-night-run-lip);
+  --color-running-text: var(--p-night-run-text);
+  --color-won-surface: var(--p-matcha-night);
+  --color-won-surface-lip: var(--p-matcha-night-lip);
+  --color-won-text: var(--p-matcha-night-text);
+  --color-pinned-text: var(--p-lilac-300);
+  --color-complete-surface: #3A3018;
+  --color-gone-surface: var(--p-mist-night);
+  --color-gone-border: var(--p-mist-night-text);
+  --color-gone-text: var(--p-mist-night-text);
+  --color-offline-surface: var(--p-mist-night);
+  --color-offline-text: var(--p-night-muted);
+  --color-skeleton: var(--p-night-600);
+  --color-scrim: rgba(0, 0, 0, .6);
+  --color-drop: rgba(0, 0, 0, .6);
+  --color-drop-strong: rgba(0, 0, 0, .7);
+  --color-highlight: rgba(255, 255, 255, .07);
+  --color-shade: rgba(0, 0, 0, .25);
+  --color-well-shade: rgba(0, 0, 0, .45);
+  --color-rim: rgba(255, 255, 255, .07);
+  --color-keyline: var(--p-black);
+
+  --shadow-raised: 0 var(--lip-lg) 0 -2px var(--color-lip), 0 18px 30px -12px var(--color-drop),
+                   inset 0 2px 0 var(--color-rim), inset 0 -6px 10px var(--color-shade);
+  --shadow-raised-lg: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 28px 40px -16px rgba(0, 0, 0, .7),
+                      inset 0 2px 0 rgba(255, 255, 255, .08), inset 0 -10px 16px rgba(0, 0, 0, .25);
+  --shadow-raised-hover: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 34px -14px var(--color-drop-strong), inset 0 2px 0 rgba(255, 255, 255, .1);
+  --shadow-well: inset 0 4px 8px var(--color-well-shade), 0 1px 0 rgba(255, 255, 255, .06);
+  --shadow-popover: var(--shadow-raised-lg);
+  --shadow-sticker: 0 3px 6px rgba(0, 0, 0, .5);
+  --backdrop-dots: radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0 / 52px 52px,
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px / 52px 52px,
+                   var(--color-page);
+}
+
+/* ---------- 3 · COMPONENT ----------------------------------------------- */
+:root, [data-theme] {
+  --btn-h: 50px; --btn-h-lg: 62px; --btn-h-sm: 38px; --btn-pad-x: 22px; --btn-radius: var(--radius-pill);
+  --btn-lip: 6px; --btn-font: var(--font-display); --btn-text: var(--text-base);
+  --icon-btn: 52px; --icon-btn-sm: 38px;
+  --input-h: 54px; --input-radius: var(--radius-pill); --input-pad-x: 22px;
+  --row-h: 76px; --row-radius: var(--radius-2xl); --row-gap: 14px; --row-pad: 0 16px 0 12px; --row-ring: var(--border-state);
+  --face-row: 54px; --face-overlay: 44px; --face-lip: 5px;
+  --nini-workspace: 180px; --nini-min: 96px;
+  --toggle-size: 52px;
+  --card-radius: var(--radius-4xl); --card-pad: 30px;
+  --nav-h: 76px; --nav-radius: var(--radius-2xl);
+  --overlay-card-w: 660px; --overlay-row-h: 66px; --overlay-pad: 22px; --overlay-radius: 44px;
+  --overlay-sidebar-w: 520px; --overlay-safe: 48px; --overlay-title-size: 28px; --overlay-game-size: 26px;
+  --overlay-stamp-size: 72px; --overlay-banner-size: 60px;
+  --overlay-card: var(--color-surface);
+  --overlay-shadow: 0 0 0 var(--border-keyline) var(--color-keyline), 0 13px 0 1px var(--p-pink-400), 0 30px 50px rgba(74, 43, 58, .5);
+  --wordmark-size: 40px; --wordmark-min: 24px;
+  --tooltip-bg: var(--p-cocoa-900); --tooltip-text: var(--p-pink-50);
+  --toast-w: 420px;
+  /* dialect switches (overridden in layer 4) */
+  --grain: var(--texture-grain);
+  --fingerprint: var(--texture-fingerprint);
+  --ambient-motion: running;  /* use as animation-play-state for idle loops */
+  --hover-lift: var(--lift-hover);
+}
+[data-theme="dark"] {
+  --tooltip-bg: var(--p-pink-50); --tooltip-text: var(--p-cocoa-900);
+  --overlay-shadow: 0 0 0 4px var(--color-keyline), 0 12px 0 0 var(--color-lip), 0 30px 50px rgba(0, 0, 0, .6), inset 0 2px 0 rgba(255, 255, 255, .08);
+}
+
+/* ---------- 4 · DIALECTS ------------------------------------------------ */
+/* Workspace = defaults above. */
+[data-dialect="broadcast"] {
+  --grain: none; --fingerprint: none;           /* vanishes in stream compression */
+  --motion-gain: 1.25; --tick-hop: -10px; --tick-squash: 0; --particle-count: 28;   /* loud + legible: taller hop, no squash */
+  --row-h: var(--overlay-row-h); --row-radius: 30px; --row-ring: 0px;
+  --face-row: var(--face-overlay);
+  --timer-row-size: 22px;
+  --text-xl: 22px; --text-base: 18px;           /* one step larger for distance reading */
+  --lip-lg: 7px;
+  --shadow-raised: var(--overlay-shadow);
+  --hover-lift: 0px;
+  --dur-burst: 1000ms;
+}
+[data-dialect="showcase"] {
+  --lip-lg: 12px; --lip-xl: 16px;
+  --card-radius: 64px;
+  --wordmark-size: 120px;
+  --nini-workspace: 320px;
+  --text-6xl: 72px;
+  --hop-wordmark: -22px;
+  --hover-lift: -8px;
+  --motion-gain: 1.6; --tick-hop: -14px; --tick-squash: .1; --amb-rate: 1.4; --particle-count: 48;
+  --backdrop-dots: radial-gradient(560px 400px at 10% 16%, var(--p-blob-pink), transparent 70%),
+                   radial-gradient(640px 540px at 94% 56%, var(--p-blob-lilac), transparent 70%),
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0 / 52px 52px,
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px / 52px 52px,
+                   var(--color-page);
+}
+
+[data-theme="dark"][data-dialect="showcase"], [data-theme="dark"] [data-dialect="showcase"] {
+  --backdrop-dots: radial-gradient(560px 400px at 10% 16%, var(--p-blob-pink-night), transparent 70%),
+                   radial-gradient(640px 540px at 94% 56%, var(--p-blob-lilac-night), transparent 70%),
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0 / 52px 52px,
+                   radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px / 52px 52px,
+                   var(--color-page);
+}
+
+/* Overlay preset chosen by the Owner: quieter, still alive on the tick */
+[data-motion-preset="calm"] {
+  --motion-gain: .6; --tick-hop: -4px; --tick-squash: 0; --amb-rate: .5; --particle-count: 0;
+}
+
+/* Reduced motion: OS setting OR in-app preference (<html data-motion="reduce">). Everything stops; states stay. */
+@media (prefers-reduced-motion: reduce) {
+  :root, [data-theme] {
+    --ambient-motion: paused; --motion-gain: 0; --tick-hop: 0px; --tick-squash: 0; --hover-lift: 0px; --particle-count: 0;
+    --dur-instant: 0ms; --dur-fast: 0ms; --dur-base: 0ms; --dur-hover: 0ms; --dur-toast: 0ms; --dur-flick: 0ms; --dur-modal: 0ms;
+    --dur-page-x: 0ms; --dur-tick: 0ms; --dur-travel: 0ms; --dur-theme: 0ms; --dur-land: 0ms; --dur-jelly: 0ms; --dur-minute: 0ms;
+    --dur-stamp: 0ms; --dur-droop: 0ms; --dur-burst: 0ms; --dur-hour: 0ms; --dur-cheer: 0ms; --dur-celebrate: 0ms; --dur-highlight: 0ms;
+  }
+}
+[data-motion="reduce"], [data-motion="reduce"] [data-theme], [data-motion="reduce"] [data-dialect] {
+  --ambient-motion: paused; --motion-gain: 0; --tick-hop: 0px; --tick-squash: 0; --hover-lift: 0px; --particle-count: 0;
+  --dur-instant: 0ms; --dur-fast: 0ms; --dur-base: 0ms; --dur-hover: 0ms; --dur-toast: 0ms; --dur-flick: 0ms; --dur-modal: 0ms;
+  --dur-page-x: 0ms; --dur-tick: 0ms; --dur-travel: 0ms; --dur-theme: 0ms; --dur-land: 0ms; --dur-jelly: 0ms; --dur-minute: 0ms;
+  --dur-stamp: 0ms; --dur-droop: 0ms; --dur-burst: 0ms; --dur-hour: 0ms; --dur-cheer: 0ms; --dur-celebrate: 0ms; --dur-highlight: 0ms;
+}

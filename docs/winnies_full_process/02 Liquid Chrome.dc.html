@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Instrument+Sans:wght@400;500;600;700&family=Michroma&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#030405}a{color:#7FE3FF}a:hover{color:#F2C14E}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#030405;font-family:'Instrument Sans',sans-serif;color:#DDE3EA">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="d2" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:66px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);font:900 60px/1 Unbounded;color:#07080B;box-shadow:0 0 0 2px #2A2F37,0 20px 50px rgba(127,227,255,.25)">02</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:900 96px/0.95 Unbounded;letter-spacing:-2px;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 38%,#9AA4B0 50%,#F1F4F8 58%,#C3CBD4 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Liquid Chrome</div>
+      <div style="font:500 24px/1.3 'Instrument Sans';color:#9AA4B0">Parent: chrome / liquid metal · Native mode: dark · Mercury on black glass. Timers look machined, Won turns to liquid gold.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="02 Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;background:#07080B;border-radius:20px;box-sizing:border-box;padding:28px 56px;display:flex;flex-direction:column;gap:22px">
+  <div data-amb="pool" style="position:absolute;left:-200px;top:120px;width:900px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(160,175,195,.22),rgba(160,175,195,0) 65%);pointer-events:none"></div>
+  <div data-amb="pool" data-ad="-5000" style="position:absolute;right:-260px;bottom:-200px;width:1000px;height:800px;border-radius:50%;background:radial-gradient(ellipse,rgba(127,227,255,.14),rgba(201,167,255,.08) 40%,rgba(0,0,0,0) 68%);pointer-events:none"></div>
+  <span data-amb="twinkle" style="position:absolute;right:300px;top:40px;width:34px;height:34px;background:linear-gradient(135deg,#fff,#9AA4B0);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);pointer-events:none"></span>
+  <span data-amb="twinkle" data-ad="-1400" style="position:absolute;left:520px;top:300px;width:22px;height:22px;background:linear-gradient(135deg,#fff,#9AA4B0);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);pointer-events:none"></span>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:64px">
+    <span data-amb="sheen" style="font:900 32px/1 Unbounded;letter-spacing:1px;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 25%,#8E98A4 40%,#F7F9FB 50%,#B9C1CB 70%,#FFFFFF 85%,#9AA4B0 100%);background-size:100% 300%;-webkit-background-clip:text;background-clip:text;color:transparent">WINNIES</span>
+    <button style="margin-left:28px;display:flex;align-items:center;gap:12px;height:44px;padding:0 14px 0 20px;border:1.5px solid transparent;border-radius:22px;background:linear-gradient(#14171D,#14171D) padding-box,linear-gradient(180deg,#9AA4B0,#2A2F37 50%,#5D6570) border-box;color:#F1F4F8;font:600 17px 'Instrument Sans';cursor:pointer">
+      Kitty vs. the world<span style="font:400 13px Michroma;color:#9AA4B0">03.10.26</span><span style="font-family:'Material Symbols Rounded';font-size:22px">expand_more</span>
+    </button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:22px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);color:#07080B;font:700 17px 'Instrument Sans';cursor:pointer;box-shadow:0 0 0 1px #2A2F37,0 8px 24px rgba(127,227,255,.18)" style-hover="filter:brightness(1.1)" style-active="transform:translateY(1px);filter:brightness(.9)">
+      <span style="font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'wght' 600">link</span>Share
+    </button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;padding:3px;border-radius:22px;border:1.5px solid transparent;background:linear-gradient(#0E1015,#0E1015) padding-box,linear-gradient(180deg,#5D6570,#1A1D23) border-box">
+      <span title="Light" style="width:38px;height:36px;display:flex;align-items:center;justify-content:center;color:#9AA4B0;font-family:'Material Symbols Rounded';font-size:20px">light_mode</span>
+      <span title="System" style="width:38px;height:36px;display:flex;align-items:center;justify-content:center;color:#9AA4B0;font-family:'Material Symbols Rounded';font-size:20px">contrast</span>
+      <span title="Dark" style="width:38px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDFEFF,#9AA4B0 50%,#E4E9EF);color:#07080B;font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' 1">dark_mode</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:46px;height:46px;border-radius:50%;padding:2px;box-sizing:border-box;background:linear-gradient(180deg,#FFFFFF,#59616C 45%,#C8CFD7)"><div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#C9A7FF,#5B3FA8);display:flex;align-items:center;justify-content:center;font:700 18px Unbounded;color:#fff">K</div></div>
+  </nav>
+
+  <section style="position:relative;display:flex;flex-direction:column;gap:6px;padding:30px 36px 30px;border:2px solid transparent;border-radius:36px;background:linear-gradient(180deg,#1A1E25,#0B0D11) padding-box,linear-gradient(180deg,#FFFFFF,#59616C 40%,#1F242B 60%,#C8CFD7) border-box;box-shadow:0 40px 80px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08)">
+    <div style="display:flex;align-items:flex-start;gap:24px">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:14px;font:500 15px 'Instrument Sans';color:#9AA4B0">
+          <span style="font:400 12px Michroma;letter-spacing:3px;color:#C3CBD4">WINNIE</span><span>Created 03.10.26</span>
+          <span style="display:flex;align-items:center;gap:8px;height:28px;padding:0 12px;border-radius:14px;background:rgba(127,227,255,.12);color:#9EEBFF;font:600 14px 'Instrument Sans'"><span data-amb="glow" style="width:10px;height:10px;border-radius:50%;background:#7FE3FF;box-shadow:0 0 10px #7FE3FF"></span>{{ runningLabel }}</span>
+        </div>
+        <h1 style="margin:0;font:700 52px/1.05 Unbounded;letter-spacing:-1px;color:#F1F4F8;text-wrap:pretty">Kitty vs. the world</h1>
+      </div>
+      <button onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:10px;height:56px;padding:0 28px 0 22px;border:0;border-radius:28px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);color:#07080B;font:700 19px Unbounded;cursor:pointer;box-shadow:0 0 0 1px #2A2F37,0 0 30px rgba(127,227,255,.25)" style-hover="filter:brightness(1.08)" style-active="transform:translateY(2px);filter:brightness(.88)">
+        <span style="font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span>{{ totalBtnLabel }}
+      </button>
+      <button aria-label="More" style="width:56px;height:56px;border:1.5px solid transparent;border-radius:50%;background:linear-gradient(#14171D,#14171D) padding-box,linear-gradient(180deg,#C8CFD7,#2A2F37 50%,#8E97A3) border-box;color:#DDE3EA;cursor:pointer;font-family:'Material Symbols Rounded';font-size:26px">more_horiz</button>
+    </div>
+    <div style="position:relative;display:flex;justify-content:center;overflow:hidden;padding:8px 0 4px">
+      <div aria-label="Total Timer" style="display:flex;font:400 150px/1.1 Michroma;letter-spacing:-4px">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8">
+          <span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 0;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 38%,#9AA4B0 50%,#F1F4F8 58%,#C3CBD4 100%);-webkit-background-clip:text;background-clip:text;color:transparent">{{ d.c }}</span>
+        </sc-for>
+      </div>
+      <span data-beat="sheen" style="position:absolute;top:0;bottom:0;left:0;width:120px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.22),rgba(255,255,255,0));transform:translateX(-200%) skewX(-20deg);pointer-events:none"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:22px">
+      <div style="flex:1;height:22px;border-radius:11px;background:#05060A;box-shadow:inset 0 2px 6px rgba(0,0,0,.9),0 0 0 1px #2A2F37;padding:3px;box-sizing:border-box">
+        <div style="width:{{ pctStr }};height:100%;border-radius:8px;background:linear-gradient(180deg,#FFFFFF,#B9C1CB 45%,#5F6773 55%,#E4E9EF);box-shadow:0 0 14px rgba(127,227,255,.4)"></div>
+      </div>
+      <span style="font:400 18px Michroma;color:#F1F4F8">{{ summary }}</span>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:14px;display:flex;align-items:center;gap:14px;height:64px;padding:0 24px;border-radius:32px;background:linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E);color:#1A1205;font:700 22px Unbounded"><span style="font-family:'Material Symbols Rounded';font-size:32px;font-variation-settings:'FILL' 1">workspace_premium</span>Complete. Every Challenge Won. Polish your trophy. <span style="font:500 13px 'Instrument Sans'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid transparent;border-radius:30px;background:linear-gradient(#11141A,#11141A) padding-box,linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box">
+    <div style="flex:1.1;height:50px;border-radius:25px;background:#07080B;box-shadow:inset 0 2px 6px #000,0 0 0 1px #2A2F37;display:flex;align-items:center;padding:0 20px;font:500 17px 'Instrument Sans';color:#8D96A3">Game</div>
+    <div style="flex:1.5;height:50px;border-radius:25px;background:#07080B;box-shadow:inset 0 2px 6px #000,0 0 0 1px #2A2F37;display:flex;align-items:center;padding:0 20px;font:500 17px 'Instrument Sans';color:#8D96A3">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:6px;height:50px;padding:0 18px;border:1.5px solid #5D6570;border-radius:25px;background:transparent;color:#DDE3EA;font:600 16px 'Instrument Sans';cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-size:20px">add</span>Counter</button>
+    <div style="width:110px;height:50px;border-radius:25px;background:#07080B;opacity:.5;box-shadow:inset 0 2px 6px #000,0 0 0 1px #2A2F37;display:flex;align-items:center;padding:0 18px;font:500 17px 'Instrument Sans';color:#8D96A3">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:50px;padding:0 24px 0 18px;border:0;border-radius:25px;background:linear-gradient(180deg,#E9FBFF,#7FE3FF 48%,#2FA9C9 52%,#BDF3FF);color:#03141A;font:700 17px Unbounded;cursor:pointer" style-active="transform:translateY(2px)"><span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'wght' 600">add</span>Add Challenge</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 6px">
+    <span style="font:400 14px Michroma;letter-spacing:4px;color:#C3CBD4">CHALLENGES</span>
+    <span style="font:500 14px 'Instrument Sans';color:#8D96A3">8 / 50 Challenges · drag to reorder</span>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 40px minmax(0,1fr) 200px 150px 48px 136px 40px;gap:16px;align-items:center;height:70px;padding:0 14px 0 12px;border:1.5px solid transparent;border-radius:35px;background:{{ r.bgx }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .4s cubic-bezier(.2,.8,.2,1)" style-hover="transform:translateY(-2px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:22px;color:#8D96A3;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span title="{{ r.statusWord }}" style="position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.statusBg }};color:{{ r.statusColor }};font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}<span data-beat="{{ r.beat }}" style="position:absolute;inset:-2px;border-radius:50%;border:2px solid {{ r.ringColor }};opacity:0"></span></span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:4px;height:22px;padding:0 9px 0 5px;border-radius:11px;background:linear-gradient(90deg,#C9A7FF,#9EE7FF);color:#120A24;font:700 12px 'Instrument Sans'"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>Pinned</span></sc-if>
+            <span style="font:700 20px/1.1 'Instrument Sans';color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <span style="flex:none;font:400 10px Michroma;letter-spacing:2px;color:{{ r.wordColor }};text-transform:uppercase">{{ r.statusWord }}</span>
+          </div>
+          <span style="font:400 15px/1.2 'Instrument Sans';color:#9AA4B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:34px;height:34px;border:1.5px solid #5D6570;border-radius:50%;background:transparent;color:#DDE3EA;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px" style-active="transform:scale(.9)">remove</button>
+            <span style="min-width:100px;height:36px;border-radius:18px;background:#05060A;box-shadow:inset 0 2px 5px #000,0 0 0 1px #2A2F37;display:flex;align-items:center;justify-content:center;font:400 15px Michroma;color:{{ r.countColor }}">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:34px;height:34px;border:0;border-radius:50%;background:linear-gradient(180deg,#FDFEFF,#9AA4B0 50%,#E4E9EF);color:#07080B;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px" style-active="transform:scale(.9)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 22px/1 Michroma;color:{{ r.timeColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 0">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:#07080B;opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:26px;font-variation-settings:'FILL' 1;box-shadow:0 0 0 1px #2A2F37" style-active="transform:scale(.92);filter:brightness(.85)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:44px;border:1.5px solid transparent;border-radius:22px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winColor }};font:700 15px 'Instrument Sans'" style-active="transform:scale(.95)">
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' {{ r.winFill }}">workspace_premium</span>{{ r.winLabel }}
+        </button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:40px;height:40px;border:1.5px solid {{ r.moreBorder }};border-radius:50%;cursor:pointer;background:transparent;color:#DDE3EA;font-family:'Material Symbols Rounded';font-size:22px">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:6px;top:66px;width:250px;padding:8px;border:1.5px solid transparent;border-radius:24px;display:flex;flex-direction:column;gap:2px;background:linear-gradient(180deg,#1E222A,#101217) padding-box,linear-gradient(180deg,#FFFFFF,#59616C 40%,#1F242B 60%,#C8CFD7) border-box;box-shadow:0 30px 60px -10px rgba(0,0,0,.9),0 0 40px rgba(127,227,255,.08)">
+            <sc-for list="{{ r.menuItems }}" as="m">
+              <div style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:16px;background:{{ m.bg }};color:{{ m.color }};font:600 16px 'Instrument Sans'"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:500 20px 'Instrument Sans';color:#8D96A3">Workspace · mid-run · 1440 · row 2 hovered, row 5 overflow menu open · click Start, Mark Won, ± to play</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="02 Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:48px;right:48px;bottom:44px;display:grid;grid-template-columns:520px minmax(0,1fr);gap:20px;align-items:stretch;padding:20px;border:2px solid transparent;border-radius:40px;background:linear-gradient(180deg,rgba(26,30,37,.96),rgba(7,8,11,.96)) padding-box,linear-gradient(180deg,#FFFFFF,#59616C 40%,#1F242B 60%,#C8CFD7) border-box;box-shadow:0 30px 60px rgba(0,0,0,.7)">
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 12px">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font:900 18px Unbounded;background:linear-gradient(180deg,#fff,#9AA4B0 50%,#F1F4F8);-webkit-background-clip:text;background-clip:text;color:transparent">WINNIES</span><span style="font:700 22px 'Instrument Sans';color:#F1F4F8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kitty vs. the world</span></div>
+      <div aria-label="Total Timer" style="display:flex;font:400 84px/1.1 Michroma;letter-spacing:-2px">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 0;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 38%,#9AA4B0 50%,#F1F4F8 58%,#C3CBD4 100%);-webkit-background-clip:text;background-clip:text;color:transparent">{{ d.c }}</span></sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:10px;border-radius:5px;background:{{ p.bg }}"></span></sc-for>
+        <span style="font:400 13px Michroma;color:#C3CBD4;margin-left:4px">{{ pageLabel }} · {{ wonCount }} / {{ totalCount }} won</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+      <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+        <div data-orow="{{ r.id }}" style="display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:16px 18px;border:1.5px solid transparent;border-radius:26px;background:{{ r.bgx }};box-shadow:{{ r.shadow }}">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span title="{{ r.statusWord }}" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.statusBg }};color:{{ r.statusColor }};font-family:'Material Symbols Rounded';font-size:21px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span><span style="font:400 15px Michroma;color:#C3CBD4">{{ r.countStr }}</span></div>
+          <span style="font:700 22px/1.1 'Instrument Sans';color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          <span style="display:flex;font:400 24px/1 Michroma;color:{{ r.timeColor }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 0">{{ d.c }}</span></sc-for></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+<div style="font:500 20px 'Instrument Sans';color:#8D96A3">Overlay · 1920×1080 · lower-third chrome bar, transparent background over gameplay stand-in · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="02 Genome" style="padding:48px;border:2px solid transparent;border-radius:36px;background:linear-gradient(#0E1015,#0E1015) padding-box,linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box">
+    <div style="font:700 44px Unbounded;color:#F1F4F8;margin-bottom:28px">Genome</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:24px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:16px">
+          <span style="width:120px;height:56px;border-radius:28px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%)"></span>
+          <span style="width:120px;height:56px;border:2px solid transparent;border-radius:28px;background:linear-gradient(#14171D,#14171D) padding-box,linear-gradient(180deg,#fff,#59616C 45%,#C8CFD7) border-box"></span>
+          <span style="width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E)"></span>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Material</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Polished mercury and smoked black glass. Chrome has a hard horizon line in the middle; panels are glass with a machined chrome rim. Light is a single soft top source.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font:600 12px 'Instrument Sans'">
+          <div style="border-radius:14px;background:#07080B;box-shadow:inset 0 0 0 1px #2A2F37;padding:10px;display:flex;align-items:flex-end;color:#DDE3EA">Void<br>#07080B</div>
+          <div style="border-radius:14px;background:#14171D;padding:10px;display:flex;align-items:flex-end;color:#DDE3EA">Graphite<br>#14171D</div>
+          <div style="border-radius:14px;background:#DDE3EA;padding:10px;display:flex;align-items:flex-end;color:#07080B">Mercury<br>#DDE3EA</div>
+          <div style="border-radius:14px;background:#8D96A3;padding:10px;display:flex;align-items:flex-end;color:#07080B">Steel<br>#8D96A3</div>
+          <div style="border-radius:14px;background:#7FE3FF;padding:10px;display:flex;align-items:flex-end;color:#03141A">Ice<br>#7FE3FF</div>
+          <div style="border-radius:14px;background:#F2C14E;padding:10px;display:flex;align-items:flex-end;color:#1A1205">Liquid Gold<br>#F2C14E</div>
+          <div style="border-radius:14px;background:#C9A7FF;padding:10px;display:flex;align-items:flex-end;color:#120A24">Orchid<br>#C9A7FF</div>
+          <div style="border-radius:14px;background:linear-gradient(135deg,#C9A7FF,#9EE7FF,#F2C14E);padding:10px;display:flex;align-items:flex-end;color:#120A24">Iridescent</div>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Palette</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Monochrome metal does the heavy lifting. Ice = running, Liquid Gold = Won, Orchid / iridescent = Pinned. Colour only ever appears as light.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:24px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:20px">
+          <span style="font:900 64px/1 Unbounded;background:linear-gradient(180deg,#fff,#9AA4B0 50%,#F1F4F8);-webkit-background-clip:text;background-clip:text;color:transparent">Aa</span><span style="font:500 52px/1 'Instrument Sans';color:#B4BCC7">Aa</span><span style="font:400 44px/1 Michroma;color:#F1F4F8">07</span>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Type</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Unbounded Black for display, Instrument Sans for text. Timers in Michroma, wide and machined, each digit in a fixed cell, filled with a light chrome gradient that keeps 9:1 contrast.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="position:relative;height:150px;border-radius:24px;overflow:hidden;background:#07080B">
+          <div style="position:absolute;left:-40px;top:-30px;width:280px;height:220px;border-radius:50%;background:radial-gradient(ellipse,rgba(160,175,195,.35),rgba(0,0,0,0) 65%)"></div>
+          <div style="position:absolute;right:-60px;bottom:-60px;width:300px;height:240px;border-radius:50%;background:radial-gradient(ellipse,rgba(127,227,255,.25),rgba(201,167,255,.12) 40%,rgba(0,0,0,0) 68%)"></div>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Backdrop</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">A black void with slow pools of reflected light that drift like mercury under glass, plus rare twinkling chrome sparkles.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:24px;background:#07080B;display:flex;align-items:center;justify-content:center">
+          <span data-amb="drip" style="width:64px;height:64px;border-radius:50% 50% 50% 50%;background:radial-gradient(circle at 35% 30%,#fff,#9AA4B0 45%,#3A4049 80%);transform-origin:50% 0"></span>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Motion character</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Liquid: things drip in, stretch under weight, blur when fast and snap glassy-sharp at rest.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:24px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:22px">
+          <span data-amb="twinkle" style="width:60px;height:60px;background:linear-gradient(135deg,#fff,#9AA4B0);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)"></span>
+          <span style="width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#9AA4B0 45%,#3A4049 80%)"></span>
+          <span style="width:80px;height:6px;border-radius:3px;background:linear-gradient(90deg,#C9A7FF,#9EE7FF,#F2C14E)"></span>
+        </div>
+        <div style="font:700 22px Unbounded;color:#F1F4F8">Ornament / mascot</div>
+        <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Four-point chrome sparkles, mercury beads, iridescent hairlines. No mascot; the shine itself is the personality.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Wordmark" style="padding:48px;border:2px solid transparent;border-radius:36px;display:flex;flex-direction:column;gap:28px;background:linear-gradient(#0E1015,#0E1015) padding-box,linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box">
+    <div style="font:700 44px Unbounded;color:#F1F4F8">Wordmark</div>
+    <div style="position:relative;flex:1;min-height:380px;border-radius:30px;background:radial-gradient(ellipse at 50% 70%,#1E242C,#030405 70%);display:flex;align-items:center;justify-content:center;overflow:hidden">
+      <span data-amb="sheen" style="font:900 220px/1 Unbounded;letter-spacing:-4px;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 25%,#8E98A4 40%,#F7F9FB 50%,#B9C1CB 70%,#FFFFFF 85%,#9AA4B0 100%);background-size:100% 300%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 20px 40px rgba(127,227,255,.2))">WINNIES</span>
+      <span data-amb="twinkle" style="position:absolute;right:250px;top:90px;width:70px;height:70px;background:#fff;clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px">
+      <div style="height:140px;border-radius:24px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);display:flex;align-items:center;justify-content:center;font:900 54px Unbounded;color:#07080B">WINNIES</div>
+      <div style="height:140px;border-radius:24px;background:#F1F4F8;display:flex;align-items:center;justify-content:center;font:900 54px Unbounded;color:#07080B">WINNIES</div>
+      <div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7;align-self:center">Unbounded Black, all caps, poured in chrome with a hard horizon reflection. The reflection slowly rolls through the letters. Flat black-on-mercury for small sizes and light mode.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Motion" style="padding:48px;border:2px solid transparent;border-radius:36px;display:flex;flex-direction:column;gap:26px;background:linear-gradient(#0E1015,#0E1015) padding-box,linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:700 44px Unbounded;color:#F1F4F8">Motion sketch</div>
+      <div style="display:flex;gap:12px">
+        <button onClick="{{ onReplayWon }}" style="height:50px;padding:0 24px;border:0;border-radius:25px;background:linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E);color:#1A1205;font:700 16px Unbounded;cursor:pointer">Replay Won</button>
+        <button onClick="{{ onReplayComplete }}" style="height:50px;padding:0 24px;border:0;border-radius:25px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);color:#07080B;font:700 16px Unbounded;cursor:pointer">Replay Complete</button>
+      </div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:40px minmax(0,1fr) auto auto;gap:18px;align-items:center;height:72px;padding:0 22px 0 14px;border:1.5px solid transparent;border-radius:36px;background:linear-gradient(180deg,#221D10,#120F08) padding-box,linear-gradient(180deg,#FFF1C2,#B88A2E 50%,#FFE08A) border-box">
+      <span style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E);color:#1A1205;font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1">workspace_premium</span>
+      <span style="font:700 21px 'Instrument Sans';color:#F6EBD0">Celeste <span style="font-weight:400;font-size:15px;color:#B4BCC7">Farewell, golden strawberry</span></span>
+      <span style="font:400 22px Michroma;color:#F2C14E">1:02:13</span>
+      <span style="font:400 11px Michroma;letter-spacing:2px;color:#F2C14E">WON</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div><div style="font:700 19px Unbounded;color:#9EEBFF;margin-bottom:8px">Tick</div><div style="font:400 16px/1.5 'Instrument Sans';color:#B4BCC7">Changed digits drip in from above: stretched, blurred, then snap sharp with a tiny rebound (560ms). A glint sweeps the Total Timer every second; the running status rings ripple outward.</div></div>
+      <div><div style="font:700 19px Unbounded;color:#F2C14E;margin-bottom:8px">Won</div><div style="font:400 16px/1.5 'Instrument Sans';color:#B4BCC7">The row flares white-hot, chrome sparkles spray, then the row drains away and re-pours at the bottom of the list as liquid gold.</div></div>
+      <div><div style="font:700 19px Unbounded;color:#C9A7FF;margin-bottom:8px">Reduced motion · Sound</div><div style="font:400 16px/1.5 'Instrument Sans';color:#B4BCC7">Static: gold rim, trophy icon, "Won" word. Sound (muted): tick = glassy click, Won = rising metallic shimmer, Complete = big reverb chime.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Dialects" style="padding:48px;border:2px solid transparent;border-radius:36px;display:flex;flex-direction:column;gap:24px;background:linear-gradient(#0E1015,#0E1015) padding-box,linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box">
+    <div style="font:700 44px Unbounded;color:#F1F4F8">Dialect lean</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="padding:28px;border-radius:26px;background:#14171D;box-shadow:inset 0 0 0 1px #2A2F37"><div style="font:700 22px Unbounded;color:#F1F4F8;margin-bottom:10px">Workspace</div><div style="font:400 17px/1.5 'Instrument Sans';color:#B4BCC7">Mostly smoked glass and quiet steel; chrome reserved for primary buttons and the Total Timer so long sessions don't glare.</div></div>
+      <div style="padding:28px;border-radius:26px;background:linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%);color:#07080B"><div style="font:700 22px Unbounded;margin-bottom:10px">Broadcast</div><div style="font:500 17px/1.5 'Instrument Sans'">Thick chrome rims around opaque glass so it reads over anything; Won turns the whole card gold for the camera.</div></div>
+      <div style="padding:28px;border-radius:26px;background:linear-gradient(135deg,#2A2140,#0B2A33);box-shadow:inset 0 0 0 1px #5D6570"><div style="font:700 22px Unbounded;color:#F1F4F8;margin-bottom:10px">Showcase</div><div style="font:400 17px/1.5 'Instrument Sans';color:#DDE3EA">Full-bleed liquid-metal hero, the wordmark pours and pools as you scroll, iridescent highlights everywhere.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const liq = 'cubic-bezier(.2,.8,.2,1)';
+    return {
+      wonDelay: 700,
+      amb: {
+        pool: [[{ transform: 'translate(0,0) scale(1,1)' }, { transform: 'translate(80px,40px) scale(1.15,.9)' }, { transform: 'translate(-40px,60px) scale(.95,1.1)' }, { transform: 'translate(0,0) scale(1,1)' }], { duration: 16000, easing: 'ease-in-out' }],
+        twinkle: [[{ transform: 'scale(0) rotate(0deg)', opacity: 0 }, { transform: 'scale(1) rotate(45deg)', opacity: 1, offset: .15 }, { transform: 'scale(0) rotate(90deg)', opacity: 0, offset: .3 }, { transform: 'scale(0)', opacity: 0 }], { duration: 4200, easing: 'ease-in-out' }],
+        sheen: [[{ backgroundPosition: '0 0%' }, { backgroundPosition: '0 100%' }], { duration: 5000, easing: 'ease-in-out', direction: 'alternate' }],
+        glow: [[{ opacity: 1, boxShadow: '0 0 10px #7FE3FF' }, { opacity: .5, boxShadow: '0 0 2px #7FE3FF' }, { opacity: 1, boxShadow: '0 0 10px #7FE3FF' }], { duration: 1000 }],
+        drip: [[{ transform: 'translateY(-40px) scale(.9,1)', opacity: 0 }, { transform: 'translateY(0) scale(.8,1.35)', opacity: 1, offset: .35 }, { transform: 'translateY(0) scale(1.12,.86)', offset: .5 }, { transform: 'translateY(0) scale(1,1)', offset: .65 }, { transform: 'translateY(0) scale(1,1)', opacity: 1, offset: .9 }, { transform: 'translateY(30px) scale(.7,1.4)', opacity: 0 }], { duration: 2600, easing: 'ease-in-out' }],
+      },
+      tick: (k) => [[{ transform: 'translateY(-38%) scaleY(1.4)', filter: 'blur(4px)', opacity: .15 }, { transform: 'translateY(4%) scaleY(.92)', filter: 'blur(0)', opacity: 1, offset: .55 }, { transform: 'none' }], { duration: k === 'total' ? 560 : 420, easing: liq }],
+      beat: (n) => n === 'sheen'
+        ? [[{ transform: 'translateX(-200%) skewX(-20deg)' }, { transform: 'translateX(1400%) skewX(-20deg)' }], { duration: 850, easing: 'ease-in-out' }]
+        : n === 'ripple' ? [[{ transform: 'scale(1)', opacity: .9 }, { transform: 'scale(1.9)', opacity: 0 }], { duration: 900, easing: 'ease-out' }] : null,
+      won: (el, W, ov) => {
+        el.animate([{ filter: 'none', transform: 'none' }, { filter: 'brightness(2.2) saturate(1.6)', transform: 'scale(1.02)', offset: .3 }, { filter: 'brightness(1.4) sepia(.8) saturate(2.5)', transform: 'scale(1.02)', offset: .6 }, { filter: 'none', transform: 'scaleY(.05)', opacity: 0 }], { duration: 700, easing: 'ease-in' });
+        W.burst(el, { n: ov ? 14 : 22, shapes: ['star'], colors: ['#FFFFFF', '#F2C14E', '#DDE3EA', '#9EE7FF'], size: 22, spread: 260, gravity: 40, dur: 1100, ox: .75, spin: 180 });
+      },
+      land: (el) => el.animate([{ transform: 'scaleY(.1) scaleX(1.04)', opacity: 0, filter: 'blur(8px) brightness(2)' }, { transform: 'scaleY(1.12) scaleX(.99)', opacity: 1, filter: 'blur(0) brightness(1.3)', offset: .55 }, { transform: 'none', filter: 'none' }], { duration: 650, easing: liq }),
+      complete: (root, W) => {
+        const t = root.querySelector('[data-kind="total"]');
+        if (t) W.burst(t.parentElement, { n: 60, shapes: ['star', 'circle'], colors: ['#FFFFFF', '#F2C14E', '#DDE3EA', '#C9A7FF', '#9EE7FF'], size: 30, spread: 600, gravity: 120, dur: 2200, spin: 360 });
+        root.querySelectorAll('[data-kind="total"]').forEach((d, i) => d.animate([{ filter: 'none' }, { filter: 'brightness(1.6) sepia(1) saturate(3) hue-rotate(-10deg)' }, { filter: 'none' }], { duration: 1600, delay: i * 60 }));
+      },
+    };
+  }
+  skin(r) {
+    const glass = 'linear-gradient(180deg,#191C23,#0F1116) padding-box,';
+    const st = {
+      running: { bgx: 'linear-gradient(180deg,#14222A,#0B1318) padding-box,linear-gradient(90deg,#7FE3FF,#E4F9FF 50%,#7FE3FF) border-box', shadow: '0 0 36px -6px rgba(127,227,255,.45)', statusBg: '#7FE3FF', statusColor: '#03141A', statusIcon: 'radio_button_checked', timeColor: '#BDF3FF', wordColor: '#9EEBFF', gameColor: '#F1F4F8', ringColor: '#7FE3FF', beat: 'ripple' },
+      idle: { bgx: glass + 'linear-gradient(180deg,#8E97A3,#22272E 50%,#5D6570) border-box', shadow: 'none', statusBg: '#22262E', statusColor: '#B4BCC7', statusIcon: r.untouched ? 'circle' : 'timelapse', timeColor: r.untouched ? '#8D96A3' : '#E4E9EF', wordColor: '#8D96A3', gameColor: '#F1F4F8', ringColor: 'transparent', beat: '' },
+      won: { bgx: 'linear-gradient(180deg,#201B0F,#120F08) padding-box,linear-gradient(180deg,#FFF1C2,#B88A2E 50%,#FFE08A) border-box', shadow: 'none', statusBg: 'linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E)', statusColor: '#1A1205', statusIcon: 'workspace_premium', timeColor: '#F2C14E', wordColor: '#F2C14E', gameColor: '#F6EBD0', ringColor: 'transparent', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      bgx: hov ? 'linear-gradient(180deg,#20242C,#13161C) padding-box,linear-gradient(180deg,#FFFFFF,#59616C 45%,#C8CFD7) border-box' : st.bgx,
+      shadow: hov ? '0 20px 40px -10px rgba(0,0,0,.9),0 0 24px rgba(255,255,255,.06)' : st.shadow,
+      lift: hov ? 'translateY(-3px)' : 'none', gripOp: hov ? 1 : 0.35, z: r.menu ? 20 : 1,
+      countColor: r.full ? '#F2C14E' : '#E4E9EF',
+      playBg: r.running ? '#7FE3FF' : 'linear-gradient(180deg,#FDFEFF 0%,#C9D0D8 30%,#7C8591 50%,#DCE2E8 55%,#F7F9FB 100%)', playOp: r.won ? 0.3 : 1,
+      winBg: r.won ? 'linear-gradient(180deg,#FFF1C2,#D9A93F 48%,#8A6418 52%,#F2C14E) padding-box,linear-gradient(#F2C14E,#F2C14E) border-box' : 'linear-gradient(#0B0D11,#0B0D11) padding-box,linear-gradient(180deg,#C8CFD7,#2A2F37 50%,#8E97A3) border-box',
+      winColor: r.won ? '#1A1205' : '#E4E9EF', winFill: r.won ? 1 : 0,
+      moreBorder: r.menu || hov ? '#C8CFD7' : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? 'rgba(255,255,255,.08)' : 'transparent', color: m.danger ? '#FF8A80' : '#E4E9EF' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.45em' : '0.82em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.42em' : '0.86em' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, w: p.on ? '36px' : '10px', bg: p.on ? 'linear-gradient(90deg,#fff,#9AA4B0)' : '#3A4049' })) };
+  }
+}
+</script>
+</body>
+</html>

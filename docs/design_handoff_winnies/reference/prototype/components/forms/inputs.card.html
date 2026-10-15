@@ -1,0 +1,16 @@
+<!-- @dsCard group="Components" viewport="1400x480" name="Inputs" subtitle="Text, number, inline rename, validation · L/D" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>body{margin:0;background:#FFE3EC}.pane{padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--color-page);color:var(--color-text);font-family:var(--font-body)}.lbl{font:800 11px/1.2 var(--font-body);color:var(--color-text-muted);letter-spacing:.02em}.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.grid2{display:grid;grid-template-columns:1fr 1fr}code{font:700 11px/1.3 ui-monospace,Menlo,monospace;color:var(--color-text-muted)}</style></head>
+<body class="w-root"><div class="grid2"><div class="pane" data-theme="light">
+<div class="lbl">Text input · default · hover · focus · disabled · error</div>
+<div class="row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="w-input"><span class="ph">Game</span></div><div class="w-input is-hover"><span class="ph">Game</span></div><div class="w-input is-focus">Elden Ring<span class="caret" style="width:2px;height:20px;background:var(--color-focus)"></span></div>
+<div class="w-input is-disabled"><span class="ph">Target</span></div><div><div class="w-input is-error">Hollow Knight</div><div class="w-msg w-msg--error"><span class="w-ico">error</span>This Challenge already exists</div></div><div><div class="w-input w-input--number is-focus" style="width:120px">120</div><div class="w-msg"><span class="w-ico">info</span>Target 1–9999</div></div></div>
+<div class="lbl">Inline edit (rename) · resting · hover · editing</div>
+<div class="row" style="gap:40px"><span class="w-inline-edit">Kitty vs. the world</span><span class="w-inline-edit is-hover">Kitty vs. the world <span class="w-ico">edit</span></span><span class="w-inline-edit is-editing">Kitty vs. the world<span class="caret"></span></span></div></div><div class="pane" data-theme="dark">
+<div class="lbl">Text input · default · hover · focus · disabled · error</div>
+<div class="row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="w-input"><span class="ph">Game</span></div><div class="w-input is-hover"><span class="ph">Game</span></div><div class="w-input is-focus">Elden Ring<span class="caret" style="width:2px;height:20px;background:var(--color-focus)"></span></div>
+<div class="w-input is-disabled"><span class="ph">Target</span></div><div><div class="w-input is-error">Hollow Knight</div><div class="w-msg w-msg--error"><span class="w-ico">error</span>This Challenge already exists</div></div><div><div class="w-input w-input--number is-focus" style="width:120px">120</div><div class="w-msg"><span class="w-ico">info</span>Target 1–9999</div></div></div>
+<div class="lbl">Inline edit (rename) · resting · hover · editing</div>
+<div class="row" style="gap:40px"><span class="w-inline-edit">Kitty vs. the world</span><span class="w-inline-edit is-hover">Kitty vs. the world <span class="w-ico">edit</span></span><span class="w-inline-edit is-editing">Kitty vs. the world<span class="caret"></span></span></div></div></div></body></html>

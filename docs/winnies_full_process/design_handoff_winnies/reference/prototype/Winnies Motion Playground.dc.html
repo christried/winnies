@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>html,body{margin:0;height:100%;overflow:hidden}a{color:#B0175A}a:hover{color:#4A2B3A}[data-theme="dark"] a{color:#FFB3D2}input::placeholder{color:inherit;opacity:.7}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-theme="{{ theme }}" data-motion="{{ motionAttr }}" style="display:grid;grid-template-columns:{{ gridCols }};height:100vh;background:var(--color-page);color:var(--color-text);font-family:var(--font-body)">
+
+<aside data-screen-label="Controls" style="display:{{ panelDisplay }};position:relative;z-index:5;height:100vh;overflow:auto;box-sizing:border-box;padding:22px 20px 40px;flex-direction:column;gap:18px;background:var(--color-surface);box-shadow:4px 0 0 var(--color-lip),12px 0 30px -18px var(--color-drop)">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <span aria-label="winnies" style="display:flex;align-items:baseline;font:400 28px/1.2 var(--font-display);padding-bottom:4px">
+      <sc-for list="{{ letters }}" as="l" hint-placeholder-count="7"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.shSm }}">{{ l.ch }}</span></sc-for>
+    </span>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font:400 20px/1.4 var(--font-display)">Motion playground</span><button onClick="{{ onPanel }}" aria-label="Hide controls" title="Hide controls" style="flex:none;width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;background:var(--color-control);color:var(--color-text);font-family:var(--font-icon);font-size:22px;box-shadow:0 3px 0 -1px var(--color-control-lip)">left_panel_close</button></div>
+    <a href="Winnies Motion Spec.dc.html" style="font:700 14px var(--font-body)">Open the motion spec →</a>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Screen</span>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+      <sc-for list="{{ viewOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="flex:1;height:34px;border:0;border-radius:999px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)">{{ o.label }}</button></sc-for>
+    </div>
+    <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Dialect</span>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);opacity:{{ dialectOp }}">
+      <sc-for list="{{ dialectOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="flex:1;height:34px;border:0;border-radius:999px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)">{{ o.label }}</button></sc-for>
+    </div>
+    <span style="font:600 13px/1.4 var(--font-body);color:var(--color-text-muted)">{{ dialectNote }}</span>
+    <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Overlay preset</span>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+      <sc-for list="{{ presetOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="flex:1;height:34px;border:0;border-radius:999px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)">{{ o.label }}</button></sc-for>
+    </div>
+    <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Theme</span>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+      <sc-for list="{{ themeOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="flex:1;height:34px;border:0;border-radius:999px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)">{{ o.label }}</button></sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Tiers</span>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <sc-for list="{{ tierOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 12px 0 8px;border:0;border-radius:17px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ o.icon }}</span>{{ o.label }}</button></sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 13px var(--font-body);color:var(--color-text-muted)">Clock</span><span style="font:400 15px var(--font-display)">{{ totalStr }}</span></div>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+      <sc-for list="{{ speedOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.on }}" aria-pressed="{{ o.sel }}" style="flex:1;height:34px;border:0;border-radius:999px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:700 13px var(--font-body)">{{ o.label }}</button></sc-for>
+    </div>
+  </div>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font:800 13px var(--font-body);color:var(--color-text-muted)">{{ g.name }}</span>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <sc-for list="{{ g.items }}" as="t" hint-placeholder-count="4"><button data-press="1" onClick="{{ t.on }}" style="display:flex;align-items:center;gap:7px;min-height:34px;padding:4px 12px 4px 5px;border:0;border-radius:17px;cursor:pointer;background:var(--color-control);color:var(--color-text);box-shadow:0 3px 0 -1px var(--color-control-lip);font:700 13px/1.25 var(--font-body);text-align:left;transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(-2px)"><span style="flex:none;padding:2px 7px;border-radius:10px;background:{{ g.c }};color:var(--color-on-accent);font:400 11px/1.45 var(--font-display)">{{ t.id }}</span>{{ t.label }}</button></sc-for>
+      </div>
+    </div>
+  </sc-for>
+
+  <div style="display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:26px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+    <div style="display:flex;align-items:center;gap:8px"><span style="font-family:var(--font-icon);font-size:20px;color:var(--color-text-muted)">volume_off</span><span style="flex:1;font:800 13px var(--font-body);color:var(--color-text-muted)">Sound cues (muted, shown only)</span></div>
+    <button onClick="{{ onTickCues }}" aria-pressed="{{ tickCues }}" style="align-self:flex-start;display:flex;align-items:center;gap:6px;height:30px;padding:0 12px 0 8px;border:0;border-radius:15px;cursor:pointer;background:{{ tickCueBg }};color:var(--color-text);font:700 12px var(--font-body);box-shadow:0 3px 0 -1px var(--color-control-lip)"><span style="font-family:var(--font-icon);font-size:16px">{{ tickCueIcon }}</span>Include tick cues (opt-in)</button>
+    <div style="display:flex;flex-direction:column;gap:4px;min-height:132px">
+      <sc-for list="{{ cues }}" as="q" hint-placeholder-count="0"><div style="display:flex;align-items:center;gap:8px;font:700 13px/1.5 var(--font-body);opacity:{{ q.op }}"><span style="flex:none;padding:0 6px;border-radius:8px;background:var(--color-complete);color:var(--color-on-accent);font:400 11px/1.6 var(--font-display)">{{ q.id }}</span><span style="flex:1;font-family:ui-monospace,Menlo,monospace;font-size:12px">{{ q.name }}</span></div></sc-for>
+      <sc-if value="{{ noCues }}" hint-placeholder-val="{{ true }}"><span style="font:600 13px var(--font-body);color:var(--color-text-muted)">Trigger something to see its cue.</span></sc-if>
+    </div>
+  </div>
+</aside>
+
+<main ref="{{ mainRef }}" data-dialect="{{ stageDialect }}" data-motion-preset="{{ presetAttr }}" style="position:relative;min-width:0;height:100vh;overflow:hidden;--tilt-hover:{{ tiltHover }}">
+  <div data-scroll="1" style="position:absolute;inset:0;overflow-x:hidden;overflow-y:auto">
+
+  <sc-if value="{{ isWs }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="{{ wsLabel }}" style="position:relative;min-height:100%;box-sizing:border-box;padding:24px 32px 300px">
+    <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+      <div data-amb="drift" style="position:absolute;inset:-52px;background:radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0/52px 52px,radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px/52px 52px"></div>
+      <sc-if value="{{ isShowcase }}" hint-placeholder-val="{{ false }}">
+        <div data-amb="blob1" style="position:absolute;left:-8%;top:-4%;width:720px;height:520px;border-radius:50%;background:radial-gradient(closest-side,{{ blobA }},transparent)"></div>
+        <div data-amb="blob2" style="position:absolute;right:-10%;top:30%;width:760px;height:620px;border-radius:50%;background:radial-gradient(closest-side,{{ blobB }},transparent)"></div>
+      </sc-if>
+      <div style="position:absolute;inset:0;background:var(--grain)"></div>
+    </div>
+    <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+
+    <div style="position:relative;max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+      <nav style="position:relative;z-index:8;display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;min-height:72px;box-sizing:border-box;padding:12px 12px 12px 26px;border-radius:36px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+        <span aria-label="winnies" style="display:flex;align-items:baseline;font:400 36px/1.2 var(--font-display);padding-bottom:4px">
+          <sc-for list="{{ letters }}" as="l" hint-placeholder-count="7"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for>
+        </span>
+        <sc-if value="{{ notShared }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;margin-left:12px">
+            <button data-press="1" data-menubtn="1" onClick="{{ onSwitcher }}" aria-expanded="{{ switcher }}" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 14px 0 18px;border:0;border-radius:23px;cursor:pointer;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);color:var(--color-text);font:700 17px var(--font-body);white-space:nowrap">{{ title }}<span style="font-family:var(--font-icon);font-size:24px">expand_more</span></button>
+            <sc-if value="{{ switcher }}" hint-placeholder-val="{{ false }}">
+              <div data-menu="1" role="menu" style="position:absolute;left:0;top:58px;z-index:30;width:260px;padding:8px;border-radius:28px;background:var(--color-surface);box-shadow:var(--shadow-popover);display:flex;flex-direction:column;gap:2px;transform-origin:20% 0">
+                <sc-for list="{{ winnieOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.on }}" style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border:0;border-radius:22px;cursor:pointer;background:{{ o.bg }};color:var(--color-text);font:700 15px var(--font-body);text-align:left" style-hover="background:var(--color-surface-sunken)"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ o.icon }}</span><span style="flex:1">{{ o.label }}</span><span style="font:400 13px var(--font-display);color:var(--color-text-muted)">{{ o.meta }}</span></button></sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ shared }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-left:12px">
+            <span style="font:700 17px var(--font-body)">{{ title }}</span>
+            <span data-livepill="1" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ liveBg }};color:var(--color-on-accent);font:800 14px var(--font-body)"><span data-loop="{{ liveSpin }}" style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ liveIcon }}</span>{{ liveLabel }}</span>
+            <span style="font:700 14px var(--font-body);color:var(--color-text-muted)">{{ freshness }}</span>
+          </div>
+        </sc-if>
+        <div style="flex:1"></div>
+        <button data-press="1" onClick="{{ onLog }}" style="display:flex;align-items:center;gap:6px;height:46px;padding:0 16px;border:0;border-radius:23px;cursor:pointer;background:transparent;color:var(--color-text);font:700 16px var(--font-body)" style-hover="background:var(--color-surface-sunken)"><span style="font-family:var(--font-icon);font-size:22px">{{ logIcon }}</span><sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">{{ logLabel }}</sc-if></button>
+        <sc-if value="{{ notShared }}" hint-placeholder-val="{{ true }}">
+          <button data-press="1" data-share="1" onClick="{{ onCopy }}" data-tip="Copy the Shared View link" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 20px 0 16px;border:0;border-radius:24px;cursor:pointer;background:var(--color-accent);color:var(--color-on-accent);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-accent-lip);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-accent-lip)"><span data-icon="share" style="display:inline-block;font-family:var(--font-icon);font-size:22px;font-variation-settings:'wght' 700">{{ shareIcon }}</span>{{ shareLabel }}</button>
+        </sc-if>
+        <button data-press="1" onClick="{{ onThemeBtn }}" aria-label="Theme" data-tip="Switch theme" style="width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;background:var(--color-control);color:var(--color-text);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1;box-shadow:0 5px 0 -1px var(--color-control-lip);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-control-lip)">{{ themeIcon }}</button>
+        <span title="kittyspeedruns" style="width:46px;height:46px;border-radius:50%;background:var(--color-pinned);display:flex;align-items:center;justify-content:center;font:400 19px var(--font-display);color:var(--color-on-accent);box-shadow:0 5px 0 -1px var(--color-pinned-lip)">K</span>
+      </nav>
+
+      <div data-page="1" data-content="1" style="display:flex;flex-direction:column;gap:20px">
+      <sc-if value="{{ onWs }}" hint-placeholder-val="{{ true }}">
+        <section data-stag="1" data-hero="1" style="position:relative;display:flex;flex-wrap:wrap;gap:22px 26px;align-items:center;padding:24px 30px 24px 22px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised-lg)">
+          <span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" style="position:absolute;top:-10%;bottom:-10%;left:0;width:20%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span><span style="position:absolute;inset:0;background:var(--fingerprint);-webkit-mask-image:var(--texture-fingerprint-mask);mask-image:var(--texture-fingerprint-mask)"></span></span>
+          <sc-if value="{{ showNini }}" hint-placeholder-val="{{ true }}">
+            <div style="position:relative;flex:none;width:160px;display:flex;justify-content:center;padding-top:14px">
+              <div data-nini="1" data-amb="{{ niniAmb }}" style="transform-origin:50% 100%"><div data-nbeat="{{ niniBeat }}" style="transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ niniMood }}" shape="mochi" mascot="{{ true }}" size="150" hint-size="150px,129px"></dc-import></div></div>
+            </div>
+          </sc-if>
+          <div style="position:relative;flex:1 1 300px;display:flex;flex-direction:column;gap:14px;min-width:0">
+            <h1 style="margin:0;font:400 46px/1.15 var(--font-display);text-wrap:pretty">{{ title }}</h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <div data-track="1" style="flex:1;min-width:160px;max-width:380px;height:28px;border-radius:14px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:4px;box-sizing:border-box">
+                <div style="position:relative;height:100%;border-radius:10px;overflow:hidden">
+                  <div data-fill="1" style="position:absolute;inset:0;border-radius:10px;overflow:hidden;transform:translateX({{ fillX }})">
+                    <span data-amb="{{ stripesAmb }}" style="position:absolute;top:0;bottom:0;left:-30px;right:0;background:var(--texture-stripes-won)"></span>
+                    <span style="position:absolute;inset:0;border-radius:10px;box-shadow:inset 0 -3px 4px rgba(40,140,80,.3),inset 0 2px 2px rgba(255,255,255,.6)"></span>
+                  </div>
+                </div>
+              </div>
+              <span style="display:flex;gap:6px;white-space:nowrap;font:400 18px/1.45 var(--font-display)"><span data-wonpill="1" style="display:inline-block">{{ wonStr }}</span><span>won ·</span><span data-pct="1" style="display:inline-block">{{ pctStr }}</span></span>
+            </div>
+          </div>
+          <div style="position:relative;flex:none;margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:18px">
+            <div data-well="1" aria-label="Total Timer" style="position:relative;display:flex;align-items:center;height:var(--timer-total-h);padding:0 var(--timer-total-pad-x);border-radius:50px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:400 var(--timer-total-size)/1 var(--font-display);color:{{ totalC }}">
+              <sc-if value="{{ live }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="1400" style="position:absolute;top:-10%;bottom:-10%;left:0;width:26%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span></sc-if>
+              <span data-timer="total" data-kind="total" data-beat="{{ totalBeat }}" style="position:relative;display:flex">
+                <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+              </span>
+              <sc-if value="{{ changedTotal }}" hint-placeholder-val="{{ false }}"><span data-hl="1" style="position:absolute;inset:-7px;border-radius:57px;box-shadow:0 0 0 4px var(--color-highlight-gold),0 0 22px 4px var(--color-highlight-gold);pointer-events:none"></span></sc-if>
+            </div>
+            <sc-if value="{{ notShared }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:12px">
+                <button data-press="1" onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:10px;height:58px;padding:0 28px 0 20px;border:0;border-radius:29px;cursor:pointer;background:var(--color-accent);color:var(--color-on-accent);font:400 19px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 8px 0 -1px var(--color-accent-lip),0 16px 24px -10px rgba(220,60,130,.5),inset 0 5px 7px rgba(255,220,235,.6);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(6px);box-shadow:0 2px 0 -1px var(--color-accent-lip)"><span data-icon="total" style="display:inline-block;font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1">{{ totalIcon }}</span>{{ totalLabel }}</button>
+                <button data-press="1" aria-label="More Winnie options" data-tip="More Winnie options" style="width:58px;height:58px;border:0;border-radius:50%;cursor:pointer;background:var(--color-control);color:var(--color-text);font-family:var(--font-icon);font-size:28px;box-shadow:0 6px 0 -1px var(--color-control-lip);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-control-lip)">more_horiz</button>
+              </div>
+            </sc-if>
+          </div>
+          <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+            <div data-banner="1" style="flex:1 1 100%;transform-origin:50% 0;display:flex;align-items:center;gap:14px;padding:14px 22px;border-radius:30px;background:var(--color-complete);color:var(--color-on-accent);font:400 22px/1.45 var(--font-display);box-shadow:0 6px 0 -1px var(--color-complete-lip)"><span style="font-family:var(--font-icon);font-size:30px;font-variation-settings:'FILL' 1">emoji_events</span>Complete! Every Challenge Won.</div>
+          </sc-if>
+        </section>
+
+        <sc-if value="{{ notShared }}" hint-placeholder-val="{{ true }}">
+          <section data-stag="1" style="position:relative;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;border-radius:38px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+            <input value="{{ addVal }}" onChange="{{ onAddChange }}" onKeyDown="{{ onAddKey }}" placeholder="Game" aria-label="Game" style="flex:1.1;min-width:140px;height:50px;box-sizing:border-box;border:0;outline-offset:3px;border-radius:25px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:0 20px;font:700 16px var(--font-body);color:var(--color-text)">
+            <div style="flex:1.5;min-width:140px;height:50px;border-radius:25px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);display:flex;align-items:center;padding:0 20px;font:700 16px var(--font-body);color:var(--color-text-muted)">Win Condition (optional)</div>
+            <button data-press="1" onClick="{{ onAdd }}" style="display:flex;align-items:center;gap:8px;height:50px;padding:0 22px 0 16px;border:0;border-radius:25px;cursor:pointer;background:var(--color-pinned);color:var(--color-on-accent);font:400 16px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 6px 0 -1px var(--color-pinned-lip);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-pinned-lip)"><span style="font-family:var(--font-icon);font-size:24px;font-variation-settings:'wght' 700">add</span>Add Challenge</button>
+          </section>
+        </sc-if>
+
+        <div data-stag="1" style="position:relative;display:flex;justify-content:space-between;align-items:baseline;padding:0 14px">
+          <span style="font:400 21px/1.45 var(--font-display)">Challenges</span>
+          <span style="font:700 14px var(--font-body);color:var(--color-text-muted)">{{ countLabel }}</span>
+        </div>
+
+        <div data-list="1" style="position:relative;display:flex;flex-direction:column;gap:var(--row-gap)">
+          <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ skel }}" as="k" hint-placeholder-count="5"><div aria-busy="true" style="display:flex;align-items:center;gap:18px;height:var(--row-h);padding:0 20px 0 18px;border-radius:var(--row-radius);background:var(--color-surface);box-shadow:var(--shadow-raised)"><span style="position:relative;overflow:hidden;flex:none;width:50px;height:50px;border-radius:50%;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="position:relative;overflow:hidden;width:{{ k.w }};height:18px;border-radius:9px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="flex:1"></span><span style="position:relative;overflow:hidden;width:110px;height:18px;border-radius:9px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></div></sc-for>
+          </sc-if>
+          <sc-if value="{{ notLoading }}" hint-placeholder-val="{{ true }}">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div data-row="{{ r.id }}" data-stag="1" style="position:relative;z-index:{{ r.z }}">
+              <div data-mid="{{ r.id }}" data-amb="{{ r.bob }}" data-ad="{{ r.ad }}" style="transform-origin:50% 100%">
+                <div style="position:relative;display:grid;grid-template-columns:{{ rowCols }};gap:14px;align-items:center;height:var(--row-h);padding:0 14px 0 10px;border-radius:var(--row-radius);background:{{ r.bg }};box-shadow:{{ r.shadow }};transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(var(--hover-lift)) rotate(var(--tilt-hover))">
+                  <sc-if value="{{ r.running }}"><span data-amb="ring" data-ring="{{ r.id }}" style="position:absolute;inset:-6px;border-radius:44px;box-shadow:0 0 0 3px var(--color-running-ring),0 0 26px 6px var(--color-accent);opacity:.5;pointer-events:none"></span></sc-if>
+                  <sc-if value="{{ r.sheen }}"><span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="sheen" style="position:absolute;top:-10%;bottom:-10%;left:0;width:16%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent)"></span></span></sc-if>
+                  <sc-if value="{{ r.pinned }}"><span data-tape="{{ r.id }}" style="position:absolute;left:-12px;top:-10px;width:92px;height:24px;background:repeating-linear-gradient(90deg,#CDB8FF 0 10px,#E4D9FF 10px 20px);opacity:.92;transform:rotate(-10deg);box-shadow:0 2px 4px rgba(0,0,0,.1);pointer-events:none"></span></sc-if>
+                  <sc-if value="{{ ctl }}"><span data-grip="{{ r.id }}" onPointerDown="{{ r.onGrip }}" aria-label="Drag to reorder" style="font-family:var(--font-icon);font-size:24px;color:var(--color-text-muted);cursor:grab;touch-action:none;opacity:.55;user-select:none" style-hover="opacity:1">drag_indicator</span></sc-if>
+                  <span data-face="{{ r.id }}" data-fbeat="{{ r.fbeat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="50" hint-size="50px,50px"></dc-import></span>
+                  <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                      <sc-if value="{{ r.editing }}"><input data-edit="1" value="{{ editVal }}" onChange="{{ onEditChange }}" onKeyDown="{{ onEditKey }}" onBlur="{{ onEditBlur }}" aria-label="Game name" style="width:100%;height:38px;box-sizing:border-box;border:0;border-radius:19px;padding:0 14px;background:var(--color-surface-raised);color:var(--color-text);font:400 19px var(--font-display);outline:var(--focus-width) solid var(--color-focus);outline-offset:2px"></sc-if>
+                      <sc-if value="{{ r.notEditing }}"><span data-name="{{ r.id }}" onClick="{{ r.onEdit }}" style="display:inline-block;font:400 19px/1.45 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;border-radius:10px">{{ r.game }}</span></sc-if>
+                      <sc-if value="{{ r.pinned }}"><span title="Pinned" style="flex:none;font-family:var(--font-icon);font-size:18px;color:var(--color-pinned-text);font-variation-settings:'FILL' 1">push_pin</span></sc-if>
+                    </div>
+                    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span style="font:500 14px/1.3 var(--font-body);color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span></sc-if>
+                    <sc-if value="{{ compact }}" hint-placeholder-val="{{ false }}"><span data-timer="row" data-kind="row" data-beat="{{ r.tbeat }}" aria-label="Challenge Timer" style="display:flex;font:400 18px/1.3 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span></sc-if>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+                    <sc-if value="{{ r.hasCounter }}">
+                      <sc-if value="{{ ctl }}"><button data-press="1" onClick="{{ r.onDec }}" aria-label="Decrease" style="width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;background:var(--color-control);color:var(--color-text);font-family:var(--font-icon);font-size:20px;box-shadow:0 4px 0 -1px var(--color-control-lip)" style-active="transform:translateY(3px);box-shadow:0 1px 0 -1px var(--color-control-lip)">remove</button></sc-if>
+                      <span data-cwell="{{ r.id }}" style="position:relative;min-width:90px;height:38px;border-radius:19px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:var(--shadow-well);display:flex;align-items:center;justify-content:center;gap:5px;font:400 16px/1 var(--font-display);overflow:hidden"><span data-count="{{ r.id }}" style="display:inline-block">{{ r.count }}</span><span>/ {{ r.target }}</span><sc-if value="{{ r.changed }}"><span data-hl="1" style="position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 3px var(--color-highlight-gold)"></span></sc-if></span>
+                      <sc-if value="{{ ctl }}"><button data-press="1" onClick="{{ r.onInc }}" aria-label="Increase" style="width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;background:var(--color-complete);color:var(--color-on-accent);font-family:var(--font-icon);font-size:20px;box-shadow:0 4px 0 -1px var(--color-complete-lip)" style-active="transform:translateY(3px);box-shadow:0 1px 0 -1px var(--color-complete-lip)">add</button></sc-if>
+                    </sc-if>
+                  </div>
+                  <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><span data-timer="row" data-kind="row" data-beat="{{ r.tbeat }}" aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 var(--timer-row-size)/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span></sc-if>
+                  <sc-if value="{{ ctl }}">
+                    <button data-press="1" onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" data-tip="{{ r.playLabel }}" style="width:50px;height:50px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:{{ r.playC }};opacity:{{ r.playOp }};box-shadow:0 5px 0 -1px {{ r.playLip }};display:flex;align-items:center;justify-content:center;transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px {{ r.playLip }}"><span data-icon="p{{ r.id }}" style="display:inline-block;font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1">{{ r.playIcon }}</span></button>
+                    <button data-press="1" onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" aria-label="{{ r.winLabel }}" data-tip="{{ r.winLabel }}" style="width:50px;height:50px;border:0;border-radius:50%;cursor:pointer;background:{{ r.winBg }};color:{{ r.winC }};font-family:var(--font-icon);font-size:30px;font-variation-settings:'wght' 700;box-shadow:0 5px 0 -1px {{ r.winLip }};transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px {{ r.winLip }}">check</button>
+                    <button data-press="1" data-menubtn="1" onClick="{{ r.onMenu }}" aria-label="More" data-tip="More" style="width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:var(--color-text);font-family:var(--font-icon);font-size:24px" style-hover="background:var(--color-surface-sunken)">more_vert</button>
+                  </sc-if>
+                  <sc-if value="{{ r.won }}"><span data-sticker="{{ r.id }}" data-amb="stick" style="position:absolute;left:{{ stickerX }};top:-12px;width:30px;height:30px;border-radius:50%;background:var(--color-complete);border:3px solid #fff;box-shadow:var(--shadow-sticker);display:flex;align-items:center;justify-content:center;font:800 16px var(--font-body);color:var(--p-pink-700);transform:rotate(12deg);pointer-events:none">★</span></sc-if>
+                  <sc-if value="{{ r.changed }}"><span data-hl="1" style="position:absolute;inset:-7px;border-radius:44px;box-shadow:0 0 0 4px var(--color-highlight-gold),0 0 22px 4px var(--color-highlight-gold);pointer-events:none"></span><span data-hl="1" style="position:absolute;right:24px;top:-14px;padding:2px 10px;border-radius:12px;background:var(--color-highlight-gold);color:var(--color-on-accent);font:800 12px/1.5 var(--font-body);pointer-events:none">Updated</span></sc-if>
+                  <sc-if value="{{ r.menu }}">
+                    <div data-menu="1" role="menu" style="position:absolute;right:6px;top:calc(100% + 8px);z-index:30;width:236px;padding:8px;border-radius:28px;background:var(--color-surface);box-shadow:var(--shadow-popover);display:flex;flex-direction:column;gap:2px;transform-origin:90% 0">
+                      <sc-for list="{{ r.menuItems }}" as="m"><button onClick="{{ m.on }}" style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border:0;border-radius:21px;cursor:pointer;background:transparent;color:{{ m.c }};font:700 15px var(--font-body);text-align:left" style-hover="background:var(--color-surface-sunken)"><span style="font-family:var(--font-icon);font-size:22px">{{ m.icon }}</span>{{ m.label }}</button></sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ onLogPage }}" hint-placeholder-val="{{ false }}">
+        <section data-screen-label="Changelog" style="display:flex;flex-direction:column;gap:18px;padding:30px 34px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised-lg)">
+          <h1 style="margin:0;font:400 44px/1.2 var(--font-display)">Changelog</h1>
+          <sc-for list="{{ logItems }}" as="e" hint-placeholder-count="3">
+            <div style="display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border-radius:30px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+              <span style="flex:none;padding:4px 12px;border-radius:14px;background:{{ e.c }};color:var(--color-on-accent);font:400 15px/1.45 var(--font-display)">{{ e.v }}</span>
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font:400 20px/1.45 var(--font-display)">{{ e.t }}</span><span style="font:500 16px/1.55 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ e.d }}</span></div>
+            </div>
+          </sc-for>
+        </section>
+      </sc-if>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isOv }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Overlay" style="box-sizing:border-box;min-height:100%;padding:28px;display:flex;flex-direction:column;gap:12px">
+    <div ref="{{ ovRef }}" style="position:relative;width:100%;aspect-ratio:16 / 9;border-radius:20px;overflow:hidden;box-shadow:0 24px 44px -24px rgba(0,0,0,.5)">
+      <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;transform:scale({{ ovScale }})">
+        <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="1920px,1080px"></dc-import>
+        <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+        <div style="position:absolute;right:60px;bottom:52px;width:var(--overlay-card-w)">
+          <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:0;right:0;bottom:calc(100% + 18px);display:flex;justify-content:center;pointer-events:none">
+              <div data-ovbanner="1" data-amb="wobble" style="display:flex;align-items:center;gap:14px;padding:14px 30px;border-radius:34px;background:var(--color-complete);color:var(--color-on-accent);font:400 46px/1.3 var(--font-display);box-shadow:0 0 0 5px var(--color-keyline),0 10px 0 1px var(--color-complete-lip),0 24px 40px rgba(0,0,0,.35)"><span style="font-family:var(--font-icon);font-size:52px;font-variation-settings:'FILL' 1">emoji_events</span>Complete!</div>
+            </div>
+          </sc-if>
+          <div data-ovcard="1" data-amb="float" style="position:relative;padding:var(--overlay-pad);box-sizing:border-box;border-radius:var(--overlay-radius);background:var(--overlay-card);color:var(--color-text);display:flex;flex-direction:column;gap:14px;box-shadow:var(--overlay-shadow)">
+            <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+              <span data-amb="glow" style="position:absolute;inset:-14px;border-radius:58px;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 40px 10px var(--color-highlight-gold);pointer-events:none"></span>
+              <sc-for list="{{ sparkles }}" as="p" hint-placeholder-count="4"><span data-amb="twinkle" data-ad="{{ p.ad }}" style="position:absolute;left:{{ p.x }};top:{{ p.y }};width:34px;height:34px;background:var(--color-highlight-gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none"></span></sc-for>
+            </sc-if>
+            <span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="3000" style="position:absolute;top:-10%;bottom:-10%;left:0;width:18%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span>
+            <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px">
+              <span style="font:400 24px/1.45 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ title }}</span>
+              <div style="flex:none;display:flex;align-items:center;gap:8px">
+                <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}"><span data-ovchip="1" style="display:flex;align-items:center;gap:6px;padding:4px 12px 4px 8px;border-radius:12px;background:var(--color-offline-surface);color:var(--color-offline-text);font:800 16px var(--font-body)"><span data-loop="spin" style="display:inline-block;font-family:var(--font-icon);font-size:20px">progress_activity</span>Reconnecting…</span></sc-if>
+                <span data-wonpill="1" style="display:inline-block;padding:4px 12px;border-radius:12px;background:var(--color-won);color:var(--color-on-accent);font:800 17px var(--font-body);white-space:nowrap">{{ wonStr }} won</span>
+              </div>
+            </div>
+            <div data-well="1" aria-label="Total Timer" style="position:relative;display:flex;align-items:center;justify-content:center;height:var(--timer-overlay-h);border-radius:44px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:400 var(--timer-overlay-size)/1 var(--font-display);color:{{ totalC }}">
+              <span data-timer="total" data-kind="ov-total" data-beat="{{ totalBeat }}" style="display:flex">
+                <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+              </span>
+            </div>
+            <div style="position:relative;display:flex;flex-direction:column;gap:10px;perspective:900px">
+              <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+                <div data-orow="{{ r.id }}" style="position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:var(--overlay-row-h);padding:0 20px 0 8px;border-radius:30px;background:{{ r.ovBg }};box-shadow:{{ r.ovSh }}">
+                  <sc-if value="{{ r.running }}"><span data-amb="ring" data-ring="{{ r.id }}" style="position:absolute;inset:-4px;border-radius:34px;box-shadow:0 0 0 4px var(--color-running-ring),0 0 24px 4px var(--color-accent);opacity:.6;pointer-events:none"></span></sc-if>
+                  <span data-face="{{ r.id }}" data-fbeat="{{ r.fbeat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="44" hint-size="44px,44px"></dc-import></span>
+                  <span style="font:400 22px/1.45 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+                  <span style="font:800 18px var(--font-body);color:var(--color-text-muted);white-space:nowrap">{{ r.countStr }}</span>
+                  <span data-timer="row" data-kind="ov-row" data-beat="{{ r.tbeat }}" style="display:flex;font:400 22px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+              <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span data-dot="{{ p.k }}" style="width:12px;height:12px;border-radius:50%;background:{{ p.c }}"></span></sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ false }}">
+            <div data-stamp="1" style="position:absolute;left:50%;top:50%;z-index:70;transform:translate(-50%,-50%) rotate(-8deg);display:flex;flex-direction:column;align-items:center;padding:14px 40px 18px;border-radius:34px;background:var(--color-won);color:var(--color-on-accent);box-shadow:0 0 0 5px var(--color-keyline),0 10px 0 1px var(--color-won-lip),0 30px 44px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none"><span style="font:400 72px/1.25 var(--font-display)">WON!</span><span style="font:800 26px/1.3 var(--font-body)">{{ stampGame }}</span></div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+    <span style="font:600 14px/1.5 var(--font-body);color:var(--color-text-muted)">1920 × 1080 OBS canvas, scaled to fit. Page {{ ovPageLabel }} · flips every 10s ({{ rotateLabel }}).</span>
+  </div>
+  </sc-if>
+  </div>
+
+  <div data-fxv="1" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:80"></div>
+  <sc-if value="{{ panelHidden }}" hint-placeholder-val="{{ false }}"><button onClick="{{ onPanel }}" aria-label="Show controls" title="Show controls" style="position:absolute;left:12px;bottom:12px;z-index:85;display:flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 10px;border:0;border-radius:20px;cursor:pointer;background:var(--color-surface);color:var(--color-text);font:700 14px var(--font-body);box-shadow:0 4px 0 -1px var(--color-control-lip)"><span style="font-family:var(--font-icon);font-size:22px">left_panel_open</span>Controls</button></sc-if>
+
+  <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;top:14px;z-index:55;display:flex;justify-content:center;pointer-events:none">
+      <div data-rbanner="1" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 22px 0 16px;border-radius:24px;background:{{ bannerBg }};color:{{ bannerC }};font:800 16px var(--font-body);box-shadow:var(--shadow-raised)"><span data-ricon="1" data-loop="{{ bannerSpin }}" style="display:inline-block;font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ bannerIcon }}</span>{{ bannerText }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center">
+      <div data-scrim="1" onClick="{{ onModalCancel }}" style="position:absolute;inset:0;background:var(--color-scrim)"></div>
+      <div data-mcard="1" role="dialog" aria-modal="true" style="position:relative;width:min(440px,calc(100% - 48px));box-sizing:border-box;padding:28px;border-radius:40px;background:var(--color-surface);box-shadow:var(--shadow-raised-lg);display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0;font:400 25px/1.35 var(--font-display);text-wrap:pretty">Delete {{ modalGame }}?</h2>
+        <p style="margin:0;font:500 16px/1.55 var(--font-body);color:var(--color-text-muted)">Its timer and counter go with it.</p>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
+          <button data-press="1" onClick="{{ onModalCancel }}" style="height:48px;padding:0 20px;border:0;border-radius:24px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 16px/1.45 var(--font-display);box-shadow:0 5px 0 -1px var(--color-control-lip)" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-control-lip)">Cancel</button>
+          <button data-press="1" onClick="{{ onModalConfirm }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 20px 0 16px;border:0;border-radius:24px;cursor:pointer;background:var(--color-danger-surface);color:var(--color-danger-text);font:400 16px/1.45 var(--font-display);box-shadow:0 5px 0 -1px var(--color-danger)" style-active="transform:translateY(4px);box-shadow:0 1px 0 -1px var(--color-danger)"><span style="font-family:var(--font-icon);font-size:22px">delete</span>Delete</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:absolute;right:24px;bottom:24px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0"><div data-toast="{{ t.id }}" role="status" style="pointer-events:auto;display:flex;align-items:center;gap:12px;max-width:var(--toast-w);box-sizing:border-box;padding:12px 10px 12px 18px;border-radius:26px;background:{{ t.bg }};color:{{ t.c }};box-shadow:{{ t.sh }};font:700 15px/1.45 var(--font-body)"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ t.icon }}</span><span style="flex:1">{{ t.text }}</span><button onClick="{{ t.close }}" aria-label="Dismiss" style="width:34px;height:34px;border:0;border-radius:50%;cursor:pointer;background:transparent;color:inherit;font-family:var(--font-icon);font-size:20px" style-hover="background:var(--color-surface-sunken)">close</button></div></sc-for>
+  </div>
+
+  <sc-if value="{{ tipOn }}" hint-placeholder-val="{{ false }}">
+    <div data-tooltip="1" style="position:absolute;left:{{ tipX }};top:{{ tipY }};z-index:70;transform:translate(-50%,-100%);padding:6px 12px;border-radius:12px;background:var(--tooltip-bg);color:var(--tooltip-text);font:700 13px/1.4 var(--font-body);white-space:nowrap;pointer-events:none">{{ tipText }}</div>
+  </sc-if>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;workspace&quot;,&quot;tsType&quot;:&quot;'workspace'|'overlay'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef(); mainRef = React.createRef(); ovRef = React.createRef();
+  static seed() {
+    const mk = (id, title, total, ch) => ({ id, title, total, paused: false, celebrated: false, ch: ch.map((d, i) => ({ count: null, target: null, pinned: false, running: false, won: false, cond: '', ...d, order: i })) });
+    return [
+      mk(0, 'Kitty vs. the world', 52317, [
+        { id: 1, game: 'Elden Ring', cond: 'Malenia, no summons', secs: 11554, pinned: true, running: true },
+        { id: 2, game: 'Super Mario 64', cond: 'All stars', count: 87, target: 120, secs: 14470 },
+        { id: 3, game: 'Cuphead', cond: 'Expert, every boss', count: 17, target: 19, secs: 6482 },
+        { id: 4, game: 'Celeste', cond: 'Farewell, golden strawberry', secs: 0 },
+        { id: 5, game: 'Dark Souls III', cond: 'Soul Level 1 Nameless King', secs: 8431 },
+        { id: 6, game: 'Hollow Knight', cond: 'Pantheon of Hallownest', secs: 4509, won: true },
+        { id: 7, game: 'Hades', cond: 'Heat 16 clear', secs: 3160, won: true },
+        { id: 8, game: 'Tetris Effect', cond: '150 lines, Marathon', count: 150, target: 150, secs: 2511, won: true },
+      ]),
+      mk(1, 'Cozy Sunday', 8150, [
+        { id: 21, game: 'Stardew Valley', cond: 'Perfection', secs: 2210 },
+        { id: 22, game: 'Pikmin 4', cond: 'Dandori 100%', count: 30, target: 50, secs: 4100 },
+        { id: 23, game: 'Unpacking', cond: 'Every room', secs: 0 },
+        { id: 24, game: 'A Short Hike', cond: 'Golden feather', secs: 1500, won: true },
+      ]),
+    ];
+  }
+  state = {
+    view: this.props.view || 'workspace', page: 'ws', theme: this.props.theme || 'light', dialect: 'workspace', preset: 'standard',
+    amb: true, resp: true, cel: true, reduced: typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches,
+    speed: 1, tickCues: false, W: Component.seed(), wi: 0, tickN: 0,
+    menuId: null, switcher: false, editId: null, editVal: '', modal: null, toasts: [], tip: null, addVal: '', loading: false, copied: false,
+    conn: 'live', changed: {}, changedTotal: false, upd: Date.now(), ovPage: 0, ovRotate: true, stamp: null, hold: null, cues: [], cheerUntil: 0, ovScale: 0.5,
+  };
+  _id = 100; _tid = 0; _cid = 0; _stg = {}; _lastFlip = Date.now();
+
+  // ---------- helpers ----------
+  root() { return this.rootRef.current; }
+  q(sel) { const r = this.root(); return r ? r.querySelector(sel) : null; }
+  qa(sel) { const r = this.root(); return r ? [...r.querySelectorAll(sel)] : []; }
+  cur() { return this.state.W[this.state.wi]; }
+  sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  stage(s) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && s >= t[i]) i++; return i; }
+  rank(q) { const hold = this.state.hold === q.id; return q.won && !hold ? 2 : q.pinned ? 0 : 1; }
+  sorted(w) { return [...w.ch].sort((a, b) => this.rank(a) - this.rank(b) || a.order - b.order); }
+  live(w) { return !w.paused && w.ch.some((x) => x.running && !x.won); }
+  setCur(fn, cb) { this.setState((s) => { const W = s.W.slice(); W[s.wi] = fn(W[s.wi]); return { W }; }, cb); }
+  patchCh(id, p, cb) { this.setCur((w) => ({ ...w, ch: w.ch.map((x) => (x.id === id ? { ...x, ...(typeof p === 'function' ? p(x) : p) } : x)) }), cb); }
+  rowEls() { return this.qa('[data-row]').map((el) => ['r' + el.dataset.row, el]); }
+  ovEls() { return this.qa('[data-orow]').map((el) => ['o' + el.dataset.orow, el]); }
+  T() { return this.m.T(); }
+  cfg() { const s = this.state; return { amb: s.amb, resp: s.resp, cel: s.cel, reduced: s.reduced, dialect: s.view === 'overlay' ? 'broadcast' : s.dialect, calm: s.view === 'overlay' && s.preset === 'calm', interval: 1000 / s.speed }; }
+  cue(name, id) {
+    if (name === 'tick.soft' && !this.state.tickCues) return;
+    const k = ++this._cid;
+    this.setState((s) => ({ cues: [{ k, name, id }, ...s.cues].slice(0, 7) }));
+  }
+  pct(w) { const n = w.ch.length; return n ? Math.round((w.ch.filter((x) => x.won).length / n) * 100) : 0; }
+
+  // ---------- lifecycle ----------
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({
+        root: () => this.root(),
+        fx: () => this.q('[data-fx]'),
+        fxv: () => (this.state.view === 'overlay' ? this.q('[data-fx]') : this.q('[data-fxv]')),
+        cfg: () => this.cfg(),
+        cue: (n, id) => this.cue(n, id),
+      });
+      this.refreshTokens(); setTimeout(() => this.refreshTokens(), 600); setTimeout(() => this.refreshTokens(), 1600);
+      this.startClock();
+      this._hk = setInterval(() => this.housekeep(), 500);
+      this.forceUpdate();
+    };
+    boot();
+    const r = this.root();
+    this._onClick = (e) => { const b = e.target.closest('[data-press]'); if (b && this.m) { this.m.release(b); this.m.cue('press.pop', 'R02'); } };
+    this._onDown = (e) => {
+      if ((this.state.menuId != null || this.state.switcher) && !e.target.closest('[data-menu],[data-menubtn]')) this.closeMenu();
+    };
+    this._onOver = (e) => {
+      const t = e.target.closest('[data-tip]');
+      if (t === this._tipEl) return;
+      this._tipEl = t; clearTimeout(this._tipT);
+      if (this.state.tip) this.setState({ tip: null });
+      if (t) this._tipT = setTimeout(() => this.showTip(t), 450);
+    };
+    this._onKey = (e) => { if (e.key === 'Escape') { if (this.state.modal) this.closeModal(); else if (this.state.menuId != null || this.state.switcher) this.closeMenu(); } };
+    r.addEventListener('click', this._onClick); r.addEventListener('pointerdown', this._onDown, true); r.addEventListener('pointerover', this._onOver); window.addEventListener('keydown', this._onKey);
+    this._ro = new ResizeObserver(() => { const el = this.ovRef.current; if (el) this.setState({ ovScale: el.clientWidth / 1920 }); });
+    this._mro = new ResizeObserver(() => { const el = this.mainRef.current; if (el && Math.abs((this.state.stageW || 0) - el.clientWidth) > 4) this.setState({ stageW: el.clientWidth }); });
+    if (this.mainRef.current) this._mro.observe(this.mainRef.current);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._bt); clearInterval(this._iv); clearInterval(this._hk); clearTimeout(this._tipT); this._ro && this._ro.disconnect(); this._mro && this._mro.disconnect();
+    const r = this.root(); if (r) { r.removeEventListener('click', this._onClick); r.removeEventListener('pointerdown', this._onDown, true); r.removeEventListener('pointerover', this._onOver); }
+    window.removeEventListener('keydown', this._onKey);
+  }
+  componentDidUpdate(pp, ps) {
+    if (!this.m) return;
+    const s = this.state;
+    if (this.ovRef.current && this._roEl !== this.ovRef.current) { this._roEl = this.ovRef.current; this._ro.disconnect(); this._ro.observe(this._roEl); }
+    const key = [s.theme, s.dialect, s.preset, s.reduced, s.view, s.amb, s.resp, s.cel].join('|');
+    if (key !== this._key) { this._key = key; this.refreshTokens(); this.m.syncLoops(true); }
+    else this.m.syncLoops(false);
+    if (s.speed !== this._lastSpeed) { if (this._lastSpeed != null) this.startClock(); this._lastSpeed = s.speed; }
+    if (s.tickN !== this._lastTick) { this._lastTick = s.tickN; this.runTick(); }
+  }
+  refreshTokens() { const el = this.mainRef.current; if (this.m && el) { this.m.refresh(el); this.m.syncLoops(true); } }
+  startClock() { clearInterval(this._iv); this._iv = setInterval(() => this.tick(), 1000 / this.state.speed); }
+  housekeep() {
+    const s = this.state;
+    if (s.view === 'overlay' && s.ovRotate && !s.stamp && Date.now() - this._lastFlip > this.T().D.page && !this._flipping) {
+      const pages = Math.ceil(this.cur().ch.length / 5); if (pages > 1) this.ovFlip((s.ovPage + 1) % pages);
+    }
+    if ((s.cheerUntil && Date.now() > s.cheerUntil) || (s.dialect === 'broadcast' && !this.live(this.cur()))) { if (s.cheerUntil && Date.now() > s.cheerUntil) this.setState({ cheerUntil: 0 }); else this.forceUpdate(); }
+  }
+  tick() {
+    const w = this.cur(); if (!this.live(w)) return;
+    this.setState((s) => {
+      const W = s.W.slice(), c = W[s.wi];
+      W[s.wi] = { ...c, total: c.total + 1, ch: c.ch.map((x) => (x.running && !x.won ? { ...x, secs: x.secs + 1 } : x)) };
+      return { W, tickN: s.tickN + 1 };
+    });
+  }
+  runTick() {
+    const m = this.m, w = this.cur();
+    this.qa('[data-timer]').forEach((t) => {
+      const d = [...t.querySelectorAll('[data-chg="1"]')];
+      if (d.length) m.tick(d, t.dataset.kind, t.dataset.beat, t.closest('[data-well]'));
+    });
+    const tb = this.q('[data-timer="total"]'); const mb = tb && tb.dataset.beat !== 'sec';
+    this.qa('[data-fbeat]').forEach((el) => { if (el.dataset.fbeat !== '') m.beat(el, +el.dataset.fbeat, mb); });
+    this.qa('[data-nbeat]').forEach((el) => { if (el.dataset.nbeat !== '') m.beat(el, +el.dataset.nbeat, mb); });
+    const nini = this.q('[data-nini]');
+    if (tb && tb.dataset.beat === 'hour' && nini) m.niniHop(nini);
+    w.ch.forEach((x) => {
+      if (!x.running || x.won) return;
+      const st = this.stage(x.secs);
+      if (this._stg[x.id] != null && this._stg[x.id] !== st) m.stageChange(this.q(`[data-face="${x.id}"]`));
+      this._stg[x.id] = st;
+    });
+    m.cue('tick.soft', 'T01');
+  }
+
+  // ---------- tooltip / menus / modal / toast ----------
+  showTip(t) {
+    const main = this.mainRef.current; if (!main || !t.isConnected) return;
+    const mr = main.getBoundingClientRect(), r = t.getBoundingClientRect();
+    this.setState({ tip: { text: t.dataset.tip, x: r.left + r.width / 2 - mr.left, y: r.top - mr.top - 10 } }, () => this.m.tipIn(this.q('[data-tooltip]')));
+  }
+  openMenu(id) {
+    if (this.state.menuId === id) return this.closeMenu();
+    this.setState({ menuId: id, switcher: false }, () => this.m.menuIn(this.q('[data-menu]')));
+  }
+  async closeMenu() { const el = this.q('[data-menu]'); if (el) await this.m.menuOut(el); this.setState({ menuId: null, switcher: false }); }
+  toggleSwitcher() { if (this.state.switcher) return this.closeMenu(); this.setState({ switcher: true, menuId: null }, () => this.m.menuIn(this.q('[data-menu]'))); }
+  toast(text, kind = 'info') {
+    const id = ++this._tid;
+    this.setState((s) => ({ toasts: [...s.toasts, { id, text, kind }].slice(-3) }), () => this.m.toastIn(this.q(`[data-toast="${id}"]`), kind === 'error'));
+    if (kind !== 'error') setTimeout(() => this.dismiss(id), 3200);
+  }
+  async dismiss(id) {
+    const el = this.q(`[data-toast="${id}"]`); if (!el) return;
+    await this.m.toastOut(el);
+    const els = () => this.qa('[data-toast]').map((e) => ['t' + e.dataset.toast, e]);
+    const prev = this.m.capture(els());
+    this.setState((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }), () => { els().forEach(([, e]) => e.getAnimations().forEach((a) => a.cancel())); this.m.flip(prev, els()); });
+  }
+  askDelete(id) {
+    if (id == null) { const l = this.sorted(this.cur()).filter((x) => !x.won); id = (l[l.length - 1] || {}).id; }
+    if (id == null) return;
+    this.setState({ modal: { id }, menuId: null }, () => this.m.modalIn(this.q('[data-scrim]'), this.q('[data-mcard]')));
+  }
+  async closeModal() { await this.m.modalOut(this.q('[data-scrim]'), this.q('[data-mcard]')); this.setState({ modal: null }); }
+  async confirmDelete() {
+    const id = this.state.modal && this.state.modal.id;
+    await this.closeModal();
+    const el = this.q(`[data-row="${id}"]`);
+    if (el) await this.m.exitRow(el);
+    const prev = this.m.capture(this.rowEls());
+    this.setCur((w) => ({ ...w, ch: w.ch.filter((x) => x.id !== id) }), () => { this.rowEls().forEach(([, e]) => e.getAnimations().forEach((a) => a.cancel())); this.m.flip(prev, this.rowEls()); });
+  }
+
+  // ---------- views ----------
+  async ensure(view, page = 'ws', dialect) {
+    const s = this.state, p = {};
+    if (s.view !== view) p.view = view;
+    if (view === 'workspace' && s.page !== page) p.page = page;
+    if (dialect && s.dialect !== dialect) p.dialect = dialect;
+    if (!Object.keys(p).length) return;
+    await new Promise((r) => this.setState({ ...p, menuId: null, switcher: false, editId: null }, r));
+    this.afterView(); await this.sleep(this.state.reduced ? 50 : 500);
+  }
+  afterView() { if (this.state.view === 'overlay') { this._lastFlip = Date.now(); this.m.cardEnter(this.q('[data-ovcard]')); } else this.m.pageIn(this.q('[data-page]'), 1); }
+  setView(v) { if (v === this.state.view) return; this.setState({ view: v, menuId: null, switcher: false, tip: null }, () => this.afterView()); }
+  async goPage(p) {
+    if (this.state.view !== 'workspace') return this.ensure('workspace', p);
+    const dir = p === 'log' ? 1 : -1; this.m.cue('page.whoosh', 'R27');
+    await this.m.pageOut(this.q('[data-page]'), dir);
+    this.setState({ page: p, menuId: null }, () => { this.m.pageIn(this.q('[data-page]'), dir); if (this.state.dialect === 'showcase') this.qa('[data-amb="hop"]').forEach((el, i) => this.m.play('resp', el, [{ transform: 'none' }, { transform: 'translateY(-18px)', offset: 0.4 }, { transform: 'none' }], { duration: 600, delay: i * 60, easing: this.T().E.bouncy })); });
+  }
+  switchTheme(e) {
+    const next = this.state.theme === 'dark' ? 'light' : 'dark';
+    let x = innerWidth / 2, y = 40;
+    if (e && e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top + r.height / 2; }
+    const color = getComputedStyle(this.root()).getPropertyValue(next === 'dark' ? '--p-night-900' : '--p-pink-100').trim() || (next === 'dark' ? '#231520' : '#FFE3EC');
+    this.m.themeWipe(this.q('[data-fxv]'), x, y, color, () => { this.setState({ theme: next }); this.m.cue('theme.swap', 'R28'); });
+  }
+  async switchWinnie(i) {
+    if (this.state.switcher) await this.closeMenu();
+    if (i === this.state.wi) return;
+    this.m.cue('winnie.swap', 'R26');
+    await this.m.stagOut(this.qa('[data-stag]'));
+    this.setState({ wi: i, menuId: null, editId: null, ovPage: 0 }, () => { this.m.stagIn(this.qa('[data-stag]')); this.m.jelly('resp', this.q('[data-hero]'), 0.4); });
+  }
+  async reload() {
+    await this.ensure('workspace');
+    this.setState({ loading: true });
+    await this.sleep(1600);
+    this.setState({ loading: false }, () => this.m.stagIn(this.qa('[data-row]')));
+  }
+  copyLink() {
+    if (this.state.dialect === 'broadcast') this.setState({ dialect: 'workspace' });
+    this.setState({ copied: true }, () => {
+      const b = this.q('[data-share]'); this.m.morph(this.q('[data-icon="share"]'));
+      this.m.burst('resp', b, { n: 6, shapes: ['spark'], colors: ['#FFC23D', '#FFFFFF', '#CDB8FF'], size: 14, spread: 80, up: false, gravity: 0 });
+      this.m.cue('copy.ok', 'R31');
+    });
+    clearTimeout(this._cp); this._cp = setTimeout(() => this.setState({ copied: false }), 2000);
+  }
+
+  // ---------- rows ----------
+  play(id) {
+    const q = this.cur().ch.find((x) => x.id === id); if (!q || q.won) return;
+    const on = !q.running || this.cur().paused;
+    this.setCur((w) => ({ ...w, paused: on ? false : w.paused, ch: w.ch.map((x) => (x.id === id ? { ...x, running: on } : x)) }), () => {
+      this.m.morph(this.q(`[data-icon="p${id}"]`));
+      if (on) { this.m.ringIn(this.q(`[data-ring="${id}"]`)); this.m.jelly('resp', this.q(`[data-face="${id}"]`), 0.6); }
+      this.m.cue(on ? 'timer.start' : 'timer.pause', 'R25');
+    });
+  }
+  toggleTotal() {
+    const w = this.cur(), live = this.live(w);
+    this.setCur((c) => {
+      if (live) return { ...c, paused: true };
+      if (c.ch.some((x) => x.running && !x.won)) return { ...c, paused: false };
+      const first = this.sorted(c).find((x) => !x.won);
+      return first ? { ...c, paused: false, ch: c.ch.map((x) => (x.id === first.id ? { ...x, running: true } : x)) } : c;
+    }, () => {
+      this.m.morph(this.q('[data-icon="total"]'));
+      const d = this.qa('[data-timer="total"] > span');
+      if (live) { this.m.droop(d); this.m.cue('timer.pause', 'R25'); } else { this.m.wave(d); this.qa('[data-ring]').forEach((r) => this.m.ringIn(r)); this.m.cue('timer.start', 'R25'); }
+    });
+  }
+  step(id, d) {
+    const q = this.cur().ch.find((x) => x.id === id); if (!q || q.target == null) return;
+    const n = Math.max(0, Math.min(q.target, q.count + d)); if (n === q.count) return this.m.shake(this.q(`[data-cwell="${id}"]`));
+    this.patchCh(id, { count: n }, () => {
+      this.m.roll(this.q(`[data-count="${id}"]`), d > 0 ? 1 : -1); this.m.cue('counter.step', 'R23');
+      if (n === q.target) this.m.full(this.q(`[data-cwell="${id}"]`));
+    });
+  }
+  startEdit(id) {
+    if (this.state.dialect === 'broadcast') return;
+    const q = this.cur().ch.find((x) => x.id === id); if (!q) return;
+    this.setState({ editId: id, editVal: q.game, menuId: null }, () => { const i = this.q('[data-edit]'); if (i) { i.focus(); i.select(); this.m.editIn(i); } });
+  }
+  saveEdit(cancel) {
+    const id = this.state.editId; if (id == null) return;
+    const v = this.state.editVal.trim();
+    if (cancel || !v) return this.setState({ editId: null });
+    this.setState({ editId: null }); this.patchCh(id, { game: v }, () => { this.m.hopText(this.q(`[data-name="${id}"]`)); this.m.cue('edit.save', 'R12'); });
+  }
+  addChallenge() {
+    if (this.state.dialect === 'broadcast') this.setState({ dialect: 'workspace' });
+    const names = ['Katamari Damacy', 'Ori and the Will of the Wisps', 'Sekiro', 'Spelunky 2', 'Kirby Forgotten Land', 'Balatro'];
+    const name = this.state.addVal.trim() || names[this._id % names.length];
+    const id = ++this._id, prev = this.m.capture(this.rowEls());
+    this.setState({ addVal: '' });
+    this.setCur((w) => ({ ...w, ch: [...w.ch, { id, game: name, cond: '', secs: 0, count: null, target: null, pinned: false, running: false, won: false, order: Math.min(...w.ch.map((x) => x.order), 0) - 1 }] }), () => {
+      this.m.flip(prev, this.rowEls(), 1, (k, el) => { if (k === 'r' + id) { this.m.enterRow(el); return true; } });
+    });
+  }
+  duplicate(id) {
+    const w = this.cur(); if (id == null) id = (this.sorted(w).find((x) => !x.won && !x.pinned) || {}).id;
+    const q = w.ch.find((x) => x.id === id); if (!q) return;
+    const nid = ++this._id, prev = this.m.capture(this.rowEls()), orig = this.q(`[data-row="${id}"]`);
+    this.setState({ menuId: null });
+    this.setCur((c) => ({ ...c, ch: [...c.ch.map((x) => (x.order > q.order ? { ...x, order: x.order + 1 } : x)), { ...q, id: nid, game: q.game + ' (copy)', secs: 0, running: false, won: false, pinned: false, count: q.target != null ? 0 : null, order: q.order + 1 }] }), () => {
+      const o = this.q(`[data-row="${id}"]`);
+      this.m.jelly('resp', o && o.querySelector('[data-mid]'), 0.5);
+      this.m.flip(prev, this.rowEls(), 1, (k, el) => { if (k === 'r' + nid) { this.m.clone(el, o ? el.getBoundingClientRect().top - o.getBoundingClientRect().top : 80); return true; } });
+    });
+  }
+  togglePin(id) {
+    const w = this.cur(); if (id == null) { const l = this.sorted(w).filter((x) => !x.won); id = (l[l.length - 1] || {}).id; }
+    const q = w.ch.find((x) => x.id === id); if (!q || q.won) return;
+    const prev = this.m.capture(this.rowEls());
+    this.setState({ menuId: null });
+    this.patchCh(id, { pinned: !q.pinned }, () => {
+      this.m.flip(prev, this.rowEls(), 1, (k, el, dy) => { if (k === 'r' + id && Math.abs(dy) > 1) { this.m.arc(el, dy); return true; } });
+      if (!q.pinned) this.m.tape(this.q(`[data-tape="${id}"]`));
+    });
+  }
+  resetTimer(id) {
+    this.setState({ menuId: null });
+    this.patchCh(id, { secs: 0, running: false }, () => {
+      const t = this.q(`[data-row="${id}"] [data-timer]`);
+      if (t) this.m.tick([...t.children], 'row', 'min');
+      this.m.jelly('resp', this.q(`[data-face="${id}"]`), 0.7); this.m.cue('timer.reset', 'R34');
+    });
+  }
+  async win(id) {
+    const w = this.cur(), q = w.ch.find((x) => x.id === id); if (!q) return;
+    const m = this.m, prevPct = this.pct(w);
+    if (q.won) {
+      const prev = m.capture(this.rowEls());
+      return this.patchCh(id, { won: false }, () => { m.flip(prev, this.rowEls()); this.animProgress(prevPct); });
+    }
+    const out = this.q(`[data-row="${id}"]`);
+    m.won(out && out.querySelector('[data-mid]'), this.q(`[data-face="${id}"]`), false);
+    if (this.q('[data-nini]')) { this.setState({ cheerUntil: Date.now() + 1800 }); m.niniHop(this.q('[data-nini]')); }
+    await m.wait(m.on('cel') ? this.T().D.jelly * 0.9 : 0);
+    const prev = m.capture(this.rowEls());
+    let fire = false;
+    this.setCur((c) => {
+      const ch = c.ch.map((x) => (x.id === id ? { ...x, won: true, running: false } : x));
+      const all = ch.every((x) => x.won); fire = all && !c.celebrated;
+      return { ...c, ch, celebrated: c.celebrated || all };
+    }, () => {
+      let moved = false;
+      const settle = (el) => { m.land(el.querySelector('[data-mid]')); m.cue('won.land', 'R17'); m.sticker(el.querySelector('[data-sticker]')); };
+      m.flip(prev, this.rowEls(), 1, (k, el, dy) => { if (k === 'r' + id) { if (Math.abs(dy) > 1 && m.on('resp')) { moved = true; m.arc(el, dy, () => settle(el)); } else settle(el); return true; } });
+      this.animProgress(prevPct);
+      if (fire) setTimeout(() => this.celebrate(), moved ? this.T().D.travel * 1.3 : 0);
+    });
+  }
+  animProgress(prevPct) {
+    const now = this.pct(this.cur());
+    this.m.progress(this.q('[data-fill]'), -(100 - prevPct), -(100 - now));
+    this.m.pop(this.q('[data-pct]')); this.qa('[data-wonpill]').forEach((e) => this.m.pop(e));
+  }
+  celebrate() {
+    const m = this.m, sc = this.state.dialect === 'showcase';
+    m.unfurl(this.q('[data-banner]'));
+    m.rain('cel', { k: sc ? 1.5 : 1 });
+    if (sc) { setTimeout(() => m.rain('cel'), 900); setTimeout(() => m.rain('cel'), 1800); }
+    const nini = this.q('[data-nini]');
+    if (nini) { m.niniJump(nini); m.burst('cel', nini, { n: 50, size: 30, spread: 520, cone: 3, gravity: 160, dur: this.T().D.celebrate }); m.cue('complete.fanfare', 'C02', 1100 * 0.45); }
+    else { m.wave(this.qa('[data-timer="total"] > span'), 1.4); m.cue('shared.complete', 'C05', this.T().D.land * 0.4); }
+    m.flash(this.q('[data-track]')); m.jelly('cel', this.q('[data-well]'), 0.6);
+  }
+  async completeAll(mode) {
+    if (mode === 'ov') await this.ensure('overlay');
+    else await this.ensure('workspace', 'ws', mode === 'shared' ? 'broadcast' : this.state.dialect === 'broadcast' ? 'workspace' : undefined);
+    const m = this.m, w = this.cur(), left = this.sorted(w).filter((x) => !x.won);
+    if (!left.length) return this.toast('Already Complete. Reset the demo to replay it.');
+    const ov = mode === 'ov';
+    for (const x of left) {
+      const el = ov ? this.q(`[data-orow="${x.id}"]`) : this.q(`[data-row="${x.id}"] [data-mid]`);
+      if (el) { m.jelly('cel', el, 0.6); m.burst('cel', el.querySelector('[data-face]') || el, { k: 0.35, spread: 160 }); }
+      await this.sleep(m.on('cel') ? 160 : 0);
+    }
+    await m.wait(400);
+    const prevPct = this.pct(w), els = () => (ov ? this.ovEls() : this.rowEls()), prev = m.capture(els()), fire = !w.celebrated;
+    this.setCur((c) => ({ ...c, paused: false, celebrated: true, ch: c.ch.map((x) => ({ ...x, won: true, running: false })) }), () => {
+      m.flip(prev, els(), ov ? this.state.ovScale : 1);
+      if (!ov) { this.animProgress(prevPct); this.qa('[data-sticker]').forEach((s, i) => m.sticker(s, i * 60)); }
+      if (fire) ov ? this.ovCelebrate() : setTimeout(() => this.celebrate(), this.T().D.travel);
+    });
+  }
+  async reopen() {
+    await this.ensure('workspace');
+    const back = this.state.wi; await this.switchWinnie(1 - back); await this.sleep(this.state.reduced ? 300 : 900); await this.switchWinnie(back);
+    this.toast(this.cur().celebrated ? 'Reopened. Complete stays, nothing replays.' : 'Reopened. Celebrations only fire on the transition.');
+  }
+  resetDemo() {
+    this._stg = {};
+    this.setState({ W: Component.seed(), wi: 0, menuId: null, switcher: false, editId: null, modal: null, stamp: null, hold: null, changed: {}, changedTotal: false, conn: 'live', ovPage: 0, loading: false }, () => { this.m.stagIn(this.qa('[data-stag]')); this.m.mute(this.q('[data-content]'), false); });
+  }
+  jump(mod) {
+    const w = this.cur(); if (!this.live(w)) this.toggleTotal();
+    const f = (s) => s - (s % mod) + mod - 3;
+    this.setCur((c) => ({ ...c, total: f(c.total), ch: c.ch.map((x) => (x.running && !x.won ? { ...x, secs: f(x.secs) } : x)) }));
+  }
+  fatigue() {
+    const w = this.cur(); if (!this.live(w)) this.toggleTotal();
+    setTimeout(() => this.setCur((c) => ({ ...c, total: c.total + 1200, ch: c.ch.map((x) => (x.running && !x.won ? { ...x, secs: x.secs + 1200 } : x)) })), 50);
+  }
+
+  // ---------- drag ----------
+  gripDown(e, id) {
+    if (e.button) return; e.preventDefault();
+    this.dragStart(id, e.clientY);
+    const mv = (ev) => this.dragMove(ev.clientY), up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); this.dragEnd(false); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up);
+  }
+  dragStart(id, y) {
+    const outs = this.qa('[data-list] > [data-row]'), from = outs.findIndex((el) => el.dataset.row == id); if (from < 0) return;
+    const pitch = outs.length > 1 ? outs[1].getBoundingClientRect().top - outs[0].getBoundingClientRect().top : 90;
+    const ranks = this.sorted(this.cur()).map((x) => this.rank(x)), el = outs[from], mid = el.querySelector('[data-mid]');
+    el.style.zIndex = 30; this.setState({ menuId: null, tip: null });
+    this._drag = { id, y0: y, from, to: from, outs, pitch, el, mid, ranks, dy: 0, pick: this.m.pick(mid) };
+    this.m.cue('drag.lift', 'R19');
+  }
+  dragMove(y) {
+    const d = this._drag; if (!d) return;
+    d.dy = y - d.y0; d.el.style.transform = `translateY(${d.dy}px)`;
+    const to = Math.max(0, Math.min(d.outs.length - 1, d.from + Math.round(d.dy / d.pitch)));
+    if (to === d.to) return;
+    d.to = to; this.m.cue('drag.over', 'R20');
+    d.outs.forEach((el, i) => {
+      if (el === d.el) return;
+      let t = 0; if (d.from < to && i > d.from && i <= to) t = -d.pitch; if (to < d.from && i >= to && i < d.from) t = d.pitch;
+      el.style.transition = 'transform var(--dur-base) var(--spring-snappy)'; el.style.transform = t ? `translateY(${t}px)` : '';
+    });
+  }
+  dragEnd(fail) {
+    const d = this._drag; if (!d) return; this._drag = null;
+    if (d.pick) d.pick.cancel();
+    const clean = () => d.outs.forEach((el) => { el.style.transition = 'none'; el.style.transform = ''; el.style.zIndex = ''; requestAnimationFrame(() => (el.style.transition = '')); });
+    const sameGroup = d.ranks[d.to] === d.ranks[d.from];
+    if (d.to === d.from && !fail) { clean(); this.m.play('resp', d.el, [{ transform: `translateY(${d.dy}px)` }, { transform: 'none' }], { duration: this.T().D.travel, easing: this.T().E.snappy }); this.m.drop(d.mid); return; }
+    if (fail || !sameGroup) {
+      d.outs.forEach((el) => { if (el !== d.el) el.style.transform = ''; });
+      d.el.style.transform = ''; d.el.style.zIndex = 30;
+      this.m.revert(d.el, d.mid, d.dy);
+      setTimeout(() => { d.el.style.zIndex = ''; d.outs.forEach((el) => (el.style.transition = '')); }, this.T().D.travel + 400);
+      this.toast(fail ? 'Couldn’t save the new order. It’s back where it was.' : (d.ranks[d.to] === 2 ? 'Won Challenges stay in the Won group.' : 'Pinned Challenges stay on top.'), 'error');
+      return;
+    }
+    const prev = this.m.capture(this.rowEls()); clean();
+    const ids = this.sorted(this.cur()).map((x) => x.id), [mv] = ids.splice(d.from, 1); ids.splice(d.to, 0, mv);
+    this.setCur((w) => ({ ...w, ch: w.ch.map((x) => ({ ...x, order: ids.indexOf(x.id) })) }), () => {
+      this.m.flip(prev, this.rowEls());
+      const el = this.q(`[data-row="${d.id}"] [data-mid]`); this.m.drop(el); this.m.cue('drag.drop', 'R21');
+    });
+  }
+  async dragDemo(fail) {
+    await this.ensure('workspace', 'ws', this.state.dialect === 'broadcast' ? 'workspace' : undefined);
+    const l = this.sorted(this.cur()), i = l.findIndex((x) => !x.pinned && !x.won); if (i < 0) return;
+    const id = l[i].id; this.dragStart(id, 0); const d = this._drag; if (!d) return;
+    const dist = d.pitch * 2.1, t0 = performance.now(), dur = this.state.reduced ? 1 : 900;
+    await this.sleep(this.state.reduced ? 0 : 260);
+    await new Promise((res) => { const f = (t) => { const k = Math.min(1, (t - t0) / dur), e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2; this.dragMove(e * dist); k < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+    await this.sleep(this.state.reduced ? 0 : 200); this.dragEnd(fail);
+  }
+
+  // ---------- broadcast ----------
+  async sharedUpdate() {
+    await this.ensure('workspace', 'ws', 'broadcast');
+    const w = this.cur(); let ids = {};
+    const run = w.ch.filter((x) => x.running && !x.won);
+    const ctr = w.ch.find((x) => x.target != null && x.count < x.target && !x.won);
+    run.forEach((x) => (ids[x.id] = 1)); if (ctr) ids[ctr.id] = 1;
+    const prevCount = ctr && ctr.count;
+    this.setState((s) => {
+      const W = s.W.slice(), c = W[s.wi];
+      W[s.wi] = { ...c, total: c.total + 37, ch: c.ch.map((x) => (x.running && !x.won ? { ...x, secs: x.secs + 37 } : ctr && x.id === ctr.id ? { ...x, count: Math.min(x.target, x.count + 2) } : x)) };
+      return { W, changed: ids, changedTotal: true, upd: Date.now() };
+    }, () => {
+      this.qa('[data-hl]').forEach((h) => this.m.highlight(h));
+      this.qa('[data-timer]').forEach((t) => { const r = t.closest('[data-row]'); if (!r || ids[r.dataset.row] || t.dataset.kind === 'total') this.m.tick([...t.children], t.dataset.kind, 'min', t.closest('[data-well]')); });
+      if (ctr) { this.m.roll(this.q(`[data-count="${ctr.id}"]`), 1); if (prevCount + 2 >= ctr.target) this.m.full(this.q(`[data-cwell="${ctr.id}"]`)); }
+      this.m.pop(this.q('[data-livepill]'), 1.15);
+      this.m.cue('shared.update', 'B01');
+    });
+    clearTimeout(this._hlT);
+    if (!this.state.reduced) this._hlT = setTimeout(() => this.setState({ changed: {}, changedTotal: false }), this.T().D.highlight);
+  }
+  async toggleConn() {
+    const s = this.state;
+    if (s.view === 'workspace') await this.ensure('workspace', 'ws', 'broadcast');
+    if (this.state.conn === 'live') {
+      this.setState({ conn: 'reconnecting', lostAt: Date.now() }, () => {
+        this.m.bannerIn(this.q('[data-rbanner]')); this.m.mute(this.q('[data-content]'), true);
+        const chip = this.q('[data-ovchip]'); if (chip) this.m.pop(chip, 1.4);
+        this.m.cue('reconnect.lost', 'B02');
+      });
+    } else if (this.state.conn === 'reconnecting') {
+      this.setState({ conn: 'back' }, async () => {
+        this.m.morph(this.q('[data-ricon]')); this.m.mute(this.q('[data-content]'), false); this.m.cue('reconnect.found', 'B03');
+        await this.sleep(1600);
+        await this.m.bannerOut(this.q('[data-rbanner]'));
+        this.setState({ conn: 'live' });
+        if (this.state.view === 'workspace') this.sharedUpdate();
+      });
+    }
+  }
+  async ovFlip(to) {
+    if (this._flipping) return; this._flipping = true; this._lastFlip = Date.now();
+    this.m.cue('page.flip', 'B04');
+    await this.m.pageFlipOut(this.qa('[data-orow]'));
+    this.setState({ ovPage: to }, () => {
+      this.m.pageFlipIn(this.qa('[data-orow]')); this.m.pop(this.q(`[data-dot="${to}"]`), 1.6);
+      this._flipping = false; this._lastFlip = Date.now();
+    });
+  }
+  async nextPage() { await this.ensure('overlay'); const pages = Math.ceil(this.cur().ch.length / 5); if (pages < 2) return this.toast('One page only. Add Challenges to see the flip.'); this.ovFlip((this.state.ovPage + 1) % pages); }
+  async ovWon() {
+    await this.ensure('overlay');
+    const m = this.m, w = this.cur(), l = this.sorted(w), q = l.find((x) => x.running && !x.won) || l.find((x) => !x.won);
+    if (!q) return this.toast('Every Challenge is Won. Reset the demo to replay.');
+    const pg = Math.floor(l.indexOf(q) / 5);
+    if (pg !== this.state.ovPage) { await this.ovFlip(pg); await this.sleep(this.state.reduced ? 0 : this.T().D.land + 200); }
+    const el = this.q(`[data-orow="${q.id}"]`), card = this.q('[data-ovcard]');
+    m.cardHop(card); m.won(el, el && el.querySelector('[data-face]'), true);
+    let fire = false;
+    this.setState((s) => {
+      const W = s.W.slice(), c = W[s.wi], ch = c.ch.map((x) => (x.id === q.id ? { ...x, won: true, running: false } : x)), all = ch.every((x) => x.won);
+      fire = all && !c.celebrated; W[s.wi] = { ...c, ch, celebrated: c.celebrated || all };
+      return { W, hold: q.id, stamp: { game: q.game } };
+    }, () => { m.stampIn(this.q('[data-stamp]')); this.qa('[data-wonpill]').forEach((e) => m.pop(e)); });
+    await this.sleep(this.state.reduced ? 2200 : this.T().D.stamp + this.T().D.cheer);
+    await m.stampOut(this.q('[data-stamp]'));
+    const prev = m.capture(this.ovEls());
+    this.setState({ stamp: null, hold: null }, () => { m.flip(prev, this.ovEls(), this.state.ovScale); if (fire) this.ovCelebrate(); });
+  }
+  ovCelebrate() {
+    const m = this.m, card = this.q('[data-ovcard]'), calm = this.cfg().calm;
+    m.jelly('cel', card, calm ? 0.3 : 1); m.bannerDrop(this.q('[data-ovbanner]'));
+    if (calm) m.burst('cel', card, { oy: 0, n: 10, size: 22, spread: 200 });
+    else {
+      m.burst('cel', card, { ox: 0, oy: 0, angle: -2.3, cone: 1.1, spread: 560, size: 30 });
+      m.burst('cel', card, { ox: 1, oy: 0, angle: -0.85, cone: 1.1, spread: 560, size: 30 });
+      m.rain('cel', { k: 1.5, size: 34 });
+    }
+    m.cue('overlay.complete', 'C03', this.T().D.land * 0.9);
+  }
+
+  // ---------- view model ----------
+  digits(str, prev) {
+    const off = prev ? prev.length - str.length : 0, n = str.length;
+    return str.split('').map((c, i) => ({ k: i, c, pos: n - 1 - i, chg: prev && prev[i + off] !== c ? '1' : '0', w: c === ':' ? 'var(--timer-colon-w)' : 'var(--timer-digit-w)', wr: c === ':' ? '0.34em' : '0.66em', col: c === ':' ? 'var(--color-text-muted)' : 'inherit' }));
+  }
+  renderVals() {
+    const s = this.state, w = s.W[s.wi], dark = s.theme === 'dark', m = this.m;
+    const p2 = (n) => String(n).padStart(2, '0');
+    const fmt = (x) => (!x ? '00:00' : Math.floor(x / 3600) + ':' + p2(Math.floor((x % 3600) / 60)) + ':' + p2(x % 60));
+    const fmtT = (x) => { const h = Math.floor(x / 3600), mm = Math.floor((x % 3600) / 60), ss = x % 60; return h ? h + ':' + p2(mm) + ':' + p2(ss) : p2(mm) + ':' + p2(ss); };
+    const beat = (x) => (x % 3600 === 0 ? 'hour' : x % 60 === 0 ? 'min' : 'sec');
+    const isOv = s.view === 'overlay', shared = !isOv && s.dialect === 'broadcast', showcase = !isOv && s.dialect === 'showcase';
+    const live = this.live(w), list = this.sorted(w), won = w.ch.filter((x) => x.won).length, n = w.ch.length, pct = this.pct(w), complete = n > 0 && won === n;
+    const cheer = s.cheerUntil && Date.now() < s.cheerUntil;
+    const sel = (on) => ({ bg: on ? 'var(--color-accent)' : 'transparent', c: on ? 'var(--color-on-accent)' : 'var(--color-text)', sh: on ? '0 3px 0 -1px var(--color-accent-lip)' : 'none' });
+    const seg = (key, opts, fn) => opts.map(([v, label], k) => ({ k, label, sel: s[key] === v, ...sel(s[key] === v), on: fn ? () => fn(v) : () => this.setState({ [key]: v }) }));
+    const candy = [['#FF6FAE', '#B0175A'], ['#FFB547', '#B86A12'], ['#FFD84D', '#B88A00'], ['#4FD18B', '#1F8A52'], ['#5CB8FF', '#1F6FB8'], ['#A985FF', '#6A44C9'], ['#FF6FAE', '#B0175A']], rot = [-5, 3, -2, 5, -3, 2, -4];
+    const letters = 'winnies'.split('').map((ch, i) => ({ k: i, ch, c: candy[i][0], rot: rot[i] + 'deg', ad: String(i * 110), sh: `0 2px 0 ${candy[i][1]},0 4px 0 ${candy[i][1]},0 5px 0 ${candy[i][1]},0 9px 10px rgba(0,0,0,.2)`, shSm: `0 2px 0 ${candy[i][1]},0 3px 0 ${candy[i][1]},0 6px 8px rgba(0,0,0,.18)` }));
+    const st = (x) => this.stage(x.secs);
+    const rowVM = (x) => {
+      const running = x.running && !x.won && live, status = x.won ? 'won' : running ? 'running' : 'idle', t = fmt(x.secs);
+      const menuItems = [
+        ['edit', 'Edit inline', () => this.startEdit(x.id)], ['push_pin', x.pinned ? 'Unpin' : 'Pin', () => this.togglePin(x.id)],
+        ['control_point_duplicate', 'Duplicate', () => this.duplicate(x.id)], ['restart_alt', 'Reset timer', () => this.resetTimer(x.id)], ['delete', 'Delete', () => this.askDelete(x.id)],
+      ].map(([icon, label, on], k) => ({ k, icon, label, on, c: k === 4 ? 'var(--color-danger-text)' : 'var(--color-text)' }));
+      return {
+        id: x.id, game: x.game, cond: x.cond, status, running, won: x.won, pinned: x.pinned && !x.won, untouched: !x.secs, secs: x.secs,
+        bg: x.won ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface)',
+        shadow: x.won ? '0 5px 0 -2px var(--color-won-surface-lip)' : running ? '0 0 0 var(--row-ring) var(--color-running-ring),0 var(--lip-lg) 0 0 var(--color-running-lip),0 20px 30px -12px var(--color-drop)' : 'var(--shadow-raised)',
+        timeC: x.won ? 'var(--color-won-text)' : running ? 'var(--color-running-text)' : !x.secs ? 'var(--color-text-muted)' : 'var(--color-text)',
+        td: this.digits(t, running ? fmt(x.secs - 1) : null), tbeat: beat(x.secs), fbeat: running ? String(st(x)) : '',
+        hasCounter: x.target != null, count: x.count, target: x.target, countStr: x.target != null ? x.count + ' / ' + x.target : '',
+        cBg: x.target != null && x.count >= x.target ? 'var(--color-won)' : 'var(--color-surface-sunken)', cC: x.target != null && x.count >= x.target ? 'var(--color-on-accent)' : 'var(--color-text)',
+        playIcon: running ? 'pause' : 'play_arrow', playLabel: running ? 'Pause' : 'Start', playBg: running ? 'var(--color-accent)' : 'var(--color-control)', playLip: running ? 'var(--color-accent-lip)' : 'var(--color-control-lip)', playC: running ? 'var(--color-on-accent)' : 'var(--color-text)', playOp: x.won ? 0.35 : 1,
+        winBg: x.won ? 'var(--color-won)' : 'var(--color-control)', winLip: x.won ? 'var(--color-won-lip)' : 'var(--color-control-lip)', winC: x.won ? 'var(--color-on-accent)' : 'var(--color-text-muted)', winLabel: x.won ? 'Won' : 'Mark Won',
+        moreBg: s.menuId === x.id ? 'var(--color-surface-sunken)' : 'transparent', menu: s.menuId === x.id, menuItems, z: s.menuId === x.id ? 20 : 1,
+        editing: s.editId === x.id, notEditing: s.editId !== x.id, changed: !!s.changed[x.id] && shared,
+        bob: showcase ? 'bob' : '', ad: String(list.indexOf(x) * 110), sheen: showcase && running,
+        ovBg: x.won ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface-sunken)', ovSh: 'none',
+        onPlay: () => this.play(x.id), onWin: () => this.win(x.id), onMenu: () => this.openMenu(x.id), onInc: () => this.step(x.id, 1), onDec: () => this.step(x.id, -1),
+        onEdit: () => this.startEdit(x.id), onGrip: (e) => this.gripDown(e, x.id),
+      };
+    };
+    const rows = list.map(rowVM);
+    const pages = Math.max(1, Math.ceil(n / 5)), ovPage = Math.min(s.ovPage, pages - 1);
+    const maxRun = Math.max(-1, ...w.ch.filter((x) => x.running && !x.won && live).map((x) => x.secs));
+    const stg = maxRun >= 0 ? this.stage(maxRun) : -1, moods = ['fresh', 'focus', 'sweat', 'tired', 'grumpy', 'fuming'];
+    const tt = fmtT(w.total), firstId = (list.find((x) => !x.won) || list[0] || {}).id;
+    const notWonCtr = list.find((x) => x.target != null && x.count < x.target && !x.won);
+    const G = (name, c, items) => ({ name, c, items: items.map(([id, label, on], k) => ({ k, id, label, on })) });
+    const groups = [
+      G('Responsive', 'var(--color-pinned)', [
+        ['R13', 'Add Challenge', () => this.addChallenge()], ['R14', 'Delete (R06 modal)', () => { this.ensure('workspace').then(() => this.askDelete()); }],
+        ['R15', 'Duplicate', () => this.ensure('workspace').then(() => this.duplicate())], ['R16', 'Pin / unpin', () => this.ensure('workspace').then(() => this.togglePin())],
+        ['R11', 'Inline edit', () => this.ensure('workspace', 'ws', s.dialect === 'broadcast' ? 'workspace' : undefined).then(() => this.startEdit(firstId))],
+        ['R04', 'Row menu', () => this.ensure('workspace', 'ws', s.dialect === 'broadcast' ? 'workspace' : undefined).then(() => this.openMenu(firstId))],
+        ['R21', 'Drag + drop', () => this.dragDemo(false)], ['R22', 'Drag, save fails', () => this.dragDemo(true)],
+        ['R23', 'Counter +1', () => this.ensure('workspace').then(() => notWonCtr ? this.step(notWonCtr.id, 1) : this.toast('Every counter is full.'))],
+        ['R24', 'Counter hits target', () => this.ensure('workspace').then(() => { if (!notWonCtr) return this.toast('Every counter is full.'); this.patchCh(notWonCtr.id, { count: notWonCtr.target - 1 }, () => this.step(notWonCtr.id, 1)); })],
+        ['R25', 'Start / pause Winnie', () => this.ensure('workspace', 'ws', s.dialect === 'broadcast' ? 'workspace' : undefined).then(() => this.toggleTotal())],
+        ['R26', 'Switch Winnie', () => this.ensure('workspace', 'ws', s.dialect === 'broadcast' ? 'workspace' : undefined).then(() => this.switchWinnie(1 - this.state.wi))],
+        ['R27', 'Changelog ↔ Workspace', () => this.goPage(s.page === 'ws' || s.view !== 'workspace' ? 'log' : 'ws')],
+        ['R28', 'Theme switch', (e) => this.switchTheme(e)],
+        ['R29', 'Un-won (progress)', () => this.ensure('workspace').then(() => { const l = this.sorted(this.cur()).filter((x) => x.won); l.length ? this.win(l[0].id) : this.toast('Nothing is Won yet.'); })],
+        ['R30', 'Reload (skeleton)', () => this.reload()], ['R31', 'Copy link', () => this.ensure('workspace').then(() => this.copyLink())],
+        ['R08', 'Toast', () => this.toast('Saved. Your Winnie is up to date.')], ['R33', 'Error toast', () => this.toast('Couldn’t save. Retrying…', 'error')],
+        ['R10', 'Tooltip', () => this.ensure('workspace', 'ws', s.dialect === 'broadcast' ? 'workspace' : undefined).then(() => { const t = this.q('[data-share]'); if (t) { this._tipEl = t; this.showTip(t); setTimeout(() => this.setState({ tip: null }), 2000); } })],
+        ['R34', 'Reset timer', () => this.ensure('workspace').then(() => { const x = this.sorted(this.cur()).find((y) => !y.won && y.secs); x && this.resetTimer(x.id); })],
+      ]),
+      G('Tick', 'var(--color-ready)', [['T03', 'Jump to :57', () => this.jump(60)], ['T04', 'Jump to an hour −3s', () => this.jump(3600)], ['T08', '+20 min (fatigue)', () => this.fatigue()]]),
+      G('Broadcast', 'var(--color-complete)', [
+        ['B01', 'Shared View update', () => this.sharedUpdate()], ['B02', s.conn === 'reconnecting' ? 'Back live (B03)' : 'Reconnecting…', () => this.toggleConn()],
+        ['B04', 'Next Overlay page', () => this.nextPage()], ['B04', s.ovRotate ? 'Auto-flip on' : 'Auto-flip off', () => this.setState((x) => ({ ovRotate: !x.ovRotate }))],
+        ['B05', 'Overlay: new Won', () => this.ovWon()], ['B07', 'Overlay card enters', () => this.ensure('overlay').then(() => this.m.cardEnter(this.q('[data-ovcard]')))],
+      ]),
+      G('Celebratory', 'var(--color-won)', [
+        ['C01', 'Mark next Won', () => (s.view === 'overlay' ? this.ovWon() : this.ensure('workspace').then(() => { const x = this.sorted(this.cur()).find((y) => y.running && !y.won) || this.sorted(this.cur()).find((y) => !y.won); x ? this.win(x.id) : this.toast('Every Challenge is Won.'); }))],
+        ['C02', 'Complete the Winnie', () => this.completeAll('ws')], ['C03', 'Overlay Complete', () => this.completeAll('ov')], ['C05', 'Shared View Complete', () => this.completeAll('shared')],
+        ['C02', 'Reopen (no replay)', () => this.reopen()], ['↺', 'Reset demo', () => this.resetDemo()],
+      ]),
+    ];
+    const ago = Math.max(0, Math.round((Date.now() - (s.conn === 'live' ? s.upd : s.lostAt || s.upd)) / 1000));
+    const gloss = dark ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.7)';
+    const compact = (s.stageW || 1200) < 1100;
+    return {
+      rootRef: this.rootRef, mainRef: this.mainRef, ovRef: this.ovRef, compact, wide: !compact,
+      gridCols: s.panelHidden ? 'minmax(0,1fr)' : '330px minmax(0,1fr)', panelDisplay: s.panelHidden ? 'none' : 'flex', panelHidden: !!s.panelHidden,
+      onPanel: () => this.setState((x) => ({ panelHidden: !x.panelHidden })),
+      theme: s.theme, motionAttr: s.reduced ? 'reduce' : 'full', stageDialect: isOv ? 'broadcast' : s.dialect, presetAttr: isOv ? s.preset : 'standard', tiltHover: shared ? '0deg' : showcase ? '-1deg' : '-0.4deg',
+      letters, title: w.title, isWs: !isOv, isOv, isShowcase: showcase, shared, notShared: !shared, onWs: s.page === 'ws', onLogPage: s.page === 'log',
+      wsLabel: shared ? 'Shared View' : showcase ? 'Workspace · Showcase dialect' : 'Workspace',
+      blobA: dark ? '#4A2140' : '#FFC2DA', blobB: dark ? '#2E2350' : '#E3D4FF', gloss,
+      viewOpts: seg('view', [['workspace', 'Workspace'], ['overlay', 'Overlay']], (v) => this.setView(v)),
+      dialectOpts: seg('dialect', [['workspace', 'Workspace'], ['broadcast', 'Shared View'], ['showcase', 'Showcase']]), dialectOp: isOv ? 0.45 : 1,
+      dialectNote: isOv ? 'The Overlay is always Broadcast.' : shared ? 'Broadcast dialect: read-only, louder ticks, no Nini.' : showcase ? 'Showcase: everything jellies, ×1.6.' : 'Workspace: calm enough for hours.',
+      presetOpts: seg('preset', [['standard', 'Standard'], ['calm', 'Calm']]),
+      themeOpts: seg('theme', [['light', 'Light'], ['dark', 'Dark']], (v) => v !== s.theme && this.switchTheme()),
+      tierOpts: [['amb', 'Ambient'], ['resp', 'Responsive'], ['cel', 'Celebratory'], ['reduced', 'Reduced motion']].map(([k, label], i) => { const on = !!s[k]; return { k: i, label, sel: on, icon: on ? 'check_circle' : 'radio_button_unchecked', on: () => this.setState({ [k]: !on }), bg: on ? (k === 'reduced' ? 'var(--color-ready)' : 'var(--color-won)') : 'var(--color-control)', c: on ? 'var(--color-on-accent)' : 'var(--color-text)', sh: on ? `0 3px 0 -1px ${k === 'reduced' ? 'var(--color-ready-lip)' : 'var(--color-won-lip)'}` : '0 3px 0 -1px var(--color-control-lip)' }; }),
+      speedOpts: [[1, '1×'], [10, '10×'], [60, '60×']].map(([v, label], k) => ({ k, label, sel: s.speed === v, ...sel(s.speed === v), on: () => this.setState({ speed: v }) })),
+      totalStr: tt + (live ? '' : ' · paused'), groups,
+      cues: s.cues.map((c, i) => ({ ...c, op: 1 - i * 0.12 })), noCues: !s.cues.length, tickCues: s.tickCues,
+      tickCueIcon: s.tickCues ? 'check_box' : 'check_box_outline_blank', tickCueBg: s.tickCues ? 'var(--color-ready)' : 'var(--color-control)', onTickCues: () => this.setState((x) => ({ tickCues: !x.tickCues })),
+      switcher: s.switcher, onSwitcher: () => this.toggleSwitcher(),
+      winnieOpts: s.W.map((x, k) => ({ k, label: x.title, meta: x.ch.filter((y) => y.won).length + ' / ' + x.ch.length, icon: k === s.wi ? 'check_circle' : 'list', bg: k === s.wi ? 'var(--color-surface-sunken)' : 'transparent', on: () => this.switchWinnie(k) })),
+      liveBg: s.conn === 'reconnecting' ? 'var(--color-mist-300, #DCCFD6)' : 'var(--color-won)', liveIcon: s.conn === 'reconnecting' ? 'progress_activity' : 'sensors', liveSpin: s.conn === 'reconnecting' ? 'spin' : '', liveLabel: s.conn === 'reconnecting' ? 'Reconnecting…' : 'Live',
+      freshness: s.conn === 'reconnecting' ? `Last update ${Math.floor(ago / 60)}:${p2(ago % 60)} ago` : ago < 3 ? 'Updated just now' : `Updated ${ago}s ago`,
+      onLog: () => this.goPage(s.page === 'ws' ? 'log' : 'ws'), logIcon: s.page === 'ws' ? 'history' : 'arrow_back', logLabel: s.page === 'ws' ? 'Changelog' : 'Back to Winnie',
+      shareIcon: s.copied ? 'check' : 'link', shareLabel: s.copied ? 'Link copied' : 'Share', onCopy: () => this.copyLink(),
+      onThemeBtn: (e) => this.switchTheme(e), themeIcon: dark ? 'bedtime' : 'light_mode',
+      heroCols: shared ? 'minmax(0,1fr) auto' : '160px minmax(0,1fr) auto', showNini: !shared,
+      niniMood: complete ? 'party' : cheer ? 'cheer' : stg >= 0 ? moods[stg] : 'snooze', niniAmb: live || complete ? 'breathe' : 'snooze', niniBeat: stg >= 0 && !cheer ? String(stg) : '',
+      fillX: -(100 - pct) + '%', stripesAmb: live ? 'stripes' : '', wonStr: won + ' / ' + n, pctStr: pct + '%',
+      totalC: complete ? 'var(--color-won-text)' : live ? 'var(--color-running-text)' : 'var(--color-text)', totalBeat: beat(w.total),
+      totalDigits: this.digits(tt, live ? fmtT(w.total - 1) : null), changedTotal: s.changedTotal && shared, live,
+      onTotal: () => this.toggleTotal(), totalIcon: live ? 'pause' : 'play_arrow', totalLabel: live ? 'Pause Winnie' : 'Start Winnie', complete,
+      addVal: s.addVal, onAddChange: (e) => this.setState({ addVal: e.target.value }), onAddKey: (e) => { if (e.key === 'Enter') this.addChallenge(); }, onAdd: () => this.addChallenge(),
+      countLabel: shared ? n + ' Challenges' : n + ' / 50 · drag to reorder', loading: s.loading, notLoading: !s.loading, skel: ['46%', '38%', '52%', '30%', '42%'].map((x, k) => ({ k, w: x })),
+      rows, rowCols: compact ? (shared ? '50px minmax(0,1fr) auto' : '22px 50px minmax(0,1fr) auto 50px 50px 42px') : shared ? '50px minmax(0,1fr) auto 112px' : '22px 50px minmax(0,1fr) auto 112px 50px 50px 42px', ctl: !shared, stickerX: shared ? '38px' : '62px',
+      editVal: s.editVal, onEditChange: (e) => this.setState({ editVal: e.target.value }), onEditKey: (e) => { if (e.key === 'Enter') this.saveEdit(false); if (e.key === 'Escape') { e.stopPropagation(); this.saveEdit(true); } }, onEditBlur: () => this.saveEdit(false),
+      logItems: [['v0.4', 'Everything moves', 'Ticks hop, rollovers bounce, and every Won gets its fountain. The Overlay has a Calm preset.', 'var(--color-accent)'], ['v0.3', 'Overlay pages', 'More than five Challenges? The Overlay flips through them every 10 seconds.', 'var(--color-pinned)'], ['v0.2', 'Counters', 'Track progress like 87 / 120 stars right on the row.', 'var(--color-complete)']].map(([v, t, d, c], k) => ({ k, v, t, d, c })),
+      ovScale: s.ovScale, ovRows: rows.slice(ovPage * 5, ovPage * 5 + 5).map((r) => ({ ...r, countStr: r.countStr })),
+      pageDots: Array.from({ length: pages }, (_, k) => ({ k, c: k === ovPage ? 'var(--color-accent)' : dark ? '#5A4050' : '#E8C8D4' })),
+      ovPageLabel: ovPage + 1 + ' / ' + pages, rotateLabel: s.ovRotate ? 'auto-flip on' : 'auto-flip off',
+      sparkles: [['-22px', '-26px', '0'], ['560px', '-30px', '500'], ['-30px', '60%', '900'], ['570px', '72%', '1300']].map(([x, y, ad], k) => ({ k, x, y, ad })),
+      offline: s.conn !== 'live', hasStamp: !!s.stamp, stampGame: s.stamp ? s.stamp.game : '',
+      showBanner: !isOv && s.conn !== 'live', bannerBg: s.conn === 'back' ? 'var(--color-won)' : 'var(--color-offline-surface)', bannerC: s.conn === 'back' ? 'var(--color-on-accent)' : 'var(--color-offline-text)',
+      bannerIcon: s.conn === 'back' ? 'check_circle' : 'progress_activity', bannerSpin: s.conn === 'back' ? '' : 'spin', bannerText: s.conn === 'back' ? 'Back live' : 'Reconnecting… showing the last update',
+      modalOpen: !!s.modal, modalGame: s.modal ? ((w.ch.find((x) => x.id === s.modal.id) || {}).game || 'this Challenge') : '', onModalCancel: () => this.closeModal(), onModalConfirm: () => this.confirmDelete(),
+      toasts: s.toasts.map((t) => ({ ...t, icon: t.kind === 'error' ? 'error' : 'check_circle', bg: t.kind === 'error' ? 'var(--color-danger-surface)' : 'var(--color-surface-raised)', c: t.kind === 'error' ? 'var(--color-danger-text)' : 'var(--color-text)', sh: t.kind === 'error' ? '0 0 0 3px var(--color-danger),var(--shadow-raised)' : 'var(--shadow-raised)', close: () => this.dismiss(t.id) })),
+      tipOn: !!s.tip, tipX: s.tip ? s.tip.x + 'px' : '0px', tipY: s.tip ? s.tip.y + 'px' : '0px', tipText: s.tip ? s.tip.text : '',
+    };
+  }
+}
+</script>
+</body>
+</html>

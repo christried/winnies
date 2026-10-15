@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<style>body{margin:0;background:#EFE6EA}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<section ref="{{ rootRef }}" style="display:flex;flex-direction:column;gap:96px;padding:80px;font-family:'M PLUS Rounded 1c',sans-serif;color:#4A2B3A">
+  <div style="display:flex;flex-direction:column;gap:28px;width:1440px">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:1200px">
+      <span style="font:800 15px/1 'M PLUS Rounded 1c';color:#B0175A">Phase 6b · concepts, rules not final</span>
+      <h1 style="margin:0;font:400 56px/1.2 'Mochiy Pop One'">Future features</h1>
+      <p style="margin:0;font:500 20px/1.5 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">Ten features, one concept screen each, built from the Kawaii Clay tokens and the P4 motion engine. Each frame is live: timers tick, buttons work, motion runs. The goal is to prove the system can carry them and to show where each one lives.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+      <sc-for list="{{ homes }}" as="h" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:24px 28px 26px;border-radius:28px;background:#FFF;box-shadow:0 4px 0 -1px #E8C9D6">
+          <span style="align-self:flex-start;font:800 13px/1 'M PLUS Rounded 1c';padding:7px 12px;border-radius:12px;background:{{ h.bg }};color:#4A2B3A">{{ h.tag }}</span>
+          <h3 style="margin:0;font:400 22px/1.35 'Mochiy Pop One'">{{ h.t }}</h3>
+          <p style="margin:0;font:500 17px/1.55 'M PLUS Rounded 1c';text-wrap:pretty">{{ h.d }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="modes" data-screen-label="00 Mode identity" style="display:flex;flex-direction:column;gap:28px;width:1440px">
+    <div style="display:flex;align-items:center;gap:20px;padding-bottom:18px;border-bottom:3px solid #E3CCD6">
+      <span style="flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#4A2B3A;color:#FFF;font:400 26px/1 'Mochiy Pop One'">0</span>
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+        <h2 style="margin:0;font:400 38px/1.25 'Mochiy Pop One'">How a Game Mode shows itself</h2>
+        <span style="font:600 19px/1.45 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">Most important. One mark, one meter, one row signal per mode, the same on every surface.</span>
+      </div>
+    </div>
+    <div data-theme="{{ theme }}" style="display:flex;flex-direction:column;gap:24px;padding:36px;border-radius:36px;background:var(--color-page);color:var(--color-text);font-family:var(--font-body);box-shadow:0 20px 50px -20px rgba(74,43,58,.35)">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px">
+        <sc-for list="{{ laws }}" as="l" hint-placeholder-count="3"><div style="display:flex;gap:14px;padding:20px 22px;border-radius:30px;background:var(--color-surface);box-shadow:var(--shadow-raised)"><span style="flex:none;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-surface);font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">{{ l.icon }}</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font:400 18px/1.4 var(--font-display)">{{ l.t }}</span><span style="font:600 15px/1.5 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ l.d }}</span></div></div></sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(240px,1fr));gap:16px">
+        <sc-for list="{{ sheet }}" as="m" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:16px;padding:22px 20px 24px;border-radius:38px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+            <sc-if value="{{ m.ribbon }}"><span style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px 0 6px;border-radius:22px;background:var(--color-text);color:var(--color-surface);font:400 17px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 4px 0 -1px var(--color-control-lip);transform:rotate(-2deg)"><span style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ m.disc }};color:{{ m.ink }};font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ m.icon }}</span>{{ m.short }}</span></sc-if>
+            <sc-if value="{{ m.noRibbon }}"><span style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:22px;outline:3px dashed var(--color-border);outline-offset:-3px;font:700 15px var(--font-body);color:var(--color-text-muted)">No ribbon</span></sc-if>
+            <div style="display:flex;flex-direction:column;gap:4px"><span style="font:400 20px/1.35 var(--font-display)">{{ m.name }}</span><span style="font:600 14px/1.5 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ m.rule }}</span></div>
+            <sc-for list="{{ m.parts }}" as="p"><div style="display:flex;flex-direction:column;gap:7px"><span style="font:800 12px/1.3 var(--font-body);color:var(--color-text-muted)">{{ p.label }}</span><span style="align-self:flex-start;display:flex;align-items:center;gap:6px;min-height:34px;padding:4px 13px 4px 9px;box-sizing:border-box;border-radius:17px;background:{{ p.bg }};color:{{ p.c }};font:800 13px/1.3 var(--font-body);box-shadow:{{ p.sh }}"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ p.icon }}</span>{{ p.t }}</span></div></sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+    <div style="display:flex;flex-direction:column;gap:56px">
+      <sc-if value="{{ g.head }}">
+        <div style="display:flex;align-items:center;gap:20px;padding-bottom:18px;border-bottom:3px solid #E3CCD6;max-width:1440px">
+          <span style="flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#4A2B3A;color:#FFF;font:400 26px/1 'Mochiy Pop One'">{{ g.n }}</span>
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+            <h2 style="margin:0;font:400 38px/1.25 'Mochiy Pop One'">{{ g.t }}</h2>
+            <span style="font:600 19px/1.45 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">{{ g.d }}</span>
+          </div>
+        </div>
+      </sc-if>
+      <sc-for list="{{ g.items }}" as="s" hint-placeholder-count="1">
+        <div id="{{ s.n }}" data-screen-label="{{ s.label }}" style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:10px;max-width:1440px">
+            <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+              <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#FF6FAE;color:#4A2B3A">{{ s.n }}</span>
+              <h3 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">{{ s.t }}</h3>
+              <span style="font:800 13px/1 'M PLUS Rounded 1c';padding:7px 12px;border-radius:12px;background:{{ s.surfBg }}">{{ s.surf }}</span>
+            </div>
+            <span style="font:600 18px/1.5 'M PLUS Rounded 1c';color:#4A2B3A;text-wrap:pretty;max-width:1200px">{{ s.d }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px 28px;font:600 15px/1.5 'M PLUS Rounded 1c';color:#7A5C6A">
+              <sc-if value="{{ s.hasMo }}"><span style="display:flex;gap:6px;max-width:700px"><span style="flex:none;font-family:'Material Symbols Rounded';font-size:19px;color:#B0175A">animation</span><span style="text-wrap:pretty">{{ s.mo }}</span></span></sc-if>
+              <sc-if value="{{ s.hasSo }}"><span style="display:flex;gap:6px;max-width:600px"><span style="flex:none;font-family:'Material Symbols Rounded';font-size:19px;color:#B0175A">music_note</span><span style="text-wrap:pretty">{{ s.so }}</span></span></sc-if>
+            </div>
+          </div>
+          <div data-half="{{ s.n }}" style="position:relative;width:1440px;min-height:{{ s.ph }};height:{{ s.fh }};border-radius:24px;overflow:hidden;background:{{ s.bg }};box-shadow:0 20px 50px -20px rgba(74,43,58,.35)">
+            <sc-if value="{{ s.ws }}" hint-placeholder-val="{{ false }}"><dc-import name="P6bWorkspace" scenario="{{ s.s }}" theme="{{ theme }}" hint-size="1440px,1000px"></dc-import></sc-if>
+            <sc-if value="{{ s.sv }}" hint-placeholder-val="{{ false }}"><dc-import name="P6bShared" scenario="{{ s.s }}" theme="{{ theme }}" hint-size="1440px,1100px"></dc-import></sc-if>
+            <sc-if value="{{ s.ov }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;top:0;width:1920px;height:1080px;transform:scale(.75);transform-origin:0 0"><dc-import name="P6bOverlay" scenario="{{ s.s }}" theme="{{ theme }}" hint-size="1920px,1080px"></dc-import></div></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { on: {} };
+  componentDidMount() {
+    this._f = () => { if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = 0; this.scan(); }); };
+    window.addEventListener('scroll', this._f, true); window.addEventListener('resize', this._f);
+    this._iv = setInterval(() => this.scan(), 400);
+    this.scan();
+  }
+  componentWillUnmount() { window.removeEventListener('scroll', this._f, true); window.removeEventListener('resize', this._f); clearInterval(this._iv); cancelAnimationFrame(this._raf); }
+  scan() {
+    const r = this.rootRef.current; if (!r) return;
+    const vw = window.innerWidth, vh = window.innerHeight, on = this.state.on, next = {}, add = [];
+    r.querySelectorAll('[data-half]').forEach((el) => {
+      const k = el.dataset.half, b = el.getBoundingClientRect(); if (!k || !b.width) return;
+      const near = b.bottom > -vh * 0.75 && b.top < vh * 1.75 && b.right > -vw * 0.5 && b.left < vw * 1.5;
+      const far = b.bottom < -vh * 2.5 || b.top > vh * 3.5 || b.right < -vw * 2 || b.left > vw * 3;
+      if (on[k]) { if (!far) next[k] = true; } else if (near) add.push([Math.abs(b.top + b.height / 2 - vh / 2) + Math.abs(b.left + b.width / 2 - vw / 2), k]);
+    });
+    const now = Date.now();
+    if (add.length && now - (this._last || 0) > 450) { add.sort((a, b) => a[0] - b[0]); next[add[0][1]] = true; this._last = now; }
+    const a = Object.keys(on), b = Object.keys(next);
+    if (a.length !== b.length || b.some((k) => !on[k])) this.setState({ on: next });
+  }
+  renderVals() {
+    const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+    const W = 'ws', S = 'sv', O = 'ov';
+    const G = [
+      ['0', '', '', [
+        ['00a', 'Workspace · summary and rows', W, 'gauntlet', 'The ribbon sits right under the Winnie name with the rule in one plain sentence. The mode meter joins the progress line, and every row carries its mode signal (here: losses per Challenge plus Record a loss). Try Record a loss.', 'Ribbon stamps in once on load (spring, −12° → −1.5°). The meter jellies whenever its value changes.', 'mode.stamp: one soft rubber-stamp thunk on load.'],
+        ['00b', 'Shared View · House rules', S, 'gauntlet', 'A full-width House rules band closes the summary card: big ribbon, the rule spelled out, and the meter at broadcast size. A Viewer arriving mid-run reads the rules before reading a single row.', 'Same stamp-in. Tokens drain live as the Owner records losses.', ''],
+        ['00c', 'Overlay · ribbon tab', O, 'gauntlet', 'Over gameplay the ribbon becomes a tab clipped to the card’s top edge, so it survives page flips. Gauntlet adds its shield row under the Total Timer; rows show losses as a cherry chip.', 'Tab rides the card float. Shield pops when an attempt is spent.', ''],
+      ]],
+      ['1', 'Game Mode picker', 'Chosen once, in the Create Winnie modal, before the first Challenge.', [
+        ['01a', 'Create Winnie · Start empty', W, 'picker', 'Five modes as a radio list with one-line pitches. The panel on the right explains the chosen mode in three lines, holds its one setting, and says what Viewers will see. Generate one lives in the second tab (see 09a). Click through the modes.', 'Detail panel jellies and the big ribbon re-stamps on every switch.', 'mode.pick: a different short sting per mode (Gauntlet: anvil, Timeboxed: tick-tock, Cursed: organ chord).'],
+      ]],
+      ['2', 'Confirmation mode', 'One Challenge confirms every win and never counts toward progress.', [
+        ['02a', 'Waiting to confirm', W, 'confirm', 'Celeste is the Confirmation Challenge: tagged, “Not counted”, excluded from 2 / 7. Hades was just won, so it sits dashed with a sky prompt tucked under it. Confirmed locks it in, Failed resets it but keeps 0:52:40. Mark another Challenge Won to get a fresh prompt.', 'Prompt slides out from under the row (spring). Confirmed = Won fountain + sticker. Failed = row shake, face pop.', 'confirm.ask: question-mark boing · confirm.yes: two-note chime · confirm.no: deflating kazoo.'],
+        ['02b', 'Viewer side', S, 'confirm', 'The House rules band names the Confirmation Challenge and shows a pending win. Status words on rows say “Waiting to confirm”.', '', ''],
+      ]],
+      ['3', 'Gauntlet mode', 'A Winnie-wide attempt pool. The last loss resets everything, loudly, everywhere.', [
+        ['03a', 'Last attempt', W, 'gauntlet-last', '1 of 5 left and Nini is sweating. Press Record a loss on any row to fire the reset announcement for real.', 'Each loss: row shake, cherry crumbs from the button, spent shield pops to a dashed ring.', 'gauntlet.loss: low wooden clonk · gauntlet.last: heartbeat thump under the next 10 seconds.'],
+        ['03b', 'Reset announcement · Workspace', W, 'gauntlet-reset', 'A blocking card names the culprit Challenge, says what reset, and keeps the Total Timer. Two ways out: Run it back, or See the wreckage. Everything behind has already reset.', 'Card drops in with overshoot, banner slams from 2.4×, the page shakes, cherry confetti bursts, the ledger chips pop in one by one.', 'gauntlet.over: brass “wah-wah-waaah” + glass crunch.'],
+        ['03c', 'Reset announcement · Shared View', S, 'gauntlet-reset', 'Arrives with the next refresh as a banner above the summary, naming Cuphead. Proposal: it stays 20 seconds, then folds into a line in the summary (“Reset by Cuphead · 2 min ago”).', 'Banner slam, page shake, every row shudders in sequence.', ''],
+        ['03d', 'Reset announcement · Overlay', O, 'gauntlet-reset', 'The one time the Overlay leaves its corner: a center-screen card for 8 seconds, then back to the corner card with five fresh shields. Loops here for review.', 'Biggest moment in Broadcast: 34 particles, shields refill one by one after the card leaves.', ''],
+      ]],
+      ['4', 'Timeboxed mode', 'The Total Timer counts down from a limit. Challenge Timers still count up. Zero means lost for good.', [
+        ['04a', 'Last minute', W, 'timebox-last', 'Under 60 seconds the well turns cherry, a chip reads “Last minute!”, Nini fumes and the page edge pulses with every second. Watch it hit zero; Run it again rewinds.', 'Per second: vignette pulse + well shiver. Last 10 seconds: double amplitude, chip and Nini pop. Zero: Time’s up stamp slams, page shakes, rows sag one by one.', 'timebox.tick: clock tick from 60s, pitch rising under 10s · timebox.zero: buzzer, then silence.'],
+        ['04b', 'Last minute · Overlay', O, 'timebox-last', 'The well label reads LEFT, a cherry halo wraps the card, rows keep counting up. At zero the stamp lands and the card goes Mist. Loops here for review.', 'Same beats as the Workspace at Broadcast gain.', ''],
+        ['04c', 'Lost', W, 'timebox-lost', 'A permanent state, not an error. Dashed Mist panel, frozen timers with lock icons, final score kept. Next steps: run it again as a new Winnie, or move it to the Archive.', 'One-time stamp + sag on arrival. Nothing loops afterwards: lost things don’t breathe.', 'timebox.lost: sad trombone, once.'],
+      ]],
+      ['5', 'Cursed Incremental mode', 'Proposal for difficulty: a Curse level with two visible effects on every open Challenge.', [
+        ['05a', 'Curse level 3', W, 'cursed', 'Difficulty reads as a Curse level (skull pips) and shows up twice on each open row: Counter Targets grow by the step (Mario 120 → 156, with a +36 sticker) and the Win Condition gains house rules from the curse deck (“+3: no healing, no upgrades, one-hit”). Won Challenges are safe. Record a loss to curse everything a bit more.', 'A lilac shiver runs down the list, row by row, with drips from each row and stickers popping.', 'curse.add: descending organ chord, one note deeper per level.'],
+        ['05b', 'Viewer side', S, 'cursed', 'Curse level in the House rules band, curse chips and rule lines on every open row.', '', ''],
+      ]],
+      ['6', 'Randomizer wheel', 'Opens from the wheel button in the add row and takes its place until closed.', [
+        ['06a', 'Spin for a Challenge', W, 'wheel', 'Twelve games, six genres, each genre its own pastel. Genre chips take slices off the wheel. The result card shows a suggested Win Condition and the average time, then Add as Challenge drops it into the list. Press Spin.', 'Wheel decelerates over 4.6s, the pointer flicks on every slice it passes, the result card jellies in under confetti.', 'wheel.spin: ratchet clicks that slow with the wheel · wheel.land: slot-machine ding.'],
+      ]],
+      ['7', 'Linked Challenges', 'A chain played back-to-back. A loss on any link resets the whole chain.', [
+        ['07a', 'Chain of three', W, 'linked', 'An ink rail with numbered links ties Cuphead → Celeste → Dark Souls III. Links sort as one block; the next link stays locked until the one before is Won. Press Record a loss on Celeste to break the chain.', 'Rail flashes cherry, link dots spin, rows shake in chain order, then everything resets in one step.', 'chain.break: metal chain snap + three quick thuds.'],
+      ]],
+      ['8', 'Autocomplete', 'Inside the existing add row. Suggestions never block typing your own text.', [
+        ['08a', 'Game suggestions', W, 'auto-game', 'Typed “Hol”: matches highlighted in Butter, year and genre for telling games apart, how many Winnies use each. “Use as typed” is always last. Arrow keys, Enter, Esc. Pick one to move to 08b.', 'Popover springs open from the field. Matches don’t animate while typing, so nothing jitters.', ''],
+        ['08b', 'Win Condition suggestions with average time', W, 'auto-cond', 'Scoped to Hollow Knight. Each suggestion can show how long other Winnies needed; a switch hides the hint for players who’d rather not know. After picking, the hint stays under the add row.', '', ''],
+      ]],
+      ['9', 'Generate a Winnie', 'The second tab of Create Winnie.', [
+        ['09a', 'Review before creating', W, 'generate', 'Pick a time budget and genres, get a named Winnie that fits, with an estimate per Challenge. Reroll any single Challenge or the whole thing, rename it, then create. Change the budget to regenerate.', 'Rows deal in from the right on every roll, a single reroll flips its row, the dice spins twice.', 'generate.roll: dice rattle · generate.deal: card-deal flicks.'],
+      ]],
+      ['10', 'Archive', 'Deleting moves a Winnie here. The Delete modal copy changes to “Moves to the Archive for 30 days.”', [
+        ['10a', 'Restore a Winnie', W, 'archive', 'Reached from the Winnie picker. Each card keeps its ribbon, Complete badge and frozen Total Timer. Days left turn cherry under 3. Press Restore.', 'Restored card squashes, then flies up toward the picker under a confetti puff. Toast confirms.', 'archive.restore: rewind whoosh + pop.'],
+      ]],
+    ];
+    const meta = { ws: ['Workspace', '#FFD0E4', '1000px', 'auto', '#FFE3EC'], sv: ['Shared View', '#CFF3DD', '1100px', 'auto', '#FFE3EC'], ov: ['Overlay · 1920 × 1080 at 75%', '#E4D9FF', '810px', '810px', '#231520'] };
+    const tall = { wheel: '1560px', 'gauntlet-reset': '1000px' };
+    const groups = G.map(([n, t, d, items]) => ({ k: n, n, t, d, head: !!t, items: items.map(([sn, st, comp, scn, sd, mo, so]) => {
+      const on = !!this.state.on[sn], M = meta[comp];
+      return { k: sn, n: sn, t: st, d: sd, s: scn, mo: mo || '', so: so || '', hasMo: !!mo, hasSo: !!so, label: sn + ' ' + st, surf: M[0], surfBg: M[1], ph: comp === 'ws' && tall[scn] ? tall[scn] : M[2], fh: M[3], bg: theme === 'dark' ? '#231520' : M[4], ws: on && comp === 'ws', sv: on && comp === 'sv', ov: on && comp === 'ov' };
+    }) }));
+    const P = (label, icon, t, tone) => { const T = { danger: ['var(--color-danger-surface)', 'var(--color-danger-text)', 'inset 0 0 0 2px var(--color-danger)'], sky: ['var(--color-ready)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-ready-lip)'], lilac: ['var(--color-pinned)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-pinned-lip)'], butter: ['var(--color-complete)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-complete-lip)'], plain: ['var(--color-surface-sunken)', 'var(--color-text)', 'none'] }[tone]; return { k: label, label, icon, t, bg: T[0], c: T[1], sh: T[2] }; };
+    const sheet = [
+      { k: 's', ribbon: false, noRibbon: true, name: 'Standard', rule: 'Win every Challenge. No ribbon anywhere: absence means Standard.', parts: [P('Meter', 'check_circle', '3 / 8 won · 38%', 'plain'), P('On rows', 'remove', 'nothing extra', 'plain'), P('Over gameplay', 'remove', 'no tab', 'plain')] },
+      { k: 'c', ribbon: true, short: 'Confirmation', icon: 'verified', disc: 'var(--p-sky-300)', ink: 'var(--p-cocoa-900)', name: 'Confirmation', rule: 'One Challenge confirms every win. Failed resets that Challenge, time kept.', parts: [P('Meter', 'verified', 'Celeste confirms · 1 waiting', 'sky'), P('On rows', 'hourglass_top', 'Waiting to confirm', 'sky'), P('Over gameplay', 'hourglass_top', 'sky badge on the face', 'sky')] },
+      { k: 'g', ribbon: true, short: 'Gauntlet', icon: 'swords', disc: 'var(--p-cherry-100)', ink: 'var(--p-cherry-700)', name: 'Gauntlet', rule: 'Shared attempt pool. The last loss resets the whole Winnie.', parts: [P('Meter', 'shield', '2 of 5 attempts left', 'danger'), P('On rows', 'swords', '2 lost · Record a loss', 'danger'), P('Over gameplay', 'shield', 'shield row under the timer', 'danger')] },
+      { k: 't', ribbon: true, short: 'Timeboxed', icon: 'hourglass_top', disc: 'var(--p-butter-gold)', ink: 'var(--p-cocoa-900)', name: 'Timeboxed', rule: 'Total Timer counts down. Zero means lost for good.', parts: [P('Meter', 'hourglass_top', '5:59:19 of 6:00:00 used', 'butter'), P('Total Timer', 'south', 'counts down, cherry in the last minute', 'butter'), P('Over gameplay', 'hourglass_top', 'well label reads LEFT', 'butter')] },
+      { k: 'k', ribbon: true, short: 'Cursed', icon: 'skull', disc: 'var(--p-lilac-300)', ink: 'var(--p-cocoa-900)', name: 'Cursed Incremental', rule: 'Each loss raises the Curse level for every open Challenge.', parts: [P('Meter', 'skull', 'Curse 3 · +10% per loss', 'lilac'), P('On rows', 'skull', 'Curse 3 · +36 Target · +3 rules', 'lilac'), P('Over gameplay', 'skull', 'skull pips beside the name', 'lilac')] },
+    ];
+    return {
+      rootRef: this.rootRef, theme, groups, sheet,
+      laws: [
+        { k: 1, icon: 'gavel', t: 'Ink means rules', d: 'The ribbon is the only ink-filled pill in the system. States are always pastel, so a mode can never be mistaken for a state, in light or dark (it inverts to milk on night).' },
+        { k: 2, icon: 'speed', t: 'One meter per mode', d: 'Each mode adds exactly one meter next to progress, in the mode’s disc colour, with an icon and a sentence. Shapes and words carry the meaning; colour only helps.' },
+        { k: 3, icon: 'devices', t: 'Same mark, three sizes', d: 'Workspace: under the name, 40px. Shared View: House rules band, 54px. Overlay: tab on the card’s top edge, 62px, always visible across page flips.' },
+      ],
+      homes: [
+        { k: 1, tag: 'Create Winnie', bg: '#FFD0E4', t: 'Mode and Generate are born here', d: 'Game Mode is a required pick (Standard preselected) in Start empty. Generate one is the second tab of the same modal, so there’s one way to make a Winnie.' },
+        { k: 2, tag: 'Add row', bg: '#FFF4CC', t: 'Wheel and Autocomplete live in the add row', d: 'Autocomplete runs inside the Game and Win Condition fields. The Butter wheel button swaps the add row for the Randomizer card.' },
+        { k: 3, tag: 'Winnie picker', bg: '#E4D9FF', t: 'Archive sits at the bottom of the picker', d: 'Deleted Winnies wait 30 days (proposed). Linked Challenges are made from a new “Link with…” item in the Challenge ⋯ menu.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

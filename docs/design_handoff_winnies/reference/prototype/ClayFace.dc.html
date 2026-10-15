@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap">
+<style>body{margin:0}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<div title="{{ label }}" style="position:relative;width:{{ w }};height:{{ h }};flex:none">
+  <div style="position:absolute;inset:0;border-radius:{{ radius }};background:{{ bodyBg }};box-shadow:{{ shadow }}"></div>
+  <div style="position:absolute;inset:0;border-radius:{{ radius }};background:radial-gradient(rgba(74,43,58,.045) 1px,rgba(0,0,0,0) 1.6px) 0 0/5px 5px,radial-gradient(rgba(255,255,255,.3) 1px,rgba(0,0,0,0) 1.6px) 2px 3px/7px 7px;pointer-events:none"></div>
+  <sc-if value="{{ band }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:8%;right:8%;top:{{ bandTop }};height:11%;border-radius:999px;background:#FF6FAE;box-shadow:inset 0 -3px 4px rgba(176,23,90,.4),inset 0 2px 3px rgba(255,220,235,.7);transform:rotate({{ bandRot }})"><span style="position:absolute;right:-9%;top:-30%;width:22%;height:90%;border-radius:999px;background:#FF6FAE;transform:rotate(32deg)"></span><span style="position:absolute;right:-6%;top:40%;width:18%;height:80%;border-radius:999px;background:#E0558F;transform:rotate(-20deg)"></span></div>
+  </sc-if>
+  <sc-if value="{{ crown }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:32%;top:-20%;width:36%;height:30%;background:#FFC23D;clip-path:polygon(0 100%,0 25%,25% 60%,50% 0,75% 60%,100% 25%,100% 100%);transform:rotate(-8deg)"></div>
+  </sc-if>
+  <svg width="100" height="100" style="position:absolute;left:{{ fx }};top:{{ fy }};width:100px;height:100px;overflow:visible;transform:scale({{ k }});transform-origin:0 0;pointer-events:none">
+    <path d="M18 60m-7 0a7 4.5 0 1 0 14 0a7 4.5 0 1 0-14 0ZM82 60m-7 0a7 4.5 0 1 0 14 0a7 4.5 0 1 0-14 0Z" style="fill:#FF5A9A;opacity:{{ f.bl }}"></path>
+    <path d="{{ f.eyeFill }}" style="fill:#4A2B3A"></path>
+    <path d="{{ f.eyeStroke }}" style="fill:none;stroke:#4A2B3A;stroke-width:5;stroke-linecap:round;stroke-linejoin:round"></path>
+    <path d="{{ f.hl }}" style="fill:#FFFFFF"></path>
+    <path d="{{ f.bags }}" style="fill:none;stroke:#4A2B3A;stroke-width:2.5;stroke-linecap:round;opacity:.45"></path>
+    <path d="{{ f.brow }}" style="fill:none;stroke:#4A2B3A;stroke-width:5;stroke-linecap:round"></path>
+    <path d="{{ f.mFill }}" style="fill:#4A2B3A"></path>
+    <path d="{{ f.tongue }}" style="fill:#FF7FA8"></path>
+    <path d="{{ f.teeth }}" style="fill:none;stroke:#FFFFFF;stroke-width:2"></path>
+    <path d="{{ f.mStroke }}" style="fill:none;stroke:#4A2B3A;stroke-width:5;stroke-linecap:round;stroke-linejoin:round"></path>
+    <path d="M30 51q-5 11-2 23M70 51q5 11 2 23" style="fill:none;stroke:#7FCBFF;stroke-width:6;stroke-linecap:round;opacity:{{ f.t }}"></path>
+    <path data-amb="{{ f.aS1 }}" d="M86 18Q95 31 86 37Q77 31 86 18Z" style="fill:#8FD3FF;stroke:#4A2B3A;stroke-width:2.5;opacity:{{ f.s1 }}"></path>
+    <path data-amb="{{ f.aS2 }}" data-ad="-700" d="M13 26Q20 36 13 40Q6 36 13 26Z" style="fill:#8FD3FF;stroke:#4A2B3A;stroke-width:2.5;opacity:{{ f.s2 }}"></path>
+    <path data-amb="{{ f.aV }}" d="M73 19q6 1 7-6M86 12q0 8 7 8M94 27q-8-1-8 7M79 34q1-8-7-8" style="fill:none;stroke:#E0245E;stroke-width:4;stroke-linecap:round;opacity:{{ f.v }};transform-box:fill-box;transform-origin:50% 50%"></path>
+    <path data-amb="{{ f.aSt }}" d="M4 18a7 7 0 1 0 14 0a7 7 0 1 0-14 0ZM14 7a5 5 0 1 0 10 0a5 5 0 1 0-10 0ZM82 18a7 7 0 1 0 14 0a7 7 0 1 0-14 0ZM76 7a5 5 0 1 0 10 0a5 5 0 1 0-10 0Z" style="fill:#FFFFFF;stroke:#4A2B3A;stroke-width:2.5;opacity:{{ f.st }}"></path>
+    <path data-amb="{{ f.aSp }}" d="M10 10Q10 18 17 18Q10 18 10 26Q10 18 3 18Q10 18 10 10ZM92 6Q92 13 98 13Q92 13 92 20Q92 13 86 13Q92 13 92 6ZM90 78Q90 84 95 84Q90 84 90 90Q90 84 85 84Q90 84 90 78Z" style="fill:#FFC23D;stroke:#4A2B3A;stroke-width:1.5;opacity:{{ f.sp }};transform-box:fill-box;transform-origin:50% 50%"></path>
+    <g style="opacity:{{ f.z }}"><g data-amb="{{ f.aZ }}"><text x="74" y="24" style="font:400 20px 'Mochiy Pop One';fill:#4A2B3A">z</text><text x="86" y="6" style="font:400 26px 'Mochiy Pop One';fill:#4A2B3A">Z</text></g></g>
+  </svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:220,&quot;height&quot;:220},&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;idle&quot;,&quot;running&quot;,&quot;won&quot;],&quot;default&quot;:&quot;running&quot;,&quot;tsType&quot;:&quot;'idle'|'running'|'won'&quot;},&quot;secs&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:13000,&quot;tsType&quot;:&quot;number&quot;},&quot;untouched&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;mood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;new&quot;,&quot;snooze&quot;,&quot;fresh&quot;,&quot;focus&quot;,&quot;sweat&quot;,&quot;tired&quot;,&quot;grumpy&quot;,&quot;fuming&quot;,&quot;star&quot;,&quot;happy&quot;,&quot;relief&quot;,&quot;cheer&quot;,&quot;party&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;size&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:120,&quot;tsType&quot;:&quot;number&quot;},&quot;shape&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;disc&quot;,&quot;mochi&quot;],&quot;default&quot;:&quot;disc&quot;,&quot;tsType&quot;:&quot;'disc'|'mochi'&quot;},&quot;mascot&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;outline&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  static stage(secs) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && secs >= t[i]) i++; return i; }
+  static moodOf(status, secs, untouched) {
+    if (status === 'won') return secs < 3600 ? 'star' : secs < 10800 ? 'happy' : 'relief';
+    if (status === 'running') return ['fresh', 'focus', 'sweat', 'tired', 'grumpy', 'fuming'][Component.stage(secs)];
+    return untouched ? 'new' : 'snooze';
+  }
+  renderVals() {
+    const p = this.props;
+    const size = +(p.size ?? 120), shape = p.shape || 'disc', mochi = shape === 'mochi';
+    const mood = p.mood || Component.moodOf(p.status || 'running', +(p.secs ?? 13000), p.untouched);
+    const E = (cx, cy, rx, ry) => `M${cx - rx} ${cy}a${rx} ${ry} 0 1 0 ${2 * rx} 0a${rx} ${ry} 0 1 0 ${-2 * rx} 0Z`;
+    const star = (cx, cy, R, r) => { let s = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, q = i % 2 ? r : R; s += (i ? 'L' : 'M') + (cx + Math.cos(a) * q).toFixed(1) + ' ' + (cy + Math.sin(a) * q).toFixed(1); } return s + 'Z'; };
+    const L = 35, R = 65, Y = 45;
+    const eyes = {
+      dot: [E(L, Y, 5.5, 7) + E(R, Y, 5.5, 7), '', E(L - 1.8, Y - 2.6, 1.9, 1.9) + E(R - 1.8, Y - 2.6, 1.9, 1.9)],
+      big: [E(L, Y, 7, 8.5) + E(R, Y, 7, 8.5), '', E(L - 2.2, Y - 3, 2.6, 2.6) + E(R - 2.2, Y - 3, 2.6, 2.6) + E(L + 2.5, Y + 3, 1.2, 1.2) + E(R + 2.5, Y + 3, 1.2, 1.2)],
+      squint: [E(L, Y + 1, 6.5, 3.2) + E(R, Y + 1, 6.5, 3.2), '', ''],
+      line: ['', `M${L - 7} ${Y + 2}h14M${R - 7} ${Y + 2}h14`, ''],
+      happy: ['', `M${L - 8} ${Y + 3}Q${L} ${Y - 8} ${L + 8} ${Y + 3}M${R - 8} ${Y + 3}Q${R} ${Y - 8} ${R + 8} ${Y + 3}`, ''],
+      half: [`M${L - 6} ${Y}a6 6 0 0 0 12 0ZM${R - 6} ${Y}a6 6 0 0 0 12 0Z`, `M${L - 8} ${Y}h16M${R - 8} ${Y}h16`, ''],
+      star: [star(L, Y, 10, 4.4) + star(R, Y, 10, 4.4), '', ''],
+      angry: [E(L, Y + 2, 5, 6) + E(R, Y + 2, 5, 6), '', E(L - 1.6, Y - .5, 1.6, 1.6) + E(R - 1.6, Y - .5, 1.6, 1.6)],
+    };
+    const brows = { det: 'M24 33L43 36M76 33L57 36', angry: 'M23 28L45 38M77 28L55 38', worry: 'M25 37L43 31M75 37L57 31' };
+    const mouths = {
+      small: ['', 'M43 64Q50 71 57 64', '', ''],
+      smile: ['', 'M37 62Q50 77 63 62', '', ''],
+      grin: ['M38 61H62Q61 75 50 75Q39 75 38 61Z', '', 'M43 70Q50 65 57 70Q54 75 50 75Q46 75 43 70Z', ''],
+      o: [E(50, 68, 4, 5), '', '', ''],
+      flat: ['', 'M42 67H58', '', ''],
+      wavy: ['', 'M37 68q3.25-5 6.5 0t6.5 0t6.5 0t6.5 0', '', ''],
+      droop: [E(50, 71, 6, 8), '', '', ''],
+      frown: ['', 'M40 73Q50 61 60 73', '', ''],
+      grit: ['M37 61H63V75H37Z', '', '', 'M37 68H63M43.5 61V75M50 61V75M56.5 61V75'],
+      big: ['M35 59H65Q63 81 50 81Q37 81 35 59Z', '', 'M42 73Q50 66 58 73Q55 81 50 81Q45 81 42 73Z', ''],
+    };
+    const M = {
+      new: { e: 'big', m: 'small', bl: .5, bg: '#A8DEFF', lip: '#74B8E0', label: 'Ready' },
+      snooze: { e: 'line', m: 'o', bl: .6, z: 1, bg: '#FFEFA1', lip: '#E8C860', label: 'Snoozing' },
+      fresh: { e: 'dot', b: 'det', m: 'grin', bl: .6, bg: '#FFA6CB', lip: '#E0679E', label: 'Fired up' },
+      focus: { e: 'squint', b: 'det', m: 'flat', bg: '#FF92BF', lip: '#D9478A', label: 'Locked in' },
+      sweat: { e: 'big', b: 'worry', m: 'wavy', s1: 1, bg: '#FF8BB5', lip: '#D2477F', label: 'Sweating' },
+      tired: { e: 'half', b: 'worry', m: 'droop', s1: 1, s2: 1, bags: 1, bg: '#E7A9C8', lip: '#BE7A9E', label: 'Running on fumes' },
+      grumpy: { e: 'angry', b: 'angry', m: 'frown', v: 1, bg: '#FF8296', lip: '#D84A63', label: 'Grumpy' },
+      fuming: { e: 'angry', b: 'angry', m: 'grit', v: 1, st: 1, bg: '#FF6372', lip: '#C22F45', label: 'Fuming' },
+      star: { e: 'star', m: 'big', sp: 1, bg: '#9BE3B4', lip: '#6CC48D', label: 'Too easy' },
+      happy: { e: 'happy', m: 'big', bl: .7, bg: '#9BE3B4', lip: '#6CC48D', label: 'Won' },
+      relief: { e: 'happy', m: 'smile', t: 1, bl: .7, bg: '#9BE3B4', lip: '#6CC48D', label: 'Finally' },
+      cheer: { e: 'happy', m: 'big', bl: .8, sp: 1, bg: '#9BE3B4', lip: '#6CC48D', label: 'Yay' },
+      party: { e: 'star', m: 'big', bl: .8, sp: 1, crown: 1, t: 1, bg: '#FFEFA1', lip: '#E8C860', label: 'Complete' },
+    };
+    const d = M[mood] || M.new, ey = eyes[d.e], mo = mouths[d.m];
+    const run = ['fresh', 'focus', 'sweat', 'tired', 'grumpy', 'fuming'].includes(mood);
+    const h = mochi ? Math.round(size * .86) : size;
+    const kk = size / 170;
+    const lip = Math.max(3, Math.round(size * .09));
+    const mochiBg = { grumpy: 'radial-gradient(circle at 40% 28%,#FFFFFF,#FFE1E6 50%,#FFAEBB)', fuming: 'radial-gradient(circle at 40% 28%,#FFF4F5,#FFC9D0 45%,#FF8C9C)', tired: 'radial-gradient(circle at 40% 28%,#FFFFFF,#F4EAF0 55%,#D9C3D0)', party: 'radial-gradient(circle at 40% 28%,#FFFFFF,#FFF6D6 55%,#FFE08A)' }[mood] || 'radial-gradient(circle at 40% 28%,#FFFFFF,#FFEFF5 55%,#FAD0DF)';
+    const ring = p.outline ? `0 0 0 ${Math.max(2, Math.round(size * .05))}px #4A2B3A,` : '';
+    return {
+      label: d.label, w: size + 'px', h: h + 'px',
+      radius: mochi ? '50% 50% 44% 44% / 62% 62% 38% 38%' : '50%',
+      bodyBg: mochi ? mochiBg : d.bg,
+      shadow: mochi
+        ? `${ring}0 ${Math.round(10 * kk)}px 0 -${Math.round(3 * kk)}px ${mood === 'fuming' || mood === 'grumpy' ? '#E88A9A' : '#F2B3CB'},0 ${Math.round(22 * kk)}px ${Math.round(26 * kk)}px -${Math.round(12 * kk)}px rgba(160,60,110,.45),inset 0 -${Math.round(10 * kk)}px ${Math.round(16 * kk)}px rgba(230,120,160,.25)`
+        : `${ring}0 ${lip}px 0 -1px ${d.lip},inset 0 ${Math.round(size * .07)}px ${Math.round(size * .09)}px rgba(255,255,255,.7),inset 0 -${Math.round(size * .05)}px ${Math.round(size * .08)}px rgba(0,0,0,.08)`,
+      band: mochi && !!p.mascot && run, bandTop: mood === 'tired' ? '26%' : '18%', bandRot: mood === 'tired' ? '9deg' : mood === 'fuming' ? '-4deg' : '0deg',
+      crown: !!d.crown && mochi,
+      k: mochi ? (size * .62) / 100 : size / 100,
+      fx: mochi ? Math.round(size * .19) + 'px' : '0px', fy: mochi ? Math.round(h * .3) + 'px' : '0px',
+      f: {
+        eyeFill: ey[0], eyeStroke: ey[1], hl: ey[2], bags: d.bags ? `M${L - 7} ${Y + 10}q7 5 14 0M${R - 7} ${Y + 10}q7 5 14 0` : '',
+        brow: d.b ? brows[d.b] : '', mFill: mo[0], mStroke: mo[1], tongue: mo[2], teeth: mo[3],
+        aS1: d.s1 ? 'drip' : '', aS2: d.s2 ? 'drip' : '', aV: d.v ? 'vein' : '', aSt: d.st ? 'steam' : '', aSp: d.sp ? 'twinkle' : '', aZ: d.z ? 'zzz' : '',
+        bl: d.bl || 0, t: d.t || 0, s1: d.s1 || 0, s2: d.s2 || 0, v: d.v || 0, st: d.st || 0, sp: d.sp || 0, z: d.z || 0,
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

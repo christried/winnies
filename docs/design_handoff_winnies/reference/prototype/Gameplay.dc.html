@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./image-slot.js"></script></helmet>
+<sc-if value="{{ bright }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#1f5fbf 0%,#5aa8f0 30%,#ffd28a 49%,#ff9a4a 52%,#3f8f3a 53%,#1f5a22 100%)">
+  <div style="position:absolute;left:62%;top:18%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,#fffbe0 0%,rgba(255,240,180,.85) 18%,rgba(255,200,120,0) 62%)"></div>
+  <div style="position:absolute;left:-5%;right:-5%;top:28%;height:28%;background:linear-gradient(180deg,#7b5fd1,#3b2f7a);clip-path:polygon(0 100%,8% 40%,16% 70%,27% 10%,38% 62%,47% 30%,58% 75%,68% 18%,79% 58%,88% 28%,100% 66%,100% 100%)"></div>
+  <div style="position:absolute;left:-5%;right:-5%;top:40%;height:20%;background:linear-gradient(180deg,#2f9a6a,#1b5e45);clip-path:polygon(0 100%,0 55%,12% 30%,24% 60%,37% 22%,52% 58%,64% 35%,77% 66%,90% 30%,100% 50%,100% 100%)"></div>
+  <div style="position:absolute;left:-30%;right:-30%;bottom:-8%;height:52%;transform:perspective(600px) rotateX(58deg);transform-origin:50% 100%;background:repeating-conic-gradient(#e8d14a 0 25%,#c2410c 0 50%) 0 0/120px 120px"></div>
+  <div style="position:absolute;left:14%;top:44%;width:300px;height:56px;background:repeating-linear-gradient(90deg,#b4532a 0 58px,#7a2e12 58px 62px),#b4532a;box-shadow:0 8px 0 #5c210b"></div>
+  <div style="position:absolute;left:52%;top:36%;width:220px;height:56px;background:repeating-linear-gradient(90deg,#b4532a 0 58px,#7a2e12 58px 62px);box-shadow:0 8px 0 #5c210b"></div>
+  <div style="position:absolute;left:78%;top:52%;width:180px;height:180px;border-radius:24px;background:linear-gradient(135deg,#ffe14d,#ff9d00);box-shadow:inset 0 0 0 10px #c26a00;transform:rotate(12deg)"></div>
+  <div style="position:absolute;left:20%;top:30%;width:44px;height:44px;border-radius:50%;background:#ffd400;box-shadow:inset -6px -6px 0 #e09400,0 0 24px #fff59a"></div>
+  <div style="position:absolute;left:26%;top:27%;width:44px;height:44px;border-radius:50%;background:#ffd400;box-shadow:inset -6px -6px 0 #e09400,0 0 24px #fff59a"></div>
+  <div style="position:absolute;left:32%;top:30%;width:44px;height:44px;border-radius:50%;background:#ffd400;box-shadow:inset -6px -6px 0 #e09400,0 0 24px #fff59a"></div>
+  <div style="position:absolute;left:44%;top:58%;width:160px;height:200px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 35% 30%,#ff7a7a,#c1121f 60%,#6a040f);box-shadow:0 30px 40px rgba(0,0,0,.45)"></div>
+  <div style="position:absolute;left:66%;top:66%;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#d0f4ff,#00a6d6 55%,#004e7a)"></div>
+  <div style="position:absolute;left:8%;top:62%;width:140px;height:240px;background:linear-gradient(90deg,#0c3b1a,#2f7d32);clip-path:polygon(50% 0,100% 70%,70% 70%,100% 100%,0 100%,30% 70%,0 70%)"></div>
+  <div style="position:absolute;left:3%;top:4%;display:flex;gap:10px">
+    <div style="width:46px;height:40px;background:#ff2d55;clip-path:polygon(50% 100%,0 35%,15% 5%,50% 22%,85% 5%,100% 35%);"></div>
+    <div style="width:46px;height:40px;background:#ff2d55;clip-path:polygon(50% 100%,0 35%,15% 5%,50% 22%,85% 5%,100% 35%);"></div>
+    <div style="width:46px;height:40px;background:#ff2d55;clip-path:polygon(50% 100%,0 35%,15% 5%,50% 22%,85% 5%,100% 35%);"></div>
+    <div style="width:46px;height:40px;background:#3a3a3a;clip-path:polygon(50% 100%,0 35%,15% 5%,50% 22%,85% 5%,100% 35%);"></div>
+  </div>
+  <div style="position:absolute;right:3%;top:4%;font:900 64px/1 Impact,'Arial Black',sans-serif;color:#fff;-webkit-text-stroke:4px #000;letter-spacing:2px">★ × 87</div>
+  <div style="position:absolute;right:3%;bottom:5%;width:200px;height:200px;border-radius:50%;border:6px solid #fff;background:radial-gradient(circle,#3a6 0 30%,#174 31% 60%,#0a2 61%);box-shadow:0 0 0 6px #000"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%)"></div>
+  <div style="position:absolute;inset:0">
+    <image-slot id="gameplay-shot" shape="rect" placeholder="Gameplay stand-in. Drop a real gameplay screenshot here (shared by every Overlay)"></image-slot>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ dark }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 36%,#1c2238 0%,#0b0d18 55%,#040409 100%)">
+  <div style="position:absolute;left:0;right:0;top:4%;height:60%;background:repeating-linear-gradient(90deg,transparent 0 160px,#07080f 160px 250px)"></div>
+  <div style="position:absolute;left:0;right:0;top:0;height:62%;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 46px),repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 92px)"></div>
+  <div style="position:absolute;left:-30%;right:-30%;bottom:-6%;height:46%;transform:perspective(700px) rotateX(62deg);transform-origin:50% 100%;background:repeating-linear-gradient(90deg,#1a1c26 0 118px,#0b0c12 118px 124px),repeating-linear-gradient(0deg,#1a1c26 0 118px,#0b0c12 118px 124px)"></div>
+  <div style="position:absolute;left:-140px;top:120px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,60,.5),rgba(255,110,20,.16) 35%,transparent 65%)"></div>
+  <div style="position:absolute;left:166px;top:390px;width:28px;height:58px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff6d0,#ffb02e 45%,#d94b00 80%);box-shadow:0 0 40px 14px rgba(255,140,30,.6)"></div>
+  <div style="position:absolute;left:1420px;top:110px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(120,170,255,.28),rgba(60,90,200,.1) 35%,transparent 65%)"></div>
+  <div style="position:absolute;left:700px;top:120px;width:560px;height:720px;background:linear-gradient(180deg,#191226,#06050a);clip-path:polygon(50% 0,62% 9%,60% 22%,80% 30%,98% 62%,86% 64%,74% 44%,70% 100%,30% 100%,26% 44%,14% 64%,2% 62%,20% 30%,40% 22%,38% 9%)"></div>
+  <div style="position:absolute;left:955px;top:178px;width:16px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 18px 6px rgba(255,40,40,.75)"></div>
+  <div style="position:absolute;left:993px;top:178px;width:16px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 18px 6px rgba(255,40,40,.75)"></div>
+  <div style="position:absolute;left:1080px;top:260px;width:12px;height:560px;border-radius:6px;background:linear-gradient(180deg,#ffd0d0,#ff2a2a 40%,#5a0000);box-shadow:0 0 30px 8px rgba(255,40,40,.45);transform:rotate(28deg);transform-origin:50% 0"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(255,150,60,.8) 0 2px,transparent 3px) 0 0/140px 120px,radial-gradient(circle,rgba(255,200,120,.6) 0 1.5px,transparent 2.5px) 60px 40px/190px 160px;opacity:.7"></div>
+  <div style="position:absolute;left:56px;top:48px;display:flex;flex-direction:column;gap:9px">
+    <div style="width:640px;height:16px;background:#2a0b0b;box-shadow:0 0 0 2px #000,0 0 0 3px #6b5a3a"><div style="width:72%;height:100%;background:linear-gradient(#e0442f,#7a120c)"></div></div>
+    <div style="width:420px;height:12px;background:#0b142a;box-shadow:0 0 0 2px #000,0 0 0 3px #6b5a3a"><div style="width:48%;height:100%;background:linear-gradient(#4f86ff,#122d7a)"></div></div>
+    <div style="width:520px;height:12px;background:#0b1f12;box-shadow:0 0 0 2px #000,0 0 0 3px #6b5a3a"><div style="width:88%;height:100%;background:linear-gradient(#4fd17a,#14522a)"></div></div>
+  </div>
+  <div style="position:absolute;left:460px;right:460px;bottom:110px;display:flex;flex-direction:column;gap:10px">
+    <span style="font:400 28px/1 Georgia,serif;color:#e8dcc0;letter-spacing:1px">Spectral Blade Queen</span>
+    <div style="height:14px;background:#1a0606;box-shadow:0 0 0 2px #000,0 0 0 3px #6b5a3a"><div style="width:64%;height:100%;background:linear-gradient(#c22a1f,#5a0a06)"></div></div>
+  </div>
+  <div style="position:absolute;left:70px;bottom:70px;width:240px;height:240px">
+    <div style="position:absolute;left:80px;top:0;width:80px;height:80px;background:#0d0d12;box-shadow:inset 0 0 0 2px #6b5a3a"></div>
+    <div style="position:absolute;left:0;top:80px;width:80px;height:80px;background:#0d0d12;box-shadow:inset 0 0 0 2px #6b5a3a"></div>
+    <div style="position:absolute;left:160px;top:80px;width:80px;height:80px;background:#0d0d12;box-shadow:inset 0 0 0 2px #6b5a3a"></div>
+    <div style="position:absolute;left:80px;top:160px;width:80px;height:80px;background:#0d0d12;box-shadow:inset 0 0 0 2px #6b5a3a"></div>
+    <div style="position:absolute;left:100px;top:180px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe9a8,#c78a1a 70%)"></div>
+  </div>
+  <div style="position:absolute;right:60px;bottom:56px;padding:10px 22px;background:rgba(0,0,0,.6);box-shadow:inset 0 0 0 2px #6b5a3a;font:400 34px/1 Georgia,serif;color:#e8dcc0">1,204,880</div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(0,0,0,.7) 100%)"></div>
+  <div style="position:absolute;inset:0">
+    <image-slot id="gameplay-dark" shape="rect" placeholder="Dark gameplay stand-in. Drop a dark gameplay screenshot here"></image-slot>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ busy }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;overflow:hidden;background:linear-gradient(115deg,#ff2d95 0%,#ffcf1f 22%,#21d4fd 45%,#7a2cff 66%,#00e37a 86%,#ffffff 100%)">
+  <div style="position:absolute;inset:0;background:repeating-conic-gradient(rgba(0,0,0,.28) 0 25%,transparent 0 50%) 0 0/28px 28px"></div>
+  <div style="position:absolute;inset:-20%;background:repeating-linear-gradient(-30deg,rgba(255,255,255,.6) 0 6px,transparent 6px 64px)"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(circle,#fff 0 3px,transparent 4px) 0 0/46px 46px,radial-gradient(circle,#000 0 4px,transparent 5px) 23px 17px/62px 62px,radial-gradient(circle,#ff3b3b 0 6px,transparent 7px) 11px 40px/88px 88px,radial-gradient(circle,#00ffd0 0 5px,transparent 6px) 50px 9px/74px 74px"></div>
+  <div style="position:absolute;left:0;right:0;top:360px;height:260px;background:radial-gradient(circle,#fff 0 6px,#ff4fb0 7px 15px,rgba(255,79,176,0) 17px) 0 0/58px 52px"></div>
+  <div style="position:absolute;right:-160px;bottom:-200px;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,#fff 0 22%,#fff6a0 32%,#ff8a00 46%,rgba(255,40,0,.65) 58%,transparent 70%)"></div>
+  <div style="position:absolute;left:760px;top:120px;width:420px;height:420px;background:#fff;clip-path:polygon(50% 0,58% 36%,92% 12%,66% 44%,100% 50%,66% 58%,90% 90%,58% 66%,50% 100%,42% 66%,10% 90%,34% 58%,0 50%,34% 44%,8% 12%,42% 36%)"></div>
+  <div style="position:absolute;left:180px;top:560px;width:260px;height:300px;background:#000;clip-path:polygon(50% 0,70% 18%,100% 10%,86% 46%,100% 100%,0 100%,14% 46%,0 10%,30% 18%)"></div>
+  <div style="position:absolute;left:1180px;top:640px;width:200px;height:240px;background:#000;clip-path:polygon(50% 0,72% 22%,100% 0,92% 50%,100% 100%,0 100%,8% 50%,0 0,28% 22%)"></div>
+  <div style="position:absolute;right:28px;top:150px;width:480px;height:440px;background:repeating-linear-gradient(90deg,#111 0 5px,transparent 5px 96px),repeating-linear-gradient(0deg,#111 0 5px,transparent 5px 88px),radial-gradient(circle,#ffe14d 0 14px,transparent 15px) 30px 26px/96px 88px,radial-gradient(circle,#21d4fd 0 10px,transparent 11px) 64px 60px/96px 88px,rgba(40,10,60,.78);box-shadow:0 0 0 5px #fff,0 0 0 9px #000"></div>
+  <div style="position:absolute;right:60px;top:-40px;width:190px;height:190px;border-radius:50%;background:repeating-radial-gradient(circle,#0a7f3a 0 10px,#7bd85a 10px 20px);box-shadow:0 0 0 6px #fff,0 0 0 10px #000"></div>
+  <div style="position:absolute;left:60px;top:40px;font:900 60px/1 Impact,'Arial Black',sans-serif;color:#fff;-webkit-text-stroke:4px #000;transform:rotate(-6deg)">COMBO ×42</div>
+  <div style="position:absolute;left:640px;top:600px;font:900 84px/1 Impact,'Arial Black',sans-serif;color:#ffe14d;-webkit-text-stroke:5px #000;transform:rotate(8deg)">CRIT!</div>
+  <div style="position:absolute;left:1080px;top:300px;font:900 54px/1 Impact,'Arial Black',sans-serif;color:#fff;-webkit-text-stroke:4px #000;transform:rotate(-10deg)">9,999</div>
+  <div style="position:absolute;left:1500px;top:720px;font:900 64px/1 Impact,'Arial Black',sans-serif;color:#00ffd0;-webkit-text-stroke:4px #000;transform:rotate(-4deg)">+87</div>
+  <div style="position:absolute;left:1640px;top:880px;font:900 58px/1 Impact,'Arial Black',sans-serif;color:#fff;-webkit-text-stroke:4px #000;transform:rotate(12deg)">-120</div>
+  <div style="position:absolute;left:340px;top:250px;font:900 48px/1 Impact,'Arial Black',sans-serif;color:#ff3b3b;-webkit-text-stroke:4px #000;transform:rotate(14deg)">MISS</div>
+  <div style="position:absolute;left:40px;bottom:40px;width:720px;height:40px;background:repeating-linear-gradient(90deg,#ff2d55 0 30px,#ffe14d 30px 60px,#21d4fd 60px 90px);box-shadow:0 0 0 5px #000"></div>
+  <div style="position:absolute;inset:0">
+    <image-slot id="gameplay-busy" shape="rect" placeholder="Busy gameplay stand-in. Drop a high-detail, chaotic screenshot here"></image-slot>
+  </div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bright&quot;,&quot;dark&quot;,&quot;busy&quot;],&quot;default&quot;:&quot;bright&quot;,&quot;tsType&quot;:&quot;'bright'|'dark'|'busy'&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const v = this.props.variant || 'bright';
+    return { bright: v === 'bright', dark: v === 'dark', busy: v === 'busy' };
+  }
+}
+</script>
+</body>
+</html>

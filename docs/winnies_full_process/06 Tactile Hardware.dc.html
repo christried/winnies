@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500;600;700&family=Silkscreen:wght@400;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>@font-face{font-family:'DSEG7';src:url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2') format('woff2');font-weight:400 700;font-display:swap}body{margin:0;background:#BDB8AE}a{color:#2D55C8}a:hover{color:#B83A0C}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#BDB8AE;font-family:Archivo,sans-serif;color:#1E1E1E">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="d6" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:22px;background:#FF5A1F;display:flex;align-items:center;justify-content:center;font:700 64px/1 DSEG7,'Share Tech Mono';color:#1C1A17;box-shadow:0 10px 0 #B83A0C,0 20px 30px rgba(60,40,20,.4),inset 0 2px 0 rgba(255,255,255,.4)">06</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:900 96px/0.95 Archivo;font-stretch:115%;letter-spacing:-2px;text-transform:uppercase">Tactile Hardware</div>
+      <div style="font:600 22px/1.3 'IBM Plex Mono';color:#3E3A33">Parents: skeuomorphism + neumorphism · Native mode: light · Winnies as a physical stopwatch console: keys that travel, LEDs that mean something, LCD digits with ghost segments.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="06 Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;box-sizing:border-box;padding:24px;background:linear-gradient(180deg,#D3CFC6,#C4BFB5)">
+<div style="position:relative;height:100%;box-sizing:border-box;border-radius:44px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 30px 60px -20px rgba(60,50,30,.55),inset 0 2px 0 #fff,inset 0 -8px 0 #CFC8B8;padding:26px 40px 34px;display:flex;flex-direction:column;gap:20px">
+  <span style="position:absolute;left:18px;top:18px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9E6E0,#9E9A92);box-shadow:inset 0 0 0 1px #8A867E"><span style="position:absolute;left:3px;right:3px;top:8px;height:2px;background:#6E6A62;transform:rotate(35deg)"></span></span>
+  <span style="position:absolute;right:18px;top:18px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9E6E0,#9E9A92);box-shadow:inset 0 0 0 1px #8A867E"><span style="position:absolute;left:3px;right:3px;top:8px;height:2px;background:#6E6A62;transform:rotate(-20deg)"></span></span>
+  <span style="position:absolute;left:18px;bottom:22px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9E6E0,#9E9A92);box-shadow:inset 0 0 0 1px #8A867E"><span style="position:absolute;left:3px;right:3px;top:8px;height:2px;background:#6E6A62;transform:rotate(70deg)"></span></span>
+  <span style="position:absolute;right:18px;bottom:22px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9E6E0,#9E9A92);box-shadow:inset 0 0 0 1px #8A867E"><span style="position:absolute;left:3px;right:3px;top:8px;height:2px;background:#6E6A62;transform:rotate(10deg)"></span></span>
+
+  <nav style="display:flex;align-items:center;gap:18px;height:64px;padding:0 10px">
+    <div style="display:flex;align-items:baseline;gap:10px"><span style="font:900 34px/1 Archivo;font-stretch:118%;font-style:italic;letter-spacing:-1px">WINNIES</span><span style="font:600 12px 'IBM Plex Mono';color:#4A463F;letter-spacing:1px">WN-50 · CHALLENGE TIMER</span></div>
+    <div style="position:relative;width:44px;height:44px;border-radius:50%;background:#FAF6EA;box-shadow:inset 0 2px 4px rgba(0,0,0,.25),0 0 0 3px #CFC8B8">
+      <span style="position:absolute;left:50%;top:4px;width:2px;height:5px;margin-left:-1px;background:#1E1E1E"></span><span style="position:absolute;left:50%;bottom:4px;width:2px;height:5px;margin-left:-1px;background:#1E1E1E"></span>
+      <span data-amb="hand" style="position:absolute;left:50%;top:6px;width:2px;height:16px;margin-left:-1px;background:#FF5A1F;transform-origin:50% 16px"></span>
+      <span style="position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#1E1E1E"></span>
+    </div>
+    <button style="margin-left:14px;display:flex;align-items:center;gap:12px;height:46px;padding:0 6px 0 4px;border:0;border-radius:10px;background:#D9D3C6;box-shadow:inset 0 2px 5px rgba(0,0,0,.2);cursor:pointer">
+      <span style="height:34px;display:flex;align-items:center;padding:0 12px;background:#1E1E1E;color:#F5F2EA;font:800 16px Archivo;font-stretch:80%;letter-spacing:2px;text-transform:uppercase;border-radius:3px;box-shadow:0 1px 0 rgba(255,255,255,.5);text-shadow:0 1px 0 #000">Kitty vs. the world</span>
+      <span style="font:600 13px 'IBM Plex Mono';color:#3E3A33">03.10.26</span><span style="font-family:'Material Symbols Sharp';font-size:22px;color:#3E3A33">unfold_more</span>
+    </button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:10px;background:linear-gradient(180deg,#E3DED3,#D2CCBF);color:#1E1E1E;font:800 15px Archivo;font-stretch:90%;letter-spacing:1.5px;cursor:pointer;box-shadow:0 5px 0 #A9A398,0 8px 10px rgba(0,0,0,.2),inset 0 1px 0 #fff" style-active="transform:translateY(4px);box-shadow:0 1px 0 #A9A398,inset 0 1px 0 #fff"><span style="font-family:'Material Symbols Sharp';font-size:20px">link</span>SHARE</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="position:relative;width:132px;height:28px;border-radius:6px;background:#3A3833;box-shadow:inset 0 2px 4px rgba(0,0,0,.6)"><span style="position:absolute;left:46px;top:3px;width:40px;height:22px;border-radius:4px;background:linear-gradient(180deg,#F5F2EA,#C9C3B5);box-shadow:0 2px 2px rgba(0,0,0,.4);background-image:repeating-linear-gradient(90deg,#B5AFA2 0 2px,rgba(0,0,0,0) 2px 5px),linear-gradient(180deg,#F5F2EA,#C9C3B5)"></span></div>
+      <div style="display:flex;justify-content:space-between;width:132px;font:700 10px 'IBM Plex Mono';color:#3E3A33"><span>SYS</span><span style="color:#B83A0C">LIGHT</span><span>DARK</span></div>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="display:flex;align-items:center;gap:10px;height:46px;padding:0 6px 0 12px;border-radius:10px;background:#D9D3C6;box-shadow:inset 0 2px 5px rgba(0,0,0,.2)"><span style="font:600 11px/1.3 'IBM Plex Mono';color:#3E3A33">USER<br><b style="color:#1E1E1E">KITTYSPEEDRUNS</b></span><span style="width:36px;height:36px;border-radius:8px;background:#2D55C8;color:#fff;display:flex;align-items:center;justify-content:center;font:900 18px Archivo">K</span></div>
+  </nav>
+
+  <section style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;padding:22px;border-radius:28px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18),inset 0 -2px 0 #fff">
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="display:flex;align-items:center;gap:16px">
+        <span style="height:46px;display:flex;align-items:center;padding:0 18px;background:#1E1E1E;color:#F5F2EA;font:800 26px Archivo;font-stretch:78%;letter-spacing:4px;text-transform:uppercase;border-radius:3px;transform:rotate(-1deg);box-shadow:0 2px 3px rgba(0,0,0,.35);text-shadow:0 -1px 0 #000,0 1px 0 rgba(255,255,255,.3);white-space:nowrap">Kitty vs. the world</span>
+        <span style="font:600 13px 'IBM Plex Mono';color:#3E3A33">CREATED 03.10.26</span>
+        <span style="display:flex;align-items:center;gap:8px;font:700 13px 'IBM Plex Mono';color:#3E3A33"><span data-amb="led" style="width:12px;height:12px;border-radius:50%;background:#EF3B2D;box-shadow:0 0 8px #EF3B2D,inset 0 -2px 2px rgba(0,0,0,.3)"></span>{{ runningLabel }}</span>
+      </div>
+      <div data-lcd="1" style="padding:12px;border-radius:18px;background:#2B2B29;box-shadow:inset 0 2px 0 #4A4A46,0 2px 0 #fff">
+        <div style="position:relative;border-radius:8px;padding:12px 24px 14px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 3px 10px rgba(0,0,0,.35)">
+          <div style="display:flex;justify-content:space-between;font:400 16px Silkscreen;color:#1C2418"><span>TOTAL TIMER</span><span>{{ summary }}</span></div>
+          <div aria-label="Total Timer" style="display:flex;justify-content:center;font:700 128px/1.1 DSEG7,'Share Tech Mono';color:#1C2418">
+            <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;text-align:right;opacity:.09">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative">{{ d.c }}</span></span></sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px;height:14px"><sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8"><span style="background:#1C2418;opacity:{{ b.op }}"></span></sc-for></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;justify-content:flex-end">
+      <button onClick="{{ onTotal }}" style="height:150px;border:0;border-radius:20px;background:linear-gradient(180deg,#FF7340,#F2531A);color:#1C1A17;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 10px 0 #B83A0C,0 16px 20px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.45)" style-active="transform:translateY(8px);box-shadow:0 2px 0 #B83A0C,inset 0 2px 0 rgba(255,255,255,.45)">
+        <span style="font-family:'Material Symbols Sharp';font-size:52px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span><span style="font:900 20px Archivo;font-stretch:105%;letter-spacing:1px;text-transform:uppercase">{{ totalBtnLabel }}</span>
+      </button>
+      <div style="display:flex;gap:12px">
+        <button aria-label="More" style="flex:1;height:52px;border:0;border-radius:12px;background:linear-gradient(180deg,#E3DED3,#D2CCBF);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font:800 13px Archivo;letter-spacing:1px;box-shadow:0 5px 0 #A9A398,inset 0 1px 0 #fff" style-active="transform:translateY(4px);box-shadow:0 1px 0 #A9A398"><span style="font-family:'Material Symbols Sharp';font-size:22px">more_horiz</span>MENU</button>
+        <div style="width:96px;border-radius:12px;background:radial-gradient(circle,#4A463F 1.5px,rgba(0,0,0,0) 2px) 0 0/8px 8px,#D9D3C6;box-shadow:inset 0 2px 4px rgba(0,0,0,.2)" title="Speaker (sound muted)"></div>
+      </div>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:12px;background:#1C2418;color:#C2CEA8;font:400 22px Silkscreen"><span style="width:14px;height:14px;border-radius:50%;background:#22C55E;box-shadow:0 0 10px #22C55E"></span>COMPLETE · ALL CHALLENGES WON · PRINTING RECEIPT… <span style="font:500 12px 'IBM Plex Mono'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:20px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18)">
+    <span style="font:700 11px/1.3 'IBM Plex Mono';color:#3E3A33;width:70px">LOAD<br>CHALLENGE</span>
+    <div style="flex:1.1;height:48px;border-radius:6px;background:#FAF6EA;box-shadow:inset 0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;padding:0 14px;font:600 16px 'IBM Plex Mono';color:#6B665C">Game</div>
+    <div style="flex:1.5;height:48px;border-radius:6px;background:#FAF6EA;box-shadow:inset 0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;padding:0 14px;font:600 16px 'IBM Plex Mono';color:#6B665C">Win Condition (optional)</div>
+    <span style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono';color:#3E3A33"><span style="position:relative;width:46px;height:24px;border-radius:12px;background:#3A3833;box-shadow:inset 0 2px 3px rgba(0,0,0,.6)"><span style="position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:linear-gradient(180deg,#F5F2EA,#C9C3B5)"></span></span>COUNTER</span>
+    <div style="width:96px;height:48px;border-radius:6px;background:#FAF6EA;opacity:.5;box-shadow:inset 0 2px 4px rgba(0,0,0,.2);display:flex;align-items:center;padding:0 12px;font:600 16px 'IBM Plex Mono';color:#6B665C">Target</div>
+    <button style="display:flex;align-items:center;gap:6px;height:48px;padding:0 18px;border:0;border-radius:10px;background:linear-gradient(180deg,#3B66DA,#2A4FBF);color:#fff;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:0 5px 0 #1A3487,inset 0 1px 0 rgba(255,255,255,.3)" style-active="transform:translateY(4px);box-shadow:0 1px 0 #1A3487"><span style="font-family:'Material Symbols Sharp';font-size:22px">add</span>ADD CHALLENGE</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;padding:0 10px;font:700 12px 'IBM Plex Mono';color:#3E3A33;letter-spacing:1px"><span>CHALLENGE SLOTS</span><span>8 / 50 · DRAG TO REORDER</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:20px 92px minmax(0,1fr) 214px 136px 50px 154px 42px;gap:14px;align-items:center;height:72px;padding:0 12px;border-radius:16px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }}">
+        <span aria-label="Drag to reorder" style="width:14px;height:34px;opacity:{{ r.gripOp }};background:repeating-linear-gradient(90deg,#8A857A 0 2px,rgba(0,0,0,0) 2px 5px);cursor:grab"></span>
+        <span title="{{ r.statusWord }}" style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono';color:#1E1E1E;letter-spacing:1px"><span data-amb="{{ r.ledAmb }}" style="width:14px;height:14px;border-radius:50%;background:{{ r.led }};box-shadow:{{ r.ledGlow }}"></span>{{ r.statusUp }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:2px;height:22px;padding:0 7px 0 3px;background:#2D55C8;color:#fff;font:700 11px 'IBM Plex Mono';border-radius:2px"><span style="font-family:'Material Symbols Sharp';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>PINNED</span></sc-if>
+            <span style="padding:2px 8px;background:#FAF6EA;box-shadow:0 1px 1px rgba(0,0,0,.2);font:800 19px/1.15 Archivo;font-stretch:88%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:{{ r.gameColor }}">{{ r.game }}</span>
+          </div>
+          <span style="font:500 13px/1.2 'IBM Plex Mono';color:#3E3A33;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:34px;height:34px;border:0;border-radius:8px;background:linear-gradient(180deg,#E3DED3,#D2CCBF);cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:0 4px 0 #A9A398" style-active="transform:translateY(3px);box-shadow:0 1px 0 #A9A398">remove</button>
+            <span style="min-width:110px;height:38px;border-radius:6px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 2px 5px rgba(0,0,0,.35),0 0 0 4px #2B2B29;display:flex;align-items:center;justify-content:center;font:700 18px DSEG7,'Share Tech Mono';color:#1C2418">{{ r.countSeg }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:34px;height:34px;border:0;border-radius:8px;background:linear-gradient(180deg,#E3DED3,#D2CCBF);cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:0 4px 0 #A9A398" style-active="transform:translateY(3px);box-shadow:0 1px 0 #A9A398">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;height:44px;align-items:center;padding:0 10px;border-radius:6px;background:{{ r.lcdBg }};box-shadow:inset 0 2px 5px rgba(0,0,0,.35),0 0 0 4px #2B2B29;font:700 21px DSEG7,'Share Tech Mono';color:#1C2418">
+          <sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative">{{ d.c }}</span></span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:50px;height:50px;border:0;border-radius:12px;cursor:pointer;background:{{ r.playBg }};color:#1C1A17;opacity:{{ r.playOp }};font-family:'Material Symbols Sharp';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:{{ r.playShadow }};transform:{{ r.playPress }}" style-active="transform:translateY(5px)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 6px;border:0;background:transparent;cursor:pointer">
+          <span style="position:relative;width:58px;height:30px;border-radius:15px;background:{{ r.trackBg }};box-shadow:inset 0 2px 4px rgba(0,0,0,.55)"><span style="position:absolute;top:3px;left:{{ r.knobX }};width:24px;height:24px;border-radius:50%;background:linear-gradient(180deg,#F5F2EA,#C9C3B5);box-shadow:0 2px 2px rgba(0,0,0,.4);transition:left .12s cubic-bezier(.7,0,.3,1)"></span></span>
+          <span style="font:800 13px Archivo;letter-spacing:1px;color:#1E1E1E;text-align:left;line-height:1.1;white-space:pre-line">{{ r.winUp }}</span>
+        </button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:42px;height:42px;border:0;border-radius:10px;cursor:pointer;background:linear-gradient(180deg,#E3DED3,#D2CCBF);font-family:'Material Symbols Sharp';font-size:22px;box-shadow:{{ r.moreShadow }};transform:{{ r.morePress }}">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:8px;top:64px;width:250px;padding:14px 10px 22px;background:#FFFFFF;box-shadow:0 18px 30px rgba(0,0,0,.3);clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),95% 100%,90% calc(100% - 8px),85% 100%,80% calc(100% - 8px),75% 100%,70% calc(100% - 8px),65% 100%,60% calc(100% - 8px),55% 100%,50% calc(100% - 8px),45% 100%,40% calc(100% - 8px),35% 100%,30% calc(100% - 8px),25% 100%,20% calc(100% - 8px),15% 100%,10% calc(100% - 8px),5% 100%,0 calc(100% - 8px));font:600 15px 'IBM Plex Mono'">
+            <div style="padding:0 8px 8px;border-bottom:1px dashed #8A857A;margin-bottom:6px;font:700 11px 'IBM Plex Mono';color:#3E3A33">SLOT 05 · OPTIONS</div>
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:10px;height:38px;padding:0 8px;background:{{ m.bg }};color:{{ m.color }}"><span style="font-family:'Material Symbols Sharp';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</div>
+<div style="font:600 20px 'IBM Plex Mono';color:#3E3A33">Workspace · mid-run · 1440 · row 2 hovered, row 5 overflow menu open · click Start, Mark Won, ± to play</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="06 Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:52px;bottom:48px;width:660px;padding:22px 22px 18px;box-sizing:border-box;border-radius:40px 40px 40px 90px;background:linear-gradient(180deg,#F1ECE2,#E2DCCF);box-shadow:0 0 0 4px #1E1E1E,0 24px 50px rgba(0,0,0,.6),inset 0 2px 0 #fff,inset 0 -8px 0 #CFC8B8">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 10px 10px"><span style="font:900 22px Archivo;font-stretch:118%;font-style:italic">WINNIES</span><span style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono'"><span data-amb="led" style="width:12px;height:12px;border-radius:50%;background:#EF3B2D;box-shadow:0 0 8px #EF3B2D"></span>LIVE</span></div>
+    <div data-lcd="1" style="padding:12px;border-radius:18px;background:#2B2B29">
+      <div style="border-radius:8px;padding:12px 18px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 3px 10px rgba(0,0,0,.35);color:#1C2418">
+        <div style="display:flex;justify-content:space-between;font:400 20px Silkscreen"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">KITTY VS. THE WORLD</span><span>{{ wonCount }}/{{ totalCount }} WON</span></div>
+        <div aria-label="Total Timer" style="display:flex;justify-content:flex-end;font:700 76px/1.15 DSEG7,'Share Tech Mono'">
+          <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.09">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative">{{ d.c }}</span></span></sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;border-top:2px solid #1C2418;margin-top:6px">
+          <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+            <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:30px minmax(0,1fr) auto auto;gap:12px;align-items:center;height:48px;border-bottom:1px solid rgba(28,36,24,.35)">
+              <span title="{{ r.statusWord }}" style="font-family:'Material Symbols Sharp';font-size:26px;font-variation-settings:'FILL' 1">{{ r.lcdIcon }}</span>
+              <span style="font:400 20px Silkscreen;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.gameUp }}</span>
+              <span style="font:700 16px DSEG7,'Share Tech Mono'">{{ r.countSeg }}</span>
+              <span style="display:flex;font:700 22px DSEG7,'Share Tech Mono'"><sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative">{{ d.c }}</span></span></sc-for></span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding-top:8px;font:400 16px Silkscreen"><sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:14px;height:14px;border:2px solid #1C2418;box-sizing:border-box;background:{{ p.bg }}"></span></sc-for><span style="margin-left:4px">PAGE {{ pageLabel }}</span></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 10px 0"><span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#FF7340,#F2531A);box-shadow:0 5px 0 #B83A0C"></span><span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(180deg,#3B66DA,#2A4FBF);box-shadow:0 5px 0 #1A3487"></span><span style="flex:1"></span><span style="width:120px;height:36px;border-radius:8px;background:radial-gradient(circle,#4A463F 1.5px,rgba(0,0,0,0) 2px) 0 0/8px 8px"></span></div>
+  </div>
+</div>
+<div style="font:600 20px 'IBM Plex Mono';color:#3E3A33">Overlay · 1920×1080 · handheld device in the corner, transparent background over gameplay stand-in · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="06 Genome" style="padding:44px;border-radius:36px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 20px 40px -20px rgba(60,50,30,.5),inset 0 2px 0 #fff,inset 0 -6px 0 #CFC8B8">
+    <div style="font:900 44px Archivo;font-stretch:115%;margin-bottom:26px">GENOME</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:18px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;gap:18px">
+          <span style="width:80px;height:60px;border-radius:14px;background:linear-gradient(180deg,#FF7340,#F2531A);box-shadow:0 8px 0 #B83A0C,inset 0 2px 0 rgba(255,255,255,.4)"></span>
+          <span style="width:80px;height:60px;border-radius:14px;background:linear-gradient(180deg,#E3DED3,#D2CCBF);box-shadow:0 2px 0 #A9A398;transform:translateY(6px)"></span>
+          <span style="width:18px;height:18px;border-radius:50%;background:#22C55E;box-shadow:0 0 10px #22C55E"></span>
+        </div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Material</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">Matte ABS plastic, recessed slots, keycaps with real travel (a solid bottom edge that collapses when pressed), screws, a speaker grille, paper labels, Dymo tape. Light from above, hard and honest.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:700 11px 'IBM Plex Mono'">
+          <div style="border-radius:8px;background:#ECE7DC;box-shadow:inset 0 0 0 1px #CFC8B8;padding:8px;display:flex;align-items:flex-end">ABS<br>#ECE7DC</div>
+          <div style="border-radius:8px;background:#B7C49C;padding:8px;display:flex;align-items:flex-end">LCD<br>#B7C49C</div>
+          <div style="border-radius:8px;background:#1C2418;color:#C2CEA8;padding:8px;display:flex;align-items:flex-end">Segment<br>#1C2418</div>
+          <div style="border-radius:8px;background:#FF5A1F;padding:8px;display:flex;align-items:flex-end">Signal<br>#FF5A1F</div>
+          <div style="border-radius:8px;background:#2B2B29;color:#fff;padding:8px;display:flex;align-items:flex-end">Bezel<br>#2B2B29</div>
+          <div style="border-radius:8px;background:#EF3B2D;padding:8px;display:flex;align-items:flex-end">LED Red<br>#EF3B2D</div>
+          <div style="border-radius:8px;background:#22C55E;padding:8px;display:flex;align-items:flex-end">LED Green<br>#22C55E</div>
+          <div style="border-radius:8px;background:#2D55C8;color:#fff;padding:8px;display:flex;align-items:flex-end">Key Blue<br>#2D55C8</div>
+        </div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Palette</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">Beige electronics with one loud orange key. Red LED = running, Green LED = Won, Blue = Pinned and secondary keys. LCD green is the only "screen" colour.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:18px;background:#E2DCCF;display:flex;align-items:center;justify-content:center;gap:16px">
+          <span style="font:900 52px/1 Archivo;font-stretch:118%;font-style:italic">Aa</span><span style="font:600 38px/1 'IBM Plex Mono'">Aa</span>
+          <span style="padding:6px 10px;border-radius:6px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:0 0 0 4px #2B2B29;font:700 40px DSEG7,'Share Tech Mono';color:#1C2418">07</span>
+        </div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Type</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">Archivo (expanded italic for the wordmark, condensed for labels), IBM Plex Mono for silkscreen and text, Silkscreen on LCDs. Timers in DSEG7 seven-segment with unlit "8" ghost segments behind every digit.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:18px;background:linear-gradient(180deg,#D3CFC6,#C4BFB5);display:flex;align-items:center;justify-content:center"><span style="width:70%;height:70%;border-radius:22px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 14px 24px -10px rgba(60,50,30,.5),inset 0 -5px 0 #CFC8B8"></span></div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Backdrop</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">A plain grey desk. The device is the page: content lives inside one chassis, and the screen edge is its bezel.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:18px;background:#E2DCCF;display:flex;align-items:center;justify-content:center;gap:24px">
+          <div style="position:relative;width:96px;height:96px;border-radius:50%;background:#FAF6EA;box-shadow:inset 0 2px 6px rgba(0,0,0,.3),0 0 0 5px #CFC8B8"><span data-amb="hand" style="position:absolute;left:50%;top:10px;width:3px;height:38px;margin-left:-1.5px;background:#FF5A1F;transform-origin:50% 38px"></span><span style="position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#1E1E1E"></span></div>
+        </div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Motion character</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">Mechanical: instant snaps, detents, quick LCD refresh flicker, keys that clunk down. Nothing floats; everything clicks into place.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:18px;background:#E2DCCF;display:flex;align-items:center;justify-content:center;gap:18px">
+          <span style="height:34px;display:flex;align-items:center;padding:0 12px;background:#1E1E1E;color:#F5F2EA;font:800 16px Archivo;font-stretch:78%;letter-spacing:3px;transform:rotate(-2deg)">WINNIE</span>
+          <span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9E6E0,#9E9A92)"></span>
+          <span style="width:70px;height:40px;border-radius:6px;background:radial-gradient(circle,#4A463F 1.5px,rgba(0,0,0,0) 2px) 0 0/8px 8px,#D9D3C6"></span>
+        </div>
+        <div style="font:800 20px Archivo;font-stretch:110%">Ornament / mascot</div>
+        <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">Dymo label tape, screws, grilles, a tiny analog stopwatch dial, thermal-receipt menus, model numbers. No mascot: the device is the character.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="06 Wordmark" style="padding:44px;border-radius:36px;display:flex;flex-direction:column;gap:26px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 20px 40px -20px rgba(60,50,30,.5),inset 0 2px 0 #fff,inset 0 -6px 0 #CFC8B8">
+    <div style="font:900 44px Archivo;font-stretch:115%">WORDMARK</div>
+    <div style="flex:1;min-height:380px;border-radius:28px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px">
+      <span style="font:900 210px/0.9 Archivo;font-stretch:125%;font-style:italic;letter-spacing:-8px;color:#1E1E1E;text-shadow:0 2px 0 #fff">WINNIES</span>
+      <span style="display:flex;align-items:center;gap:14px;font:700 22px 'IBM Plex Mono';letter-spacing:6px;color:#3E3A33"><span style="width:16px;height:16px;border-radius:50%;background:#FF5A1F"></span>WN-50 CHALLENGE TIMER</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px">
+      <div style="height:130px;border-radius:18px;background:#FF5A1F;display:flex;align-items:center;justify-content:center;font:900 52px Archivo;font-stretch:125%;font-style:italic;color:#1C1A17;box-shadow:0 8px 0 #B83A0C">WINNIES</div>
+      <div style="height:130px;border-radius:18px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:0 0 0 8px #2B2B29;display:flex;align-items:center;justify-content:center;font:400 46px Silkscreen;color:#1C2418">WINNIES</div>
+      <div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26;align-self:center">Archivo at full width and black weight, slanted like a sports-watch logo, silkscreened onto plastic with a model line. Also ships as a Dymo strip and an LCD boot screen.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="06 Motion" style="padding:44px;border-radius:36px;display:flex;flex-direction:column;gap:24px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 20px 40px -20px rgba(60,50,30,.5),inset 0 2px 0 #fff,inset 0 -6px 0 #CFC8B8">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:900 44px Archivo;font-stretch:115%">MOTION SKETCH</div>
+      <div style="display:flex;gap:14px">
+        <button onClick="{{ onReplayWon }}" style="height:52px;padding:0 20px;border:0;border-radius:12px;background:linear-gradient(180deg,#3B66DA,#2A4FBF);color:#fff;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:0 5px 0 #1A3487" style-active="transform:translateY(4px);box-shadow:0 1px 0 #1A3487">REPLAY WON</button>
+        <button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 20px;border:0;border-radius:12px;background:linear-gradient(180deg,#FF7340,#F2531A);color:#1C1A17;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:0 5px 0 #B83A0C" style-active="transform:translateY(4px);box-shadow:0 1px 0 #B83A0C">REPLAY COMPLETE</button>
+      </div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:16px;align-items:center;height:72px;padding:0 16px;border-radius:16px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18)">
+      <span style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono'"><span style="width:14px;height:14px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px #22C55E"></span>WON</span>
+      <span style="font:800 19px Archivo;font-stretch:88%">Celeste <span style="font:500 13px 'IBM Plex Mono'">Farewell, golden strawberry</span></span>
+      <span style="padding:6px 10px;border-radius:6px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:0 0 0 4px #2B2B29;font:700 21px DSEG7,'Share Tech Mono';color:#1C2418">1:02:13</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div><div style="font:800 18px Archivo;color:#B83A0C;margin-bottom:8px">TICK</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#2E2B26">Changed segments refresh with a two-frame LCD flicker (140ms, stepped); the analog dial hand jumps one detent per second; the running LED blinks red.</div></div>
+      <div><div style="font:800 18px Archivo;color:#157A3A;margin-bottom:8px">WON</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#2E2B26">The toggle snaps over, the row jolts like a latch engaging, paper-strip confetti spits out, LED goes green, and the slot re-seats at the bottom like a cartridge.</div></div>
+      <div><div style="font:800 18px Archivo;color:#2D55C8;margin-bottom:8px">REDUCED MOTION · SOUND</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#2E2B26">Static: LED colour + WON word + toggle position. Sound (muted): tick = quartz click, Won = ka-chunk latch + beep, Complete = receipt printer whirr and a triple beep.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="06 Dialects" style="padding:44px;border-radius:36px;display:flex;flex-direction:column;gap:24px;background:linear-gradient(180deg,#F1ECE2,#E6E0D3);box-shadow:0 20px 40px -20px rgba(60,50,30,.5),inset 0 2px 0 #fff,inset 0 -6px 0 #CFC8B8">
+    <div style="font:900 44px Archivo;font-stretch:115%">DIALECT LEAN</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="padding:26px;border-radius:20px;background:#E2DCCF;box-shadow:inset 0 3px 8px rgba(0,0,0,.18)"><div style="font:800 22px Archivo;margin-bottom:10px">Workspace</div><div style="font:500 16px/1.5 'IBM Plex Mono';color:#2E2B26">The full desktop console: deep keys, slots and LCDs. Feels like hardware you can operate for hours without looking.</div></div>
+      <div style="padding:26px;border-radius:20px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:0 0 0 6px #2B2B29;color:#1C2418"><div style="font:400 22px Silkscreen;margin-bottom:10px">Broadcast</div><div style="font:600 16px/1.5 'IBM Plex Mono'">A handheld held up to the camera: pure LCD, black-on-green, unbeatable legibility over any game.</div></div>
+      <div style="padding:26px;border-radius:20px;background:#FF5A1F;color:#1C1A17;box-shadow:0 8px 0 #B83A0C"><div style="font:800 22px Archivo;margin-bottom:10px">Showcase</div><div style="font:600 16px/1.5 'IBM Plex Mono'">Product-launch page for a gadget: exploded views, spec sheets, "unbox" scroll, changelog as firmware release notes.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    return {
+      wonDelay: 360,
+      amb: {
+        led: [[{ opacity: 1 }, { opacity: .25 }], { duration: 1000, easing: 'steps(1,end)' }],
+        hand: [[{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 60000, easing: 'steps(60,end)' }],
+      },
+      tick: () => [[{ opacity: .1 }, { opacity: 1 }, { opacity: .55 }, { opacity: 1 }], { duration: 140, easing: 'steps(1,end)' }],
+      won: (el, W, ov) => {
+        el.animate([{ transform: 'none' }, { transform: 'translateY(4px)' }, { transform: 'translateY(-2px)' }, { transform: 'none' }], { duration: 180, easing: 'steps(1,end)' });
+        W.burst(el, { n: ov ? 10 : 18, shapes: ['bar'], colors: ['#FAF6EA', '#FF5A1F', '#22C55E', '#FFFFFF'], size: 26, spread: 200, gravity: 220, dur: 1100, ox: .82, up: true, cone: 1.4, spin: 720, style: { boxShadow: '0 1px 2px rgba(0,0,0,.3)' } });
+      },
+      land: (el) => el.animate([{ transform: 'translateX(-28px)', opacity: 0 }, { transform: 'translateX(4px)', opacity: 1, offset: .75 }, { transform: 'none' }], { duration: 240, easing: 'cubic-bezier(.6,0,.4,1)' }),
+      complete: (root, W) => {
+        root.querySelectorAll('[data-lcd]').forEach((l) => l.animate([{ filter: 'none' }, { filter: 'invert(1)' }, { filter: 'none' }, { filter: 'invert(1)' }, { filter: 'none' }, { filter: 'invert(1)' }, { filter: 'none' }], { duration: 1200, easing: 'steps(1,end)' }));
+        const t = root.querySelector('[data-lcd]');
+        if (t) W.burst(t, { n: 40, shapes: ['bar'], colors: ['#FAF6EA', '#FF5A1F', '#22C55E', '#2D55C8'], size: 34, spread: 500, gravity: 300, dur: 1800, up: true, cone: 2, spin: 900 });
+      },
+    };
+  }
+  skin(r) {
+    const KEY = '0 5px 0 #A9A398,0 7px 8px rgba(0,0,0,.18),inset 0 1px 0 #fff';
+    const st = {
+      running: { bg: '#E9E3D6', shadow: 'inset 0 3px 8px rgba(0,0,0,.2),inset 0 0 0 2px #FF5A1F', led: '#EF3B2D', ledGlow: '0 0 10px #EF3B2D,inset 0 -2px 2px rgba(0,0,0,.3)', ledAmb: 'led', lcdBg: 'linear-gradient(180deg,#CFDAB4,#B3C196)', gameColor: '#1E1E1E' },
+      idle: { bg: '#E2DCCF', shadow: 'inset 0 3px 8px rgba(0,0,0,.18),inset 0 -1px 0 #fff', led: '#5A5650', ledGlow: 'inset 0 2px 2px rgba(0,0,0,.5)', ledAmb: '', lcdBg: 'linear-gradient(180deg,#C2CEA8,#A9B78E)', gameColor: '#1E1E1E' },
+      won: { bg: '#DCD6C8', shadow: 'inset 0 3px 8px rgba(0,0,0,.22)', led: '#22C55E', ledGlow: '0 0 10px #22C55E,inset 0 -2px 2px rgba(0,0,0,.3)', ledAmb: '', lcdBg: 'linear-gradient(180deg,#B5C29A,#9DAC82)', gameColor: '#3E3A33' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    const seg = (s) => s.split('').map((c, k) => c);
+    return {
+      ...st,
+      bg: hov ? 'linear-gradient(180deg,#F5F1E8,#E9E3D6)' : st.bg,
+      shadow: hov ? '0 6px 0 #CFC8B8,0 10px 16px rgba(0,0,0,.15),inset 0 1px 0 #fff' : st.shadow,
+      lift: hov ? 'translateY(-4px)' : 'none', gripOp: hov ? 1 : 0.55, z: r.menu ? 20 : 1,
+      statusUp: r.statusWord.toUpperCase(), gameUp: r.game.toUpperCase(),
+      winUp: r.won ? 'WON' : 'MARK\nWON',
+      countSeg: r.hasCounter ? String(r.count).padStart(3, '0') + '/' + String(r.target).padStart(3, '0') : '',
+      lcdIcon: r.won ? 'check_box' : r.running ? 'play_arrow' : 'check_box_outline_blank',
+      playBg: r.running ? 'linear-gradient(180deg,#FF7340,#F2531A)' : 'linear-gradient(180deg,#E3DED3,#D2CCBF)',
+      playShadow: r.running ? '0 1px 0 #B83A0C,inset 0 2px 4px rgba(0,0,0,.25)' : KEY, playPress: r.running ? 'translateY(4px)' : 'none', playOp: r.won ? 0.4 : 1,
+      trackBg: r.won ? '#1F7A3E' : '#3A3833', knobX: r.won ? '31px' : '3px',
+      moreShadow: r.menu ? '0 1px 0 #A9A398,inset 0 2px 4px rgba(0,0,0,.2)' : KEY, morePress: r.menu ? 'translateY(4px)' : 'none',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? '#ECE7DC' : 'transparent', color: m.danger ? '#B3261E' : '#1E1E1E' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.32em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      blocks: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, op: i < v.wonCount ? 1 : 0.12 })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.34em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, bg: p.on ? '#1C2418' : 'transparent' })) };
+  }
+}
+</script>
+</body>
+</html>

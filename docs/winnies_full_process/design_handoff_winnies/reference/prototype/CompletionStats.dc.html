@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+</helmet>
+<div ref="{{ rootRef }}" data-cs="1" style="position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start;font-family:var(--font-body);color:var(--color-text)">
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:20;overflow:visible"></div>
+  <section data-cst="1" aria-labelledby="cs-rank" style="position:relative;display:flex;flex-direction:column;gap:14px;padding:20px 20px 22px;border-radius:34px;background:var(--color-surface);box-shadow:{{ cardSh }}">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 4px 0 6px">
+      <h3 id="cs-rank" style="flex:1;min-width:180px;margin:0;font:400 {{ h3 }}/1.4 var(--font-display)">{{ t.ranked }}</h3>
+      <div role="radiogroup" aria-label="{{ t.sortBy }}" style="display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+        <sc-for list="{{ sorts }}" as="o" hint-placeholder-count="2"><button data-press="1" role="radio" aria-checked="{{ o.sel }}" onClick="{{ o.on }}" style="display:flex;align-items:center;gap:6px;height:36px;padding:0 14px 0 10px;border:0;border-radius:18px;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font:800 14px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ o.icon }}</span>{{ o.label }}</button></sc-for>
+      </div>
+    </div>
+    <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+        <li data-rk="{{ r.id }}" aria-label="{{ r.aria }}" style="display:grid;grid-template-columns:34px 40px minmax(0,1fr) minmax(70px,150px) 96px;gap:12px;align-items:center;min-height:{{ rowH }};padding:6px 16px 6px 8px;box-sizing:border-box;border-radius:28px;background:var(--color-surface-raised);box-shadow:{{ rowSh }}">
+          <span data-rank="{{ r.rank }}" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.rBg }};color:{{ r.rC }};font:400 15px/1 var(--font-display);box-shadow:{{ r.rSh }}">{{ r.rank }}</span>
+          <span style="display:flex"><dc-import name="ClayFace" status="won" secs="{{ r.secs }}" size="40" hint-size="40px,40px"></dc-import></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0">
+              <span style="min-width:0;font:400 {{ gameSize }}/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+              <sc-if value="{{ r.hasTag }}"><span style="flex:none;display:flex;align-items:center;gap:4px;height:26px;padding:0 10px 0 6px;border-radius:13px;background:{{ r.tagBg }};color:var(--color-on-accent);font:800 12px/1 var(--font-body);white-space:nowrap;box-shadow:0 3px 0 -1px {{ r.tagLip }}"><span style="font-family:var(--font-icon);font-size:16px;font-variation-settings:'FILL' 1">{{ r.tagIcon }}</span>{{ r.tag }}</span></sc-if>
+            </div>
+            <sc-if value="{{ r.hasSub }}"><span style="font:700 13px/1.3 var(--font-body);color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sub }}</span></sc-if>
+          </div>
+          <span aria-hidden="true" style="display:block;height:18px;border-radius:9px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:4px;box-sizing:border-box"><span style="display:block;height:100%;width:{{ r.w }}"><span data-bar="1" style="display:block;height:100%;border-radius:5px;background:{{ r.barBg }};transform-origin:0 50%"></span></span></span>
+          <span style="display:flex;justify-content:flex-end;font:400 {{ timeSize }}/1 var(--font-display);color:var(--color-won-text);white-space:nowrap"><sc-for list="{{ r.td }}" as="d"><span style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+        </li>
+      </sc-for>
+    </ol>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+    <section data-cst="1" aria-label="{{ t.totalTimer }} {{ totalStr }}" style="grid-column:1 / -1;position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px 24px 18px 18px;border-radius:32px;background:var(--color-surface);box-shadow:{{ cardSh }}">
+      <span aria-hidden="true" style="flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-won);color:var(--color-on-accent);font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1;box-shadow:0 4px 0 -1px var(--color-won-lip)">timer</span>
+      <div style="flex:1 1 140px;min-width:0;display:flex;flex-direction:column;gap:2px">
+        <span style="font:800 {{ labelSize }}/1.3 var(--font-body)">{{ t.totalTimer }}</span>
+        <span style="font:700 14px/1.4 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ totalSub }}</span>
+      </div>
+      <span data-num="1" data-to="{{ total }}" data-fmt="time" aria-hidden="true" style="display:flex;font:400 {{ bigSize }}/1.15 var(--font-display);color:var(--color-won-text)"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }}">{{ d.c }}</span></sc-for></span>
+    </section>
+
+    <sc-for list="{{ extremes }}" as="x" hint-placeholder-count="2">
+      <section data-cst="1" aria-label="{{ x.aria }}" style="position:relative;display:flex;flex-direction:column;gap:12px;padding:16px 18px 18px;border-radius:32px;background:var(--color-surface);box-shadow:{{ cardSh }}">
+        <span style="align-self:flex-start;display:flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 8px;border-radius:15px;background:{{ x.bg }};color:var(--color-on-accent);font:800 13px/1 var(--font-body);white-space:nowrap;box-shadow:0 3px 0 -1px {{ x.lip }}"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">{{ x.icon }}</span>{{ x.label }}</span>
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          <span data-xface="1" style="flex:none;display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ x.mood }}" size="56" hint-size="56px,56px"></dc-import></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+            <span style="font:400 {{ gameSize }}/1.35 var(--font-display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere">{{ x.game }}</span>
+            <span style="font:400 21px/1.3 var(--font-display);color:var(--color-won-text)">{{ x.time }}</span>
+          </div>
+        </div>
+        <span style="font:700 14px/1.4 var(--font-body);color:var(--color-text-muted)">{{ x.word }}</span>
+      </section>
+    </sc-for>
+
+    <section data-cst="1" aria-label="{{ countAria }}" style="position:relative;display:flex;flex-direction:column;gap:10px;padding:16px 18px 18px;border-radius:32px;background:var(--color-surface);box-shadow:{{ cardSh }}">
+      <span style="align-self:flex-start;display:flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 8px;border-radius:15px;background:var(--color-complete);color:var(--color-on-accent);font:800 13px/1 var(--font-body);white-space:nowrap;box-shadow:0 3px 0 -1px var(--color-complete-lip)"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'wght' 700">exposure_plus_1</span>{{ t.counted }}</span>
+      <sc-if value="{{ hasCounts }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <span data-num="1" data-to="{{ countSum }}" data-fmt="num" aria-hidden="true" style="display:flex;font:400 {{ midSize }}/1.15 var(--font-display)"><sc-for list="{{ countDigits }}" as="d"><span style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+          <span style="font:700 14px/1.4 var(--font-body);color:var(--color-text-muted)">{{ countSub }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ counters }}" as="c" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="flex:1;min-width:0;font:700 14px/1.35 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.game }}</span><span style="flex:none;height:28px;padding:0 10px;border-radius:14px;display:flex;align-items:center;gap:4px;background:{{ c.bg }};color:var(--color-on-accent);font:400 14px/1 var(--font-display);box-shadow:0 3px 0 -1px {{ c.lip }}">{{ c.val }}<sc-if value="{{ c.over }}"><span style="margin-left:3px;padding:2px 6px;border-radius:9px;background:var(--color-highlight-gold);color:#4A2B3A;font:400 12px/1 var(--font-display)">{{ c.overStr }}</span></sc-if></span></div></sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noCounts }}" hint-placeholder-val="{{ false }}"><span style="font:700 15px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.noCounts }}</span></sc-if>
+    </section>
+
+    <section data-cst="1" aria-label="{{ lossAria }}" style="position:relative;display:flex;flex-direction:column;gap:10px;padding:16px 18px 18px;border-radius:32px;background:var(--color-surface);box-shadow:{{ cardSh }}">
+      <span style="align-self:flex-start;display:flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 8px;border-radius:15px;background:var(--color-danger-surface);color:var(--color-danger-text);font:800 13px/1 var(--font-body);white-space:nowrap;box-shadow:0 3px 0 -1px var(--color-danger)"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">cancel</span>{{ t.losses }}</span>
+      <sc-if value="{{ hasLosses }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <span data-num="1" data-to="{{ lossSum }}" data-fmt="num" aria-hidden="true" style="display:flex;font:400 {{ midSize }}/1.15 var(--font-display);color:var(--color-danger-text)"><sc-for list="{{ lossDigits }}" as="d"><span style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+          <span style="font:700 14px/1.4 var(--font-body);color:var(--color-text-muted)">{{ lossSub }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ lossList }}" as="c" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="flex:1;min-width:0;font:700 14px/1.35 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.game }}</span><span style="flex:none;font:400 15px/1 var(--font-display);color:var(--color-danger-text)">{{ c.val }}</span></div></sc-for>
+        </div>
+        <span style="font:700 13px/1.4 var(--font-body);color:var(--color-text-muted)">{{ t.lossNote }}</span>
+      </sc-if>
+      <sc-if value="{{ noLosses }}" hint-placeholder-val="{{ false }}"><span style="font:700 15px/1.45 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">{{ t.noLosses }}</span></sc-if>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1300,&quot;height&quot;:620},&quot;ch&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{id:number,game:string,cond?:string,secs:number,count?:number|null,target?:number|null,losses?:number|null}&gt;&quot;},&quot;total&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:60385,&quot;tsType&quot;:&quot;number&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;workspace&quot;,&quot;broadcast&quot;],&quot;default&quot;:&quot;workspace&quot;,&quot;tsType&quot;:&quot;'workspace'|'broadcast'&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;de&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'de'&quot;},&quot;replay&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { sort: 'fast' };
+  static L = {
+    en: { ranked: 'Every Challenge, ranked', sortBy: 'Sort by time', fast: 'Fastest first', slow: 'Slowest first', fastest: 'Fastest', slowest: 'Slowest', totalTimer: 'Total Timer', counted: 'Counted', losses: 'Losses', tooEasy: 'Too easy', won: 'Won', finally: 'Finally', lossNote: 'Losses never block a Win.', noCounts: 'No Counters this run.', noLosses: 'Losses weren’t tracked this run. Turn them on per Challenge next time.',
+      totalSub: (n, avg) => `${n} Challenges · ${avg} average`, countSub: (n) => (n === 1 ? 'across 1 Counter' : `across ${n} Counters`), lossSub: (n) => (n === 1 ? 'on 1 Challenge, Won anyway' : `on ${n} Challenges, Won anyway`), lossesN: (n) => (n === 1 ? '1 loss' : n + ' losses'), over: (n) => n + ' over target' },
+    de: { ranked: 'Jede Challenge im Ranking', sortBy: 'Nach Zeit sortieren', fast: 'Schnellste zuerst', slow: 'Langsamste zuerst', fastest: 'Schnellste', slowest: 'Langsamste', totalTimer: 'Gesamt-Timer', counted: 'Gezählt', losses: 'Niederlagen', tooEasy: 'Zu einfach', won: 'Gewonnen', finally: 'Endlich', lossNote: 'Niederlagen verhindern nie einen Sieg.', noCounts: 'Diesmal ohne Zähler.', noLosses: 'Niederlagen wurden diesmal nicht gezählt. Beim nächsten Mal pro Challenge einschalten.',
+      totalSub: (n, avg) => `${n} Challenges · Ø ${avg}`, countSub: (n) => (n === 1 ? 'über 1 Zähler' : `über ${n} Zähler`), lossSub: (n) => (n === 1 ? 'bei 1 Challenge, trotzdem gewonnen' : `bei ${n} Challenges, trotzdem gewonnen`), lossesN: (n) => (n === 1 ? '1 Niederlage' : n + ' Niederlagen'), over: (n) => n + ' über dem Ziel' },
+  };
+  root() { return this.rootRef.current; }
+  q(s) { const r = this.root(); return r ? r.querySelector(s) : null; }
+  qa(s) { const r = this.root(); return r ? [...r.querySelectorAll(s)] : []; }
+  reduced() { const r = this.root(); return !!(r && r.closest('[data-motion="reduce"]')) || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      const r = this.root(), dia = r && r.closest('[data-dialect]');
+      this.m = window.WinniesMotion.engine({ root: () => this.root(), fx: () => this.q('[data-fx]'), cfg: () => ({ amb: true, resp: true, cel: true, reduced: this.reduced(), dialect: dia ? dia.dataset.dialect : 'workspace', calm: false, interval: 1000 }), cue: () => {} });
+      this.m.refresh(this.root());
+      this.intro();
+    };
+    if (typeof IntersectionObserver !== 'undefined') {
+      this._io = new IntersectionObserver((es) => { if (es[es.length - 1].isIntersecting && !this._booted) { this._booted = true; boot(); } }, { rootMargin: '60px' });
+      this._io.observe(this.root());
+    } else { this._booted = true; boot(); }
+  }
+  componentWillUnmount() { clearTimeout(this._bt); (this._ts || []).forEach(clearTimeout); (this._raf || []).forEach(cancelAnimationFrame); this._io && this._io.disconnect(); }
+  componentDidUpdate(pp) { if (pp.replay !== this.props.replay && this.m) this.intro(); }
+  later(fn, ms) { this._ts = this._ts || []; this._ts.push(setTimeout(fn, ms)); }
+  intro() {
+    const m = this.m; if (!m) return;
+    m.refresh(this.root());
+    m.stagIn(this.qa('[data-cst]'));
+    if (!m.on('cel')) return;
+    const T = m.T();
+    this.qa('[data-bar]').forEach((b, i) => m.play('cel', b, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: T.D.land * 1.4, delay: 260 + i * 70, easing: T.E.bouncy, fill: 'backwards' }));
+    this.qa('[data-num]').forEach((el, i) => this.later(() => this.countUp(el), 200 + i * 120));
+    this.later(() => {
+      const r1 = this.q('[data-rank="1"]'); if (!r1) return;
+      m.pop(r1, 1.6);
+      m.burst('cel', r1, { n: 10, shapes: ['spark', 'circle'], colors: ['#FFC23D', '#FFFFFF', '#FFEFA1'], size: 14, spread: 90, up: false, gravity: 0 });
+      m.cue('stats.rank', 'C08');
+    }, 900);
+    this.qa('[data-xface]').forEach((f, i) => this.later(() => m.jelly('cel', f, 1.1), 700 + i * 220));
+    m.cue('stats.tally', 'C07', 200);
+  }
+  countUp(el) {
+    if (!el || !this.m || !this.m.on('cel')) return;
+    const to = +el.dataset.to, isT = el.dataset.fmt === 'time', slots = [...el.children], n = slots.length, final = slots.map((s) => s.textContent);
+    const hLen = isT ? final.join('').split(':')[0].length : 0, dur = 1300, t0 = performance.now();
+    const p2 = (x) => String(x).padStart(2, '0');
+    const f = (v) => (isT ? String(Math.floor(v / 3600)).padStart(hLen, '0') + ':' + p2(Math.floor((v % 3600) / 60)) + ':' + p2(v % 60) : String(v).padStart(n, ' '));
+    this._raf = this._raf || [];
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      const str = k >= 1 ? final.join('') : f(Math.round(to * e));
+      if (str.length === n) slots.forEach((s, i) => { s.textContent = str[i]; });
+      if (k < 1) this._raf.push(requestAnimationFrame(step));
+    };
+    this._raf.push(requestAnimationFrame(step));
+  }
+  setSort(sort) {
+    if (sort === this.state.sort) return;
+    const els = () => this.qa('[data-rk]').map((e) => ['k' + e.dataset.rk, e]);
+    const prev = this.m ? this.m.capture(els()) : null;
+    this.setState({ sort }, () => { if (prev) this.m.flip(prev, els(), 1); });
+  }
+  renderVals() {
+    const L = Component.L[this.props.lang] || Component.L.en, br = this.props.variant === 'broadcast';
+    const ch = (this.props.ch || []).filter((x) => x && x.game), total = +(this.props.total ?? 0);
+    const p2 = (x) => String(x).padStart(2, '0');
+    const fmt = (x) => Math.floor(x / 3600) + ':' + p2(Math.floor((x % 3600) / 60)) + ':' + p2(x % 60);
+    const slots = (str, muted) => str.split('').map((c, k) => ({ k, c, w: c === ':' ? '0.34em' : '0.66em', col: c === ':' && muted ? 'var(--color-text-muted)' : 'inherit' }));
+    const byTime = [...ch].sort((a, b) => a.secs - b.secs);
+    const fast = byTime[0], slow = byTime[byTime.length - 1], max = Math.max(1, ...ch.map((x) => x.secs));
+    const list = this.state.sort === 'fast' ? byTime : [...byTime].reverse();
+    const word = (s) => (s < 3600 ? L.tooEasy : s < 10800 ? L.won : L.finally);
+    const rows = list.map((x) => {
+      const rank = byTime.indexOf(x) + 1, isF = x === fast, isS = x === slow && ch.length > 1;
+      const subs = [x.cond, x.losses != null ? L.lossesN(x.losses) : ''].filter(Boolean);
+      return {
+        id: x.id, rank, game: x.game, secs: x.secs, time: fmt(x.secs), td: slots(fmt(x.secs)), w: Math.max(4, Math.round((x.secs / max) * 100)) + '%',
+        hasSub: subs.length > 0, sub: subs.join(' · '),
+        rBg: rank === 1 ? 'var(--color-highlight-gold)' : 'var(--color-surface-sunken)', rC: rank === 1 ? '#4A2B3A' : 'var(--color-text)', rSh: rank === 1 ? '0 3px 0 0 var(--color-complete-lip)' : 'inset 0 0 0 2px var(--color-border)',
+        hasTag: isF || isS, tag: isF ? L.fastest : L.slowest, tagIcon: isF ? 'bolt' : 'hourglass_bottom', tagBg: isF ? 'var(--color-ready)' : 'var(--color-pinned)', tagLip: isF ? 'var(--color-ready-lip)' : 'var(--color-pinned-lip)',
+        barBg: isF ? 'var(--color-ready)' : isS ? 'var(--color-pinned)' : 'var(--color-won)',
+        aria: `#${rank} ${x.game}, ${fmt(x.secs)}` + (isF ? ', ' + L.fastest : isS ? ', ' + L.slowest : ''),
+      };
+    });
+    const cs = ch.filter((x) => x.target != null), countSum = cs.reduce((a, x) => a + (x.count || 0), 0);
+    const ls = ch.filter((x) => x.losses != null), lossSum = ls.reduce((a, x) => a + (x.losses || 0), 0);
+    const totalStr = fmt(total), avg = fmt(Math.round(ch.reduce((a, x) => a + x.secs, 0) / Math.max(1, ch.length)));
+    const kl = br ? '0 0 0 3px var(--color-keyline),0 7px 0 0 var(--color-complete-lip)' : '0 5px 0 -1px var(--color-complete-lip),0 12px 20px -12px var(--color-drop)';
+    return {
+      rootRef: this.rootRef, t: L, cardSh: kl, rowSh: br ? '0 0 0 2px var(--color-border),0 4px 0 -1px var(--color-lip)' : '0 3px 0 -1px var(--color-lip)',
+      h3: br ? '24px' : '22px', gameSize: br ? '18px' : '17px', timeSize: br ? '21px' : '19px', labelSize: br ? '18px' : '17px', bigSize: br ? '56px' : '50px', midSize: br ? '44px' : '40px', rowH: br ? '58px' : '54px',
+      sorts: [['fast', 'bolt', L.fast], ['slow', 'hourglass_bottom', L.slow]].map(([k, icon, label]) => { const on = this.state.sort === k; return { k, icon, label, sel: on, bg: on ? 'var(--color-control)' : 'transparent', c: on ? 'var(--color-text)' : 'var(--color-text-muted)', sh: on ? '0 4px 0 -1px var(--color-control-lip)' : 'none', on: () => this.setSort(k) }; }),
+      rows,
+      total, totalStr, totalDigits: slots(totalStr, true), totalSub: L.totalSub(ch.length, avg),
+      extremes: [fast && { k: 'f', x: fast, label: L.fastest, icon: 'bolt', bg: 'var(--color-ready)', lip: 'var(--color-ready-lip)' }, slow && ch.length > 1 && { k: 's', x: slow, label: L.slowest, icon: 'hourglass_bottom', bg: 'var(--color-pinned)', lip: 'var(--color-pinned-lip)' }].filter(Boolean).map((e) => ({ k: e.k, label: e.label, icon: e.icon, bg: e.bg, lip: e.lip, game: e.x.game, time: fmt(e.x.secs), word: word(e.x.secs), mood: e.x.secs < 3600 ? 'star' : e.x.secs < 10800 ? 'happy' : 'relief', aria: `${e.label}: ${e.x.game}, ${fmt(e.x.secs)}` })),
+      hasCounts: cs.length > 0, noCounts: cs.length === 0, countSum, countDigits: slots(String(countSum)), countSub: L.countSub(cs.length), countAria: `${L.counted}: ${countSum}, ${L.countSub(cs.length)}`,
+      counters: cs.map((x) => { const over = x.count > x.target; return { k: x.id, game: x.game, val: x.count + ' / ' + x.target, over, overStr: '+' + (x.count - x.target), bg: over ? 'var(--color-complete)' : 'var(--color-won)', lip: over ? 'var(--color-complete-lip)' : 'var(--color-won-lip)' }; }),
+      hasLosses: ls.length > 0, noLosses: ls.length === 0, lossSum, lossDigits: slots(String(lossSum)), lossSub: L.lossSub(ls.length), lossAria: `${L.losses}: ${lossSum}`,
+      lossList: [...ls].sort((a, b) => b.losses - a.losses).slice(0, 4).map((x) => ({ k: x.id, game: x.game, val: x.losses })),
+    };
+  }
+}
+</script>
+</body>
+</html>

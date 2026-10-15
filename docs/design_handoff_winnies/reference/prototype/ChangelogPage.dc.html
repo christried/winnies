@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>body{margin:0}a{color:#B0175A}a:hover{color:#4A2B3A}[data-theme="dark"] a{color:#FFB3D2}[data-theme="dark"] a:hover{color:#FFEEF5}[data-cl] :focus-visible{outline:3px solid var(--color-focus);outline-offset:3px}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-cl="1" data-theme="{{ theme }}" data-dialect="showcase" data-motion="{{ motionAttr }}" data-screen-label="{{ screenLabel }}" style="position:relative;width:100%;min-height:1000px;overflow:clip;display:flex;flex-direction:column;background:var(--color-page);color:var(--color-text);font-family:var(--font-body);-webkit-font-smoothing:antialiased">
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+    <div data-amb="drift" style="position:absolute;inset:-52px;background:radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0/52px 52px,radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px/52px 52px"></div>
+    <div data-amb="blob1" style="position:absolute;left:-8%;top:-80px;width:760px;height:560px;border-radius:50%;background:radial-gradient(closest-side,{{ blobA }},transparent)"></div>
+    <div data-amb="blob2" style="position:absolute;right:-12%;top:620px;width:820px;height:660px;border-radius:50%;background:radial-gradient(closest-side,{{ blobB }},transparent)"></div>
+    <div data-amb="blob2" data-ad="2400" style="position:absolute;left:-14%;top:1560px;width:760px;height:620px;border-radius:50%;background:radial-gradient(closest-side,{{ blobB }},transparent)"></div>
+    <div data-amb="blob1" data-ad="4200" style="position:absolute;right:-10%;top:2500px;width:780px;height:600px;border-radius:50%;background:radial-gradient(closest-side,{{ blobA }},transparent)"></div>
+  </div>
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+  <div data-wipe="1" style="position:absolute;inset:0;pointer-events:none;z-index:90;overflow:hidden"></div>
+
+  <div style="position:relative;flex:1;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:24px 40px 0;display:flex;flex-direction:column">
+
+    <header data-stag="1" style="position:relative;z-index:20;display:flex;align-items:center;gap:16px;height:84px;box-sizing:border-box;padding:0 14px 0 30px;border-radius:42px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+      <a href="#" onClick="{{ noop }}" aria-label="winnies home" style="flex:none;display:flex;align-items:baseline;font:400 40px/1.2 var(--font-display);padding-bottom:8px;text-decoration:none;border-radius:16px">
+        <sc-for list="{{ letters }}" as="l" hint-placeholder-count="7"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for>
+      </a>
+      <span style="flex:none;display:flex;align-items:center;height:30px;padding:0 12px;border-radius:15px;background:var(--color-pinned);color:var(--color-on-accent);font:800 13px/1 var(--font-body);box-shadow:0 3px 0 -1px var(--color-pinned-lip)">Beta</span>
+      <div style="flex:1;min-width:8px"></div>
+      <nav aria-label="Main" style="flex:none;display:flex;align-items:center;gap:6px">
+        <a href="#" onClick="{{ noop }}" aria-current="page" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 18px 0 14px;border-radius:24px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);color:var(--color-text);font:800 16px/1 var(--font-body);text-decoration:none;white-space:nowrap" style-hover="color:var(--color-text)"><span style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1;color:var(--color-text-accent)">history</span>Changelog</a>
+        <a href="https://github.com/" onClick="{{ onGitHub }}" style="display:flex;align-items:center;gap:6px;height:48px;padding:0 16px;border-radius:24px;color:var(--color-text);font:800 16px/1 var(--font-body);text-decoration:none;white-space:nowrap;transition:background-color var(--dur-fast) var(--ease-out)" style-hover="background-color:var(--color-surface-sunken);color:var(--color-text)">GitHub<span aria-hidden="true" style="font-family:var(--font-icon);font-size:18px;color:var(--color-text-muted)">open_in_new</span></a>
+      </nav>
+      <div role="radiogroup" aria-label="Theme" style="flex:none;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+        <sc-for list="{{ themeOpts }}" as="o" hint-placeholder-count="3"><button role="radio" aria-checked="{{ o.sel }}" aria-label="{{ o.label }}" title="{{ o.label }}" onClick="{{ o.on }}" style="width:40px;height:40px;border:0;border-radius:50%;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1;display:flex;align-items:center;justify-content:center">{{ o.icon }}</button></sc-for>
+      </div>
+      <button data-press="1" data-signin="1" onClick="{{ onSignIn }}" aria-busy="{{ signBusy }}" style="flex:none;display:flex;align-items:center;gap:10px;height:54px;padding:0 24px 0 18px;border:0;border-radius:27px;cursor:{{ signCur }};background:var(--color-accent);color:var(--color-on-accent);font:400 17px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 8px 0 -1px var(--color-accent-lip),inset 0 5px 7px rgba(255,220,235,.6);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(7px);box-shadow:0 1px 0 -1px var(--color-accent-lip)">
+        <sc-if value="{{ signIdle }}" hint-placeholder-val="{{ true }}"><img src="https://cdn.simpleicons.org/discord/4A2B3A" alt="" width="24" height="24" style="display:block"></sc-if>
+        <sc-if value="{{ signBusy }}" hint-placeholder-val="{{ false }}"><span data-loop="spin" aria-hidden="true" style="display:inline-block;width:24px;height:24px;font-family:var(--font-icon);font-size:24px;line-height:24px">progress_activity</span></sc-if>
+        <span>{{ signLabel }}</span>
+      </button>
+    </header>
+
+    <sc-if value="{{ showPage }}" hint-placeholder-val="{{ true }}">
+      <section data-stag="1" aria-labelledby="cl-h1" style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:40px;max-width:1220px;width:100%;margin:0 auto;box-sizing:border-box;padding:64px 24px 40px">
+        <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+          <span style="align-self:flex-start;display:flex;align-items:center;gap:8px;height:38px;padding:0 16px 0 12px;border-radius:19px;background:var(--color-surface);color:var(--color-text);font:800 15px/1 var(--font-body);box-shadow:0 5px 0 -1px var(--color-lip)"><span style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1;color:var(--color-text-accent)">campaign</span>Release notes</span>
+          <h1 id="cl-h1" data-h1="1" style="margin:0;font:400 92px/1.15 var(--font-display);letter-spacing:-0.01em;transform-origin:0 100%">{{ docTitle }}</h1>
+          <p style="margin:0;max-width:620px;font:500 21px/1.55 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">Everything new in Winnies, newest first. Written by humans, mostly. Proofread by a cat, occasionally.</p>
+        </div>
+        <button data-nini="1" onClick="{{ onBoop }}" aria-label="Boop Nini" title="Boop Nini" style="flex:none;padding:0;border:0;background:transparent;cursor:pointer;border-radius:50%;margin-right:24px">
+          <span data-amb="breathe" style="display:block;transform-origin:50% 100%"><span data-nhop="1" style="display:block;transform-origin:50% 100%"><dc-import name="ClayFace" mood="cheer" shape="mochi" size="230" hint-size="230px,198px"></dc-import></span></span>
+        </button>
+      </section>
+
+      <div style="display:grid;grid-template-columns:280px minmax(0,880px);justify-content:center;gap:52px;align-items:start;padding:0 24px">
+        <aside data-stag="1" style="position:sticky;top:24px;z-index:5;display:flex;flex-direction:column;gap:12px;padding:22px 14px 18px;border-radius:44px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+          <span style="padding:0 14px;font:800 14px/1.3 var(--font-body);color:var(--color-text-muted)">On this page</span>
+          <nav aria-label="Releases" style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ rail }}" as="r" hint-placeholder-count="4"><button data-press="1" onClick="{{ r.on }}" aria-current="{{ r.cur }}" style="display:flex;align-items:center;gap:12px;min-height:58px;padding:6px 16px 6px 10px;border:0;border-radius:29px;cursor:pointer;text-align:left;background:{{ r.bg }};color:{{ r.c }};box-shadow:{{ r.sh }};transition:transform var(--dur-hover) var(--ease-hover),background-color var(--dur-fast) var(--ease-out)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(4px)"><span aria-hidden="true" style="flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.dBg }};color:{{ r.dC }};box-shadow:{{ r.dSh }};font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">{{ r.icon }}</span><span style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font:400 18px/1.4 var(--font-display);white-space:nowrap">{{ r.label }}</span><span style="font:800 13px/1.3 var(--font-body);color:{{ r.subC }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sub }}</span></span></button></sc-for>
+          </nav>
+          <span aria-hidden="true" style="height:0;margin:6px 14px;border-top:3px dashed var(--color-border)"></span>
+          <a href="https://github.com/" onClick="{{ onGitHub }}" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:22px;color:var(--color-text);font:800 15px/1.3 var(--font-body);text-decoration:none;transition:background-color var(--dur-fast) var(--ease-out)" style-hover="background-color:var(--color-surface-sunken);color:var(--color-text)"><span aria-hidden="true" style="font-family:var(--font-icon);font-size:20px;color:var(--color-text-accent);font-variation-settings:'FILL' 1">bug_report</span>Found a bug? Tell GitHub<span aria-hidden="true" style="font-family:var(--font-icon);font-size:17px;color:var(--color-text-muted)">open_in_new</span></a>
+        </aside>
+
+        <main style="display:flex;flex-direction:column;gap:52px;min-width:0;padding-bottom:24px">
+          <sc-for list="{{ sections }}" as="s" hint-placeholder-count="4">
+            <section id="{{ s.anchor }}" data-sec="{{ s.key }}" aria-labelledby="{{ s.hid }}" style="position:relative">
+              <div data-reveal="{{ s.key }}" style="position:relative;border-radius:var(--card-radius);background:{{ s.bg }};box-shadow:{{ s.sh }};padding:{{ s.pad }};transform-origin:50% 0">
+                <span data-hl="{{ s.key }}" aria-hidden="true" style="position:absolute;inset:-14px;border-radius:78px;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 32px 8px var(--color-highlight-gold);opacity:0;pointer-events:none"></span>
+                <sc-if value="{{ s.latest }}"><span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span style="position:absolute;inset:0;background:var(--grain)"></span><span style="position:absolute;inset:0;background:var(--fingerprint);-webkit-mask-image:var(--texture-fingerprint-mask);mask-image:var(--texture-fingerprint-mask)"></span><span data-amb="shimmer" style="position:absolute;top:-10%;bottom:-10%;left:0;width:18%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span></sc-if>
+
+                <sc-if value="{{ s.isNext }}">
+                  <div style="position:relative;display:flex;align-items:center;gap:20px">
+                    <span data-amb="bob" aria-hidden="true" style="flex:none;width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-ready);color:var(--color-on-accent);box-shadow:0 6px 0 -1px var(--color-ready-lip),inset 0 4px 6px rgba(255,255,255,.55);font-family:var(--font-icon);font-size:34px;font-variation-settings:'FILL' 1">explore</span>
+                    <h2 id="{{ s.hid }}" style="margin:0;font:400 40px/1.3 var(--font-display);text-wrap:balance">{{ s.title }}</h2>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ s.isRel }}">
+                  <div style="position:relative;display:flex;align-items:flex-start;gap:20px">
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+                      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+                        <h2 id="{{ s.hid }}" aria-label="{{ s.h2label }}" onMouseEnter="{{ s.onWave }}" style="margin:0;display:flex;font:400 64px/1.2 var(--font-display);cursor:default">
+                          <sc-for list="{{ s.vchars }}" as="c"><span data-vc="1" aria-hidden="true" style="display:inline-block;transform-origin:50% 100%">{{ c.c }}</span></sc-for>
+                        </h2>
+                        <span data-tag="{{ s.key }}" style="display:flex;align-items:center;gap:7px;height:38px;padding:0 16px 0 11px;border-radius:19px;background:{{ s.tagBg }};color:var(--color-on-accent);box-shadow:0 4px 0 -1px {{ s.tagLip }};font:800 15px/1 var(--font-body);white-space:nowrap;transform:rotate({{ s.tagRot }})"><span aria-hidden="true" style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">{{ s.tagIcon }}</span>{{ s.tag }}</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                        <span style="font:400 22px/1.45 var(--font-display)">{{ s.name }}</span>
+                        <span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:var(--color-text-muted)"></span>
+                        <time datetime="{{ s.iso }}" style="display:flex;align-items:center;gap:6px;font:800 17px/1.4 var(--font-body);color:var(--color-text-muted)"><span aria-hidden="true" style="font-family:var(--font-icon);font-size:19px">calendar_today</span>{{ s.date }}</time>
+                      </div>
+                    </div>
+                    <button data-press="1" data-copy="{{ s.key }}" onClick="{{ s.onCopy }}" aria-label="{{ s.copyAria }}" title="{{ s.copyAria }}" style="flex:none;margin-top:10px;width:54px;height:54px;border:0;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;background:{{ s.copyBg }};color:{{ s.copyC }};box-shadow:0 6px 0 -1px {{ s.copyLip }};transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px var(--color-control-lip)"><span data-ci="1" style="display:inline-block;font-family:var(--font-icon);font-size:25px;font-variation-settings:'wght' 600">{{ s.copyIcon }}</span></button>
+                  </div>
+                </sc-if>
+
+                <div style="position:relative;display:flex;flex-direction:column;gap:18px;margin-top:{{ s.bodyGap }};max-width:740px">
+                  <sc-for list="{{ s.blocks }}" as="b" hint-placeholder-count="3">
+                    <sc-if value="{{ b.isH3 }}"><h3 data-li="1" style="margin:22px 0 0;display:flex;align-items:center;gap:14px;font:400 26px/1.4 var(--font-display);text-wrap:balance"><span aria-hidden="true" style="flex:none;width:12px;height:28px;border-radius:6px;background:{{ b.sprBg }};box-shadow:0 3px 0 -1px {{ b.sprLip }};transform:rotate(16deg)"></span>{{ b.text }}</h3></sc-if>
+                    <sc-if value="{{ b.isP }}"><p data-li="1" style="margin:0;max-width:68ch;font:500 19px/1.65 var(--font-body);text-wrap:pretty"><sc-for list="{{ b.segs }}" as="g"><sc-if value="{{ g.isText }}">{{ g.v }}</sc-if><sc-if value="{{ g.isStrong }}"><strong style="font-weight:800;color:var(--color-text)">{{ g.v }}</strong></sc-if><sc-if value="{{ g.isCode }}"><code style="padding:.12em .45em;border-radius:8px;background:var(--color-surface-sunken);box-shadow:inset 0 2px 3px var(--color-well-shade);font:700 .86em/1 ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:var(--color-text);white-space:nowrap">{{ g.v }}</code></sc-if><sc-if value="{{ g.isLink }}"><a href="{{ g.href }}" onClick="{{ g.on }}" style="display:inline;color:var(--color-text-accent);font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:var(--color-accent);border-radius:8px;padding:0 3px;margin:0 -3px;transition:background-color var(--dur-fast) var(--ease-out),text-decoration-color var(--dur-fast) var(--ease-out)" style-hover="background-color:var(--color-running-surface);color:var(--color-text-accent);text-decoration-color:var(--color-text-accent)">{{ g.v }}<sc-if value="{{ g.ext }}"><span aria-hidden="true" style="display:inline-block;margin-left:3px;font-family:var(--font-icon);font-size:.9em;font-weight:400;vertical-align:-0.14em;text-decoration:none">open_in_new</span></sc-if></a></sc-if></sc-for></p></sc-if>
+                    <sc-if value="{{ b.isUl }}"><ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px">
+                      <sc-for list="{{ b.items }}" as="it"><li data-li="1" style="display:grid;grid-template-columns:30px minmax(0,1fr);font:500 19px/1.65 var(--font-body)"><span aria-hidden="true" style="width:12px;height:12px;margin-top:10px;border-radius:50%;background:var(--color-accent);box-shadow:0 3px 0 var(--color-accent-lip)"></span><div style="min-width:0;max-width:66ch;text-wrap:pretty"><sc-for list="{{ it.segs }}" as="g"><sc-if value="{{ g.isText }}">{{ g.v }}</sc-if><sc-if value="{{ g.isStrong }}"><strong style="font-weight:800;color:var(--color-text)">{{ g.v }}</strong></sc-if><sc-if value="{{ g.isCode }}"><code style="padding:.12em .45em;border-radius:8px;background:var(--color-surface-sunken);box-shadow:inset 0 2px 3px var(--color-well-shade);font:700 .86em/1 ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:var(--color-text);white-space:nowrap">{{ g.v }}</code></sc-if><sc-if value="{{ g.isLink }}"><a href="{{ g.href }}" onClick="{{ g.on }}" style="display:inline;color:var(--color-text-accent);font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:var(--color-accent);border-radius:8px;padding:0 3px;margin:0 -3px;transition:background-color var(--dur-fast) var(--ease-out),text-decoration-color var(--dur-fast) var(--ease-out)" style-hover="background-color:var(--color-running-surface);color:var(--color-text-accent);text-decoration-color:var(--color-text-accent)">{{ g.v }}<sc-if value="{{ g.ext }}"><span aria-hidden="true" style="display:inline-block;margin-left:3px;font-family:var(--font-icon);font-size:.9em;font-weight:400;vertical-align:-0.14em;text-decoration:none">open_in_new</span></sc-if></a></sc-if></sc-for>
+                        <sc-if value="{{ it.hasKids }}"><ul style="margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px"><sc-for list="{{ it.kids }}" as="kd"><li style="display:grid;grid-template-columns:28px minmax(0,1fr)"><span aria-hidden="true" style="width:12px;height:12px;margin-top:10px;box-sizing:border-box;border-radius:50%;background:var(--color-surface);box-shadow:inset 0 0 0 3px var(--color-pinned-lip)"></span><span style="min-width:0"><sc-for list="{{ kd.segs }}" as="g"><sc-if value="{{ g.isText }}">{{ g.v }}</sc-if><sc-if value="{{ g.isStrong }}"><strong style="font-weight:800;color:var(--color-text)">{{ g.v }}</strong></sc-if><sc-if value="{{ g.isCode }}"><code style="padding:.12em .45em;border-radius:8px;background:var(--color-surface-sunken);box-shadow:inset 0 2px 3px var(--color-well-shade);font:700 .86em/1 ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:var(--color-text);white-space:nowrap">{{ g.v }}</code></sc-if><sc-if value="{{ g.isLink }}"><a href="{{ g.href }}" onClick="{{ g.on }}" style="color:var(--color-text-accent);font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:var(--color-accent)" style-hover="background-color:var(--color-running-surface);color:var(--color-text-accent)">{{ g.v }}</a></sc-if></sc-for></span></li></sc-for></ul></sc-if>
+                      </div></li></sc-for>
+                    </ul></sc-if>
+                    <sc-if value="{{ b.isOl }}"><ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px">
+                      <sc-for list="{{ b.items }}" as="it"><li data-li="1" style="display:grid;grid-template-columns:48px minmax(0,1fr);align-items:start;font:500 19px/1.65 var(--font-body)"><span aria-hidden="true" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-complete);color:var(--color-on-accent);box-shadow:0 4px 0 -1px var(--color-complete-lip);font:400 15px/1 var(--font-display)">{{ it.n }}</span><div style="min-width:0;max-width:66ch;text-wrap:pretty"><sc-for list="{{ it.segs }}" as="g"><sc-if value="{{ g.isText }}">{{ g.v }}</sc-if><sc-if value="{{ g.isStrong }}"><strong style="font-weight:800;color:var(--color-text)">{{ g.v }}</strong></sc-if><sc-if value="{{ g.isCode }}"><code style="padding:.12em .45em;border-radius:8px;background:var(--color-surface-sunken);box-shadow:inset 0 2px 3px var(--color-well-shade);font:700 .86em/1 ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:var(--color-text);white-space:nowrap">{{ g.v }}</code></sc-if><sc-if value="{{ g.isLink }}"><a href="{{ g.href }}" onClick="{{ g.on }}" style="color:var(--color-text-accent);font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:var(--color-accent)" style-hover="background-color:var(--color-running-surface);color:var(--color-text-accent)">{{ g.v }}</a></sc-if></sc-for></div></li></sc-for>
+                    </ol></sc-if>
+                  </sc-for>
+                </div>
+              </div>
+            </section>
+          </sc-for>
+        </main>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}">
+      <section data-stag="1" data-nfcard="1" aria-labelledby="cl-nf" style="position:relative;width:100%;max-width:1000px;box-sizing:border-box;margin:72px auto 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:44px 56px 56px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised-lg)">
+        <span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span style="position:absolute;inset:0;background:var(--grain)"></span><span style="position:absolute;inset:0;background:var(--fingerprint);-webkit-mask-image:var(--texture-fingerprint-mask);mask-image:var(--texture-fingerprint-mask)"></span><span data-amb="shimmer" style="position:absolute;top:-10%;bottom:-10%;left:0;width:18%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span>
+        <div aria-hidden="true" style="position:relative;display:flex;align-items:center;justify-content:center;gap:22px">
+          <span data-dg="1" style="display:inline-block;transform-origin:50% 100%"><span data-amb="bob" data-ad="0" style="display:inline-block"><span style="display:inline-block;transform:rotate(-6deg);font:400 190px/1.2 var(--font-display);color:var(--color-accent);text-shadow:0 4px 0 var(--color-accent-lip),0 8px 0 var(--color-accent-lip),0 13px 0 var(--color-accent-lip),0 22px 26px rgba(0,0,0,.18)">4</span></span></span>
+          <span data-dg="1" style="display:inline-block;transform-origin:50% 100%;margin-top:34px"><span data-nini="1" data-amb="breathe" style="display:inline-block;transform-origin:50% 100%"><dc-import name="ClayFace" mood="sweat" shape="mochi" size="170" hint-size="170px,146px"></dc-import></span></span>
+          <span data-dg="1" style="display:inline-block;transform-origin:50% 100%"><span data-amb="bob" data-ad="1300" style="display:inline-block"><span style="display:inline-block;transform:rotate(5deg);font:400 190px/1.2 var(--font-display);color:var(--color-pinned);text-shadow:0 4px 0 var(--color-pinned-lip),0 8px 0 var(--color-pinned-lip),0 13px 0 var(--color-pinned-lip),0 22px 26px rgba(0,0,0,.18)">4</span></span></span>
+        </div>
+        <h1 id="cl-nf" style="position:relative;margin:0;font:400 54px/1.25 var(--font-display);text-wrap:balance">Changelog not found</h1>
+        <p style="position:relative;margin:0;max-width:620px;font:500 19px/1.6 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">We went to fetch the release notes and came back empty-handed. The file moved, the server sneezed, or it’s hiding in a Dark Souls III boss room and refuses to come out.</p>
+        <span style="position:relative;display:flex;align-items:center;gap:10px;max-width:100%;height:46px;box-sizing:border-box;padding:0 20px 0 14px;border-radius:23px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:700 15px ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:var(--color-text)"><span aria-hidden="true" style="flex:none;font-family:var(--font-icon);font-size:21px;color:var(--color-gone-text)">link_off</span>CHANGELOG.md · 404 Not Found</span>
+        <div style="position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:12px">
+          <button data-press="1" data-retry="1" onClick="{{ onRetry }}" aria-busy="{{ busy }}" style="display:flex;align-items:center;gap:10px;height:60px;padding:0 28px 0 22px;border:0;border-radius:30px;cursor:{{ retryCur }};background:var(--color-accent);color:var(--color-on-accent);font:400 18px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 9px 0 -1px var(--color-accent-lip),inset 0 5px 7px rgba(255,220,235,.6);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(8px);box-shadow:0 1px 0 -1px var(--color-accent-lip)"><span data-loop="{{ retrySpin }}" aria-hidden="true" style="display:inline-block;width:24px;height:24px;font-family:var(--font-icon);font-size:24px;line-height:24px;font-variation-settings:'wght' 700">{{ retryIcon }}</span>{{ retryLabel }}</button>
+          <button data-press="1" onClick="{{ onHome }}" style="display:flex;align-items:center;gap:10px;height:60px;padding:0 26px 0 20px;border:0;border-radius:30px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 18px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 9px 0 -1px var(--color-control-lip);transition:transform var(--dur-hover) var(--ease-hover)" style-hover="transform:translateY(calc(var(--hover-lift) / 2))" style-active="transform:translateY(8px);box-shadow:0 1px 0 -1px var(--color-control-lip)"><span aria-hidden="true" style="font-family:var(--font-icon);font-size:24px;font-variation-settings:'FILL' 1">home</span>Back to winnies</button>
+        </div>
+        <sc-if value="{{ retryMsg }}" hint-placeholder-val="{{ false }}"><p role="status" style="position:relative;margin:0;display:flex;align-items:center;gap:8px;padding:10px 18px 10px 12px;border-radius:22px;background:var(--color-danger-surface);color:var(--color-danger-text);font:800 16px/1.4 var(--font-body)"><span aria-hidden="true" style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">error</span>Still nothing. Try once more, the second try is the lucky one.</p></sc-if>
+        <a href="https://github.com/" onClick="{{ onGitHub }}" style="position:relative;margin-top:4px;color:var(--color-text-accent);font:800 17px/1.5 var(--font-body);text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:var(--color-accent);border-radius:8px;padding:0 4px" style-hover="background-color:var(--color-running-surface);color:var(--color-text-accent)">Read the release notes on GitHub instead<span aria-hidden="true" style="display:inline-block;margin-left:4px;font-family:var(--font-icon);font-size:.95em;vertical-align:-0.14em">open_in_new</span></a>
+      </section>
+    </sc-if>
+  </div>
+
+  <footer style="position:relative;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:40px 64px 36px">
+    <nav aria-label="Footer" style="display:flex;align-items:center;gap:8px 26px;flex-wrap:wrap;font:700 15px var(--font-body);color:var(--color-text-muted)">
+      <a href="#" onClick="{{ noop }}" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-text-accent);text-decoration:underline">Imprint</a>
+      <a href="#" onClick="{{ noop }}" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-text-accent);text-decoration:underline">Privacy Policy</a>
+      <a href="#" onClick="{{ noop }}" aria-current="page" style="color:var(--color-text-accent);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px" style-hover="color:var(--color-text-accent)">Changelog</a>
+      <span style="margin-left:auto;font:800 14px var(--font-body);color:var(--color-text-muted)">winnies v0.9.2 · beta</span>
+    </nav>
+  </footer>
+
+  <div aria-live="polite" style="position:absolute;inset:0;z-index:65;display:flex;flex-direction:column;justify-content:flex-end;pointer-events:none">
+    <div style="position:sticky;bottom:32px;align-self:flex-end;margin-right:40px;display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+      <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0"><div data-toast="{{ t.id }}" role="{{ t.role }}" style="pointer-events:auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:440px;box-sizing:border-box;padding:12px 8px 12px 12px;border-radius:var(--radius-xl);background:var(--color-surface-raised);color:var(--color-text);box-shadow:var(--shadow-popover);font:700 16px/1.4 var(--font-body)"><span style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ t.discBg }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1,'wght' 600">{{ t.icon }}</span><span style="min-width:0;text-wrap:pretty">{{ t.text }}</span><button onClick="{{ t.close }}" aria-label="Dismiss" style="width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;background:transparent;color:var(--color-text);font-family:var(--font-icon);font-size:21px" style-hover="background:var(--color-surface-sunken)">close</button></div></sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1200},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;page&quot;,&quot;not-found&quot;],&quot;default&quot;:&quot;page&quot;,&quot;tsType&quot;:&quot;'page'|'not-found'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  static MD = [
+    '# Changelog',
+    '',
+    '## What’s next?',
+    '',
+    'Twitch sign-in, Game Modes beyond Standard, and a German translation are all in the oven. Follow along, vote, or yell at us politely on [GitHub issues](https://github.com/winnies-app/winnies/issues). Found a bug? Same place. We read everything, even the ones in all caps.',
+    '',
+    '## 0.9.2 · 2026-10-12 · Lights out',
+    '',
+    '- **Dark theme.** Winnies now comes in Light and Dark, plus System, which follows `prefers-color-scheme` and switches live when your OS does.',
+    '- Pick your theme in the account menu. It’s remembered per user, so your other PC knows too.',
+    '- The Shared View follows each Viewer’s own theme. The Overlay stays transparent, because OBS does not care about your feelings.',
+    '- Every colour was re-checked for contrast in both themes. Timers now hit AAA. ([#41](https://github.com/winnies-app/winnies/issues/41))',
+    '- Fixed: the page no longer flashes white for a split second on load. Your retinas are welcome. ([#38](https://github.com/winnies-app/winnies/issues/38))',
+    '',
+    '## 0.9.0 · 2026-09-28 · Hello, beta',
+    '',
+    'The first public beta. Sign in with Discord and go.',
+    '',
+    '### Winnies',
+    '- Create a **Winnie**: a named list of up to 50 Challenges. Names are 1–30 characters, and you can make 10 Winnies a day.',
+    '- Rename inline with a double-click. Delete with a confirm that tells you exactly how many Challenges go down with it.',
+    '',
+    '### Challenges',
+    '- Each **Challenge** is a game plus an optional Win Condition, like “Malenia, no summons”.',
+    '- Pin a Challenge to keep it on top. Won Challenges sink to the bottom. Drag to reorder the rest.',
+    '',
+    '### Timers and counters',
+    '- Every Challenge has its own Challenge Timer. The Total Timer runs whenever any of them does, in `MM:SS` or `H:MM:SS`.',
+    '- Add a Counter with a Target to track things like 87 / 120 stars.',
+    '- Mark Challenges Won. Win them all and the Winnie is **Complete**. There is confetti. A worrying amount of confetti.',
+    '',
+    '### Sharing',
+    '- Share a read-only Shared View at `/shared/:id`. It refreshes itself, so Viewers never hit reload.',
+    '- Add the Overlay to OBS from `/shared/:id/overlay`:',
+    '  - Transparent background, sits right on top of gameplay.',
+    '  - Up to 5 Challenges per page, flipping every 10 seconds.',
+    '',
+    '## 0.4.0 · 2026-06-14 · The spreadsheet era',
+    '',
+    'Closed alpha for twelve brave streamers and one confused cat. How it worked:',
+    '',
+    '1. Make one Winnie. Just one. We were scared.',
+    '2. Add Challenges and start their timers by hand.',
+    '3. Screenshot the whole thing and paste it into OBS as your “overlay”.',
+    '',
+    '- No sharing, no counters, no dark theme, no regrets.',
+    '- Thanks to everyone who sent bug reports at 4 a.m. You know who you are. Go to bed.',
+  ].join('\n');
+
+  static inl(s) {
+    const out = [], re = /`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g; let last = 0, m;
+    while ((m = re.exec(s))) {
+      if (m.index > last) out.push({ t: 'text', v: s.slice(last, m.index) });
+      if (m[1] != null) out.push({ t: 'code', v: m[1] });
+      else if (m[2] != null) out.push({ t: 'link', v: m[2], href: m[3] });
+      else out.push({ t: 'strong', v: m[4] });
+      last = re.lastIndex;
+    }
+    if (last < s.length) out.push({ t: 'text', v: s.slice(last) });
+    return out;
+  }
+  static parse(md) {
+    const L = md.replace(/\r/g, '').split('\n'), blocks = []; let i = 0;
+    const isStart = (l) => /^#{1,3} /.test(l) || /^\s*- /.test(l) || /^\d+\. /.test(l);
+    while (i < L.length) {
+      const l = L[i]; if (!l.trim()) { i++; continue; }
+      const h = l.match(/^(#{1,3}) (.+)$/);
+      if (h) { blocks.push({ type: 'h' + h[1].length, text: h[2].trim() }); i++; continue; }
+      if (/^\s*- /.test(l)) {
+        const items = [];
+        while (i < L.length && /^\s*- /.test(L[i])) {
+          const ind = L[i].match(/^\s*/)[0].length, tx = L[i].replace(/^\s*- /, '');
+          if (ind >= 2 && items.length) items[items.length - 1].kids.push(Component.inl(tx)); else items.push({ segs: Component.inl(tx), kids: [] });
+          i++;
+        }
+        blocks.push({ type: 'ul', items }); continue;
+      }
+      if (/^\d+\. /.test(l)) {
+        const items = [];
+        while (i < L.length && /^\d+\. /.test(L[i])) { const mm = L[i].match(/^(\d+)\. (.*)$/); items.push({ n: mm[1], segs: Component.inl(mm[2]) }); i++; }
+        blocks.push({ type: 'ol', items }); continue;
+      }
+      const buf = [];
+      while (i < L.length && L[i].trim() && !isStart(L[i])) { buf.push(L[i].trim()); i++; }
+      blocks.push({ type: 'p', segs: Component.inl(buf.join(' ')) });
+    }
+    const doc = { title: '', sections: [] }; let cur = null;
+    blocks.forEach((b) => {
+      if (b.type === 'h1') { doc.title = b.text; return; }
+      if (b.type === 'h2') {
+        const m = b.text.match(/^(\d+\.\d+\.\d+)\s*·\s*(\d{4})-(\d\d)-(\d\d)\s*(?:·\s*(.+))?$/);
+        cur = m ? { kind: 'release', version: m[1], y: m[2], mo: m[3], d: m[4], name: m[5] || '', blocks: [] } : { kind: 'section', title: b.text, blocks: [] };
+        doc.sections.push(cur); return;
+      }
+      if (!cur) { cur = { kind: 'section', title: '', blocks: [] }; doc.sections.push(cur); }
+      cur.blocks.push(b);
+    });
+    return doc;
+  }
+  static DOC = Component.parse(Component.MD);
+  static TAGS = { '0.9.0': ['First beta', 'rocket_launch', 'var(--color-pinned)', 'var(--color-pinned-lip)'], '0.4.0': ['Closed alpha', 'science', 'var(--color-ready)', 'var(--color-ready-lip)'] };
+  static MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  state = {
+    theme: this.props.theme === 'dark' ? 'dark' : 'light', mode: this.props.theme === 'dark' ? 'dark' : 'light',
+    notFound: this.props.scenario === 'not-found', active: 'next', copied: {}, toasts: [], busy: false, failOnce: true, retryMsg: false, signBusy: false,
+  };
+  _tid = 10; _vis = true; _revealed = {};
+
+  root() { return this.rootRef.current; }
+  q(sel) { const r = this.root(); return r ? r.querySelector(sel) : null; }
+  qa(sel) { const r = this.root(); return r ? [...r.querySelectorAll(sel)] : []; }
+  sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  isReduced() { return !!this.props.reduced || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  cfg() { return { amb: true, resp: true, cel: true, reduced: this.isReduced(), dialect: 'showcase', calm: false, interval: 1000 }; }
+  later(fn, ms) { this._ts = this._ts || []; this._ts.push(setTimeout(fn, ms)); }
+
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.root(), fx: () => this.q('[data-fx]'), fxv: () => this.q('[data-fx]'), cfg: () => this.cfg(), cue: () => {} });
+      this.refreshTokens(); setTimeout(() => this.refreshTokens(), 700); setTimeout(() => this.refreshTokens(), 1800);
+      this.intro();
+    };
+    const r = this.root();
+    const setAnims = (play) => { const el = this.root(); if (!el) return; el.getAnimations({ subtree: true }).forEach((a) => { try { play ? a.play() : a.pause(); } catch (e) {} }); };
+    if (typeof IntersectionObserver !== 'undefined') {
+      this._vis = false;
+      this._io = new IntersectionObserver((es) => {
+        const v = es[es.length - 1].isIntersecting; if (v === this._vis) return;
+        this._vis = v;
+        if (!v) { setAnims(false); return; }
+        if (!this._booted) { this._booted = true; boot(); return; }
+        setAnims(true); this.refreshTokens();
+      }, { rootMargin: '100px' });
+      this._io.observe(r);
+    } else { this._booted = true; boot(); }
+    this._onClick = (e) => { const b = e.target.closest('[data-press]'); if (b && this.m && !b.disabled) this.m.release(b); };
+    r.addEventListener('click', this._onClick);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._bt); (this._ts || []).forEach(clearTimeout); Object.values(this._ct || {}).forEach(clearTimeout);
+    this._io && this._io.disconnect(); this._rio && this._rio.disconnect(); this._sio && this._sio.disconnect();
+    const r = this.root(); if (r) r.removeEventListener('click', this._onClick);
+  }
+  componentDidUpdate(pp) {
+    if (pp.scenario !== this.props.scenario) {
+      (this._ts || []).forEach(clearTimeout); this._revealed = {};
+      this.setState({ notFound: this.props.scenario === 'not-found', busy: false, failOnce: true, retryMsg: false, active: 'next' }, () => this.intro());
+      return;
+    }
+    if (pp.theme !== this.props.theme) { const t = this.props.theme === 'dark' ? 'dark' : 'light'; this.setState({ theme: t, mode: t }); }
+    if (!this.m || !this._vis) return;
+    const key = this.state.theme + '|' + this.isReduced();
+    if (key !== this._key) { this._key = key; this.refreshTokens(); } else this.m.syncLoops(false);
+  }
+  refreshTokens() { const el = this.root(); if (this.m && el && this._vis) { this.m.refresh(el); this.m.syncLoops(true); } }
+
+  intro() {
+    if (!this.m) return;
+    this.later(() => {
+      this.m.stagIn(this.qa('[data-stag]'));
+      if (this.state.notFound) this.later(() => this.m.wave(this.qa('[data-dg]'), 2.4), 380);
+      else this.later(() => this.m.jelly('resp', this.q('[data-h1]'), 0.6), 300);
+      this.observe();
+    }, 200);
+  }
+  observe() {
+    this._rio && this._rio.disconnect(); this._sio && this._sio.disconnect();
+    if (this.state.notFound || typeof IntersectionObserver === 'undefined') return;
+    this._rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) this.reveal(e.target); }), { threshold: 0.12 });
+    this.qa('[data-reveal]').forEach((el) => this._rio.observe(el));
+    this._sio = new IntersectionObserver((es) => {
+      if (this._lock) return;
+      const hit = es.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (hit && hit.target.dataset.sec !== this.state.active) this.setState({ active: hit.target.dataset.sec });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    this.qa('[data-sec]').forEach((el) => this._sio.observe(el));
+  }
+  reveal(el) {
+    const k = el.dataset.reveal; if (this._revealed[k]) return; this._revealed[k] = true;
+    const m = this.m; if (!m) return; const T = m.T();
+    m.play('resp', el, [{ transform: 'translateY(56px) scale(.95,1.05)', opacity: 0 }, { transform: 'translateY(-6px) scale(1.02,.98)', opacity: 1, offset: 0.55 }, { transform: 'scale(.995,1.005)', opacity: 1, offset: 0.8 }, { transform: 'none', opacity: 1 }], { duration: T.D.land * 1.2, easing: T.E.out });
+    m.stagIn(el.querySelectorAll('[data-li]'));
+    const first = Component.DOC.sections.find((x) => x.kind === 'release');
+    if (first && k === 'v' + first.version) this.later(() => this.stamp(), 420);
+  }
+  stamp() {
+    const chip = this.q('[data-tag="v' + Component.DOC.sections.find((x) => x.kind === 'release').version + '"]'); if (!chip || !this.m) return;
+    const T = this.m.T();
+    this.m.play('cel', chip, [{ transform: 'rotate(-30deg) scale(2)', opacity: 0 }, { transform: 'rotate(4deg) scale(.92)', opacity: 1, offset: 0.55 }, { transform: 'rotate(-3deg) scale(1)', opacity: 1 }], { duration: T.D.stamp, easing: T.E.out, fill: 'backwards' });
+    this.later(() => this.m.burst('cel', chip, { n: 10, shapes: ['spark', 'circle'], colors: ['#FFC23D', '#FF6FAE', '#FFFFFF', '#CDB8FF'], size: 15, spread: 120, up: false, gravity: 0 }), T.D.stamp * 0.45);
+    this.m.cue('changelog.latest', 'S01', T.D.stamp * 0.45);
+  }
+  scroller(el) {
+    let p = el.parentElement;
+    while (p && p !== document.body) { const s = getComputedStyle(p); if (/(auto|scroll)/.test(s.overflowY) && p.scrollHeight > p.clientHeight + 4) return p; p = p.parentElement; }
+    return document.scrollingElement || document.documentElement;
+  }
+  goTo(key) {
+    const sec = this.q(`[data-sec="${key}"]`); if (!sec) return;
+    const sc = this.scroller(sec), isDoc = sc === document.scrollingElement || sc === document.documentElement;
+    const top = sec.getBoundingClientRect().top - (isDoc ? 0 : sc.getBoundingClientRect().top) - 28;
+    this._lock = true; clearTimeout(this._lockT); this._lockT = setTimeout(() => { this._lock = false; }, 900);
+    try { sc.scrollBy({ top, behavior: this.isReduced() ? 'auto' : 'smooth' }); } catch (e) {}
+    this.setState({ active: key });
+    const card = this.q(`[data-reveal="${key}"]`), hl = this.q(`[data-hl="${key}"]`);
+    if (card) { this._revealed[key] = true; card.getAnimations().forEach((a) => a.cancel()); }
+    this.later(() => {
+      if (!this.m) return; const T = this.m.T();
+      this.m.jelly('resp', card, 0.25);
+      this.m.play('resp', hl, [{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.65 }, { opacity: 0 }], { duration: T.D.highlight, easing: T.E.out });
+    }, this.isReduced() ? 0 : 420);
+  }
+  wave(key) {
+    if (!this.m) return; this._wv = this._wv || {};
+    const now = Date.now(); if (now - (this._wv[key] || 0) < 900) return; this._wv[key] = now;
+    this.m.wave(this.qa(`[data-sec="${key}"] [data-vc]`), 1.3);
+  }
+  copy(key, version) {
+    try { navigator.clipboard && navigator.clipboard.writeText('https://winnies.app/changelog#' + version).catch(() => {}); } catch (e) {}
+    this.setState((s) => ({ copied: { ...s.copied, [key]: true } }), () => {
+      const b = this.q(`[data-copy="${key}"]`); if (!b || !this.m) return;
+      this.m.morph(b.querySelector('[data-ci]'));
+      this.m.burst('resp', b, { n: 10, shapes: ['spark', 'circle'], colors: ['#FFC23D', '#FFFFFF', '#CDB8FF', '#9BE3B4'], size: 14, spread: 100, up: false, gravity: 0 });
+      this.m.cue('copy.pop', 'R31');
+    });
+    this.toast(`Link to ${version} copied. Go forth and spread the news.`, 'success');
+    this._ct = this._ct || {}; clearTimeout(this._ct[key]);
+    this._ct[key] = setTimeout(() => this.setState((s) => ({ copied: { ...s.copied, [key]: false } })), 2000);
+  }
+  boop() {
+    if (!this.m) return;
+    const n = this.q('[data-nhop]');
+    this.m.niniHop(n);
+    this.m.burst('cel', n, { n: 14, shapes: ['circle', 'spark'], colors: ['#FF6FAE', '#FFC23D', '#CDB8FF', '#A8DEFF'], size: 16, spread: 170 });
+    this.m.cue('nini.boop', 'S02');
+  }
+  openLink(e, href) {
+    if (e) e.preventDefault();
+    if (this.m && e && e.currentTarget) this.m.pop(e.currentTarget, 1.1);
+    this.toast(/issues\/\d+/.test(href) ? 'Opening that issue on GitHub in a new tab.' : /issues/.test(href) ? 'Opening GitHub issues in a new tab. Be nice in there.' : 'Opening GitHub in a new tab.', 'info');
+  }
+  signIn() {
+    if (this.state.signBusy) return;
+    this.setState({ signBusy: true }, () => this.m && this.m.syncLoops(false));
+    this.later(() => this.setState({ signBusy: false }), 2400);
+  }
+  async retry() {
+    if (this.state.busy) return;
+    this.setState({ busy: true, retryMsg: false });
+    await this.sleep(this.isReduced() ? 300 : 1300);
+    if (this.state.failOnce) {
+      this.setState({ busy: false, failOnce: false, retryMsg: true }, () => {
+        if (!this.m) return;
+        this.m.shake(this.q('[data-nfcard]')); this.m.jelly('resp', this.q('[data-nini]'), 0.7); this.m.cue('error.shake', 'R33');
+      });
+      return;
+    }
+    if (this.m) await this.m.stagOut(this.qa('[data-stag]').slice(1));
+    this._revealed = {};
+    this.setState({ notFound: false, busy: false, retryMsg: false, active: 'next' }, () => {
+      if (!this.m) return this.observe();
+      this.m.stagIn(this.qa('[data-stag]').slice(1));
+      this.m.cue('page.whoosh', 'R27');
+      this.later(() => this.m.jelly('resp', this.q('[data-h1]'), 0.6), 300);
+      this.observe();
+    });
+  }
+  toast(text, kind = 'success') {
+    const id = ++this._tid;
+    this.setState((s) => ({ toasts: [...s.toasts, { id, text, kind }].slice(-3) }), () => this.m && this.m.toastIn(this.q(`[data-toast="${id}"]`), kind === 'error'));
+    if (kind === 'success') setTimeout(() => this.dismiss(id), 4000);
+    if (kind === 'info') setTimeout(() => this.dismiss(id), 5000);
+  }
+  async dismiss(id) {
+    const el = this.q(`[data-toast="${id}"]`); if (!el) return;
+    if (this.m) await this.m.toastOut(el);
+    this.setState((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }));
+  }
+  setMode(mode, e) {
+    const next = mode === 'system' ? (typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : mode;
+    if (next === this.state.theme) return this.setState({ mode });
+    const root = this.root(), L = this.q('[data-wipe]');
+    if (!this.m || !this.m.on('resp') || !L) return this.setState({ mode, theme: next });
+    const rr = root.getBoundingClientRect(), sc = rr.width / (root.offsetWidth || 1) || 1;
+    let x = root.offsetWidth - 300, y = 66;
+    if (e && e.currentTarget) { const b = e.currentTarget.getBoundingClientRect(); x = (b.left + b.width / 2 - rr.left) / sc; y = (b.top + b.height / 2 - rr.top) / sc; }
+    const W = root.offsetWidth, H = Math.min(root.offsetHeight, y + 2400), r = Math.hypot(Math.max(x, W - x), Math.max(y, H - y));
+    const c = document.createElement('div');
+    Object.assign(c.style, { position: 'absolute', left: x - r + 'px', top: y - r + 'px', width: 2 * r + 'px', height: 2 * r + 'px', borderRadius: '50%', background: next === 'dark' ? '#231520' : '#FFE3EC', transform: 'scale(0)' });
+    L.appendChild(c);
+    const T = this.m.T();
+    this.m.cue('theme.switch', 'R28');
+    c.animate([{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { duration: T.D.theme, easing: T.E['in-out'], fill: 'forwards' }).onfinish = () => {
+      this.setState({ mode, theme: next }, () => requestAnimationFrame(() => { c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T.D.base, easing: T.E.out, fill: 'forwards' }).onfinish = () => c.remove(); }));
+    };
+  }
+
+  renderVals() {
+    const s = this.state, dark = s.theme === 'dark', doc = Component.DOC;
+    const candy = [['#FF6FAE', '#B0175A'], ['#FFB547', '#B86A12'], ['#FFD84D', '#B88A00'], ['#4FD18B', '#1F8A52'], ['#5CB8FF', '#1F6FB8'], ['#A985FF', '#6A44C9'], ['#FF6FAE', '#B0175A']], rot = [-5, 3, -2, 5, -3, 2, -4];
+    const letters = 'winnies'.split('').map((c, i) => ({ k: i, ch: c, c: candy[i][0], rot: rot[i] + 'deg', ad: String(i * 110), sh: `0 2px 0 ${candy[i][1]},0 4px 0 ${candy[i][1]},0 6px 0 ${candy[i][1]},0 9px 10px rgba(0,0,0,.2)` }));
+    const segs = (arr) => (arr || []).map((g, k) => ({ k, v: g.v, href: g.href || '#', isText: g.t === 'text', isStrong: g.t === 'strong', isCode: g.t === 'code', isLink: g.t === 'link', ext: g.t === 'link' && /^https?:/.test(g.href || ''), on: (e) => this.openLink(e, g.href || '') }));
+    const SPR = [['var(--color-accent)', 'var(--color-accent-lip)'], ['var(--color-pinned)', 'var(--color-pinned-lip)'], ['var(--color-ready)', 'var(--color-ready-lip)'], ['var(--color-complete)', 'var(--color-complete-lip)']];
+    const firstRel = doc.sections.find((x) => x.kind === 'release');
+    const sections = doc.sections.map((x, si) => {
+      const rel = x.kind === 'release', key = rel ? 'v' + x.version : si === 0 ? 'next' : 's' + si, latest = rel && x === firstRel;
+      const tag = latest ? ['Latest', 'new_releases', 'var(--color-accent)', 'var(--color-accent-lip)'] : (rel && Component.TAGS[x.version]) || null;
+      let h3i = 0;
+      const blocks = x.blocks.map((b, bi) => {
+        const spr = b.type === 'h3' ? SPR[h3i++ % SPR.length] : SPR[0];
+        return {
+          k: bi, isH3: b.type === 'h3', isP: b.type === 'p', isUl: b.type === 'ul', isOl: b.type === 'ol', text: b.text || '', sprBg: spr[0], sprLip: spr[1], segs: segs(b.segs),
+          items: (b.items || []).map((it, ii) => ({ k: ii, n: it.n || '', segs: segs(it.segs), hasKids: !!(it.kids && it.kids.length), kids: (it.kids || []).map((kd, ki) => ({ k: ki, segs: segs(kd) })) })),
+        };
+      });
+      const copied = !!s.copied[key];
+      return {
+        k: si, key, anchor: rel ? x.version : 'whats-next', hid: 'cl-h-' + key.replace(/\./g, '-'), isNext: !rel, isRel: rel, latest, title: x.title || '',
+        bg: rel ? 'var(--color-surface)' : 'var(--color-surface-sunken)', sh: rel ? 'var(--shadow-raised-lg)' : 'var(--shadow-well)', pad: rel ? '44px 56px 54px' : '38px 52px 44px', bodyGap: rel ? '30px' : '22px',
+        version: x.version || '', vchars: (x.version || '').split('').map((c, k) => ({ k, c })), h2label: rel ? 'Version ' + x.version : '',
+        name: x.name || '', date: rel ? `${x.d}.${x.mo}.${x.y.slice(2)}` : '', iso: rel ? `${x.y}-${x.mo}-${x.d}` : '',
+        hasTag: !!tag, tag: tag ? tag[0] : '', tagIcon: tag ? tag[1] : '', tagBg: tag ? tag[2] : 'transparent', tagLip: tag ? tag[3] : 'transparent', tagRot: latest ? '-3deg' : '0deg',
+        copyAria: rel ? 'Copy link to ' + x.version : '', copyIcon: copied ? 'check' : 'link', copyBg: copied ? 'var(--color-won)' : 'var(--color-control)', copyC: copied ? 'var(--color-on-accent)' : 'var(--color-text)', copyLip: copied ? 'var(--color-won-lip)' : 'var(--color-control-lip)',
+        onCopy: () => this.copy(key, x.version), onWave: () => this.wave(key), blocks,
+      };
+    });
+    const rail = sections.map((x, k) => {
+      const on = s.active === x.key;
+      return {
+        k, label: x.isRel ? x.version : x.title, sub: x.isRel ? x.name + ' · ' + x.date : 'Coming up', icon: x.isRel ? (x.latest ? 'new_releases' : 'sell') : 'explore', cur: on ? 'location' : 'false',
+        bg: on ? 'var(--color-accent)' : 'transparent', c: on ? 'var(--color-on-accent)' : 'var(--color-text)', sh: on ? '0 5px 0 -1px var(--color-accent-lip),inset 0 4px 6px rgba(255,220,235,.5)' : 'none', subC: on ? 'var(--color-on-accent)' : 'var(--color-text-muted)',
+        dC: on ? 'var(--color-text)' : 'var(--color-on-accent)',
+        dBg: on ? 'var(--color-control)' : x.isRel ? (x.latest ? 'var(--color-accent)' : 'var(--color-pinned)') : 'var(--color-ready)',
+        dSh: on ? '0 3px 0 -1px var(--color-accent-lip)' : x.isRel ? (x.latest ? '0 3px 0 -1px var(--color-accent-lip)' : '0 3px 0 -1px var(--color-pinned-lip)') : '0 3px 0 -1px var(--color-ready-lip)',
+        on: () => this.goTo(x.key),
+      };
+    });
+    const toastKind = { success: ['check', 'var(--color-won)'], info: ['info', 'var(--color-ready)'], error: ['error', 'var(--color-danger)'] };
+    return {
+      rootRef: this.rootRef, theme: s.theme, motionAttr: this.isReduced() ? 'reduce' : 'full',
+      screenLabel: 'Changelog · ' + (s.notFound ? 'Not found' : 'Releases') + ' · ' + s.theme,
+      letters, noop: (e) => e.preventDefault(), gloss: dark ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.7)',
+      blobA: dark ? '#4A2140' : '#FFC2DA', blobB: dark ? '#2E2350' : '#E3D4FF',
+      themeOpts: [['light', 'light_mode', 'Light'], ['dark', 'dark_mode', 'Dark'], ['system', 'contrast', 'Match system']].map(([v, icon, label], k) => { const on = s.mode === v; return { k, icon, label, sel: on ? 'true' : 'false', bg: on ? 'var(--color-control)' : 'transparent', c: on ? 'var(--color-text)' : 'var(--color-text-muted)', sh: on ? '0 4px 0 -1px var(--color-control-lip)' : 'none', on: (e) => this.setMode(v, e) }; }),
+      signBusy: !!s.signBusy, signIdle: !s.signBusy, signLabel: s.signBusy ? 'Redirecting to Discord…' : 'Sign in with Discord', signCur: s.signBusy ? 'progress' : 'pointer', onSignIn: () => this.signIn(),
+      onGitHub: (e) => this.openLink(e, e && e.currentTarget ? (e.currentTarget.getAttribute('data-issues') ? 'issues' : '') : ''),
+      showPage: !s.notFound, notFound: !!s.notFound, docTitle: doc.title, sections, rail, onBoop: () => this.boop(),
+      busy: !!s.busy, retryCur: s.busy ? 'progress' : 'pointer', retryIcon: s.busy ? 'progress_activity' : 'refresh', retrySpin: s.busy ? 'spin' : '', retryLabel: s.busy ? 'Looking again…' : 'Try again', retryMsg: !!s.retryMsg,
+      onRetry: () => this.retry(), onHome: () => this.toast('That goes to the homepage. Which is the next phase. Patience.', 'info'),
+      toasts: s.toasts.map((t) => { const K = toastKind[t.kind] || toastKind.info; return { ...t, icon: K[0], discBg: K[1], role: t.kind === 'error' ? 'alert' : 'status', close: () => this.dismiss(t.id) }; }),
+    };
+  }
+}
+</script>
+</body>
+</html>

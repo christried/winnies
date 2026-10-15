@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0}a{color:#B0175A}a:hover{color:#4A2B3A}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;display:flex;gap:64px;align-items:flex-start;font-family:'M PLUS Rounded 1c',sans-serif;color:{{ t.ink }}">
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="K Workspace" style="position:relative;flex:none;width:1440px;height:1400px;overflow:hidden;border-radius:48px;box-sizing:border-box;padding:30px 56px;display:flex;flex-direction:column;gap:22px;background:{{ t.pageBg }}">
+  <span style="position:absolute;inset:0;background:radial-gradient(rgba(74,43,58,.05) 1px,rgba(0,0,0,0) 1.6px) 0 0/6px 6px,radial-gradient(rgba(255,255,255,.18) 1px,rgba(0,0,0,0) 1.6px) 3px 2px/9px 9px;pointer-events:none"></span>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:76px;padding:0 14px 0 28px;border-radius:38px;background:{{ t.surf }};box-shadow:{{ t.sh }}">
+    <span aria-label="winnies" style="display:flex;align-items:baseline;font:400 40px/1 'Mochiy Pop One';padding-bottom:6px">
+      <sc-for list="{{ letters }}" as="l" hint-placeholder-count="7"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for>
+    </span>
+    <button style="margin-left:20px;display:flex;align-items:center;gap:12px;height:48px;padding:0 16px 0 20px;border:0;border-radius:24px;background:{{ t.well }};box-shadow:{{ t.wellSh }};color:{{ t.ink }};font:700 18px 'M PLUS Rounded 1c';cursor:pointer">Kitty vs. the world<span style="font-family:'Material Symbols Rounded';font-size:24px">expand_more</span></button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:50px;padding:0 22px;border:0;border-radius:25px;background:#FF6FAE;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 6px 0 -1px #D9478A,inset 0 4px 6px rgba(255,220,235,.7)" style-active="transform:translateY(4px);box-shadow:0 2px 0 -1px #D9478A"><span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'wght' 700">link</span>Share</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;gap:4px;padding:4px;border-radius:26px;background:{{ t.well }};box-shadow:{{ t.wellSh }}">
+      <span title="Light" style="width:42px;height:42px;border-radius:21px;display:flex;align-items:center;justify-content:center;background:{{ sunBg }};color:{{ sunC }};box-shadow:{{ sunSh }};font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1">light_mode</span>
+      <span title="System" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:{{ t.mute }};font-family:'Material Symbols Rounded';font-size:22px">contrast</span>
+      <span title="Dark" style="width:42px;height:42px;border-radius:21px;display:flex;align-items:center;justify-content:center;background:{{ moonBg }};color:{{ moonC }};box-shadow:{{ moonSh }};font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1">bedtime</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="position:relative;width:52px;height:52px">
+      <span style="position:absolute;left:4px;top:-6px;width:18px;height:18px;background:#CDB8FF;clip-path:polygon(0 100%,30% 0,100% 100%)"></span><span style="position:absolute;right:4px;top:-6px;width:18px;height:18px;background:#CDB8FF;clip-path:polygon(0 100%,70% 0,100% 100%)"></span>
+      <span style="position:absolute;inset:0;border-radius:50%;background:#CDB8FF;display:flex;align-items:center;justify-content:center;font:400 20px 'Mochiy Pop One';color:#4A2B3A;box-shadow:0 5px 0 -1px #A68BE8">K</span>
+    </div>
+  </nav>
+
+  <section style="position:relative;display:grid;grid-template-columns:210px minmax(0,1fr) auto;gap:30px;align-items:center;padding:30px 36px 30px 24px;border-radius:52px;background:{{ t.surf }};box-shadow:{{ t.shLg }}">
+    <span style="position:absolute;inset:0;border-radius:52px;background:repeating-radial-gradient(circle at 84% 22%,rgba(74,43,58,.035) 0 1.5px,rgba(0,0,0,0) 1.5px 5px);-webkit-mask-image:radial-gradient(circle at 84% 22%,#000 0 60px,rgba(0,0,0,0) 110px);mask-image:radial-gradient(circle at 84% 22%,#000 0 60px,rgba(0,0,0,0) 110px);pointer-events:none"></span>
+    <div style="position:relative;display:flex;justify-content:center;padding-top:18px">
+      <div data-nini="1" data-amb="jelly" style="transform-origin:50% 100%"><div data-beat="{{ niniBeat }}" style="transform-origin:50% 100%">
+        <dc-import name="ClayFace" mood="{{ niniMood }}" shape="mochi" mascot="{{ true }}" size="180" hint-size="180px,155px"></dc-import>
+      </div></div>
+    </div>
+    <div style="position:relative;display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="align-self:flex-start;position:relative;padding:10px 18px;border-radius:20px;background:#FFEFA1;color:#4A2B3A;font:700 17px 'M PLUS Rounded 1c';box-shadow:0 4px 0 -1px #E8C860">{{ niniLine }} <span style="font-weight:500;font-size:12px;color:#7A5566">(new copy)</span><span style="position:absolute;left:-10px;top:14px;width:16px;height:16px;background:#FFEFA1;clip-path:polygon(100% 0,0 50%,100% 100%)"></span></div>
+      <h1 style="margin:0;font:400 54px/1.08 'Mochiy Pop One';text-wrap:pretty">Kitty vs. the world</h1>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="flex:1;max-width:400px;height:28px;border-radius:14px;background:{{ t.well }};box-shadow:{{ t.wellSh }};padding:4px;box-sizing:border-box"><div style="width:{{ pctStr }};height:100%;border-radius:10px;background:repeating-linear-gradient(-45deg,#9BE3B4 0 10px,#B9EEC9 10px 20px);box-shadow:inset 0 -3px 4px rgba(40,140,80,.3),inset 0 2px 2px rgba(255,255,255,.6)"></div></div>
+        <span style="font:400 19px 'Mochiy Pop One'">{{ summary }}</span>
+        <span style="font:700 15px 'M PLUS Rounded 1c';color:{{ t.mute }}">· created 03.10.26</span>
+      </div>
+    </div>
+    <div style="position:relative;display:flex;flex-direction:column;align-items:flex-end;gap:20px">
+      <div aria-label="Total Timer" style="display:flex;align-items:center;gap:6px">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8">
+          <sc-if value="{{ d.num }}"><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative;display:flex;align-items:center;justify-content:center;width:62px;height:86px;border-radius:26px;background:{{ d.bg }};font:400 52px/1 'Mochiy Pop One';color:#4A2B3A;transform-origin:50% 100%;box-shadow:0 8px 0 -1px {{ d.lip }},0 16px 18px -10px {{ t.dropTile }},inset 0 6px 6px rgba(255,255,255,.75),inset 0 -5px 7px rgba(0,0,0,.07)">{{ d.c }}<span style="position:absolute;left:12px;top:9px;width:16px;height:8px;border-radius:50%;background:rgba(255,255,255,.75);transform:rotate(-20deg)"></span></span></sc-if>
+          <sc-if value="{{ d.sep }}"><span style="font:800 40px/1 'M PLUS Rounded 1c';color:#FF6FAE">♥</span></sc-if>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:10px;height:62px;padding:0 30px 0 22px;border:0;border-radius:31px;background:#FF6FAE;color:#4A2B3A;font:400 21px 'Mochiy Pop One';cursor:pointer;box-shadow:0 8px 0 -1px #D9478A,0 16px 24px -10px rgba(220,60,130,.6),inset 0 5px 7px rgba(255,220,235,.7)" style-active="transform:translateY(6px);box-shadow:0 2px 0 -1px #D9478A"><span style="font-family:'Material Symbols Rounded';font-size:30px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span>{{ totalBtnLabel }}</button>
+        <button aria-label="More Winnie options" style="width:62px;height:62px;border:0;border-radius:50%;background:{{ t.btn }};cursor:pointer;color:{{ t.ink }};font-family:'Material Symbols Rounded';font-size:28px;box-shadow:0 6px 0 -1px {{ t.btnLip }}">more_horiz</button>
+      </div>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;display:flex;align-items:center;gap:14px;padding:16px 24px;border-radius:30px;background:#9BE3B4;color:#4A2B3A;font:400 24px 'Mochiy Pop One';box-shadow:0 6px 0 -1px #6CC48D">✿ Complete! Every Challenge Won! <span style="font:500 13px 'M PLUS Rounded 1c'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:14px;border-radius:38px;background:{{ t.surf }};box-shadow:{{ t.sh }}">
+    <div style="flex:1.1;height:54px;border-radius:27px;background:{{ t.well }};box-shadow:{{ t.wellSh }};display:flex;align-items:center;padding:0 22px;font:700 17px 'M PLUS Rounded 1c';color:{{ t.mute }}">Game</div>
+    <div style="flex:1.5;height:54px;border-radius:27px;background:{{ t.well }};box-shadow:{{ t.wellSh }};display:flex;align-items:center;padding:0 22px;font:700 17px 'M PLUS Rounded 1c';color:{{ t.mute }}">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:6px;height:54px;padding:0 18px;border:0;border-radius:27px;background:#A8DEFF;color:#4A2B3A;font:800 16px 'M PLUS Rounded 1c';cursor:pointer;box-shadow:0 5px 0 -1px #74B8E0"><span style="font-family:'Material Symbols Rounded';font-size:22px">add</span>Counter</button>
+    <button style="display:flex;align-items:center;gap:8px;height:54px;padding:0 24px 0 18px;border:0;border-radius:27px;background:#CDB8FF;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 6px 0 -1px #A68BE8" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px #A68BE8"><span style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'wght' 700">add</span>Add Challenge</button>
+  </section>
+
+  <div style="position:relative;display:flex;justify-content:space-between;align-items:baseline;padding:0 14px">
+    <span style="font:400 22px 'Mochiy Pop One'">Challenges</span>
+    <span style="font:700 15px 'M PLUS Rounded 1c';color:{{ t.mute }}">8 / 50 · drag to reorder</span>
+  </div>
+
+  <div style="position:relative;display:flex;flex-direction:column;gap:14px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 56px minmax(0,1fr) 210px 126px 52px 146px 44px;gap:16px;align-items:center;height:76px;padding:0 16px 0 12px;border-radius:38px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .3s cubic-bezier(.3,1.8,.5,1)" style-hover="transform:translateY(-4px) rotate(-.4deg)">
+        <sc-if value="{{ r.pinned }}"><span style="position:absolute;left:-14px;top:-10px;width:96px;height:26px;background:repeating-linear-gradient(90deg,#CDB8FF 0 10px,#E4D9FF 10px 20px);opacity:.92;transform:rotate(-10deg);box-shadow:0 2px 4px rgba(0,0,0,.08)"></span></sc-if>
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:24px;color:{{ t.mute }};opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span data-beat="{{ r.beat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="54" hint-size="54px,54px"></dc-import></span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            <span style="font:400 21px/1.45 'Mochiy Pop One';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <sc-if value="{{ r.pinned }}"><span title="Pinned" style="flex:none;font-family:'Material Symbols Rounded';font-size:18px;color:#8B6BE0;font-variation-settings:'FILL' 1">push_pin</span></sc-if>
+          </div>
+          <span style="font:500 15px/1.2 'M PLUS Rounded 1c';color:{{ t.mute }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:38px;height:38px;border:0;border-radius:50%;background:{{ t.btn }};color:{{ t.ink }};cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;box-shadow:0 4px 0 -1px {{ t.btnLip }}" style-active="transform:translateY(3px)">remove</button>
+            <span style="min-width:96px;height:40px;border-radius:20px;background:{{ r.wellBg }};color:{{ r.countColor }};box-shadow:{{ t.wellSh }};display:flex;align-items:center;justify-content:center;font:400 17px 'Mochiy Pop One'">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:38px;height:38px;border:0;border-radius:50%;background:#FFEFA1;color:#4A2B3A;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;box-shadow:0 4px 0 -1px #E8C860" style-active="transform:translateY(3px)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 22px/1 'Mochiy Pop One';color:{{ r.timeColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:{{ r.playColor }};opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:0 5px 0 -1px {{ r.playLip }}" style-active="transform:translateY(4px)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:48px;border:0;border-radius:24px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winColor }};font:400 15px 'Mochiy Pop One';box-shadow:0 5px 0 -1px {{ r.winLip }}" style-active="transform:translateY(4px)"><span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' {{ r.winFill }}">favorite</span>{{ r.winLabel }}</button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:{{ t.ink }};font-family:'Material Symbols Rounded';font-size:24px">more_vert</button>
+        <sc-if value="{{ r.won }}"><span data-amb="stick" style="position:absolute;left:52px;top:-12px;width:32px;height:32px;border-radius:50%;background:#FFEFA1;border:3px solid #fff;box-shadow:0 3px 6px rgba(176,23,90,.25);display:flex;align-items:center;justify-content:center;font:800 17px 'M PLUS Rounded 1c';color:#B0175A;transform:rotate(12deg)">★</span></sc-if>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:8px;top:70px;width:250px;padding:10px;border-radius:30px;background:{{ t.surf }};display:flex;flex-direction:column;gap:2px;box-shadow:{{ t.shLg }}">
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:22px;background:{{ m.bg }};color:{{ m.color }};font:700 16px 'M PLUS Rounded 1c'"><span style="font-family:'Material Symbols Rounded';font-size:22px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="K Overlay" style="position:relative;flex:none;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;right:60px;bottom:52px;width:600px;padding:24px;box-sizing:border-box;border-radius:44px;background:{{ t.ovCard }};color:{{ t.ink }};display:flex;flex-direction:column;gap:14px;box-shadow:{{ t.ovSh }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px"><span style="font:400 24px/1.45 'Mochiy Pop One';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kitty vs. the world</span><span style="flex:none;padding:4px 12px;border-radius:12px;background:#9BE3B4;color:#4A2B3A;font:800 16px 'M PLUS Rounded 1c'">{{ wonCount }} / {{ totalCount }} won</span></div>
+    <div aria-label="Total Timer" style="display:flex;align-items:center;gap:6px;justify-content:center">
+      <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8">
+        <sc-if value="{{ d.num }}"><span data-chg="{{ d.chg }}" data-kind="total" style="display:flex;align-items:center;justify-content:center;width:60px;height:82px;border-radius:24px;background:{{ d.bg }};font:400 50px/1 'Mochiy Pop One';color:#4A2B3A;transform-origin:50% 100%;box-shadow:0 7px 0 -1px {{ d.lip }},inset 0 5px 6px rgba(255,255,255,.75)">{{ d.c }}</span></sc-if>
+        <sc-if value="{{ d.sep }}"><span style="font:800 36px/1 'M PLUS Rounded 1c';color:#FF6FAE">♥</span></sc-if>
+      </sc-for>
+    </div>
+    <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+      <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:44px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:60px;padding:0 20px 0 8px;border-radius:30px;background:{{ r.ovBg }}">
+        <dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="44" hint-size="44px,44px"></dc-import>
+        <span style="font:400 22px/1.45 'Mochiy Pop One';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+        <span style="font:800 18px 'M PLUS Rounded 1c';color:{{ t.mute }}">{{ r.countStr }}</span>
+        <span style="display:flex;font:400 22px/1 'Mochiy Pop One';color:{{ r.timeColor }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+      </div>
+    </sc-for>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+      <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="font:800 24px/1 'M PLUS Rounded 1c';color:{{ p.color }}">♥</span></sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;both&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;both&quot;,&quot;tsType&quot;:&quot;'both'|'workspace'|'overlay'&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;base&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;strawberry&quot;,&quot;lilac&quot;,&quot;mint&quot;,&quot;butter&quot;],&quot;default&quot;:&quot;strawberry&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;bg&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dots&quot;,&quot;gingham&quot;,&quot;swirl&quot;,&quot;plain&quot;],&quot;default&quot;:&quot;dots&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;wordmark&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;candy&quot;,&quot;berry&quot;,&quot;sticker&quot;],&quot;default&quot;:&quot;candy&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;live&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } const W = window.WinniesCore.mount(this, this.motion()); if (this.props.live === false) clearInterval(W.iv); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._ct); this._wc && this._wc.stop(); }
+  stage(s) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && s >= t[i]) i++; return i; }
+  motion() {
+    const pop = 'cubic-bezier(.3,1.7,.5,1)';
+    const jelly = [{ transform: 'scale(1,1)' }, { transform: 'scale(1.07,.88)', offset: .18 }, { transform: 'scale(.94,1.08)', offset: .42 }, { transform: 'scale(1.03,.97)', offset: .68 }, { transform: 'scale(1,1)' }];
+    const beats = {
+      run0: [[{ transform: 'none' }, { transform: 'translateY(-8px) scale(.94,1.07)', offset: .35 }, { transform: 'scale(1.07,.93)', offset: .7 }, { transform: 'none' }], { duration: 420, easing: 'ease-out' }],
+      run1: [[{ transform: 'none' }, { transform: 'translateY(2px) rotate(-5deg)', offset: .4 }, { transform: 'none' }], { duration: 420, easing: 'ease-in-out' }],
+      run2: [[{ transform: 'rotate(0)' }, { transform: 'rotate(-11deg)', offset: .3 }, { transform: 'rotate(9deg)', offset: .65 }, { transform: 'rotate(0)' }], { duration: 520, easing: 'ease-in-out' }],
+      run3: [[{ transform: 'none' }, { transform: 'translateY(3px) scale(1.07,.88)', offset: .45 }, { transform: 'translateY(3px) scale(1.07,.88)', offset: .7 }, { transform: 'none' }], { duration: 950, easing: 'ease-in-out' }],
+      run4: [[{ transform: 'none' }, { transform: 'translateX(-4px)', offset: .2 }, { transform: 'translateX(4px)', offset: .4 }, { transform: 'translateX(-3px)', offset: .6 }, { transform: 'translateX(2px)', offset: .8 }, { transform: 'none' }], { duration: 380, easing: 'linear' }],
+      run5: [[{ transform: 'none' }, { transform: 'translateX(-4px) scale(1.06)' }, { transform: 'translateX(4px) scale(1.06)' }, { transform: 'translateX(-4px) scale(1.06)' }, { transform: 'translateX(3px) scale(1.04)' }, { transform: 'none' }], { duration: 460, easing: 'steps(6,end)' }],
+    };
+    return {
+      wonDelay: 700,
+      amb: {
+        hop: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.12,.88)', offset: .08 }, { transform: 'translateY(-14px) scale(.92,1.1)', offset: .2 }, { transform: 'translateY(0) scale(1.1,.9)', offset: .32 }, { transform: 'scale(1,1)', offset: .42 }, { transform: 'scale(1,1)' }], { duration: 2600, easing: 'ease-in-out' }],
+        jelly: [[{ transform: 'scale(1,1)' }, { transform: 'scale(1.05,.95)' }, { transform: 'scale(.98,1.03)' }, { transform: 'scale(1,1)' }], { duration: 2200, easing: 'ease-in-out' }],
+        stick: [[{ transform: 'rotate(12deg) scale(1)' }, { transform: 'rotate(4deg) scale(1.08)' }, { transform: 'rotate(12deg) scale(1)' }], { duration: 2600, easing: 'ease-in-out' }],
+        drip: [[{ transform: 'translateY(0)' }, { transform: 'translateY(5px)', offset: .7 }, { transform: 'translateY(0)' }], { duration: 1400, easing: 'ease-in' }],
+        vein: [[{ transform: 'scale(1)' }, { transform: 'scale(1.3)', offset: .15 }, { transform: 'scale(1)', offset: .3 }, { transform: 'scale(1)' }], { duration: 900 }],
+        steam: [[{ transform: 'translateY(2px) scale(.9)' }, { transform: 'translateY(-6px) scale(1.08)' }, { transform: 'translateY(2px) scale(.9)' }], { duration: 700, easing: 'steps(4,end)' }],
+        twinkle: [[{ transform: 'scale(.6) rotate(0)' }, { transform: 'scale(1.15) rotate(20deg)' }, { transform: 'scale(.6) rotate(0)' }], { duration: 1100, easing: 'ease-in-out' }],
+        zzz: [[{ transform: 'translate(0,0)', opacity: .3 }, { transform: 'translate(4px,-6px)', opacity: 1 }, { transform: 'translate(0,0)', opacity: .3 }], { duration: 2400, easing: 'ease-in-out' }],
+      },
+      tick: (k) => k === 'total'
+        ? [[{ transform: 'translateY(0) scale(1) rotate(0)' }, { transform: 'translateY(-18px) scale(.9,1.12) rotate(-8deg)', offset: .35 }, { transform: 'translateY(0) scale(1.12,.86) rotate(2deg)', offset: .68 }, { transform: 'none' }], { duration: 520, easing: 'ease-out' }]
+        : [[{ transform: 'translateY(0)' }, { transform: 'translateY(-7px) rotate(-6deg)', offset: .4 }, { transform: 'none' }], { duration: 380, easing: pop }],
+      beat: (n) => beats[n],
+      won: (el, W, ov) => {
+        el.animate(jelly, { duration: 700, easing: 'ease-out' });
+        this.setState({ cheer: Date.now() });
+        W.burst(el, { n: ov ? 14 : 24, shapes: ['text:♥', 'text:★', 'circle', 'text:✿'], colors: ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF', '#A8DEFF'], size: 26, spread: 240, gravity: 60, dur: 1300, ox: .1, up: true, cone: 2, font: "'M PLUS Rounded 1c'", spin: 120 });
+      },
+      land: (el) => el.animate([{ transform: 'translateY(-40px) scale(.9,1.1)', opacity: 0 }, { transform: 'translateY(0) scale(1.08,.9)', opacity: 1, offset: .5 }, { transform: 'scale(.97,1.04)', offset: .75 }, { transform: 'none' }], { duration: 600, easing: 'ease-out' }),
+      complete: (root, W) => {
+        root.querySelectorAll('[data-nini]').forEach((n) => {
+          n.animate([{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.2,.8)', offset: .15 }, { transform: 'translateY(-90px) scale(.9,1.15) rotate(-10deg)', offset: .45 }, { transform: 'translateY(0) scale(1.15,.85)', offset: .75 }, { transform: 'none' }], { duration: 1100, easing: 'ease-in-out', iterations: 2 });
+          W.burst(n, { n: 50, shapes: ['text:♥', 'text:★', 'circle', 'text:✿'], colors: ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF', '#A8DEFF'], size: 34, spread: 560, gravity: 160, dur: 2300, up: true, cone: 3, font: "'M PLUS Rounded 1c'" });
+        });
+      },
+    };
+  }
+  theme() {
+    const B = {
+      strawberry: { L: ['#FFE3EC', '#FFCADD', '#FFF8FB', '#F5B8CF', '#FFE3EC', '220,80,140', '#7A5566', '#FFC2DA', '#E3D4FF'], D: ['#231520', '#2E1B29', '#352230', '#140A11', '#2A1823', '0,0,0', '#CFA9BB', '#4A2140', '#2E2350'] },
+      lilac: { L: ['#EEE6FF', '#DCCEFF', '#FBF8FF', '#D3C2F5', '#EEE6FF', '120,80,200', '#665484', '#D8C6FF', '#FFD0E4'], D: ['#1B1730', '#241F3E', '#2A2445', '#0F0C1E', '#211C38', '0,0,0', '#B9AEDB', '#352A66', '#4A2145'] },
+      mint: { L: ['#DFF6E8', '#C4EDD4', '#F7FFFA', '#B3E2C5', '#DFF6E8', '40,140,90', '#4C6A58', '#BDEBD0', '#FFF0A8'], D: ['#122019', '#182A21', '#1E3328', '#08120D', '#172920', '0,0,0', '#A6CDB6', '#1F4A35', '#3F3A1A'] },
+      butter: { L: ['#FFF4CC', '#FFE8A3', '#FFFCF0', '#F0D893', '#FFF4CC', '200,150,30', '#76603C', '#FFE08A', '#FFC9DE'], D: ['#221C0F', '#2C2414', '#342B19', '#120E06', '#2A2314', '0,0,0', '#D6C49A', '#4A3A12', '#4A2135'] },
+    };
+    const dark = this.props.mode === 'dark';
+    const [page, dot, surf, lip, well, glow, mute, s1, s2] = (B[this.props.base] || B.strawberry)[dark ? 'D' : 'L'];
+    const bg = this.props.bg || 'dots';
+    const pageBg = bg === 'gingham' ? `linear-gradient(90deg,${dot}AA 50%,rgba(0,0,0,0) 50%) 0 0/56px 56px,linear-gradient(${dot}AA 50%,rgba(0,0,0,0) 50%) 0 0/56px 56px,${page}`
+      : bg === 'swirl' ? `radial-gradient(560px 400px at 10% 16%,${s1},rgba(0,0,0,0) 70%),radial-gradient(640px 540px at 94% 56%,${s2},rgba(0,0,0,0) 70%),radial-gradient(460px 420px at 28% 98%,${s1},rgba(0,0,0,0) 70%),${page}`
+      : bg === 'plain' ? page
+      : `radial-gradient(${dot} 18%,rgba(0,0,0,0) 19%) 0 0/52px 52px,radial-gradient(${dot} 18%,rgba(0,0,0,0) 19%) 26px 26px/52px 52px,${page}`;
+    const g = `rgba(${glow},`;
+    return {
+      dark, pageBg, surf, lip, well, mute, ink: dark ? '#FFEEF5' : '#4A2B3A',
+      sh: dark ? `0 8px 0 -2px ${lip},0 18px 30px -12px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.07),inset 0 -6px 10px rgba(0,0,0,.25)` : `0 8px 0 -2px ${lip},0 16px 26px -12px ${g}.35),inset 0 5px 7px rgba(255,255,255,.9),inset 0 -5px 9px ${g}.1)`,
+      shLg: dark ? `0 12px 0 -2px ${lip},0 28px 40px -16px rgba(0,0,0,.7),inset 0 2px 0 rgba(255,255,255,.08),inset 0 -10px 16px rgba(0,0,0,.25)` : `0 12px 0 -2px ${lip},0 26px 40px -16px ${g}.4),inset 0 -8px 14px ${g}.12),inset 0 8px 12px rgba(255,255,255,.95)`,
+      hov: dark ? `0 12px 0 -2px ${lip},0 26px 34px -14px rgba(0,0,0,.7),inset 0 2px 0 rgba(255,255,255,.1)` : `0 12px 0 -2px ${lip},0 26px 34px -14px ${g}.5),inset 0 5px 8px #fff`,
+      wellSh: dark ? 'inset 0 4px 8px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.06)' : `inset 0 4px 8px ${g}.22)`,
+      btn: dark ? '#4A3644' : '#FFFFFF', btnLip: dark ? '#1A0F16' : lip,
+      dropTile: dark ? 'rgba(0,0,0,.6)' : `${g}.45)`,
+      ovCard: dark ? surf : '#FFF8FB',
+      ovSh: dark ? `0 0 0 4px #000,0 12px 0 0 ${lip},0 30px 50px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.08)` : '0 0 0 5px #4A2B3A,0 13px 0 1px #FF9FC8,0 30px 50px rgba(74,43,58,.5)',
+    };
+  }
+  skin(r, t) {
+    const q = (this.state.ch || []).find((x) => x.id === r.id) || {};
+    const secs = q.secs || 0, dk = t.dark, hov = r.hover && !r.won;
+    const st = {
+      running: { bg: dk ? '#4A2238' : '#FFD2E5', ovBg: dk ? '#4A2238' : '#FFD2E5', shadow: `0 0 0 4px #FF6FAE,0 8px 0 0 ${dk ? '#7A1F4D' : '#D9478A'},0 20px 30px -12px ${dk ? 'rgba(0,0,0,.6)' : 'rgba(220,60,130,.5)'}`, timeColor: dk ? '#FFB3D2' : '#9E1450' },
+      idle: { bg: t.surf, ovBg: t.well, shadow: t.sh, timeColor: r.untouched ? t.mute : t.ink },
+      won: { bg: dk ? '#1E3A2A' : '#D6F5E0', ovBg: dk ? '#1E3A2A' : '#D6F5E0', shadow: `0 5px 0 -2px ${dk ? '#0C2216' : '#9BE3B4'}`, timeColor: dk ? '#A8EFC2' : '#2E6B45' },
+    }[r.status];
+    return {
+      ...st, secs, beat: r.running ? 'run' + this.stage(secs) : '',
+      shadow: hov ? t.hov : st.shadow, lift: hov ? 'translateY(-5px) rotate(-.5deg)' : 'none', gripOp: hov ? 1 : 0, z: r.menu ? 20 : 1,
+      wellBg: r.full ? '#9BE3B4' : t.well, countColor: r.full ? '#4A2B3A' : t.ink,
+      playBg: r.running ? '#FF6FAE' : t.btn, playLip: r.running ? '#D9478A' : t.btnLip, playColor: r.running ? '#4A2B3A' : t.ink, playOp: r.won ? 0.35 : 1,
+      winBg: r.won ? '#9BE3B4' : t.btn, winLip: r.won ? '#6CC48D' : t.btnLip, winColor: r.won ? '#4A2B3A' : t.ink, winFill: r.won ? 1 : 0,
+      moreBg: r.menu || hov ? t.well : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? t.well : 'transparent', color: m.danger ? (dk ? '#FF8FB8' : '#B0175A') : t.ink })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.34em' : '0.66em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'both';
+    const t = this.theme();
+    const wm = this.props.wordmark || 'candy';
+    const candy = [['#FF6FAE', '#B0175A'], ['#FFB547', '#B86A12'], ['#FFD84D', '#B88A00'], ['#4FD18B', '#1F8A52'], ['#5CB8FF', '#1F6FB8'], ['#A985FF', '#6A44C9'], ['#FF6FAE', '#B0175A']];
+    const rot = [-5, 3, -2, 5, -3, 2, -4];
+    const white = '3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px 2px 0 #fff,2px -2px 0 #fff,-2px -2px 0 #fff';
+    const letters = 'winnies'.split('').map((ch, i) => {
+      const [c, lip] = wm === 'berry' ? ['#FF6FAE', '#B0175A'] : candy[i];
+      const sh = wm === 'sticker' ? `${white},0 6px 0 #fff,0 9px 0 ${t.dark ? '#000' : 'rgba(74,43,58,.25)'},0 12px 14px rgba(0,0,0,.2)` : `0 2px 0 ${lip},0 4px 0 ${lip},0 6px 0 ${lip},0 10px 12px rgba(0,0,0,.22)`;
+      return { k: i, ch, c, sh, rot: (wm === 'berry' ? 0 : rot[i]) + 'deg', ad: String(-i * 110) };
+    });
+    const dk = t.dark;
+    const base = {
+      rootRef: this.rootRef, t, letters, showWs: view !== 'overlay', showOv: view !== 'workspace',
+      sunBg: dk ? 'transparent' : '#FFEFA1', sunC: dk ? t.mute : '#4A2B3A', sunSh: dk ? 'none' : '0 4px 0 -1px #E8C860',
+      moonBg: dk ? '#CDB8FF' : 'transparent', moonC: dk ? '#4A2B3A' : t.mute, moonSh: dk ? '0 4px 0 -1px #8F72D9' : 'none',
+      niniMood: 'snooze', niniLine: '', niniBeat: '',
+    };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r, t) });
+    const rows = v.rows.map(sk);
+    const cheering = this.state.cheer && Date.now() - this.state.cheer < 1800;
+    if (this.state.cheer && cheering && !this._ct) this._ct = setTimeout(() => { this._ct = null; this.forceUpdate(); }, 1900);
+    const maxRun = Math.max(-1, ...rows.filter((r) => r.running).map((r) => r.secs));
+    const stg = maxRun >= 0 ? this.stage(maxRun) : -1;
+    const moods = ['fresh', 'focus', 'sweat', 'tired', 'grumpy', 'fuming'];
+    const niniMood = v.complete ? 'party' : cheering ? 'cheer' : v.live && stg >= 0 ? moods[stg] : 'snooze';
+    const hrs = Math.floor(maxRun / 3600);
+    const lines = {
+      snooze: 'Zzz… press Start when you’re ready.', fresh: v.runningLabel + '! Malenia again. I believe in you.', focus: 'Locked in. Don’t blink.', sweat: 'Deep breaths. You’ve got this.',
+      tired: hrs + ' hours in… water? snacks? stretch?', grumpy: 'We’re not mad. We’re just… very focused.', fuming: hrs + ' hours. Malenia owes us rent.', cheer: 'YAAAY! One down!', party: 'Every Challenge Won! Happy tears!',
+    };
+    const pal = [['#CDB8FF', '#A68BE8'], ['#A8DEFF', '#74B8E0'], ['#FFEFA1', '#E8C860'], ['#9BE3B4', '#6CC48D'], ['#FFC4DB', '#F08DB5']];
+    let n = 0;
+    return { ...base, ...v, rows, ovRows: v.ovRows.map(sk),
+      niniMood, niniLine: lines[niniMood], niniBeat: v.live && stg >= 0 && !cheering ? 'run' + stg : '',
+      totalDigits: v.totalDigits.map((d) => d.num ? { ...d, bg: pal[n % 5][0], lip: pal[n++ % 5][1] } : d),
+      pageDots: v.pageDots.map((p) => ({ ...p, color: p.on ? '#FF6FAE' : (dk ? '#5A4050' : '#E8C8D4') })) };
+  }
+}
+</script>
+</body>
+</html>

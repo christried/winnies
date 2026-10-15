@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Silkscreen:wght@400;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>@font-face{font-family:'DSEG7';src:url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2') format('woff2');font-weight:400 700;font-display:swap}body{margin:0;background:#FBD3E1}a{color:#B0175A}a:hover{color:#4A2B3A}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#FBD3E1;font-family:'M PLUS Rounded 1c',sans-serif;color:#4A2B3A">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="rE" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:50% 50% 46% 46% / 58% 58% 42% 42%;background:#CDB8FF;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 0 -2px #A68BE8,0 20px 30px -10px rgba(120,80,200,.4)"><span style="width:70px;height:56px;border-radius:12px;background:#B7C49C;box-shadow:inset 0 3px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font:700 28px DSEG7,'Share Tech Mono';color:#1C2418">E</span></div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:400 88px/1 'Mochiy Pop One';text-shadow:0 6px 0 #FF9FC8">Pocket Pet</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font:800 16px 'M PLUS Rounded 1c'">
+        <span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Material #4 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Palette #4 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Type #4 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Backdrop #4</span><span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Motion #4 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF8FB">Ornament #4 + #6</span>
+      </div>
+      <div style="font:700 22px/1.35 'M PLUS Rounded 1c';color:#6E4558">Why: the Kawaii Clay line, made streamer-native via toy electronics. Winnies as a virtual-pet keychain: Nini lives on the LCD and reacts to your run. It's your Kawaii Clay vs Pure Clay side-by-side with A.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="E Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;border-radius:48px;box-sizing:border-box;padding:30px 56px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(#FFCADD 18%,rgba(255,202,221,0) 19%) 0 0/52px 52px,radial-gradient(#FFCADD 18%,rgba(255,202,221,0) 19%) 26px 26px/52px 52px,#FFE3EC">
+  <nav style="position:relative;display:flex;align-items:center;gap:16px;height:72px;padding:0 14px 0 26px;border-radius:36px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF,0 16px 26px -12px rgba(220,80,140,.35),inset 0 5px 7px #fff">
+    <span style="font:400 32px/1 'Mochiy Pop One';color:#FF6FAE;text-shadow:0 3px 0 #B0175A">winnies</span><span style="padding:3px 8px;border-radius:6px;background:#B7C49C;font:400 12px Silkscreen;color:#1C2418">PET v1</span>
+    <button style="margin-left:18px;display:flex;align-items:center;gap:12px;height:48px;padding:0 16px 0 20px;border:0;border-radius:24px;background:#FFE3EC;box-shadow:inset 0 3px 7px rgba(220,100,150,.22);color:#4A2B3A;font:800 17px 'M PLUS Rounded 1c';cursor:pointer">Kitty vs. the world<span style="font:400 13px Silkscreen;color:#6E4558">03.10.26</span><span style="font-family:'Material Symbols Rounded';font-size:24px">expand_more</span></button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:50px;padding:0 22px;border:0;border-radius:25px;background:#FF6FAE;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 6px 0 -1px #D9478A,inset 0 4px 6px rgba(255,220,235,.7)" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px #D9478A"><span style="font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'wght' 700">link</span>Share</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="position:relative;width:120px;height:30px;border-radius:15px;background:#FFE3EC;box-shadow:inset 0 3px 6px rgba(220,100,150,.3)"><span style="position:absolute;left:44px;top:3px;width:32px;height:24px;border-radius:12px;background:#FFEFA1;box-shadow:0 3px 0 -1px #E8C860"></span></div>
+      <div style="display:flex;justify-content:space-between;width:120px;font:400 10px Silkscreen"><span>SYS</span><span style="color:#B0175A">LIGHT</span><span>DARK</span></div>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:52px;height:52px;border-radius:50%;background:#CDB8FF;display:flex;align-items:center;justify-content:center;font:400 20px 'Mochiy Pop One';box-shadow:0 5px 0 -1px #A68BE8">K</div>
+  </nav>
+
+  <section style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:28px;align-items:center;padding:30px 34px;border-radius:120px 120px 70px 70px / 90px 90px 60px 60px;background:#CDB8FF;box-shadow:0 14px 0 -2px #A68BE8,0 30px 40px -16px rgba(120,80,200,.45),inset 0 -10px 18px rgba(90,50,170,.18),inset 0 10px 16px rgba(255,255,255,.55)">
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="display:flex;align-items:center;gap:14px;padding-left:20px">
+        <span style="padding:6px 16px;border-radius:12px;background:#FFF8FB;font:400 22px 'Mochiy Pop One';transform:rotate(-1.5deg);box-shadow:0 4px 0 -1px #E0C8E8">Kitty vs. the world</span>
+        <span style="font:400 13px Silkscreen;color:#3A2560">CREATED 03.10.26</span>
+      </div>
+      <div data-lcd="1" style="padding:14px;border-radius:30px;background:#7D6AA8;box-shadow:inset 0 4px 10px rgba(40,20,80,.5),0 3px 0 rgba(255,255,255,.5)">
+        <div style="position:relative;display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;align-items:center;border-radius:18px;padding:14px 22px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 3px 10px rgba(0,0,0,.35);color:#1C2418">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div data-pet="1" style="position:relative;width:72px;height:66px"><span style="position:absolute;left:0;top:0;width:9px;height:9px;background:transparent;box-shadow:{{ petPix }}"></span></div>
+            <span style="font:400 13px Silkscreen">{{ petMood }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+            <div style="display:flex;justify-content:space-between;font:400 15px Silkscreen"><span>TOTAL TIMER</span><span>{{ runningUp }}</span></div>
+            <div aria-label="Total Timer" style="display:flex;justify-content:flex-end;font:700 104px/1.1 DSEG7,'Share Tech Mono'">
+              <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative;display:inline-block;transform-origin:50% 100%">{{ d.c }}</span></span></sc-for>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px"><div style="display:grid;grid-template-columns:repeat(8,1fr);gap:5px;flex:1;height:14px"><sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8"><span style="background:#1C2418;opacity:{{ b.op }}"></span></sc-for></div><span style="font:400 15px Silkscreen">{{ summaryUp }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+      <button onClick="{{ onTotal }}" style="width:130px;height:130px;border:0;border-radius:50%;background:#FF6FAE;color:#4A2B3A;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 10px 0 -1px #D9478A,0 18px 24px -10px rgba(220,60,130,.6),inset 0 6px 8px rgba(255,220,235,.7)" style-active="transform:translateY(8px);box-shadow:0 2px 0 -1px #D9478A"><span style="font-family:'Material Symbols Rounded';font-size:52px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span><span style="font:400 13px 'Mochiy Pop One'">{{ totalBtnShort }}</span></button>
+      <span style="font:800 13px 'M PLUS Rounded 1c';color:#3A2560">{{ totalBtnLabel }}</span>
+      <div style="display:flex;gap:12px">
+        <button aria-label="More" style="width:54px;height:54px;border:0;border-radius:50%;background:#FFEFA1;cursor:pointer;font-family:'Material Symbols Rounded';font-size:26px;color:#4A2B3A;box-shadow:0 6px 0 -1px #E8C860" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px #E8C860">more_horiz</button>
+        <span title="Speaker (muted)" style="width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,rgba(58,37,96,.5) 2px,rgba(0,0,0,0) 2.5px) 0 0/9px 9px,#B9A2F0;box-shadow:inset 0 3px 6px rgba(60,30,120,.3)"></span>
+      </div>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;padding:14px 22px;border-radius:24px;background:#B7C49C;font:400 22px Silkscreen;color:#1C2418;box-shadow:inset 0 3px 8px rgba(0,0,0,.3)">COMPLETE! ALL CHALLENGES WON. NINI EVOLVED. <span style="font:500 12px 'M PLUS Rounded 1c'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:14px;border-radius:38px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF,inset 0 5px 8px #fff">
+    <div style="flex:1.1;height:54px;border-radius:27px;background:#FFE3EC;box-shadow:inset 0 4px 8px rgba(220,100,150,.22);display:flex;align-items:center;padding:0 22px;font:700 17px 'M PLUS Rounded 1c';color:#8A6475">Game</div>
+    <div style="flex:1.5;height:54px;border-radius:27px;background:#FFE3EC;box-shadow:inset 0 4px 8px rgba(220,100,150,.22);display:flex;align-items:center;padding:0 22px;font:700 17px 'M PLUS Rounded 1c';color:#8A6475">Win Condition (optional)</div>
+    <span style="display:flex;align-items:center;gap:8px;font:400 12px Silkscreen"><span style="position:relative;width:50px;height:28px;border-radius:14px;background:#FFE3EC;box-shadow:inset 0 3px 6px rgba(220,100,150,.3)"><span style="position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#FFF8FB;box-shadow:0 3px 0 -1px #F5B8CF"></span></span>COUNTER</span>
+    <div style="width:100px;height:54px;border-radius:27px;background:#FFE3EC;opacity:.55;display:flex;align-items:center;padding:0 18px;font:700 17px 'M PLUS Rounded 1c';color:#8A6475">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:54px;padding:0 24px 0 18px;border:0;border-radius:27px;background:#9BE3B4;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 6px 0 -1px #6CC48D" style-active="transform:translateY(5px);box-shadow:0 1px 0 -1px #6CC48D"><span style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'wght' 700">add</span>Add Challenge</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 14px"><span style="font:400 22px 'Mochiy Pop One'">Challenges</span><span style="font:400 13px Silkscreen;color:#6E4558">8 / 50 · DRAG TO REORDER</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 52px minmax(0,1fr) 220px 138px 52px 150px 44px;gap:14px;align-items:center;height:76px;padding:0 16px 0 14px;border-radius:38px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .3s cubic-bezier(.3,1.8,.5,1)" style-hover="transform:translateY(-4px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:24px;color:#7A5566;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span title="{{ r.statusWord }}" data-beat="{{ r.beat }}" style="position:relative;width:52px;height:52px;border-radius:50%;background:{{ r.faceBg }};box-shadow:0 5px 0 -1px {{ r.faceLip }},inset 0 4px 5px rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px">
+          <span style="display:flex;gap:11px;align-items:flex-end;height:9px"><span style="width:{{ r.eyeW }};height:{{ r.eyeH }};border-radius:{{ r.eyeR }};background:{{ r.eyeBg }};border-top:{{ r.eyeBt }};box-sizing:border-box"></span><span style="width:{{ r.eyeW }};height:{{ r.eyeH }};border-radius:{{ r.eyeR }};background:{{ r.eyeBg }};border-top:{{ r.eyeBt }};box-sizing:border-box"></span></span>
+          <span style="width:{{ r.mW }};height:{{ r.mH }};border-radius:{{ r.mR }};background:{{ r.mBg }};border-bottom:{{ r.mBb }};box-sizing:border-box"></span>
+        </span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;height:24px;padding:0 10px 0 6px;border-radius:12px;background:#CDB8FF;font:800 12px 'M PLUS Rounded 1c'"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>Pinned</span></sc-if>
+            <span style="font:400 20px/1.15 'Mochiy Pop One';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <span style="flex:none;padding:1px 8px;border-radius:6px;background:{{ r.wordBg }};font:400 12px Silkscreen">{{ r.statusUp }}</span>
+          </div>
+          <span style="font:500 15px/1.2 'M PLUS Rounded 1c';color:#7A5566;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:38px;height:38px;border:0;border-radius:50%;background:#FFF8FB;color:#4A2B3A;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;box-shadow:0 4px 0 -1px #F5B8CF" style-active="transform:translateY(3px);box-shadow:none">remove</button>
+            <span style="min-width:114px;height:40px;border-radius:12px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 2px 5px rgba(0,0,0,.3),0 0 0 4px #CDB8FF;display:flex;align-items:center;justify-content:center;font:700 17px DSEG7,'Share Tech Mono';color:#1C2418">{{ r.countSeg }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:38px;height:38px;border:0;border-radius:50%;background:#FFEFA1;color:#4A2B3A;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;box-shadow:0 4px 0 -1px #E8C860" style-active="transform:translateY(3px);box-shadow:none">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;align-items:center;height:44px;padding:0 12px;border-radius:12px;background:{{ r.lcdBg }};box-shadow:inset 0 2px 5px rgba(0,0,0,.3),0 0 0 4px {{ r.lcdRim }};font:700 20px DSEG7,'Share Tech Mono';color:#1C2418">
+          <sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative;display:inline-block;transform-origin:50% 100%">{{ d.c }}</span></span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:#4A2B3A;opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:0 5px 0 -1px {{ r.playLip }};transform:{{ r.playPress }}" style-active="transform:translateY(5px)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;gap:10px;height:52px;padding:0 4px;border:0;background:transparent;cursor:pointer">
+          <span style="position:relative;width:62px;height:34px;border-radius:17px;background:{{ r.trackBg }};box-shadow:inset 0 3px 6px rgba(120,40,80,.25)"><span data-knob="1" style="position:absolute;top:4px;left:{{ r.knobX }};width:26px;height:26px;border-radius:50%;background:#FFF8FB;box-shadow:0 3px 0 -1px #E0B8C8;transition:left .14s steps(3,end)"></span></span>
+          <span style="font:400 11px/1.3 Silkscreen;text-align:left;white-space:pre-line">{{ r.winUp }}</span>
+        </button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:#4A2B3A;font-family:'Material Symbols Rounded';font-size:24px">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:8px;top:70px;width:250px;padding:10px;border-radius:24px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);display:flex;flex-direction:column;gap:2px;box-shadow:0 0 0 8px #CDB8FF,0 8px 0 4px #A68BE8,0 30px 40px -10px rgba(120,80,200,.5);color:#1C2418">
+            <div style="padding:4px 12px 8px;font:400 12px Silkscreen;border-bottom:2px solid #1C2418;margin-bottom:4px">MENU · {{ r.gameUp }}</div>
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;background:{{ m.bg }};color:{{ m.color }};font:400 14px Silkscreen"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Workspace · mid-run · 1440 · row 2 hovered, row 5 menu open · Start, Mark Won and ± are live</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="E Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:56px;bottom:40px;width:700px;padding:56px 40px 30px;box-sizing:border-box;border-radius:50% 50% 46% 46% / 30% 30% 22% 22%;background:#CDB8FF;box-shadow:0 0 0 6px #4A2B3A,0 14px 0 2px #A68BE8,0 30px 50px rgba(40,20,60,.6),inset 0 -12px 20px rgba(90,50,170,.2),inset 0 12px 18px rgba(255,255,255,.55)">
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><span style="font:400 24px 'Mochiy Pop One';color:#4A2B3A">winnies</span></div>
+    <div data-lcd="1" style="padding:12px;border-radius:26px;background:#7D6AA8;box-shadow:inset 0 4px 10px rgba(40,20,80,.5)">
+      <div style="border-radius:16px;padding:12px 16px;background:linear-gradient(180deg,#C2CEA8,#A9B78E);box-shadow:inset 0 3px 10px rgba(0,0,0,.35);color:#1C2418">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="position:relative;width:72px;height:66px;flex:none"><span style="position:absolute;left:0;top:0;width:9px;height:9px;background:transparent;box-shadow:{{ petPix }}"></span></div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px Silkscreen;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">KITTY VS. THE WORLD</span>
+            <div aria-label="Total Timer" style="display:flex;justify-content:flex-end;font:700 62px/1.1 DSEG7,'Share Tech Mono'"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative;display:inline-block">{{ d.c }}</span></span></sc-for></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;border-top:2px solid #1C2418;margin-top:6px">
+          <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+            <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:28px minmax(0,1fr) auto auto;gap:10px;align-items:center;height:46px;border-bottom:1px solid rgba(28,36,24,.35)">
+              <span title="{{ r.statusWord }}" style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1">{{ r.lcdIcon }}</span>
+              <span style="font:400 16px Silkscreen;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.gameUp }}</span>
+              <span style="font:700 14px DSEG7,'Share Tech Mono'">{{ r.countSeg }}</span>
+              <span style="display:flex;font:700 20px DSEG7,'Share Tech Mono'"><sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.08">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative;display:inline-block">{{ d.c }}</span></span></sc-for></span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding-top:8px;font:400 14px Silkscreen"><sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:12px;height:12px;border:2px solid #1C2418;box-sizing:border-box;background:{{ p.bg }}"></span></sc-for><span>PAGE {{ pageLabel }}</span><span style="flex:1"></span><span>{{ wonCount }}/{{ totalCount }} WON</span></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:26px;padding-top:18px"><span style="width:46px;height:46px;border-radius:50%;background:#FF6FAE;box-shadow:0 6px 0 -1px #D9478A"></span><span style="width:46px;height:46px;border-radius:50%;background:#FFEFA1;box-shadow:0 6px 0 -1px #E8C860"></span><span style="width:46px;height:46px;border-radius:50%;background:#9BE3B4;box-shadow:0 6px 0 -1px #6CC48D"></span></div>
+  </div>
+</div>
+<div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Overlay · 1920×1080 · egg-shaped pet device with Nini on the LCD · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="E Genome" style="padding:44px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF">
+    <div style="font:400 44px 'Mochiy Pop One';margin-bottom:26px">Genome</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:28px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:90px;height:70px;border-radius:50% 50% 46% 46% / 58% 58% 42% 42%;background:#CDB8FF;box-shadow:0 7px 0 -1px #A68BE8,inset 0 6px 8px rgba(255,255,255,.55)"></span><span style="width:50px;height:50px;border-radius:50%;background:#FF6FAE;box-shadow:0 8px 0 -1px #D9478A"></span><span style="width:50px;height:50px;border-radius:50%;background:#FF6FAE;box-shadow:0 1px 0 -1px #D9478A;transform:translateY(7px)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Material</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">#6</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Kawaii fondant (#4) shaped like a soft-touch toy shell: egg forms, inset LCD bezels, buttons with real travel and physical switches (#6).</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:800 11px 'M PLUS Rounded 1c'"><div style="border-radius:14px;background:#FFE3EC;padding:8px;display:flex;align-items:flex-end">Milk #4</div><div style="border-radius:14px;background:#FF6FAE;padding:8px;display:flex;align-items:flex-end">Bubblegum #4</div><div style="border-radius:14px;background:#CDB8FF;padding:8px;display:flex;align-items:flex-end">Lilac #4</div><div style="border-radius:14px;background:#9BE3B4;padding:8px;display:flex;align-items:flex-end">Matcha #4</div><div style="border-radius:14px;background:#FFEFA1;padding:8px;display:flex;align-items:flex-end">Butter #4</div><div style="border-radius:14px;background:#B7C49C;padding:8px;display:flex;align-items:flex-end">LCD #6</div><div style="border-radius:14px;background:#1C2418;color:#C2CEA8;padding:8px;display:flex;align-items:flex-end">Segment #6</div><div style="border-radius:14px;background:#4A2B3A;color:#fff;padding:8px;display:flex;align-items:flex-end">Cocoa #4</div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Palette</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">#6</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Kawaii pastels for shells and buttons; Tactile Hardware's LCD green + segment ink for every screen. Lilac = the device, Bubblegum = running, Matcha = Won.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:28px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:16px"><span style="font:400 48px/1 'Mochiy Pop One'">Aa</span><span style="font:400 30px/1 Silkscreen">Aa</span><span style="padding:6px 10px;border-radius:10px;background:#B7C49C;font:700 34px DSEG7,'Share Tech Mono';color:#1C2418">07</span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Type</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">#6</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Mochiy Pop One + M PLUS Rounded 1c on plastic (#4); Silkscreen and DSEG7 with ghost segments on anything that's a screen (#6).</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:28px;background:radial-gradient(#FFCADD 18%,rgba(255,202,221,0) 19%) 0 0/36px 36px,radial-gradient(#FFCADD 18%,rgba(255,202,221,0) 19%) 18px 18px/36px 36px,#FFE3EC"></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Backdrop</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Strawberry-milk polka dots, untouched from Kawaii Clay. The device sits on it like a toy on a bedspread.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:28px;background:#FFE3EC;display:flex;align-items:center;justify-content:center"><span style="padding:14px 18px;border-radius:14px;background:#B7C49C"><span style="display:block;position:relative;width:72px;height:66px"><span style="position:absolute;left:0;top:0;width:9px;height:9px;background:transparent;box-shadow:{{ petPix }}"></span></span></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Motion</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">#6</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Plastic hops and wobbles (#4); anything on an LCD animates in 2-frame pixel steps like a real virtual pet (#6). Nini above is live.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:28px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:18px"><span style="width:50px;height:50px;border-radius:50%;background:#9BE3B4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 5px 0 -1px #6CC48D"><span style="display:flex;gap:10px"><span style="width:10px;height:6px;border-top:3px solid #4A2B3A;border-radius:10px 10px 0 0;box-sizing:border-box"></span><span style="width:10px;height:6px;border-top:3px solid #4A2B3A;border-radius:10px 10px 0 0;box-sizing:border-box"></span></span><span style="width:16px;height:8px;border-radius:0 0 9px 9px;background:#4A2B3A"></span></span><span style="width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,rgba(58,37,96,.5) 2px,rgba(0,0,0,0) 2.5px) 0 0/9px 9px,#B9A2F0"></span><span style="padding:4px 10px;border-radius:8px;background:#FFF8FB;font:400 15px 'Mochiy Pop One';transform:rotate(-2deg)">label</span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 20px 'Mochiy Pop One'">Ornament</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">#6</span></div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Nini (#4) reborn as a pixel pet on the LCD; faces on status buttons (#4); speaker grilles, toggle switches, sticker labels (#6). Mood: idle snoozes, running jogs, Won jumps.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="E Dialects" style="padding:44px;border-radius:48px;background:#FFF8FB;display:flex;flex-direction:column;gap:24px;box-shadow:0 12px 0 -2px #F5B8CF">
+    <div style="font:400 44px 'Mochiy Pop One'">Dialect sketch</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:62px;padding:0 14px;border-radius:31px;background:#FFF8FB;box-shadow:0 5px 0 -2px #F5B8CF"><span style="width:16px;height:16px;border-radius:50%;background:#FF6FAE"></span><span style="flex:1;font:400 18px 'Mochiy Pop One'">Elden Ring</span><span style="padding:6px 10px;border-radius:10px;background:#B7C49C;font:700 16px DSEG7,'Share Tech Mono';color:#1C2418">3:12:44</span></div></div><div style="font:400 20px 'Mochiy Pop One'">Workspace</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">The desk dock: shallow lips, small LCDs, Nini only on the main screen. Calm toy, long sessions.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:linear-gradient(135deg,#3a8f3a,#1f5fbf);display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;padding:12px;border-radius:24px;background:#CDB8FF;box-shadow:0 0 0 5px #4A2B3A,0 8px 0 4px #A68BE8"><div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 12px;border-radius:12px;background:#B7C49C;color:#1C2418"><span style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1">play_arrow</span><span style="flex:1;font:400 18px Silkscreen">ELDEN RING</span><span style="font:700 20px DSEG7,'Share Tech Mono'">3:12:44</span></div></div></div><div style="font:400 20px 'Mochiy Pop One'">Broadcast</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">The keychain held up to the camera: Cocoa outline, all info on LCD (unbeatable legibility), Nini reacts big.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:radial-gradient(#FFCADD 18%,rgba(255,202,221,0) 19%) 0 0/40px 40px,#FFE3EC;display:flex;align-items:center;justify-content:center"><div data-amb="hop" style="width:200px;height:240px;border-radius:50% 50% 46% 46% / 56% 56% 44% 44%;background:#CDB8FF;box-shadow:0 12px 0 -2px #A68BE8,inset 0 10px 16px rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transform-origin:50% 100%"><span style="width:110px;height:80px;border-radius:14px;background:#B7C49C;display:flex;align-items:center;justify-content:center;font:400 20px Silkscreen;color:#1C2418">HI!</span><span style="display:flex;gap:12px"><span style="width:24px;height:24px;border-radius:50%;background:#FF6FAE"></span><span style="width:24px;height:24px;border-radius:50%;background:#FFEFA1"></span><span style="width:24px;height:24px;border-radius:50%;background:#9BE3B4"></span></span></div></div><div style="font:400 20px 'Mochiy Pop One'">Showcase</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">A giant egg you can press; sign-in "hatches" Nini. Changelog as pet evolution log.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="E Motion" style="padding:44px;border-radius:48px;background:#FFF8FB;display:flex;flex-direction:column;gap:24px;box-shadow:0 12px 0 -2px #F5B8CF">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:400 44px 'Mochiy Pop One'">Motion sketch</div>
+      <div style="display:flex;gap:12px"><button onClick="{{ onReplayWon }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#9BE3B4;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 5px 0 -1px #6CC48D" style-active="transform:translateY(4px)">Replay Won</button><button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#FFEFA1;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 5px 0 -1px #E8C860" style-active="transform:translateY(4px)">Replay Complete</button></div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:52px minmax(0,1fr) auto auto;gap:16px;align-items:center;height:76px;padding:0 22px 0 14px;border-radius:38px;background:#D6F5E0;box-shadow:0 5px 0 -2px #9BE3B4">
+      <span style="width:52px;height:52px;border-radius:50%;background:#9BE3B4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px"><span style="display:flex;gap:11px"><span style="width:11px;height:7px;border-top:3px solid #4A2B3A;border-radius:10px 10px 0 0;box-sizing:border-box"></span><span style="width:11px;height:7px;border-top:3px solid #4A2B3A;border-radius:10px 10px 0 0;box-sizing:border-box"></span></span><span style="width:18px;height:9px;border-radius:0 0 10px 10px;background:#4A2B3A"></span></span>
+      <span style="font:400 21px 'Mochiy Pop One'">Celeste <span style="font:500 15px 'M PLUS Rounded 1c';color:#7A5566">Farewell, golden strawberry</span></span>
+      <span style="padding:8px 12px;border-radius:12px;background:#A9B78E;font:700 20px DSEG7,'Share Tech Mono';color:#1C2418">1:02:13</span>
+      <span style="padding:2px 10px;border-radius:6px;background:#9BE3B4;font:400 12px Silkscreen">WON</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px">
+      <div><div style="font:400 18px 'Mochiy Pop One';color:#B0175A;margin-bottom:8px">Tick</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Changed LCD segments blink in one frame and hop 1 pixel; Nini flips between two jogging frames every second while anything runs. The running face button wiggles.</div></div>
+      <div><div style="font:400 18px 'Mochiy Pop One';color:#2E7D4F;margin-bottom:8px">Won</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Switch clicks across in 3 steps, the row jelly-hops, hearts pop, Nini jumps with arms up on the LCD, the row drops into the Won group.</div></div>
+      <div><div style="font:400 18px 'Mochiy Pop One';color:#6A4BC4;margin-bottom:8px">Reduced motion · Sound</div><div style="font:500 15px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Static: happy face, switch side, WON chip, Nini's still frame + mood word. Sound (muted): tick = pet chirp, Won = 3-note beep melody, Complete = "evolution" jingle.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    return {
+      wonDelay: 600,
+      amb: {
+        hop: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.08,.92)', offset: .1 }, { transform: 'translateY(-24px) scale(.95,1.06)', offset: .3 }, { transform: 'translateY(0) scale(1.06,.94)', offset: .5 }, { transform: 'none', offset: .62 }, { transform: 'none' }], { duration: 2000, easing: 'ease-in-out' }],
+      },
+      tick: (k) => [[{ opacity: .1, transform: 'translateY(0)' }, { opacity: 1, transform: 'translateY(-6%)' }, { opacity: 1, transform: 'none' }], { duration: 200, easing: 'steps(1,end)' }],
+      beat: () => [[{ transform: 'rotate(0)' }, { transform: 'rotate(-12deg)', offset: .3 }, { transform: 'rotate(10deg)', offset: .65 }, { transform: 'rotate(0)' }], { duration: 480, easing: 'ease-in-out' }],
+      won: (el, W, ov) => {
+        if (!ov) el.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.06,.9)', offset: .2 }, { transform: 'translateY(-8px) scale(.95,1.06)', offset: .45 }, { transform: 'scale(1.02,.98)', offset: .7 }, { transform: 'none' }], { duration: 600, easing: 'ease-out' });
+        else el.animate([{ filter: 'none' }, { filter: 'invert(1)' }, { filter: 'none' }, { filter: 'invert(1)' }, { filter: 'none' }], { duration: 500, easing: 'steps(1,end)' });
+        this.setState({ cheer: Date.now() });
+        W.burst(el, { n: ov ? 10 : 18, shapes: ov ? ['square'] : ['text:♥', 'text:★', 'circle'], colors: ov ? ['#1C2418'] : ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF'], size: ov ? 10 : 24, spread: 200, gravity: 80, dur: 1200, ox: .2, up: true, cone: 2, font: "'M PLUS Rounded 1c'", easing: ov ? 'steps(8,end)' : undefined, spin: ov ? 0 : 120 });
+      },
+      land: (el, W, ov) => !ov && el.animate([{ transform: 'translateY(-36px) scale(.9,1.1)', opacity: 0 }, { transform: 'translateY(0) scale(1.08,.9)', opacity: 1, offset: .5 }, { transform: 'scale(.97,1.04)', offset: .75 }, { transform: 'none' }], { duration: 560, easing: 'ease-out' }),
+      complete: (root, W) => {
+        this.setState({ cheer: Date.now() + 3000 });
+        root.querySelectorAll('[data-lcd]').forEach((l) => {
+          l.animate([{ transform: 'none' }, { transform: 'translateY(-14px) scale(1.02,.98)' }, { transform: 'none' }, { transform: 'translateY(-8px)' }, { transform: 'none' }], { duration: 900, easing: 'steps(5,end)' });
+          W.burst(l, { n: 40, shapes: ['text:♥', 'text:★', 'circle'], colors: ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF'], size: 30, spread: 520, gravity: 140, dur: 2200, up: true, cone: 3, font: "'M PLUS Rounded 1c'" });
+        });
+      },
+    };
+  }
+  pet(mode, frame) {
+    const P = 9, ink = '#1C2418';
+    const maps = {
+      idle: ['..XXXX..', '.X....X.', 'X......X', 'X.XX.XX.X'.slice(0, 8), 'X......X', 'X..XX..X', '.XXXXXX.'],
+      run0: ['..XXXX..', '.X....X.', 'X.X..X.X', 'X......X', 'X..XX..X', '.XXXXXX.', 'X......X'],
+      run1: ['........', '..XXXX..', '.X....X.', 'X.X..X.X', 'X..XX..X', '.XXXXXX.', '.X....X.'],
+      cheer: ['X......X', '.XXXXXX.', 'X......X', 'X.X..X.X', 'X.XXXX.X', 'X..XX..X', '.XXXXXX.'],
+    };
+    const m = maps[mode === 'run' ? 'run' + frame : mode] || maps.idle;
+    const out = [];
+    m.forEach((row, y) => row.split('').forEach((c, x) => { if (c === 'X') out.push(`${x * P}px ${y * P + 2}px 0 ${ink}`); }));
+    return out.join(',');
+  }
+  skin(r) {
+    const C = '#4A2B3A';
+    const eyes = { dot: { eyeW: '7px', eyeH: '9px', eyeR: '50%', eyeBg: C, eyeBt: 'none' }, sleepy: { eyeW: '10px', eyeH: '3px', eyeR: '2px', eyeBg: C, eyeBt: 'none' }, happy: { eyeW: '11px', eyeH: '7px', eyeR: '10px 10px 0 0', eyeBg: 'transparent', eyeBt: '3px solid ' + C } };
+    const mouths = { o: { mW: '10px', mH: '10px', mR: '50%', mBg: C, mBb: 'none' }, smile: { mW: '12px', mH: '6px', mR: '0 0 8px 8px', mBg: 'transparent', mBb: '3px solid ' + C }, flat: { mW: '10px', mH: '3px', mR: '2px', mBg: C, mBb: 'none' }, big: { mW: '18px', mH: '9px', mR: '0 0 10px 10px', mBg: C, mBb: 'none' } };
+    const st = {
+      running: { bg: '#FFD2E5', shadow: '0 0 0 4px #FF6FAE,0 8px 0 0 #D9478A,0 20px 30px -12px rgba(220,60,130,.5)', faceBg: '#FF6FAE', faceLip: '#D9478A', ...eyes.dot, ...mouths.o, wordBg: '#FF6FAE', lcdBg: 'linear-gradient(180deg,#CFDAB4,#B3C196)', lcdRim: '#FF6FAE', beat: 'run' },
+      idle: { bg: '#FFF8FB', shadow: '0 8px 0 -2px #F5B8CF,0 16px 24px -14px rgba(220,80,140,.35),inset 0 5px 8px #fff', faceBg: r.untouched ? '#A8DEFF' : '#FFEFA1', faceLip: r.untouched ? '#74B8E0' : '#E8C860', ...(r.untouched ? eyes.dot : eyes.sleepy), ...(r.untouched ? mouths.flat : mouths.smile), wordBg: '#FFE3EC', lcdBg: 'linear-gradient(180deg,#C2CEA8,#A9B78E)', lcdRim: '#CDB8FF', beat: '' },
+      won: { bg: '#D6F5E0', shadow: '0 5px 0 -2px #9BE3B4', faceBg: '#9BE3B4', faceLip: '#6CC48D', ...eyes.happy, ...mouths.big, wordBg: '#9BE3B4', lcdBg: 'linear-gradient(180deg,#B5C29A,#9DAC82)', lcdRim: '#9BE3B4', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      shadow: hov ? '0 12px 0 -2px #F5B8CF,0 26px 34px -14px rgba(220,80,140,.5),inset 0 5px 8px #fff' : st.shadow,
+      lift: hov ? 'translateY(-5px)' : 'none', gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : 1,
+      statusUp: r.statusWord.toUpperCase(), gameUp: r.game.toUpperCase(), winUp: r.won ? 'WON' : 'MARK\nWON',
+      countSeg: r.hasCounter ? String(r.count).padStart(3, '0') + '/' + String(r.target).padStart(3, '0') : '',
+      lcdIcon: r.won ? 'check_box' : r.running ? 'play_arrow' : 'check_box_outline_blank',
+      playBg: r.running ? '#FF6FAE' : '#FFF8FB', playLip: r.running ? '#D9478A' : '#F5B8CF', playPress: r.running ? 'translateY(3px)' : 'none', playOp: r.won ? 0.35 : 1,
+      trackBg: r.won ? '#9BE3B4' : '#FFE3EC', knobX: r.won ? '32px' : '4px',
+      moreBg: r.menu || hov ? '#FFE3EC' : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? '#1C2418' : 'transparent', color: m.first ? '#C2CEA8' : m.danger ? '#7A1030' : '#1C2418' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.32em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    const cheering = (this.state.cheer && Date.now() - this.state.cheer < 1800) || v.complete;
+    if (this.state.cheer && !this._ct) this._ct = setTimeout(() => { this._ct = null; this.forceUpdate(); }, 1900);
+    const mode = cheering ? 'cheer' : v.live ? 'run' : 'idle';
+    const frame = (this.state.total || 0) % 2;
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      petPix: this.pet(mode, frame), petMood: cheering ? 'YAY!!' : v.live ? 'JOGGING' : 'SNOOZE',
+      runningUp: v.runningLabel.toUpperCase(), summaryUp: v.summary.toUpperCase(),
+      totalBtnShort: v.live ? 'PAUSE' : 'START',
+      blocks: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, op: i < v.wonCount ? 1 : 0.12 })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.34em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, bg: p.on ? '#1C2418' : 'transparent' })) };
+  }
+}
+</script>
+</body>
+</html>

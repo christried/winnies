@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>@font-face{font-family:'DSEG7';src:url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2') format('woff2');font-weight:400 700;font-display:swap}body{margin:0;background:#E9E1D6}a{color:#6C4BF4}a:hover{color:#C93A1A}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#E9E1D6;font-family:'IBM Plex Mono',monospace;color:#2A2140">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="rA" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:40px;background:#FF5B3A;display:flex;align-items:center;justify-content:center;font:900 72px/1 Archivo;font-stretch:120%;font-style:italic;color:#2A2140;box-shadow:0 18px 30px -12px rgba(200,60,20,.6),inset 0 -8px 14px rgba(140,30,10,.35),inset 0 8px 12px rgba(255,210,190,.7)">A</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:900 92px/0.95 Archivo;font-stretch:120%;font-style:italic;letter-spacing:-2px">CLAY GADGET</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font:700 16px 'IBM Plex Mono'">
+        <span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Material #1</span><span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Palette #1</span><span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Type #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Backdrop #1 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Motion #1 + #6</span><span style="padding:6px 12px;border-radius:14px;background:#FFF9F2">Ornament #1 + #6</span>
+      </div>
+      <div style="font:600 22px/1.35 'IBM Plex Mono';color:#4A405C">Your recipe: a squishy clay toy that is secretly a precision stopwatch. Clay you want to squeeze, with LCD windows, Dymo labels and keys that click.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="A Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;background:#F6EFE6;border-radius:28px;box-sizing:border-box;padding:30px 52px;display:flex;flex-direction:column;gap:22px">
+  <div data-amb="drift" style="position:absolute;left:-160px;top:300px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,140,.5),rgba(255,170,140,0) 70%);pointer-events:none"></div>
+  <div data-amb="drift" data-ad="-5000" style="position:absolute;right:-200px;top:-140px;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle,rgba(170,150,255,.4),rgba(170,150,255,0) 70%);pointer-events:none"></div>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:72px;padding:0 14px 0 26px;border-radius:36px;background:#FFF9F2;box-shadow:0 16px 32px -14px rgba(120,70,30,.38),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px rgba(255,255,255,.95)">
+    <span style="font:900 32px/1 Archivo;font-stretch:122%;font-style:italic;letter-spacing:-1px">WINNIES</span><span style="font:600 11px 'IBM Plex Mono';color:#5E5373;letter-spacing:1px">WN-50</span>
+    <button style="margin-left:18px;display:flex;align-items:center;gap:12px;height:48px;padding:0 14px 0 6px;border:0;border-radius:24px;background:#F1E7DA;box-shadow:inset 0 3px 8px rgba(120,70,30,.18);cursor:pointer">
+      <span style="height:34px;display:flex;align-items:center;padding:0 14px;border-radius:17px;background:#2A2140;color:#FFF9F2;font:800 15px Archivo;font-stretch:80%;letter-spacing:2px;text-transform:uppercase;box-shadow:inset 0 -3px 5px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.18)">Kitty vs. the world</span>
+      <span style="font:600 14px 'IBM Plex Mono';color:#5E5373">03.10.26</span><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#2A2140">expand_more</span>
+    </button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#6C4BF4;color:#fff;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:0 12px 20px -10px rgba(80,40,200,.7),inset 0 -5px 8px rgba(40,20,140,.4),inset 0 5px 8px rgba(200,190,255,.6)" style-active="transform:scale(.96,.9)"><span style="font-family:'Material Symbols Rounded';font-size:20px">link</span>SHARE</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="position:relative;width:120px;height:30px;border-radius:15px;background:#F1E7DA;box-shadow:inset 0 3px 7px rgba(120,70,30,.25)"><span style="position:absolute;left:44px;top:3px;width:32px;height:24px;border-radius:12px;background:#FFC53D;box-shadow:inset 0 -3px 5px rgba(160,100,0,.35),inset 0 3px 4px rgba(255,255,255,.7)"></span></div>
+      <div style="display:flex;justify-content:space-between;width:120px;font:700 10px 'IBM Plex Mono';color:#5E5373"><span>SYS</span><span style="color:#2A2140">LIGHT</span><span>DARK</span></div>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:52px;height:52px;border-radius:50%;background:#FFC53D;display:flex;align-items:center;justify-content:center;font:900 22px Archivo;color:#2A2140;box-shadow:0 10px 16px -8px rgba(160,100,0,.6),inset 0 -5px 8px rgba(160,100,0,.35),inset 0 5px 8px rgba(255,255,255,.7)">K</div>
+  </nav>
+
+  <section style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:24px;padding:26px;border-radius:44px;background:#FFF9F2;box-shadow:0 28px 50px -24px rgba(120,70,30,.45),inset 0 -10px 18px rgba(120,70,30,.10),inset 0 10px 16px rgba(255,255,255,.95)">
+    <span style="position:absolute;left:16px;top:16px;width:16px;height:16px;border-radius:50%;background:#FFC53D;box-shadow:inset -2px -3px 4px rgba(160,100,0,.4)"><span style="position:absolute;left:3px;right:3px;top:7px;height:2px;background:rgba(120,70,0,.5);transform:rotate(30deg)"></span></span>
+    <span style="position:absolute;right:16px;top:16px;width:16px;height:16px;border-radius:50%;background:#2EC98E;box-shadow:inset -2px -3px 4px rgba(0,90,60,.4)"><span style="position:absolute;left:3px;right:3px;top:7px;height:2px;background:rgba(0,70,40,.5);transform:rotate(-20deg)"></span></span>
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0;padding-left:14px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <span style="height:44px;display:flex;align-items:center;padding:0 18px;border-radius:12px;background:#2A2140;color:#FFF9F2;font:800 26px Archivo;font-stretch:76%;letter-spacing:4px;text-transform:uppercase;transform:rotate(-1deg);box-shadow:0 6px 10px -4px rgba(42,33,64,.5),inset 0 -3px 5px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.15)">Kitty vs. the world</span>
+        <span style="font:600 13px 'IBM Plex Mono';color:#5E5373">CREATED 03.10.26</span>
+        <span style="display:flex;align-items:center;gap:8px;font:700 13px 'IBM Plex Mono'"><span data-amb="pulse" style="width:14px;height:14px;border-radius:50%;background:#FF5B3A;box-shadow:0 0 10px rgba(255,91,58,.7),inset -2px -2px 3px rgba(140,30,10,.4)"></span>{{ runningLabel }}</span>
+      </div>
+      <div style="padding:12px;border-radius:30px;background:#EFE4D6;box-shadow:inset 0 5px 10px rgba(120,70,30,.25),inset 0 -2px 3px rgba(255,255,255,.8)">
+        <div data-lcd="1" style="position:relative;border-radius:20px;padding:14px 26px 16px;background:#2A2140;box-shadow:inset 0 4px 12px rgba(0,0,0,.6)">
+          <div style="display:flex;justify-content:space-between;font:600 14px 'IBM Plex Mono';color:#FFC53D;opacity:.85"><span>TOTAL TIMER</span><span>{{ summary }}</span></div>
+          <div aria-label="Total Timer" style="display:flex;justify-content:center;font:700 120px/1.1 DSEG7,'Share Tech Mono';color:#FFC53D;text-shadow:0 0 18px rgba(255,197,61,.45)">
+            <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.05;text-shadow:none">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative;display:inline-block;transform-origin:50% 100%">{{ d.c }}</span></span></sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;height:16px"><sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8"><span style="border-radius:8px;background:{{ b.bg }};box-shadow:{{ b.sh }}"></span></sc-for></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;justify-content:flex-end">
+      <button onClick="{{ onTotal }}" style="height:172px;border:0;border-radius:40px;background:#FF5B3A;color:#2A2140;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 20px 28px -14px rgba(200,60,20,.75),inset 0 -10px 14px rgba(140,30,10,.35),inset 0 9px 12px rgba(255,210,190,.75)" style-active="transform:translateY(4px) scale(.97,.9)">
+        <span style="font-family:'Material Symbols Rounded';font-size:56px;font-variation-settings:'FILL' 1,'wght' 700">{{ totalBtnIcon }}</span><span style="font:900 19px Archivo;font-stretch:110%;letter-spacing:1px;text-transform:uppercase">{{ totalBtnLabel }}</span>
+      </button>
+      <div style="display:flex;gap:12px">
+        <button aria-label="More" style="flex:1;height:54px;border:0;border-radius:27px;background:#FFF9F2;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font:800 13px Archivo;letter-spacing:1px;color:#2A2140;box-shadow:0 10px 16px -10px rgba(120,70,30,.5),inset 0 -4px 7px rgba(120,70,30,.14),inset 0 4px 7px #fff" style-active="transform:scale(.95,.88)"><span style="font-family:'Material Symbols Rounded';font-size:22px">more_horiz</span>MENU</button>
+        <span title="Speaker (sound muted)" style="width:80px;border-radius:27px;background:radial-gradient(circle,rgba(120,70,30,.45) 2.5px,rgba(0,0,0,0) 3px) 0 0/11px 11px,#F1E7DA;box-shadow:inset 0 3px 7px rgba(120,70,30,.2)"></span>
+      </div>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column:1 / -1;display:flex;align-items:center;gap:14px;padding:16px 22px;border-radius:26px;background:#2EC98E;font:900 22px Archivo;font-stretch:110%;color:#123F2D;box-shadow:inset 0 -6px 10px rgba(0,90,60,.3),inset 0 6px 8px rgba(255,255,255,.5)"><span style="font-family:'Material Symbols Rounded';font-size:34px;font-variation-settings:'FILL' 1">emoji_events</span>COMPLETE. EVERY CHALLENGE WON. DEVICE OVERHEATING (HAPPILY). <span style="font:500 12px 'IBM Plex Mono'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:14px;border-radius:34px;background:#FFF9F2;box-shadow:0 16px 32px -16px rgba(120,70,30,.38),inset 0 -6px 12px rgba(120,70,30,.10),inset 0 6px 10px rgba(255,255,255,.95)">
+    <span style="font:700 11px/1.3 'IBM Plex Mono';color:#5E5373;width:78px;padding-left:8px">LOAD<br>CHALLENGE</span>
+    <div style="flex:1.1;height:54px;border-radius:27px;background:#F1E7DA;box-shadow:inset 0 4px 9px rgba(120,70,30,.2);display:flex;align-items:center;padding:0 20px;font:600 16px 'IBM Plex Mono';color:#6A5F80">Game</div>
+    <div style="flex:1.5;height:54px;border-radius:27px;background:#F1E7DA;box-shadow:inset 0 4px 9px rgba(120,70,30,.2);display:flex;align-items:center;padding:0 20px;font:600 16px 'IBM Plex Mono';color:#6A5F80">Win Condition (optional)</div>
+    <span style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono'"><span style="position:relative;width:50px;height:28px;border-radius:14px;background:#F1E7DA;box-shadow:inset 0 3px 6px rgba(120,70,30,.28)"><span style="position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#FFF9F2;box-shadow:0 3px 5px -2px rgba(120,70,30,.5),inset 0 -2px 3px rgba(120,70,30,.15)"></span></span>COUNTER</span>
+    <div style="width:96px;height:54px;border-radius:27px;background:#F1E7DA;opacity:.55;box-shadow:inset 0 4px 9px rgba(120,70,30,.2);display:flex;align-items:center;padding:0 16px;font:600 16px 'IBM Plex Mono';color:#6A5F80">Target</div>
+    <button style="display:flex;align-items:center;gap:6px;height:54px;padding:0 22px 0 16px;border:0;border-radius:27px;background:#6C4BF4;color:#fff;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:0 14px 20px -10px rgba(80,40,200,.7),inset 0 -6px 9px rgba(40,20,140,.4),inset 0 5px 8px rgba(200,190,255,.6)" style-active="transform:scale(.96,.9)"><span style="font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'wght' 700">add</span>ADD CHALLENGE</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;padding:0 14px;font:700 12px 'IBM Plex Mono';color:#5E5373;letter-spacing:1px"><span>CHALLENGE SLOTS</span><span>8 / 50 · DRAG TO REORDER</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 96px minmax(0,1fr) 220px 138px 52px 150px 44px;gap:14px;align-items:center;height:76px;padding:0 14px 0 14px;border-radius:38px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .25s cubic-bezier(.3,1.6,.5,1)" style-hover="transform:translateY(-4px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:24px;color:#6A5F80;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span title="{{ r.statusWord }}" style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono';letter-spacing:1px"><span data-beat="{{ r.beat }}" style="width:20px;height:20px;border-radius:50%;background:{{ r.led }};box-shadow:{{ r.ledSh }}"></span>{{ r.statusUp }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;height:24px;padding:0 10px 0 6px;border-radius:12px;background:#6C4BF4;color:#fff;font:700 11px 'IBM Plex Mono';box-shadow:inset 0 -3px 5px rgba(40,20,140,.4),inset 0 3px 4px rgba(200,190,255,.6)"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>PINNED</span></sc-if>
+            <span style="font:800 21px/1.1 Archivo;font-stretch:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          </div>
+          <span style="font:500 14px/1.2 'IBM Plex Mono';color:#5E5373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:36px;height:36px;border:0;border-radius:50%;background:#FFF9F2;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;color:#2A2140;box-shadow:0 6px 10px -6px rgba(120,70,30,.5),inset 0 -3px 5px rgba(120,70,30,.14)" style-active="transform:scale(.88,.8)">remove</button>
+            <span style="min-width:116px;height:40px;border-radius:20px;background:#2A2140;box-shadow:inset 0 3px 7px rgba(0,0,0,.5),0 0 0 4px #F1E7DA;display:flex;align-items:center;justify-content:center;font:700 17px DSEG7,'Share Tech Mono';color:{{ r.segColor }}">{{ r.countSeg }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:36px;height:36px;border:0;border-radius:50%;background:#FFC53D;cursor:pointer;font-family:'Material Symbols Rounded';font-size:20px;color:#2A2140;box-shadow:0 6px 10px -6px rgba(160,100,0,.6),inset 0 -3px 5px rgba(160,100,0,.35)" style-active="transform:scale(.88,.8)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;align-items:center;height:44px;padding:0 14px;border-radius:22px;background:#2A2140;box-shadow:inset 0 3px 7px rgba(0,0,0,.5),0 0 0 4px #F1E7DA;font:700 20px DSEG7,'Share Tech Mono';color:{{ r.segColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.1">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative;display:inline-block;transform-origin:50% 100%">{{ d.c }}</span></span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:#2A2140;opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:{{ r.playSh }}" style-active="transform:scale(.9,.82)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;gap:10px;height:52px;padding:0 4px;border:0;background:transparent;cursor:pointer">
+          <span style="position:relative;width:62px;height:34px;border-radius:17px;background:{{ r.trackBg }};box-shadow:inset 0 3px 7px rgba(0,0,0,.25)"><span data-knob="{{ r.id }}" style="position:absolute;top:4px;left:{{ r.knobX }};width:26px;height:26px;border-radius:50%;background:#FFF9F2;box-shadow:0 4px 6px -2px rgba(0,0,0,.35),inset 0 -3px 4px rgba(120,70,30,.18);transition:left .3s cubic-bezier(.3,1.7,.5,1)"></span></span>
+          <span style="font:800 12px/1.15 Archivo;letter-spacing:1px;color:#2A2140;text-align:left;white-space:pre-line">{{ r.winUp }}</span>
+        </button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:#2A2140;font-family:'Material Symbols Rounded';font-size:24px;box-shadow:{{ r.moreSh }}">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:8px;top:70px;width:260px;padding:10px;border-radius:28px;background:#FFF9F2;display:flex;flex-direction:column;gap:2px;box-shadow:0 30px 50px -18px rgba(120,70,30,.55),inset 0 -6px 10px rgba(120,70,30,.12),inset 0 6px 10px #fff">
+            <div style="padding:6px 14px 8px;font:700 11px 'IBM Plex Mono';color:#5E5373;letter-spacing:1px">SLOT {{ r.slot }} · OPTIONS</div>
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:21px;background:{{ m.bg }};box-shadow:{{ m.sh }};color:{{ m.color }};font:600 15px 'IBM Plex Mono'"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:600 20px 'IBM Plex Mono';color:#5E5373">Workspace · mid-run · 1440 · row 2 hovered, row 5 menu open · Start, Mark Won and ± are live</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="A Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:48px;bottom:48px;width:640px;padding:22px;box-sizing:border-box;border-radius:48px;background:#FFF9F2;display:flex;flex-direction:column;gap:14px;box-shadow:0 0 0 6px #2A2140,0 30px 60px -20px rgba(40,20,10,.75),inset 0 -10px 18px rgba(120,70,30,.14),inset 0 10px 16px #fff">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px">
+      <span style="height:38px;display:flex;align-items:center;padding:0 14px;border-radius:10px;background:#2A2140;color:#FFF9F2;font:800 18px Archivo;font-stretch:78%;letter-spacing:3px;text-transform:uppercase;transform:rotate(-1deg);white-space:nowrap">Kitty vs. the world</span>
+      <span style="display:flex;align-items:center;gap:8px;font:700 14px 'IBM Plex Mono'"><span data-amb="pulse" style="width:14px;height:14px;border-radius:50%;background:#FF5B3A;box-shadow:0 0 10px rgba(255,91,58,.7)"></span>LIVE · {{ wonCount }}/{{ totalCount }} WON</span>
+    </div>
+    <div data-lcd="1" style="border-radius:30px;padding:12px 18px;background:#2A2140;box-shadow:inset 0 4px 12px rgba(0,0,0,.6),0 0 0 8px #EFE4D6">
+      <div aria-label="Total Timer" style="display:flex;justify-content:center;font:700 84px/1.12 DSEG7,'Share Tech Mono';color:#FFC53D;text-shadow:0 0 16px rgba(255,197,61,.45)">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.05;text-shadow:none">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="total" style="position:relative;display:inline-block;transform-origin:50% 100%">{{ d.c }}</span></span></sc-for>
+      </div>
+    </div>
+    <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+      <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:30px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:60px;padding:0 10px 0 18px;border-radius:30px;background:{{ r.bg }};box-shadow:{{ r.shadow }}">
+        <span title="{{ r.statusWord }}" style="width:22px;height:22px;border-radius:50%;background:{{ r.led }};box-shadow:{{ r.ledSh }}"></span>
+        <span style="font:800 22px/1 Archivo;font-stretch:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+        <span style="font:700 16px 'IBM Plex Mono';color:#5E5373">{{ r.countStr }}</span>
+        <span style="display:flex;align-items:center;height:42px;padding:0 12px;border-radius:21px;background:#2A2140;font:700 20px DSEG7,'Share Tech Mono';color:{{ r.segColor }}"><sc-for list="{{ r.td }}" as="d"><span style="position:relative;display:inline-block;width:{{ d.w }};text-align:right"><span style="position:absolute;inset:0;opacity:.1">{{ d.ghost }}</span><span data-chg="{{ d.chg }}" data-kind="row" style="position:relative;display:inline-block">{{ d.c }}</span></span></sc-for></span>
+      </div>
+    </sc-for>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;font:700 13px 'IBM Plex Mono';color:#5E5373">
+      <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:16px;border-radius:8px;background:{{ p.bg }};box-shadow:inset 0 -3px 4px rgba(0,0,0,.2)"></span></sc-for><span style="margin-left:6px">PAGE {{ pageLabel }}</span>
+    </div>
+  </div>
+</div>
+<div style="font:600 20px 'IBM Plex Mono';color:#5E5373">Overlay · 1920×1080 · clay handheld with ink LCD, transparent background over gameplay stand-in · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="A Genome" style="padding:44px;border-radius:44px;background:#F6EFE6;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="font:900 44px Archivo;font-stretch:118%;font-style:italic;margin-bottom:26px">GENOME</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:100px;height:54px;border-radius:27px;background:#FFF9F2;box-shadow:0 14px 22px -12px rgba(120,70,30,.55),inset 0 -6px 10px rgba(120,70,30,.14),inset 0 6px 8px #fff"></span><span style="width:54px;height:54px;border-radius:50%;background:#FF5B3A;box-shadow:inset 0 -6px 10px rgba(140,30,10,.35),inset 0 6px 8px rgba(255,210,190,.75)"></span><span style="width:70px;height:40px;border-radius:14px;background:#2A2140;box-shadow:0 0 0 5px #F1E7DA,inset 0 3px 6px rgba(0,0,0,.5)"></span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Material</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;font:700 12px 'IBM Plex Mono'">#1</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Matte inflated clay, unchanged from Pure Clay. Tech parts (LCD windows, switches) are set INTO the clay like inlays, not stuck on.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:700 11px 'IBM Plex Mono'"><div style="border-radius:14px;background:#F6EFE6;box-shadow:inset 0 0 0 2px #E2D6C6;padding:8px;display:flex;align-items:flex-end">Cream</div><div style="border-radius:14px;background:#FF5B3A;padding:8px;display:flex;align-items:flex-end">Tomato</div><div style="border-radius:14px;background:#6C4BF4;color:#fff;padding:8px;display:flex;align-items:flex-end">Grape</div><div style="border-radius:14px;background:#2EC98E;padding:8px;display:flex;align-items:flex-end">Mint</div><div style="border-radius:14px;background:#FFF9F2;box-shadow:inset 0 0 0 2px #E2D6C6;padding:8px;display:flex;align-items:flex-end">Clay</div><div style="border-radius:14px;background:#C93A1A;color:#fff;padding:8px;display:flex;align-items:flex-end">Brick</div><div style="border-radius:14px;background:#FFC53D;padding:8px;display:flex;align-items:flex-end">Butter</div><div style="border-radius:14px;background:#2A2140;color:#FFC53D;padding:8px;display:flex;align-items:flex-end">Ink</div></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Palette</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;font:700 12px 'IBM Plex Mono'">#1</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Pure Clay palette. The LCD is Ink with Butter segments (a warm VFD glow), so hardware never brings in a foreign green.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:16px"><span style="font:900 54px/1 Archivo;font-stretch:122%;font-style:italic">Aa</span><span style="font:600 36px/1 'IBM Plex Mono'">Aa</span><span style="padding:6px 12px;border-radius:14px;background:#2A2140;font:700 36px DSEG7,'Share Tech Mono';color:#FFC53D">07</span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Type</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:700 12px 'IBM Plex Mono'">#6</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Archivo expanded italic for the mark and game names, IBM Plex Mono for labels and text, DSEG7 seven-segment for every timer with ghost "8"s.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="position:relative;height:130px;border-radius:26px;overflow:hidden;background:#F6EFE6"><div style="position:absolute;left:-40px;top:10px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,170,140,.7),rgba(255,170,140,0) 70%)"></div><div style="position:absolute;left:22%;top:22%;width:56%;height:56%;border-radius:22px;background:#FFF9F2;box-shadow:0 12px 20px -10px rgba(120,70,30,.5),inset 0 -4px 8px rgba(120,70,30,.12)"></div></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Backdrop</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;font:700 12px 'IBM Plex Mono'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:700 12px 'IBM Plex Mono'">#6</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Cream tabletop with drifting glows (#1); the summary is one clay chassis with screws, a grille and an LCD (#6's "device is the page", softened).</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#EFE4D6;display:flex;align-items:flex-end;justify-content:center;gap:30px;padding-bottom:20px;box-sizing:border-box"><span data-amb="squish" style="width:60px;height:60px;border-radius:50%;background:#6C4BF4;transform-origin:50% 100%;box-shadow:inset 0 -8px 12px rgba(40,20,140,.45)"></span><span data-amb="detent" style="width:60px;height:60px;border-radius:16px;background:#2A2140;color:#FFC53D;display:flex;align-items:center;justify-content:center;font:700 30px DSEG7,'Share Tech Mono'">8</span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Motion</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;font:700 12px 'IBM Plex Mono'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:700 12px 'IBM Plex Mono'">#6</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Bodies squash and spring (#1); digits and switches move in hard detents (#6). Soft outside, precise inside.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#EFE4D6;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:24px;height:24px;border-radius:50%;background:#FFC53D;box-shadow:inset -3px -4px 5px rgba(160,100,0,.4)"></span><span style="height:32px;display:flex;align-items:center;padding:0 12px;border-radius:9px;background:#2A2140;color:#FFF9F2;font:800 14px Archivo;font-stretch:76%;letter-spacing:3px">WINNIE</span><span style="width:60px;height:36px;border-radius:18px;background:radial-gradient(circle,rgba(120,70,30,.45) 2.5px,rgba(0,0,0,0) 3px) 0 0/10px 10px,#F1E7DA"></span><span style="width:20px;height:20px;border-radius:50%;background:#2EC98E"></span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:800 20px Archivo">Ornament</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;font:700 12px 'IBM Plex Mono'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:700 12px 'IBM Plex Mono'">#6</span></div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Clay beads double as screws and LEDs, clay Dymo tape for names, a dimpled speaker grille. No mascot; the gadget is the character.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="A Dialects" style="padding:44px;border-radius:44px;background:#F6EFE6;display:flex;flex-direction:column;gap:24px;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="font:900 44px Archivo;font-stretch:118%;font-style:italic">DIALECT SKETCH</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:#F6EFE6;box-shadow:inset 0 0 0 2px #E2D6C6;display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:62px;padding:0 12px;border-radius:31px;background:#FFF9F2;box-shadow:0 8px 16px -10px rgba(120,70,30,.35),inset 0 -3px 6px rgba(120,70,30,.10)"><span style="width:16px;height:16px;border-radius:50%;background:#FF5B3A"></span><span style="flex:1;font:800 18px Archivo">Elden Ring</span><span style="padding:6px 10px;border-radius:16px;background:#2A2140;font:700 16px DSEG7,'Share Tech Mono';color:#FFC53D">3:12:44</span></div></div><div style="font:800 20px Archivo">Workspace</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Low inflation: shallow shadows, 6% squish, LCDs small. Calm enough for a six-hour run.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:linear-gradient(135deg,#3a8f3a,#1f5fbf);display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:76px;padding:0 14px;border-radius:38px;background:#FFF9F2;box-shadow:0 0 0 6px #2A2140,0 18px 30px rgba(0,0,0,.5),inset 0 -6px 10px rgba(120,70,30,.14)"><span style="width:22px;height:22px;border-radius:50%;background:#FF5B3A;box-shadow:0 0 10px #FF5B3A"></span><span style="flex:1;font:800 22px Archivo">Elden Ring</span><span style="padding:8px 12px;border-radius:20px;background:#2A2140;font:700 22px DSEG7,'Share Tech Mono';color:#FFC53D">3:12:44</span></div></div><div style="font:800 20px Archivo">Broadcast</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Full inflation + 6px Ink outline so clay holds over any game; bigger LCD, bouncier ticks.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:#FF5B3A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;box-shadow:inset 0 -12px 20px rgba(140,30,10,.3),inset 0 10px 16px rgba(255,210,190,.6)"><span data-amb="bob" style="font:900 76px/1 Archivo;font-stretch:125%;font-style:italic;color:#2A2140;text-shadow:0 6px 0 #C93A1A">WINNIES</span><span style="padding:8px 14px;border-radius:14px;background:#2A2140;font:700 26px DSEG7,'Share Tech Mono';color:#FFC53D">88:88:88</span></div><div style="font:800 20px Archivo">Showcase</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Max inflation: a giant clay gadget you can poke on the landing page; changelog as firmware notes.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="A Motion" style="padding:44px;border-radius:44px;background:#F6EFE6;display:flex;flex-direction:column;gap:24px;box-shadow:0 24px 40px -24px rgba(120,70,30,.4)">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:900 44px Archivo;font-stretch:118%;font-style:italic">MOTION SKETCH</div>
+      <div style="display:flex;gap:12px"><button onClick="{{ onReplayWon }}" style="height:52px;padding:0 22px;border:0;border-radius:26px;background:#2EC98E;color:#123F2D;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:inset 0 -5px 8px rgba(0,90,60,.3),inset 0 5px 7px rgba(255,255,255,.5)" style-active="transform:scale(.95,.88)">REPLAY WON</button><button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 22px;border:0;border-radius:26px;background:#FFC53D;color:#2A2140;font:800 15px Archivo;letter-spacing:1px;cursor:pointer;box-shadow:inset 0 -5px 8px rgba(160,100,0,.35)" style-active="transform:scale(.95,.88)">REPLAY COMPLETE</button></div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:96px minmax(0,1fr) auto auto;gap:16px;align-items:center;height:76px;padding:0 20px;border-radius:38px;background:#D9F4E7;box-shadow:0 4px 8px -6px rgba(20,90,60,.4),inset 0 3px 6px rgba(255,255,255,.7)">
+      <span style="display:flex;align-items:center;gap:8px;font:700 12px 'IBM Plex Mono'"><span style="width:20px;height:20px;border-radius:50%;background:#2EC98E;box-shadow:0 0 10px #2EC98E"></span>WON</span>
+      <span style="font:800 21px Archivo">Celeste <span style="font:500 14px 'IBM Plex Mono';color:#5E5373">Farewell, golden strawberry</span></span>
+      <span style="padding:8px 14px;border-radius:22px;background:#2A2140;font:700 20px DSEG7,'Share Tech Mono';color:#7FE0B5">1:02:13</span>
+      <span style="position:relative;width:62px;height:34px;border-radius:17px;background:#2EC98E"><span style="position:absolute;top:4px;left:32px;width:26px;height:26px;border-radius:50%;background:#FFF9F2"></span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px">
+      <div><div style="font:800 18px Archivo;color:#C93A1A;margin-bottom:8px">TICK</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Changed segments snap in one hard frame (#6), then the digit squashes 12% and springs back (#1). The running LED bead squishes on the beat.</div></div>
+      <div><div style="font:800 18px Archivo;color:#1A7A55;margin-bottom:8px">WON</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Toggle knob springs across, the row squashes and pops, clay beads burst, LCD flips to mint, row re-seats at the bottom with a squish-thunk.</div></div>
+      <div><div style="font:800 18px Archivo;color:#4A2FC4;margin-bottom:8px">REDUCED MOTION · SOUND</div><div style="font:500 15px/1.5 'IBM Plex Mono';color:#4A405C">Static: LED colour + WON word + toggle side. Sound (muted): tick = quartz click on clay, Won = squelchy latch + beep, Complete = kazoo through a tiny speaker.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const spring = 'cubic-bezier(.3,1.5,.5,1)';
+    const beads = { shapes: ['circle'], colors: ['#2EC98E', '#FFC53D', '#FF5B3A', '#6C4BF4'], style: () => ({ boxShadow: 'inset -3px -4px 5px rgba(0,0,0,.25), inset 2px 3px 4px rgba(255,255,255,.6)' }) };
+    return {
+      wonDelay: 620,
+      amb: {
+        drift: [[{ transform: 'translate(0,0) scale(1)' }, { transform: 'translate(60px,-40px) scale(1.08)' }, { transform: 'translate(0,0) scale(1)' }], { duration: 14000, easing: 'ease-in-out' }],
+        pulse: [[{ transform: 'scale(1)' }, { transform: 'scale(1.3,1.1)' }, { transform: 'scale(1)' }], { duration: 1000, easing: 'ease-in-out' }],
+        bob: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(-10px) scale(.98,1.03)' }, { transform: 'translateY(0) scale(1.03,.97)', offset: .85 }, { transform: 'none' }], { duration: 2400, easing: 'ease-in-out' }],
+        squish: [[{ transform: 'scale(1,1)' }, { transform: 'scale(1.3,.7)', offset: .1 }, { transform: 'translateY(-50px) scale(.85,1.15)', offset: .4 }, { transform: 'scale(1,1)', offset: .7 }, { transform: 'scale(1.15,.85)', offset: .8 }, { transform: 'scale(1,1)' }], { duration: 1600, easing: 'ease-in-out' }],
+        detent: [[{ transform: 'rotate(0deg)' }, { transform: 'rotate(90deg)' }, { transform: 'rotate(180deg)' }, { transform: 'rotate(270deg)' }, { transform: 'rotate(360deg)' }], { duration: 1600, easing: 'steps(4,end)' }],
+      },
+      tick: (k) => [[{ opacity: .15, transform: 'scale(1,1)' }, { opacity: 1, transform: 'scale(1.1,.86)', offset: .12 }, { transform: 'scale(.97,1.05)', offset: .5 }, { opacity: 1, transform: 'scale(1,1)' }], { duration: k === 'total' ? 460 : 360, easing: 'ease-out' }],
+      beat: () => [[{ transform: 'scale(1)' }, { transform: 'scale(1.25,.8)', offset: .3 }, { transform: 'scale(1)' }], { duration: 420, easing: spring }],
+      won: (el, W, ov) => {
+        const k = el.querySelector('[data-knob]');
+        if (k) k.animate([{ transform: 'none' }, { transform: 'translateX(28px) scale(1.2,.8)', offset: .4 }, { transform: 'translateX(28px)' }], { duration: 400, easing: spring, fill: 'forwards' }).onfinish = function () { this.cancel(); };
+        el.animate([{ transform: 'none' }, { transform: 'translateY(3px)', offset: .08 }, { transform: 'scale(1.03,.84)', offset: .3 }, { transform: 'translateY(-12px) scale(.98,1.05)', offset: .62 }, { transform: 'none' }], { duration: 620, easing: 'ease-out' });
+        W.burst(el, { ...beads, n: ov ? 14 : 22, size: 18, spread: 220, gravity: 160, dur: 1200, ox: .82, up: true, cone: 2.4 });
+      },
+      land: (el) => el.animate([{ transform: 'translateX(-24px) scale(.97,1.04)', opacity: .3 }, { transform: 'translateX(3px) scale(1.02,.93)', offset: .6, opacity: 1 }, { transform: 'none' }], { duration: 480, easing: 'ease-out' }),
+      complete: (root, W) => {
+        root.querySelectorAll('[data-lcd]').forEach((l) => l.animate([{ filter: 'none' }, { filter: 'brightness(1.8)' }, { filter: 'none' }, { filter: 'brightness(1.8)' }, { filter: 'none' }], { duration: 900, easing: 'steps(1,end)' }));
+        const l = root.querySelector('[data-lcd]');
+        if (l) W.burst(l, { ...beads, n: 60, size: 26, spread: 520, gravity: 300, dur: 2000 });
+      },
+    };
+  }
+  skin(r) {
+    const SURF = '0 16px 32px -14px rgba(120,70,30,.38),0 4px 8px -4px rgba(120,70,30,.15),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px rgba(255,255,255,.95)';
+    const BALL = '0 8px 12px -8px rgba(120,70,30,.5),inset 0 -4px 7px rgba(120,70,30,.14),inset 0 4px 7px #fff';
+    const st = {
+      running: { bg: '#FFFFFF', shadow: '0 0 0 4px #FF5B3A,0 22px 36px -14px rgba(200,60,20,.45),inset 0 -6px 12px rgba(120,70,30,.10),inset 0 6px 10px #fff', led: '#FF5B3A', ledSh: '0 0 12px rgba(255,91,58,.8),inset -3px -3px 4px rgba(140,30,10,.4),inset 2px 2px 3px rgba(255,220,200,.7)', beat: 'run', segColor: '#FFC53D' },
+      idle: { bg: '#FFF9F2', shadow: SURF, led: '#E6DACA', ledSh: 'inset 0 3px 5px rgba(120,70,30,.3)', beat: '', segColor: r.untouched ? '#9A8E76' : '#FFC53D' },
+      won: { bg: '#D9F4E7', shadow: '0 4px 8px -6px rgba(20,90,60,.4),inset 0 -3px 6px rgba(20,90,60,.10),inset 0 3px 6px rgba(255,255,255,.7)', led: '#2EC98E', ledSh: '0 0 10px rgba(46,201,142,.7),inset -3px -3px 4px rgba(0,90,60,.35)', beat: '', segColor: '#7FE0B5' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      shadow: hov ? '0 30px 44px -16px rgba(120,70,30,.5),inset 0 -6px 12px rgba(120,70,30,.12),inset 0 6px 10px #fff' : st.shadow,
+      lift: hov ? 'translateY(-5px)' : 'none', gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : 1,
+      statusUp: r.statusWord.toUpperCase(), slot: String(r.n).padStart(2, '0'),
+      winUp: r.won ? 'WON' : 'MARK\nWON',
+      countSeg: r.hasCounter ? String(r.count).padStart(3, '0') + '/' + String(r.target).padStart(3, '0') : '',
+      playBg: r.running ? '#FF5B3A' : '#FFF9F2', playOp: r.won ? 0.35 : 1,
+      playSh: r.running ? '0 10px 16px -8px rgba(200,60,20,.7),inset 0 -5px 8px rgba(140,30,10,.35),inset 0 5px 7px rgba(255,210,190,.7)' : BALL,
+      trackBg: r.won ? '#2EC98E' : '#F1E7DA', knobX: r.won ? '32px' : '4px',
+      moreBg: r.menu || hov ? '#FFF9F2' : 'transparent', moreSh: r.menu ? 'inset 0 3px 7px rgba(120,70,30,.25)' : hov ? BALL : 'none',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? '#F1E7DA' : 'transparent', sh: m.first ? 'inset 0 3px 6px rgba(120,70,30,.18)' : 'none', color: m.danger ? '#B0300F' : '#2A2140' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.32em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      blocks: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, bg: i < v.wonCount ? '#2EC98E' : 'rgba(255,197,61,.12)', sh: i < v.wonCount ? '0 0 8px rgba(46,201,142,.6)' : 'none' })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.34em' : '0.82em', ghost: d.sep ? ':' : '8' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, w: p.on ? '44px' : '16px', bg: p.on ? '#FF5B3A' : '#D8CBB9' })) };
+  }
+}
+</script>
+</body>
+</html>

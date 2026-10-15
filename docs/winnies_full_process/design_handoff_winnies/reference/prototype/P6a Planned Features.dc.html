@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<style>body{margin:0;background:#EFE6EA}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<section ref="{{ rootRef }}" style="display:flex;flex-direction:column;gap:96px;padding:80px;font-family:'M PLUS Rounded 1c',sans-serif;color:#4A2B3A">
+  <div style="display:flex;flex-direction:column;gap:28px;max-width:2928px">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:1300px">
+      <span style="font:800 15px/1 'M PLUS Rounded 1c';color:#B0175A">Phase 6a</span>
+      <h1 style="margin:0;font:400 56px/1.2 'Mochiy Pop One'">Planned features, full designs</h1>
+      <p style="margin:0;font:500 20px/1.5 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">Eleven features, every state, in light and dark at 1440 wide. Each frame is a working prototype running its P4 motion, built on top of the existing Workspace, Shared View and Overlay.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:2928px">
+      <sc-for list="{{ homes }}" as="h" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:24px 28px 26px;border-radius:28px;background:#FFF;box-shadow:0 4px 0 -1px #E8C9D6">
+          <span style="align-self:flex-start;font:800 13px/1 'M PLUS Rounded 1c';padding:7px 12px;border-radius:12px;background:{{ h.bg }};color:#4A2B3A">{{ h.tag }}</span>
+          <h3 style="margin:0;font:400 22px/1.35 'Mochiy Pop One'">{{ h.t }}</h3>
+          <p style="margin:0;font:500 17px/1.55 'M PLUS Rounded 1c';color:#4A2B3A;text-wrap:pretty">{{ h.d }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+    <div style="display:flex;flex-direction:column;gap:56px">
+      <div style="display:flex;align-items:center;gap:20px;padding-bottom:18px;border-bottom:3px solid #E3CCD6;max-width:2928px">
+        <span style="flex:none;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#4A2B3A;color:#FFF;font:400 26px/1 'Mochiy Pop One'">{{ g.n }}</span>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+          <h2 style="margin:0;font:400 38px/1.25 'Mochiy Pop One'">{{ g.t }}</h2>
+          <span style="font:600 19px/1.45 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">{{ g.d }}</span>
+        </div>
+      </div>
+      <sc-for list="{{ g.items }}" as="s" hint-placeholder-count="1">
+        <div id="{{ s.n }}" data-screen-label="{{ s.label }}" style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;max-width:2928px">
+            <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#FF6FAE;color:#fff">{{ s.n }}</span>
+            <h3 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">{{ s.t }}</h3>
+            <span style="font:600 18px/1.45 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">{{ s.d }}</span>
+          </div>
+          <div style="display:flex;gap:48px;align-items:flex-start">
+            <sc-for list="{{ s.halves }}" as="h" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font:800 15px 'M PLUS Rounded 1c';color:#7A5C6A">{{ h.label }}</span>
+                <div data-half="{{ h.k }}" style="position:relative;width:1440px;min-height:{{ s.ph }};border-radius:24px;overflow:hidden;background:{{ h.bg }};box-shadow:0 20px 50px -20px rgba(74,43,58,.35)">
+                  <sc-if value="{{ h.ws }}" hint-placeholder-val="{{ false }}"><dc-import name="WorkspaceP6" scenario="{{ s.s }}" theme="{{ h.theme }}" hint-size="1440px,1000px"></dc-import></sc-if>
+                  <sc-if value="{{ h.sv }}" hint-placeholder-val="{{ false }}"><dc-import name="SharedViewP6" scenario="{{ s.s }}" theme="{{ h.theme }}" hint-size="1440px,1180px"></dc-import></sc-if>
+                  <sc-if value="{{ h.ov }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;top:0;width:1920px;height:1080px;transform:scale(.75);transform-origin:0 0"><dc-import name="OverlayFrameP6" scenario="{{ s.s }}" theme="{{ h.theme }}" placement="{{ s.o.placement }}" bg="{{ s.o.bg }}" per-page="{{ s.o.per }}" timers="{{ s.o.timers }}" calm="{{ s.o.calm }}" players="{{ s.o.players }}" hint-size="1920px,1080px"></dc-import></div></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { on: {} };
+  componentDidMount() {
+    this._f = () => { if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = 0; this.scan(); }); };
+    window.addEventListener('scroll', this._f, true); window.addEventListener('resize', this._f);
+    this._iv = setInterval(() => this.scan(), 400);
+    this.scan();
+  }
+  componentWillUnmount() { window.removeEventListener('scroll', this._f, true); window.removeEventListener('resize', this._f); clearInterval(this._iv); cancelAnimationFrame(this._raf); }
+  scan() {
+    const r = this.rootRef.current; if (!r) return;
+    const vw = window.innerWidth, vh = window.innerHeight, on = this.state.on, next = {}, add = [];
+    r.querySelectorAll('[data-half]').forEach((el) => {
+      const k = el.dataset.half, b = el.getBoundingClientRect(); if (!k || !b.width) return;
+      const near = b.bottom > -vh * 0.75 && b.top < vh * 1.75 && b.right > -vw * 0.5 && b.left < vw * 1.5;
+      const far = b.bottom < -vh * 2.5 || b.top > vh * 3.5 || b.right < -vw * 2 || b.left > vw * 3;
+      if (on[k]) { if (!far) next[k] = true; } else if (near) add.push([Math.abs(b.top + b.height / 2 - vh / 2) + Math.abs(b.left + b.width / 2 - vw / 2), k]);
+    });
+    const now = Date.now();
+    if (add.length && now - (this._last || 0) > 450) { add.sort((a, b) => a[0] - b[0]); next[add[0][1]] = true; this._last = now; }
+    const a = Object.keys(on), b = Object.keys(next);
+    if (a.length !== b.length || b.some((k) => !on[k])) this.setState({ on: next });
+  }
+  renderVals() {
+    const W = 'ws', S = 'sv', O = 'ov';
+    const G = [
+      ['1', 'Winnie settings', 'A per-Winnie area for Players, Discord, Overlay and, later, Game Mode. Owner only.', [
+        ['01a', 'Settings · Players', W, 'settings', 'Settings sits as a second tab next to Challenges, so it never pushes the run off screen.'],
+        ['01b', 'Entry from the Winnie menu', W, 'menu-winnie', 'Second way in: ⋯ → Winnie settings jumps straight to the tab.'],
+        ['01c', 'Game Mode, reserved', W, 'mode-settings', 'Standard is the only mode today. Gauntlet and Confirmation are shown locked.'],
+      ]],
+      ['2', 'Discord notifications', 'One webhook per Winnie. Write-only once saved, removable, testable. Every event starts off.', [
+        ['02a', 'Empty', W, 'discord-empty', 'No webhook yet, so the event switches are locked.'],
+        ['02b', 'Invalid URL', W, 'discord-invalid', 'An invite link pasted by mistake. The message says exactly where the real URL lives.'],
+        ['02c', 'Saved', W, 'discord-saved', 'Shown as configured with a masked hint. Replace, Remove, Send test message.'],
+        ['02d', 'Test sent', W, 'discord-test-sent', 'Both events on. Preview of the posted message, plus the delivery log.'],
+        ['02e', 'Test failed', W, 'discord-test-failed', 'Discord answered 404. Press Send test message again to see the shake.'],
+        ['02f', 'Repeated failures, in the Workspace', W, 'discord-failing', 'Sticky toast with Fix it, plus a badge on the Settings tab. Fix it opens Discord settings.'],
+        ['02g', 'Repeated failures, in Settings', W, 'discord-failing-settings', 'Alert banner above the webhook, badge on the Discord section, failed deliveries in the log.'],
+      ]],
+      ['3', 'Overlay settings', 'Owner only. Challenges per page, timers, calm preset and placement, next to a live Overlay preview.', [
+        ['03a', 'Settings with live preview', W, 'overlay-settings', 'Every control updates the 1920 × 1080 preview right away and saves on its own.'],
+        ['03b', 'Output · sidebar, 3 per page, calm, Players', O, 'pages', 'The OBS output with these settings, flipping pages.', { placement: 'sidebar', bg: 'busy', per: 3, timers: true, calm: true, players: true }],
+        ['03c', 'Output · corner, timers off', O, 'single', 'Corner placement with timers hidden. Rows tighten up.', { placement: 'corner', bg: 'bright', per: 5, timers: false, calm: false, players: false }],
+      ]],
+      ['4', 'Play this myself!', 'A Viewer copies a Winnie into their own account from the Shared View.', [
+        ['04a', 'The button on the Shared View', S, 'mid-run', 'Lives in the header, next to View only. Also shows read-only Players, notes, losses and overshoot.'],
+        ['04b', 'Prompt, signed in', S, 'play', 'Prefilled with the source name. Says what comes along and what starts fresh.'],
+        ['04c', 'Signed out', S, 'play-signed-out', 'Three steps promise the way back to this exact prompt. Click Sign in to run the round trip.'],
+        ['04d', 'Redirecting', S, 'play-redirect', 'The button holds its spinner while Discord opens.'],
+        ['04e', 'Back from sign-in', S, 'play-returned', 'Same prompt, same name, now with a welcome-back chip and the new avatar in the header.'],
+        ['04f', 'Name too long', S, 'play-name-error', 'Same 30-character rule as Create Winnie.'],
+        ['04g', 'Copying', S, 'play-busy', 'Controls lock while the copy is made.'],
+        ['04h', 'Copy ready', S, 'play-done', 'Confetti, then a way into the new Winnie or back to watching.'],
+        ['04i', 'Daily quota reached', S, 'play-quota', 'Copies count toward the 10 Winnies per day.'],
+      ]],
+      ['5', 'Completion statistics', 'Total Timer, every Challenge ranked, fastest and slowest, counter totals and losses. Numbers count up, bars fill, #1 sparkles.', [
+        ['05a', 'Workspace', W, 'complete', 'Sort by fastest or slowest. Rows re-rank with a FLIP.'],
+        ['05b', 'Shared View', S, 'complete', 'Broadcast dialect: thicker keylines, bigger numbers.'],
+      ]],
+      ['6', 'Loss counter', 'Optional per Challenge, off by default. Never affects completion.', [
+        ['06a', 'Recording a loss', W, 'losses', 'Turned on for Elden Ring, Cuphead and Hollow Knight. The frame records one on Cuphead. Undo lives in the toast.'],
+        ['06b', 'Switching it on', W, 'menu-challenge', 'Track losses / Stop tracking losses in the Challenge menu.'],
+      ]],
+      ['7', 'Counter overshoot', 'Counters may run past their target. Gold sticker and a different well, so it never reads as “at target”.', [
+        ['07a', 'At target vs. over target', W, 'overshoot', 'Tetris Effect sits at target (green). Mario is over (132 / 120). The frame pushes Cuphead past 19.'],
+      ]],
+      ['8', 'Players', 'Optional per Winnie. Names and colours from the player palette, a bench for anyone unassigned.', [
+        ['08a', 'Bench and markers', W, 'players', 'Rex is on the bench. Click a Player for a keyboard-friendly “Put on…” menu.'],
+        ['08b', 'Dragging a Player', W, 'players-drag', 'Rex held over Celeste. Click anywhere to drop. Dropping off the list sends them back to the bench.'],
+        ['08c', 'Players off', W, 'settings-off', 'The switch in Settings. With it off, the Workspace looks exactly like before.'],
+      ]],
+      ['9', 'Challenge notes', 'Optional, up to 200 characters. Edited in the Workspace, revealed on hover or click in the Shared View.', [
+        ['09a', 'Editing a note', W, 'notes', 'Note field in the inline editor. Rows with a note get a note button.'],
+        ['09b', 'Revealed on the Shared View', S, 'note-open', 'Hover previews it, click pins it, Esc or a click outside closes it.'],
+      ]],
+      ['10', 'Keyboard reordering', 'Focus the grip, Space picks up, arrows move, Space drops, Esc cancels.', [
+        ['10a', 'Picked up', W, 'kbd', 'Super Mario 64 picked up and moved one place down. A live region announces every step. Try it: Tab to a grip and press Space.'],
+      ]],
+      ['11', 'Language', 'English / Deutsch, switched from the account menu. German runs about 30% longer, so this proves the layouts hold.', [
+        ['11a', 'Deutsch · mid-run', W, 'de', 'The full Workspace mid-run, with Players, a note and a loss counter.'],
+        ['11b', 'Deutsch · Challenge menu', W, 'de-menu', 'The longest menu labels.'],
+        ['11c', 'Deutsch · language switch', W, 'de-account', 'The switch itself. EN / DE in the account menu.'],
+        ['11d', 'Deutsch · Discord', W, 'de-settings', 'Settings copy in German.'],
+        ['11e', 'Deutsch · Overlay settings', W, 'de-overlay', ''],
+        ['11f', 'Deutsch · Complete', W, 'de-complete', 'Statistics in German.'],
+      ]],
+    ];
+    const ph = { ws: '1000px', sv: '1180px', ov: '810px' };
+    const groups = G.map(([n, t, d, items]) => ({ k: n, n, t, d, items: items.map(([sn, st, comp, scn, sd, o]) => ({
+      k: sn, n: sn, t: st, d: sd, s: scn, o: o || {}, label: sn + ' ' + st, ph: ph[comp],
+      halves: [['light', 'Light', '#FFF4F8'], ['dark', 'Dark', '#231520']].map(([theme, label, bg]) => { const k = sn + theme[0], on = !!this.state.on[k]; return { k, theme, label, bg, ws: on && comp === 'ws', sv: on && comp === 'sv', ov: on && comp === 'ov' }; }),
+    })) }));
+    const homes = [
+      { k: 1, tag: 'Workspace', bg: '#FFD0E4', t: 'Challenges | Settings tabs', d: 'A tab pair under the Winnie card. Settings holds Players, Discord, Overlay and Game Mode. Also reachable from ⋯ → Winnie settings. A red badge on the tab surfaces Discord failures.' },
+      { k: 2, tag: 'Shared View', bg: '#CFF3DD', t: 'Play this myself! in the header', d: 'Pinned to the header so it’s always one click away, mid-run or Complete. Signed-out Viewers sign in and land back on the same prompt.' },
+      { k: 3, tag: 'Account menu', bg: '#E4D9FF', t: 'Language lives with the account', d: 'English / Deutsch is a per-person preference, so it sits in the account menu, not in Winnie settings.' },
+    ];
+    return { rootRef: this.rootRef, groups, homes };
+  }
+}
+</script>
+</body>
+</html>

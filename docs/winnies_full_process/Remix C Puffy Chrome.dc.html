@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=Michroma&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#030405}a{color:#9EE7FF}a:hover{color:#FF8A70}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#030405;font-family:'Instrument Sans',sans-serif;color:#E4E9EF">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="rC" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 32% 26%,#FFFFFF 0 7%,#FFC2B4 16%,#FF5B3A 48%,#8A1E08 88%);box-shadow:inset 0 -12px 20px rgba(0,0,0,.4),0 24px 40px -14px rgba(255,91,58,.5);font:900 60px/1 Unbounded;color:#1A0703">C</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:900 92px/0.95 Unbounded;letter-spacing:-2px;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 38%,#9AA4B0 50%,#F1F4F8 58%,#C3CBD4 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Puffy Chrome</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font:600 16px 'Instrument Sans'">
+        <span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Material #1 + #2</span><span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Palette #2 + #1</span><span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Type #2</span><span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Backdrop #2 + #1</span><span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Motion #1 + #2</span><span style="padding:6px 12px;border-radius:14px;background:#14171D;box-shadow:inset 0 0 0 1px #3A4049">Ornament #2 + #1</span>
+      </div>
+      <div style="font:500 22px/1.35 'Instrument Sans';color:#B4BCC7">Why: the inflated-3D / balloon-chrome trend. Clay's squishy shapes, poured in candy-coloured liquid metal. Celebratory and trophy-like, on a dark stage that suits streams.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="C Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;background:#07080B;border-radius:28px;box-sizing:border-box;padding:30px 52px;display:flex;flex-direction:column;gap:22px">
+  <div data-amb="pool" style="position:absolute;left:-200px;top:140px;width:900px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(160,175,195,.2),rgba(0,0,0,0) 65%);pointer-events:none"></div>
+  <div data-amb="pool" data-ad="-6000" style="position:absolute;right:-260px;bottom:-200px;width:1000px;height:800px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,91,58,.12),rgba(108,75,244,.1) 40%,rgba(0,0,0,0) 68%);pointer-events:none"></div>
+  <span data-amb="float" style="position:absolute;right:380px;top:110px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#C9B8FF 20%,#6C4BF4 55%,#251270 92%);pointer-events:none"></span>
+  <span data-amb="float" data-ad="-2000" style="position:absolute;left:600px;top:62px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#BDF5DE 20%,#2EC98E 55%,#0A5A3B 92%);pointer-events:none"></span>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:68px">
+    <span data-amb="sheen" style="font:900 34px/1 Unbounded;letter-spacing:-.5px;background:linear-gradient(180deg,#FFFFFF 0%,#E4E9EF 25%,#8E98A4 40%,#F7F9FB 50%,#B9C1CB 70%,#FFFFFF 85%,#9AA4B0 100%);background-size:100% 300%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))">winnies</span>
+    <button style="margin-left:24px;display:flex;align-items:center;gap:12px;height:48px;padding:0 14px 0 20px;border:0;border-radius:24px;background:linear-gradient(180deg,#1E222A,#111318);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 6px rgba(0,0,0,.6),0 0 0 1.5px #3A4049;color:#F1F4F8;font:600 17px 'Instrument Sans';cursor:pointer">Kitty vs. the world<span style="font:400 13px Michroma;color:#9AA4B0">03.10.26</span><span style="font-family:'Material Symbols Rounded';font-size:22px">expand_more</span></button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:50px;padding:0 24px;border:0;border-radius:25px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 6%,#D6CCFF 18%,#6C4BF4 55%,#2A1480 95%);color:#fff;font:700 16px Unbounded;cursor:pointer;box-shadow:inset 0 -8px 14px rgba(0,0,0,.35),0 14px 24px -10px rgba(108,75,244,.6);text-shadow:0 1px 2px rgba(0,0,0,.5)" style-active="transform:scale(.95,.88)"><span style="font-family:'Material Symbols Rounded';font-size:20px">link</span>Share</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;padding:4px;gap:2px;border-radius:24px;background:#0E1015;box-shadow:inset 0 2px 6px #000,0 0 0 1.5px #2A2F37">
+      <span title="Light" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#9AA4B0;font-family:'Material Symbols Rounded';font-size:20px">light_mode</span>
+      <span title="System" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#9AA4B0;font-family:'Material Symbols Rounded';font-size:20px">contrast</span>
+      <span title="Dark" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#E4E9EF 22%,#8D96A3 60%,#3A4049 95%);color:#07080B;font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' 1">dark_mode</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFE7A8 20%,#FFC53D 55%,#8A5A00 95%);display:flex;align-items:center;justify-content:center;font:900 20px Unbounded;color:#2A1A00;box-shadow:inset 0 -6px 10px rgba(0,0,0,.3)">K</div>
+  </nav>
+
+  <section style="position:relative;display:flex;flex-direction:column;gap:8px;padding:28px 36px 30px;border-radius:56px;background:linear-gradient(180deg,#1C2028,#0C0E12);box-shadow:inset 0 2px 0 rgba(255,255,255,.14),inset 0 -14px 30px rgba(0,0,0,.6),0 0 0 2px #2A2F37,0 40px 80px -30px rgba(0,0,0,.9)">
+    <div style="display:flex;align-items:flex-start;gap:20px">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:14px;font:500 15px 'Instrument Sans';color:#9AA4B0"><span style="font:400 12px Michroma;letter-spacing:3px;color:#C3CBD4">WINNIE</span>Created 03.10.26<span style="display:flex;align-items:center;gap:8px;height:30px;padding:0 14px;border-radius:15px;background:rgba(255,91,58,.14);color:#FFB09E;font:600 14px 'Instrument Sans'"><span data-amb="pulse" style="width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 10%,#FF5B3A 50%,#8A1E08)"></span>{{ runningLabel }}</span></div>
+        <h1 style="margin:0;font:800 50px/1.05 Unbounded;letter-spacing:-1px;color:#F1F4F8;text-wrap:pretty">Kitty vs. the world</h1>
+      </div>
+      <button onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:10px;height:64px;padding:0 30px 0 24px;border:0;border-radius:32px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 6%,#FFC2B4 18%,#FF5B3A 52%,#8A1E08 98%);color:#1A0703;font:800 19px Unbounded;cursor:pointer;box-shadow:inset 0 -10px 16px rgba(0,0,0,.35),0 18px 30px -12px rgba(255,91,58,.6)" style-active="transform:scale(.95,.86)"><span style="font-family:'Material Symbols Rounded';font-size:30px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span>{{ totalBtnLabel }}</button>
+      <button aria-label="More" style="width:64px;height:64px;border:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 7%,#E4E9EF 20%,#8D96A3 58%,#2A2F37 96%);color:#07080B;cursor:pointer;font-family:'Material Symbols Rounded';font-size:28px;box-shadow:inset 0 -8px 12px rgba(0,0,0,.35)">more_horiz</button>
+    </div>
+    <div aria-label="Total Timer" style="display:flex;justify-content:center;padding:4px 0;font:900 150px/1.1 Unbounded;letter-spacing:-6px;filter:drop-shadow(0 18px 20px rgba(0,0,0,.7))">
+      <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%;background:radial-gradient(ellipse at 35% 22%,#FFFFFF 0 10%,#E9EDF2 22%,#9AA4B0 52%,#F1F4F8 64%,#6E7783 92%);-webkit-background-clip:text;background-clip:text;color:transparent">{{ d.c }}</span></sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:22px">
+      <div style="flex:1;height:30px;border-radius:15px;background:#05060A;box-shadow:inset 0 3px 8px #000,0 0 0 1.5px #2A2F37;padding:4px;box-sizing:border-box"><div style="width:{{ pctStr }};height:100%;border-radius:11px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 8%,#BDF5DE 22%,#2EC98E 60%,#0A5A3B 100%)"></div></div>
+      <span style="font:400 18px Michroma;color:#F1F4F8">{{ summary }}</span>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:12px;display:flex;align-items:center;gap:14px;height:66px;padding:0 26px;border-radius:33px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 6%,#BDF5DE 20%,#2EC98E 58%,#0A5A3B 100%);color:#04241A;font:800 21px Unbounded"><span style="font-family:'Material Symbols Rounded';font-size:32px;font-variation-settings:'FILL' 1">emoji_events</span>Complete. Every Challenge Won. Inflate the trophy. <span style="font:500 12px 'Instrument Sans'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:12px;border-radius:36px;background:linear-gradient(180deg,#15181E,#0D0F13);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1.5px #2A2F37">
+    <div style="flex:1.1;height:52px;border-radius:26px;background:#07080B;box-shadow:inset 0 3px 8px #000;display:flex;align-items:center;padding:0 22px;font:500 17px 'Instrument Sans';color:#8D96A3">Game</div>
+    <div style="flex:1.5;height:52px;border-radius:26px;background:#07080B;box-shadow:inset 0 3px 8px #000;display:flex;align-items:center;padding:0 22px;font:500 17px 'Instrument Sans';color:#8D96A3">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:6px;height:52px;padding:0 18px;border:0;border-radius:26px;background:radial-gradient(ellipse at 30% 20%,#fff 0 6%,#E4E9EF 20%,#8D96A3 60%,#3A4049 100%);color:#07080B;font:700 16px 'Instrument Sans';cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-size:20px">add</span>Counter</button>
+    <div style="width:100px;height:52px;border-radius:26px;background:#07080B;opacity:.5;box-shadow:inset 0 3px 8px #000;display:flex;align-items:center;padding:0 18px;font:500 17px 'Instrument Sans';color:#8D96A3">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:52px;padding:0 24px 0 18px;border:0;border-radius:26px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 6%,#D6CCFF 18%,#6C4BF4 55%,#2A1480 95%);color:#fff;font:700 16px Unbounded;cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.5);box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)" style-active="transform:scale(.95,.88)"><span style="font-family:'Material Symbols Rounded';font-size:22px">add</span>Add Challenge</button>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 10px"><span style="font:400 14px Michroma;letter-spacing:4px;color:#C3CBD4">CHALLENGES</span><span style="font:500 14px 'Instrument Sans';color:#8D96A3">8 / 50 Challenges · drag to reorder</span></div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 50px minmax(0,1fr) 206px 140px 52px 140px 44px;gap:14px;align-items:center;height:74px;padding:0 14px 0 12px;border-radius:37px;background:{{ r.bg }};box-shadow:{{ r.shadow }};transform:{{ r.lift }};transition:transform .3s cubic-bezier(.3,1.6,.5,1)" style-hover="transform:translateY(-3px)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Rounded';font-size:22px;color:#8D96A3;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span title="{{ r.statusWord }}" data-beat="{{ r.beat }}" style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.orb }};color:{{ r.orbInk }};font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1;box-shadow:inset 0 -6px 10px rgba(0,0,0,.35),0 8px 14px -6px rgba(0,0,0,.6)">{{ r.statusIcon }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;height:24px;padding:0 10px 0 6px;border-radius:12px;background:radial-gradient(ellipse at 30% 20%,#fff 0 6%,#D6CCFF 22%,#6C4BF4 70%);color:#fff;font:700 12px 'Instrument Sans';text-shadow:0 1px 1px rgba(0,0,0,.5)"><span style="font-family:'Material Symbols Rounded';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>Pinned</span></sc-if>
+            <span style="font:700 20px/1.1 'Instrument Sans';color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <span style="flex:none;font:400 10px Michroma;letter-spacing:2px;color:{{ r.wordColor }};text-transform:uppercase">{{ r.statusWord }}</span>
+          </div>
+          <span style="font:400 15px/1.2 'Instrument Sans';color:#9AA4B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:36px;height:36px;border:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#E4E9EF 22%,#8D96A3 60%,#3A4049 96%);color:#07080B;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px" style-active="transform:scale(.88,.8)">remove</button>
+            <span style="min-width:100px;height:38px;border-radius:19px;background:#05060A;box-shadow:inset 0 2px 6px #000,0 0 0 1px #2A2F37;display:flex;align-items:center;justify-content:center;font:400 15px Michroma;color:{{ r.countColor }}">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:36px;height:36px;border:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFE7A8 20%,#FFC53D 55%,#8A5A00 96%);color:#2A1A00;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px" style-active="transform:scale(.88,.8)">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 21px/1 Michroma;color:{{ r.timeColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:52px;height:52px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:{{ r.playInk }};opacity:{{ r.playOp }};font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)" style-active="transform:scale(.9,.82)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:46px;border:0;border-radius:23px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winInk }};font:700 15px 'Instrument Sans';box-shadow:{{ r.winSh }}" style-active="transform:scale(.94,.86)"><span style="font-family:'Material Symbols Rounded';font-size:20px;font-variation-settings:'FILL' {{ r.winFill }}">emoji_events</span>{{ r.winLabel }}</button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:{{ r.moreBg }};color:#E4E9EF;font-family:'Material Symbols Rounded';font-size:22px">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:6px;top:68px;width:250px;padding:8px;border-radius:30px;display:flex;flex-direction:column;gap:2px;background:linear-gradient(180deg,#22262E,#111318);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1.5px #3A4049,0 30px 60px -10px rgba(0,0,0,.9)">
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:21px;background:{{ m.bg }};color:{{ m.color }};font:600 16px 'Instrument Sans'"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+<div style="font:500 20px 'Instrument Sans';color:#8D96A3">Workspace · mid-run · 1440 · row 2 hovered, row 5 menu open · Start, Mark Won and ± are live</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="C Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;left:52px;top:140px;width:600px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0;padding:16px 24px 10px;border-radius:52px;background:linear-gradient(180deg,rgba(30,34,42,.97),rgba(10,12,16,.97));box-shadow:inset 0 2px 0 rgba(255,255,255,.16),0 0 0 3px #C8CFD7,0 0 0 6px #07080B,0 30px 50px rgba(0,0,0,.6)">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font:900 18px Unbounded;color:#E4E9EF">winnies</span><span style="font:600 20px 'Instrument Sans';color:#F1F4F8">Kitty vs. the world</span><span style="font:400 13px Michroma;color:#C3CBD4">{{ wonCount }}/{{ totalCount }} WON</span></div>
+      <div aria-label="Total Timer" style="display:flex;font:900 92px/1.1 Unbounded;letter-spacing:-3px;filter:drop-shadow(0 10px 12px rgba(0,0,0,.7))"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;transform-origin:50% 100%;background:radial-gradient(ellipse at 35% 22%,#FFFFFF 0 10%,#E9EDF2 22%,#9AA4B0 52%,#F1F4F8 64%,#6E7783 92%);-webkit-background-clip:text;background-clip:text;color:transparent">{{ d.c }}</span></sc-for></div>
+    </div>
+    <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+      <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:68px;padding:0 24px 0 10px;border-radius:34px;background:linear-gradient(180deg,rgba(30,34,42,.97),rgba(10,12,16,.97));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 3px {{ r.rim }},0 0 0 5px #07080B,0 16px 30px rgba(0,0,0,.5)">
+        <span title="{{ r.statusWord }}" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.orb }};color:{{ r.orbInk }};font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1;box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)">{{ r.statusIcon }}</span>
+        <span style="font:700 23px/1 'Instrument Sans';color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+        <span style="font:400 15px Michroma;color:#C3CBD4">{{ r.countStr }}</span>
+        <span style="display:flex;font:400 23px/1 Michroma;color:{{ r.timeColor }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+      </div>
+    </sc-for>
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 20px"><sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:16px;border-radius:8px;background:{{ p.bg }};box-shadow:0 0 0 3px #07080B"></span></sc-for><span style="font:400 13px Michroma;color:#F1F4F8;text-shadow:0 1px 3px #000">{{ pageLabel }}</span></div>
+  </div>
+</div>
+<div style="font:500 20px 'Instrument Sans';color:#8D96A3">Overlay · 1920×1080 · each row its own floating capsule, chrome rims + black keyline · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="C Genome" style="padding:44px;border-radius:44px;background:#0E1015;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1.5px #2A2F37">
+    <div style="font:800 42px Unbounded;color:#F1F4F8;margin-bottom:26px">Genome</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:16px"><span style="width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFC2B4 18%,#FF5B3A 50%,#8A1E08 92%);box-shadow:inset 0 -6px 10px rgba(0,0,0,.35)"></span><span style="width:110px;height:56px;border-radius:28px;background:radial-gradient(ellipse at 30% 20%,#fff 0 6%,#E4E9EF 20%,#8D96A3 60%,#2A2F37 100%)"></span><span style="width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#BDF5DE 20%,#2EC98E 55%,#0A5A3B 92%)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Material</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Instrument Sans'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Clay's inflated shapes (#1) with a liquid-metal skin (#2): soft radial highlight, deep coloured core, no hard horizon. Balloons, not ingots.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:700 11px 'Instrument Sans'"><div style="border-radius:14px;background:#07080B;box-shadow:inset 0 0 0 1px #2A2F37;padding:8px;display:flex;align-items:flex-end">Void #2</div><div style="border-radius:14px;background:#14171D;padding:8px;display:flex;align-items:flex-end">Graphite #2</div><div style="border-radius:14px;background:#DDE3EA;color:#07080B;padding:8px;display:flex;align-items:flex-end">Mercury #2</div><div style="border-radius:14px;background:#8D96A3;color:#07080B;padding:8px;display:flex;align-items:flex-end">Steel #2</div><div style="border-radius:14px;background:#FF5B3A;color:#1A0703;padding:8px;display:flex;align-items:flex-end">Tomato #1</div><div style="border-radius:14px;background:#2EC98E;color:#04241A;padding:8px;display:flex;align-items:flex-end">Mint #1</div><div style="border-radius:14px;background:#6C4BF4;padding:8px;display:flex;align-items:flex-end">Grape #1</div><div style="border-radius:14px;background:#FFC53D;color:#2A1A00;padding:8px;display:flex;align-items:flex-end">Butter #1</div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Palette</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Instrument Sans'">#1</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Liquid Chrome's black and mercury as the stage; Pure Clay's toy colours as anodised chrome. Tomato = running, Mint = Won, Grape = Pinned/primary.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:18px"><span style="font:900 60px/1 Unbounded;background:radial-gradient(ellipse at 35% 22%,#fff 0 10%,#E9EDF2 22%,#9AA4B0 52%,#F1F4F8 64%,#6E7783 92%);-webkit-background-clip:text;background-clip:text;color:transparent">07</span><span style="font:500 40px/1 'Instrument Sans';color:#B4BCC7">Aa</span><span style="font:400 30px/1 Michroma;color:#F1F4F8">07</span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Type</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Unbounded Black for the mark and the Total Timer (as puffy balloon numerals), Instrument Sans for text, Michroma for row timers and labels.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="position:relative;height:130px;border-radius:26px;overflow:hidden;background:#07080B"><div style="position:absolute;left:-40px;top:-30px;width:280px;height:220px;border-radius:50%;background:radial-gradient(ellipse,rgba(160,175,195,.3),rgba(0,0,0,0) 65%)"></div><span style="position:absolute;left:62%;top:30%;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#C9B8FF 20%,#6C4BF4 55%,#251270 92%)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Backdrop</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Instrument Sans'">#1</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">The black void with drifting light pools (#2), plus Pure Clay's floating pebbles, now chrome balloons bobbing in the dark (#1).</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#07080B;display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px;box-sizing:border-box"><span data-amb="dripsquish" style="width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#E4E9EF 20%,#8D96A3 58%,#2A2F37 96%);transform-origin:50% 100%"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Motion</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Instrument Sans'">#1</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Things drip in like mercury (#2), then land and squash like clay (#1). Heavy, glossy, satisfying.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="height:130px;border-radius:26px;background:#07080B;display:flex;align-items:center;justify-content:center;gap:20px"><span data-amb="twinkle" style="width:52px;height:52px;background:linear-gradient(135deg,#fff,#9AA4B0);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)"></span><span style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFE7A8 20%,#FFC53D 55%,#8A5A00 95%)"></span><span style="width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFC2B4 18%,#FF5B3A 50%,#8A1E08 92%)"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:700 19px Unbounded;color:#F1F4F8">Ornament</span><span style="padding:2px 8px;border-radius:8px;background:#C3CBD4;color:#07080B;font:700 12px 'Instrument Sans'">#2</span><span style="padding:2px 8px;border-radius:8px;background:#FF5B3A;color:#1A0703;font:700 12px 'Instrument Sans'">#1</span></div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Chrome sparkles (#2) and clay beads as chrome balloons (#1); Won confetti is a spray of metallic beads. No mascot.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="C Dialects" style="padding:44px;border-radius:44px;background:#0E1015;display:flex;flex-direction:column;gap:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1.5px #2A2F37">
+    <div style="font:800 42px Unbounded;color:#F1F4F8">Dialect sketch</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:#07080B;display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:62px;padding:0 16px 0 10px;border-radius:31px;background:linear-gradient(180deg,#191C23,#0F1116);box-shadow:0 0 0 1.5px #2A2F37"><span style="width:40px;height:40px;border-radius:50%;background:#4A2A24"></span><span style="flex:1;font:700 18px 'Instrument Sans'">Elden Ring</span><span style="font:400 18px Michroma">3:12:44</span></div></div><div style="font:700 19px Unbounded;color:#F1F4F8">Workspace</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Deflated: matte graphite pills, chrome only on primary buttons and the Total Timer. Low glare for long sessions.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:linear-gradient(135deg,#3a8f3a,#1f5fbf);display:flex;align-items:center;justify-content:center;padding:20px"><div style="width:100%;display:flex;align-items:center;gap:12px;height:74px;padding:0 20px 0 10px;border-radius:37px;background:linear-gradient(180deg,#1E222A,#0A0C10);box-shadow:0 0 0 3px #FF5B3A,0 0 0 6px #07080B,0 20px 30px rgba(0,0,0,.5)"><span style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#FFC2B4 18%,#FF5B3A 50%,#8A1E08 92%)"></span><span style="flex:1;font:700 22px 'Instrument Sans'">Elden Ring</span><span style="font:400 22px Michroma">3:12:44</span></div></div><div style="font:700 19px Unbounded;color:#F1F4F8">Broadcast</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Fully inflated orbs and rims with a black keyline; each row floats as its own capsule over the game.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:300px;border-radius:30px;background:radial-gradient(ellipse at 50% 70%,#1E242C,#030405 70%);display:flex;align-items:center;justify-content:center"><span data-amb="dripsquish" style="font:900 90px/1 Unbounded;letter-spacing:-3px;background:radial-gradient(ellipse at 35% 22%,#FFFFFF 0 10%,#E9EDF2 22%,#9AA4B0 52%,#F1F4F8 64%,#6E7783 92%);-webkit-background-clip:text;background-clip:text;color:transparent;transform-origin:50% 100%">winnies</span></div><div style="font:700 19px Unbounded;color:#F1F4F8">Showcase</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Max inflation: a giant balloon-chrome wordmark that wobbles when you scroll, candy-chrome trophies raining.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="C Motion" style="padding:44px;border-radius:44px;background:#0E1015;display:flex;flex-direction:column;gap:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1.5px #2A2F37">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:800 42px Unbounded;color:#F1F4F8">Motion sketch</div>
+      <div style="display:flex;gap:12px"><button onClick="{{ onReplayWon }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:radial-gradient(ellipse at 30% 20%,#FFFFFF 0 6%,#BDF5DE 20%,#2EC98E 58%,#0A5A3B 100%);color:#04241A;font:700 15px Unbounded;cursor:pointer" style-active="transform:scale(.95,.88)">Replay Won</button><button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:radial-gradient(ellipse at 30% 20%,#fff 0 6%,#E4E9EF 20%,#8D96A3 60%,#3A4049 100%);color:#07080B;font:700 15px Unbounded;cursor:pointer" style-active="transform:scale(.95,.88)">Replay Complete</button></div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:50px minmax(0,1fr) auto;gap:16px;align-items:center;height:74px;padding:0 24px 0 12px;border-radius:37px;background:linear-gradient(180deg,#0F231B,#08130F);box-shadow:0 0 0 1.5px #2EC98E">
+      <span style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 32% 26%,#fff 0 8%,#BDF5DE 20%,#2EC98E 55%,#0A5A3B 92%);color:#04241A;font-family:'Material Symbols Rounded';font-size:24px;font-variation-settings:'FILL' 1">emoji_events</span>
+      <span style="font:700 20px 'Instrument Sans'">Celeste <span style="font-weight:400;font-size:15px;color:#9AA4B0">Farewell, golden strawberry · Won</span></span>
+      <span style="font:400 21px Michroma;color:#7FE0B5">1:02:13</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px">
+      <div><div style="font:700 17px Unbounded;color:#FFB09E;margin-bottom:8px">Tick</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Changed balloon digits drip down stretched and blurred, then squash on landing and rebound (560ms). The running orb inflates a little on every beat.</div></div>
+      <div><div style="font:700 17px Unbounded;color:#7FE0B5;margin-bottom:8px">Won</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Row inflates, flares white, sprays chrome beads and sparkles, then deflates away and re-pours at the bottom in mint chrome.</div></div>
+      <div><div style="font:700 17px Unbounded;color:#C9B8FF;margin-bottom:8px">Reduced motion · Sound</div><div style="font:400 15px/1.5 'Instrument Sans';color:#B4BCC7">Static: mint orb, trophy icon, "Won" word. Sound (muted): tick = glassy balloon squeak, Won = rubbery pop + shimmer, Complete = huge reverb chime with confetti hiss.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const beadStyle = (c) => ({ background: `radial-gradient(circle at 32% 26%,#fff 0 12%,${c} 55%,#111 100%)` });
+    return {
+      wonDelay: 700,
+      amb: {
+        pool: [[{ transform: 'translate(0,0) scale(1,1)' }, { transform: 'translate(80px,40px) scale(1.15,.9)' }, { transform: 'translate(-40px,60px) scale(.95,1.1)' }, { transform: 'translate(0,0) scale(1,1)' }], { duration: 16000, easing: 'ease-in-out' }],
+        float: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(-18px) scale(.96,1.04)' }, { transform: 'translateY(0) scale(1,1)' }], { duration: 4400, easing: 'ease-in-out' }],
+        sheen: [[{ backgroundPosition: '0 0%' }, { backgroundPosition: '0 100%' }], { duration: 5000, easing: 'ease-in-out', direction: 'alternate' }],
+        pulse: [[{ transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(1)' }], { duration: 1000, easing: 'ease-in-out' }],
+        twinkle: [[{ transform: 'scale(.2) rotate(0deg)', opacity: .2 }, { transform: 'scale(1) rotate(45deg)', opacity: 1, offset: .2 }, { transform: 'scale(.2) rotate(90deg)', opacity: .2, offset: .4 }, { transform: 'scale(.2)', opacity: .2 }], { duration: 3600, easing: 'ease-in-out' }],
+        dripsquish: [[{ transform: 'translateY(-50px) scale(.85,1.3)', opacity: 0, filter: 'blur(4px)' }, { transform: 'translateY(0) scale(.9,1.12)', opacity: 1, filter: 'blur(0)', offset: .3 }, { transform: 'translateY(0) scale(1.18,.82)', offset: .42 }, { transform: 'translateY(0) scale(.96,1.04)', offset: .55 }, { transform: 'none', offset: .65 }, { transform: 'none' }], { duration: 2600, easing: 'ease-in-out' }],
+      },
+      tick: (k) => [[{ transform: 'translateY(-30%) scale(.88,1.3)', filter: 'blur(4px)', opacity: .15 }, { transform: 'translateY(0) scale(.95,1.06)', filter: 'blur(0)', opacity: 1, offset: .4 }, { transform: 'scale(1.12,.86)', offset: .6 }, { transform: 'scale(.98,1.02)', offset: .8 }, { transform: 'none' }], { duration: k === 'total' ? 560 : 440, easing: 'ease-out' }],
+      beat: () => [[{ transform: 'scale(1)' }, { transform: 'scale(1.14)', offset: .35 }, { transform: 'scale(.96)', offset: .7 }, { transform: 'scale(1)' }], { duration: 520, easing: 'ease-out' }],
+      won: (el, W, ov) => {
+        el.animate([{ transform: 'none', filter: 'none' }, { transform: 'scale(1.03,1.08)', filter: 'brightness(1.8)', offset: .3 }, { transform: 'scale(1.04,1.1)', filter: 'brightness(2.2) saturate(1.4)', offset: .55 }, { transform: 'scale(.4,.05)', filter: 'brightness(1.4)', opacity: 0 }], { duration: 700, easing: 'ease-in' });
+        W.burst(el, { n: ov ? 14 : 22, shapes: ['circle', 'circle', 'star'], colors: ['#FF5B3A', '#2EC98E', '#6C4BF4', '#FFC53D', '#DDE3EA'], size: 22, spread: 260, gravity: 120, dur: 1200, ox: .5, spin: 200, style: beadStyle });
+      },
+      land: (el) => el.animate([{ transform: 'translateY(-30px) scale(.9,1.3)', opacity: 0, filter: 'blur(6px)' }, { transform: 'translateY(0) scale(1.06,.88)', opacity: 1, filter: 'blur(0)', offset: .55 }, { transform: 'scale(.98,1.03)', offset: .8 }, { transform: 'none' }], { duration: 650, easing: 'ease-out' }),
+      complete: (root, W) => {
+        const t = root.querySelector('[data-kind="total"]');
+        if (t) W.burst(t.parentElement, { n: 64, shapes: ['circle', 'star'], colors: ['#FF5B3A', '#2EC98E', '#6C4BF4', '#FFC53D', '#DDE3EA'], size: 34, spread: 640, gravity: 260, dur: 2400, spin: 300, style: beadStyle });
+        root.querySelectorAll('[data-kind="total"]').forEach((d, i) => d.animate([{ transform: 'none' }, { transform: 'translateY(-34px) scale(.9,1.2)', offset: .4 }, { transform: 'scale(1.15,.85)', offset: .7 }, { transform: 'none' }], { duration: 800, delay: i * 70, easing: 'ease-out' }));
+      },
+    };
+  }
+  skin(r) {
+    const orb = (hl, mid, dk) => `radial-gradient(circle at 32% 26%,#fff 0 8%,${hl} 20%,${mid} 55%,${dk} 94%)`;
+    const glass = 'linear-gradient(180deg,#191C23,#0F1116)';
+    const st = {
+      running: { bg: 'linear-gradient(180deg,#2A1612,#160B09)', shadow: '0 0 0 2px #FF5B3A,0 0 40px -6px rgba(255,91,58,.45),inset 0 1px 0 rgba(255,255,255,.12)', orb: orb('#FFC2B4', '#FF5B3A', '#8A1E08'), orbInk: '#1A0703', statusIcon: 'bolt', timeColor: '#FFC2B4', wordColor: '#FF9C86', gameColor: '#F1F4F8', rim: '#FF5B3A', beat: 'run' },
+      idle: { bg: glass, shadow: '0 0 0 1.5px #2A2F37,inset 0 1px 0 rgba(255,255,255,.08)', orb: orb('#C3CBD4', '#4A525E', '#14171D'), orbInk: '#E4E9EF', statusIcon: r.untouched ? 'radio_button_unchecked' : 'hourglass_empty', timeColor: r.untouched ? '#8D96A3' : '#E4E9EF', wordColor: '#8D96A3', gameColor: '#F1F4F8', rim: '#C8CFD7', beat: '' },
+      won: { bg: 'linear-gradient(180deg,#0F231B,#08130F)', shadow: '0 0 0 1.5px #1F7A57', orb: orb('#BDF5DE', '#2EC98E', '#0A5A3B'), orbInk: '#04241A', statusIcon: 'emoji_events', timeColor: '#7FE0B5', wordColor: '#7FE0B5', gameColor: '#DDF5EA', rim: '#2EC98E', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      bg: hov ? 'linear-gradient(180deg,#23272F,#14171C)' : st.bg,
+      shadow: hov ? '0 0 0 1.5px #8D96A3,0 22px 40px -12px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.16)' : st.shadow,
+      lift: hov ? 'translateY(-4px)' : 'none', gripOp: hov ? 1 : 0.35, z: r.menu ? 20 : 1,
+      countColor: r.full ? '#7FE0B5' : '#E4E9EF',
+      playBg: r.running ? orb('#FFC2B4', '#FF5B3A', '#8A1E08') : orb('#E4E9EF', '#8D96A3', '#2A2F37'), playInk: '#07080B', playOp: r.won ? 0.3 : 1,
+      winBg: r.won ? `radial-gradient(ellipse at 30% 20%,#fff 0 6%,#BDF5DE 20%,#2EC98E 58%,#0A5A3B 100%)` : '#0B0D11', winInk: r.won ? '#04241A' : '#E4E9EF', winFill: r.won ? 1 : 0,
+      winSh: r.won ? 'inset 0 -5px 8px rgba(0,0,0,.3)' : '0 0 0 1.5px #5D6570',
+      moreBg: r.menu || hov ? '#22262E' : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? 'rgba(255,255,255,.08)' : 'transparent', color: m.danger ? '#FF9C86' : '#E4E9EF' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.45em' : '0.82em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.36em' : '0.74em' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, w: p.on ? '44px' : '16px', bg: p.on ? 'radial-gradient(ellipse at 30% 20%,#fff 0 10%,#E4E9EF 30%,#8D96A3 80%)' : '#3A4049' })) };
+  }
+}
+</script>
+</body>
+</html>

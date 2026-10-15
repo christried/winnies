@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Chakra+Petch:wght@500;600;700&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#06021A}a{color:#2DE2E6}a:hover{color:#FF3EA5}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#06021A;font-family:'Chakra Petch',sans-serif;color:#F2EEFF">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="d5" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#FF9AD0,#FF3EA5 45%,#8A0F55);border:8px solid transparent;box-sizing:border-box;box-shadow:0 0 0 6px #C9B6E8,0 0 40px #FF3EA5;font:400 40px 'Press Start 2P';color:#0A0420">05</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 96px/1 Audiowide;font-style:italic;background:linear-gradient(180deg,#E8F7FF 0%,#7FD4FF 40%,#FFFFFF 49%,#3A1060 51%,#FF4FB0 70%,#FFD0EC 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(255,62,165,.6))">Chrome Cyberdelia</div>
+      <div style="font:600 24px/1.3 'Chakra Petch';color:#C9B6E8">Parents: chrome + cyberdelia · Native mode: dark · Chrome objects floating on a neon void. Arcade cabinet energy: every Winnie is a high-score run.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="05 Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;border-radius:16px;box-sizing:border-box;padding:28px 48px;display:flex;flex-direction:column;gap:20px;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 42%,#5A0F6A 61%,#0A0420 61.2%)">
+  <div style="position:absolute;right:120px;top:360px;width:420px;height:420px;border-radius:50%;background:linear-gradient(180deg,#FFD23F,#FF8A3D 45%,#FF3EA5);-webkit-mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);opacity:.85;pointer-events:none"></div>
+  <div style="position:absolute;left:-30%;right:-30%;bottom:0;height:39%;perspective:500px;pointer-events:none;overflow:hidden">
+    <div data-amb="grid" style="position:absolute;inset:-40% 0 0 0;transform:rotateX(62deg);transform-origin:50% 0;background:linear-gradient(90deg,rgba(45,226,230,.8) 2px,rgba(0,0,0,0) 2px) 0 0/80px 80px,linear-gradient(0deg,rgba(255,62,165,.85) 2px,rgba(0,0,0,0) 2px) 0 0/80px 80px"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:radial-gradient(#fff 1px,rgba(0,0,0,0) 1.5px) 0 0/120px 120px;opacity:.5;pointer-events:none"></div>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:96px;padding:0 20px 0 28px;border:6px solid transparent;border-radius:20px;background:linear-gradient(90deg,#3A0A5E,#8A1A7A 50%,#3A0A5E) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box;box-shadow:0 0 40px rgba(255,62,165,.45),inset 0 0 30px rgba(255,62,165,.5)">
+    <span data-amb="neon" style="font:400 56px/1 Audiowide;font-style:italic;letter-spacing:2px;background:linear-gradient(180deg,#E8F7FF 0%,#7FD4FF 40%,#FFFFFF 49%,#3A1060 51%,#FF4FB0 70%,#FFD0EC 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px #FF3EA5)">WINNIES</span>
+    <button style="margin-left:22px;display:flex;align-items:center;gap:12px;height:46px;padding:0 10px 0 18px;border:2px solid #2DE2E6;border-radius:8px;background:#05010F;color:#F2EEFF;font:700 17px 'Chakra Petch';cursor:pointer;box-shadow:0 0 12px rgba(45,226,230,.5)">KITTY VS. THE WORLD<span style="font:400 11px 'Press Start 2P';color:#2DE2E6">03.10.26</span><span style="font-family:'Material Symbols Sharp';font-size:24px">expand_more</span></button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:46px;padding:0 20px;border:0;border-radius:23px;background:linear-gradient(180deg,#FFFFFF,#BFC6D8 40%,#5A5080 52%,#E6E9F0 60%,#FFFFFF);color:#0A0420;font:700 17px 'Chakra Petch';cursor:pointer;box-shadow:0 4px 0 #2A2050,0 0 16px rgba(255,255,255,.3)" style-active="transform:translateY(4px);box-shadow:0 0 0 #2A2050"><span style="font-family:'Material Symbols Sharp';font-size:20px">link</span>SHARE</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;gap:6px">
+      <span title="Light" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #C9B6E8;color:#C9B6E8;font-family:'Material Symbols Sharp';font-size:20px;box-sizing:border-box">light_mode</span>
+      <span title="System" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #C9B6E8;color:#C9B6E8;font-family:'Material Symbols Sharp';font-size:20px;box-sizing:border-box">contrast</span>
+      <span title="Dark" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2DE2E6;color:#0A0420;font-family:'Material Symbols Sharp';font-size:20px;font-variation-settings:'FILL' 1;box-shadow:0 0 14px #2DE2E6">dark_mode</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="display:flex;align-items:center;gap:10px;padding-left:8px"><span style="font:400 10px/1.6 'Press Start 2P';color:#FFD23F;text-align:right">PLAYER 1<br><span style="color:#F2EEFF">KITTY</span></span><span style="width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#9AF6F8,#2DE2E6 45%,#0A6A70);display:flex;align-items:center;justify-content:center;font:400 16px 'Press Start 2P';color:#0A0420;box-shadow:0 0 0 3px #E6E9F0">K</span></div>
+  </nav>
+
+  <section style="position:relative;border:10px solid transparent;border-radius:30px;background:linear-gradient(#05010F,#05010F) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box;box-shadow:0 30px 60px -20px rgba(0,0,0,.9),0 0 50px rgba(45,226,230,.25)">
+    <div style="position:absolute;inset:0;border-radius:20px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 2px,rgba(0,0,0,0) 2px 4px);pointer-events:none"></div>
+    <div style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 300px;gap:32px;align-items:center;padding:24px 30px">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <span style="font:400 12px 'Press Start 2P';color:#FFD23F">WINNIE · CREATED 03.10.26</span>
+        <h1 style="margin:0;font:700 44px/1.05 'Chakra Petch';text-transform:uppercase;color:#FFFFFF;text-shadow:0 0 18px rgba(255,62,165,.6);text-wrap:pretty">Kitty vs. the world</h1>
+        <span style="align-self:flex-start;display:flex;align-items:center;gap:8px;padding:6px 12px;border:2px solid #FF3EA5;border-radius:6px;font:700 15px 'Chakra Petch';color:#FF8AC8;box-shadow:0 0 12px rgba(255,62,165,.5)"><span data-amb="blink" style="width:10px;height:10px;background:#FF3EA5;box-shadow:0 0 8px #FF3EA5"></span>{{ runningLabel }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+        <span style="font:400 14px 'Press Start 2P';color:#2DE2E6">TIME</span>
+        <div aria-label="Total Timer" style="display:flex;font:400 64px/1 'Press Start 2P';color:#FFFFFF;text-shadow:0 0 14px #2DE2E6,0 0 34px rgba(45,226,230,.7)">
+          <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font:400 14px 'Press Start 2P';color:#FFD23F">STAGE</span>
+        <span style="font:400 20px/1.3 'Press Start 2P';color:#fff">{{ wonCount }}/{{ totalCount }} WON</span>
+        <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;height:18px"><sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8"><span style="background:{{ b.bg }};box-shadow:{{ b.glow }}"></span></sc-for></div>
+        <span style="font:600 15px 'Chakra Petch';color:#C9B6E8">{{ summary }}</span>
+      </div>
+    </div>
+    <div style="position:relative;display:flex;align-items:center;gap:26px;padding:16px 30px 22px;border-top:2px solid #2A1A5A">
+      <button onClick="{{ onTotal }}" style="display:flex;align-items:center;gap:16px;border:0;background:transparent;color:#F2EEFF;cursor:pointer;padding:0">
+        <span style="width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 38% 30%,#FFB0DA,#FF3EA5 45%,#8A0F55 90%);box-shadow:0 0 0 6px #C9B6E8,0 0 0 9px #2A2050,0 10px 0 6px #5A0F3A,0 0 30px rgba(255,62,165,.6);color:#0A0420;font-family:'Material Symbols Sharp';font-size:40px;font-variation-settings:'FILL' 1" style-active="transform:translateY(6px)">{{ totalBtnIcon }}</span>
+        <span style="font:400 16px 'Press Start 2P'">{{ totalBtnLabel }}</span>
+      </button>
+      <div style="flex:1"></div>
+      <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}"><span data-amb="blink" style="font:400 14px 'Press Start 2P';color:#FFD23F">PRESS START TO RESUME</span></sc-if>
+      <sc-if value="{{ live }}" hint-placeholder-val="{{ true }}"><span style="font:400 14px 'Press Start 2P';color:#FF8AC8">GAME IN PROGRESS</span></sc-if>
+      <button aria-label="More" style="width:54px;height:54px;border:0;border-radius:50%;background:radial-gradient(circle at 38% 30%,#FFFFFF,#BFC6D8 45%,#4A4070);box-shadow:0 0 0 4px #2A2050,0 6px 0 3px #1A1040;color:#0A0420;cursor:pointer;font-family:'Material Symbols Sharp';font-size:28px">more_horiz</button>
+    </div>
+    <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;margin:0 30px 22px;padding:16px;border:3px solid #FFD23F;text-align:center;font:400 22px 'Press Start 2P';color:#FFD23F;text-shadow:0 0 14px #FFD23F">STAGE CLEAR! COMPLETE · ALL CHALLENGES WON <span style="font:600 13px 'Chakra Petch'">(new copy)</span></div>
+    </sc-if>
+  </section>
+
+  <section style="position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid #2DE2E6;border-radius:14px;background:rgba(5,1,15,.92);box-shadow:0 0 18px rgba(45,226,230,.35)">
+    <span style="font:400 11px/1.5 'Press Start 2P';color:#2DE2E6;width:96px">NEW<br>CHAL&shy;LENGE</span>
+    <div style="flex:1.1;height:48px;border-radius:8px;border:2px solid #4A3A8A;background:#0A0420;display:flex;align-items:center;padding:0 16px;font:600 17px 'Chakra Petch';color:#A99BD0">Game</div>
+    <div style="flex:1.5;height:48px;border-radius:8px;border:2px solid #4A3A8A;background:#0A0420;display:flex;align-items:center;padding:0 16px;font:600 17px 'Chakra Petch';color:#A99BD0">Win Condition (optional)</div>
+    <button style="display:flex;align-items:center;gap:6px;height:48px;padding:0 16px;border:2px solid #C9B6E8;border-radius:8px;background:transparent;color:#F2EEFF;font:700 15px 'Chakra Petch';cursor:pointer"><span style="font-family:'Material Symbols Sharp';font-size:20px">add</span>COUNTER</button>
+    <div style="width:100px;height:48px;border-radius:8px;border:2px solid #4A3A8A;background:#0A0420;opacity:.5;display:flex;align-items:center;padding:0 14px;font:600 17px 'Chakra Petch';color:#A99BD0">Target</div>
+    <button style="display:flex;align-items:center;gap:8px;height:48px;padding:0 20px;border:0;border-radius:24px;background:radial-gradient(circle at 40% 30%,#FFF1A8,#FFD23F 50%,#B8860B);color:#0A0420;font:700 16px 'Chakra Petch';cursor:pointer;box-shadow:0 4px 0 #6A4A00,0 0 16px rgba(255,210,63,.5)" style-active="transform:translateY(4px);box-shadow:none"><span style="font-family:'Material Symbols Sharp';font-size:22px;font-variation-settings:'FILL' 1">toll</span>ADD CHALLENGE</button>
+  </section>
+
+  <section style="position:relative;border:2px solid #FF3EA5;border-radius:16px;background:rgba(5,1,15,.94);box-shadow:0 0 24px rgba(255,62,165,.35)">
+    <div style="display:grid;grid-template-columns:22px 70px minmax(0,1fr) 196px 140px 48px 132px 40px;gap:14px;align-items:center;height:44px;padding:0 14px;border-bottom:2px solid #2A1A5A;font:400 11px 'Press Start 2P';color:#FFD23F">
+      <span></span><span>RANK</span><span>GAME / WIN CONDITION</span><span style="text-align:right">COUNTER</span><span style="text-align:right">TIME</span><span></span><span></span><span></span>
+    </div>
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:22px 70px minmax(0,1fr) 196px 140px 48px 132px 40px;gap:14px;align-items:center;height:68px;padding:0 14px;border-bottom:1px solid #2A1A5A;background:{{ r.bg }};box-shadow:{{ r.shadow }}" style-hover="background:rgba(45,226,230,.12)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Sharp';font-size:22px;color:#A99BD0;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span data-beat="{{ r.beat }}" style="font:400 16px 'Press Start 2P';color:{{ r.rankColor }};text-shadow:0 0 10px {{ r.rankColor }}">{{ r.rank }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <span title="{{ r.statusWord }}" style="flex:none;display:flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:4px;background:{{ r.statusBg }};color:{{ r.statusColor }};font:700 13px 'Chakra Petch';letter-spacing:1px"><span style="font-family:'Material Symbols Sharp';font-size:16px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span>
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;height:24px;padding:0 8px 0 4px;border-radius:4px;background:linear-gradient(180deg,#FFFFFF,#BFC6D8 45%,#6A6090 55%,#E6E9F0);color:#0A0420;font:700 13px 'Chakra Petch'"><span style="font-family:'Material Symbols Sharp';font-size:16px;font-variation-settings:'FILL' 1">push_pin</span>PINNED</span></sc-if>
+            <span style="font:700 21px/1.1 'Chakra Petch';text-transform:uppercase;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          </div>
+          <span style="font:500 15px/1.2 'Chakra Petch';color:#B9AEE0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:34px;height:34px;border:0;border-radius:50%;background:radial-gradient(circle at 38% 30%,#FFFFFF,#BFC6D8 45%,#4A4070);color:#0A0420;cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:0 3px 0 #1A1040" style-active="transform:translateY(3px);box-shadow:none">remove</button>
+            <span style="min-width:100px;height:34px;border-radius:6px;background:#0A0420;border:2px solid #4A3A8A;display:flex;align-items:center;justify-content:center;font:400 13px 'Press Start 2P';color:{{ r.countColor }}">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:34px;height:34px;border:0;border-radius:50%;background:radial-gradient(circle at 38% 30%,#9AF6F8,#2DE2E6 45%,#0A6A70);color:#0A0420;cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:0 3px 0 #064448" style-active="transform:translateY(3px);box-shadow:none">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 18px/1 'Press Start 2P';color:{{ r.timeColor }};text-shadow:{{ r.timeGlow }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;background:{{ r.playBg }};color:#0A0420;opacity:{{ r.playOp }};font-family:'Material Symbols Sharp';font-size:26px;font-variation-settings:'FILL' 1;box-shadow:0 0 0 3px #C9B6E8,0 5px 0 3px #1A1040" style-active="transform:translateY(4px)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border:2px solid {{ r.winBorder }};border-radius:21px;cursor:pointer;background:{{ r.winBg }};color:{{ r.winColor }};font:700 15px 'Chakra Petch'" style-active="transform:translateY(2px)"><span style="font-family:'Material Symbols Sharp';font-size:20px;font-variation-settings:'FILL' 1">toll</span>{{ r.winUp }}</button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:40px;height:40px;border:2px solid {{ r.moreBorder }};border-radius:50%;cursor:pointer;background:transparent;color:#F2EEFF;font-family:'Material Symbols Sharp';font-size:22px">more_vert</button>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:10px;top:62px;width:240px;padding:6px;border:4px solid transparent;border-radius:14px;background:linear-gradient(#0A0420,#0A0420) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box;box-shadow:0 0 30px rgba(255,62,165,.5)">
+            <sc-for list="{{ r.menuItems }}" as="m"><div style="display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border-radius:8px;background:{{ m.bg }};color:{{ m.color }};font:700 15px 'Chakra Petch';text-transform:uppercase"><span style="font-family:'Material Symbols Sharp';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+    <div style="display:flex;justify-content:space-between;padding:12px 16px;font:400 10px 'Press Start 2P';color:#A99BD0"><span>8 / 50 CHALLENGES</span><span>DRAG TO REORDER</span></div>
+  </section>
+</div>
+<div style="font:600 20px 'Chakra Petch';color:#A99BD0">Workspace · mid-run · 1440 · row 2 hovered, row 5 overflow menu open · click Start, Mark Won, ± to play</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="05 Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:12px">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;right:56px;top:140px;width:580px;border:8px solid transparent;border-radius:26px;background:linear-gradient(rgba(5,1,15,.95),rgba(5,1,15,.95)) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box;box-shadow:0 0 0 3px #0A0420,0 0 40px rgba(255,62,165,.55),0 30px 60px rgba(0,0,0,.6)">
+    <div style="position:absolute;inset:0;border-radius:18px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.04) 0 2px,rgba(0,0,0,0) 2px 4px);pointer-events:none"></div>
+    <div style="position:relative;padding:20px 22px 8px;display:flex;flex-direction:column;align-items:center;gap:10px;border-bottom:2px solid #2A1A5A">
+      <span style="font:400 32px/1 Audiowide;font-style:italic;background:linear-gradient(180deg,#E8F7FF 0%,#7FD4FF 40%,#FFFFFF 49%,#3A1060 51%,#FF4FB0 70%,#FFD0EC 100%);-webkit-background-clip:text;background-clip:text;color:transparent">WINNIES</span>
+      <span style="font:700 22px 'Chakra Petch';text-transform:uppercase;color:#fff">Kitty vs. the world</span>
+      <div style="display:flex;align-items:center;gap:16px"><span style="font:400 14px 'Press Start 2P';color:#2DE2E6">TIME</span>
+        <div aria-label="Total Timer" style="display:flex;font:400 46px/1 'Press Start 2P';color:#fff;text-shadow:0 0 12px #2DE2E6,0 0 28px rgba(45,226,230,.7)"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></div>
+      </div>
+    </div>
+    <div style="position:relative;padding:6px 14px">
+      <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+        <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:64px minmax(0,1fr) auto auto;gap:12px;align-items:center;height:66px;padding:0 8px;border-bottom:1px solid #2A1A5A;background:{{ r.bg }}">
+          <span style="font:400 15px 'Press Start 2P';color:{{ r.rankColor }};text-shadow:0 0 10px {{ r.rankColor }}">{{ r.rank }}</span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:4px"><span style="font:700 22px/1 'Chakra Petch';text-transform:uppercase;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span><span style="display:flex;align-items:center;gap:4px;font:700 13px 'Chakra Petch';color:{{ r.wordGlow }}"><span style="font-family:'Material Symbols Sharp';font-size:15px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span></div>
+          <span style="font:400 12px 'Press Start 2P';color:#FFD23F">{{ r.countStr }}</span>
+          <span style="display:flex;font:400 18px/1 'Press Start 2P';color:{{ r.timeColor }};text-shadow:{{ r.timeGlow }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:12px 22px 16px">
+      <span style="display:flex;gap:10px;align-items:center"><sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:14px;height:14px;transform:rotate(45deg);background:{{ p.bg }};border:2px solid #2DE2E6;box-sizing:border-box"></span></sc-for><span style="font:400 11px 'Press Start 2P';color:#2DE2E6;margin-left:6px">{{ pageLabel }}</span></span>
+      <span style="font:400 11px 'Press Start 2P';color:#FFD23F">{{ wonCount }}/{{ totalCount }} WON</span>
+    </div>
+  </div>
+</div>
+<div style="font:600 20px 'Chakra Petch';color:#A99BD0">Overlay · 1920×1080 · chrome-framed high-score screen, transparent background over gameplay stand-in · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="05 Genome" style="padding:44px;border:6px solid transparent;border-radius:28px;background:linear-gradient(#0A0420,#0A0420) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box">
+    <div style="font:400 40px Audiowide;font-style:italic;margin-bottom:28px">GENOME</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:16px;background:#05010F;display:flex;align-items:center;justify-content:center;gap:20px">
+          <span style="width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#FFB0DA,#FF3EA5 45%,#8A0F55 90%);box-shadow:0 0 0 5px #C9B6E8,0 7px 0 5px #5A0F3A"></span>
+          <span style="width:120px;height:70px;border:6px solid transparent;border-radius:14px;background:repeating-linear-gradient(180deg,#14083A 0 2px,#05010F 2px 4px) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box;box-sizing:border-box"></span>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Material</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">Chrome that reflects a synthwave sky (blue top, magenta horizon) framing CRT glass with scanlines. Controls are convex arcade buttons that physically travel.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font:700 12px 'Chakra Petch'">
+          <div style="border-radius:8px;background:#0A0420;box-shadow:inset 0 0 0 2px #2A1A5A;padding:9px;display:flex;align-items:flex-end">Void<br>#0A0420</div>
+          <div style="border-radius:8px;background:#FF3EA5;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Laser<br>#FF3EA5</div>
+          <div style="border-radius:8px;background:#2DE2E6;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Grid<br>#2DE2E6</div>
+          <div style="border-radius:8px;background:#FFD23F;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Coin<br>#FFD23F</div>
+          <div style="border-radius:8px;background:#1B0A4A;padding:9px;display:flex;align-items:flex-end">Night<br>#1B0A4A</div>
+          <div style="border-radius:8px;background:#FF8A3D;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Sunset<br>#FF8A3D</div>
+          <div style="border-radius:8px;background:#E6E9F0;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Chrome<br>#E6E9F0</div>
+          <div style="border-radius:8px;background:#C9B6E8;color:#0A0420;padding:9px;display:flex;align-items:flex-end">Lavender<br>#C9B6E8</div>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Palette</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">Outrun neon on deep violet. Laser Pink = running, Coin Gold = Won, Grid Cyan = time and structure, chrome = Pinned and secondary buttons.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:16px;background:#05010F;display:flex;align-items:center;justify-content:center;gap:20px">
+          <span style="font:400 54px/1 Audiowide;font-style:italic;background:linear-gradient(180deg,#E8F7FF 0%,#7FD4FF 40%,#FFFFFF 49%,#3A1060 51%,#FF4FB0 70%,#FFD0EC 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Aa</span><span style="font:600 44px/1 'Chakra Petch';color:#D8D0F2">Aa</span><span style="font:400 36px/1 'Press Start 2P';color:#fff;text-shadow:0 0 12px #2DE2E6">07</span>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Type</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">Audiowide Italic in chrome for display, Chakra Petch for text (uppercase for game names). Timers and ranks in Press Start 2P with cyan phosphor glow: score-counter energy.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="position:relative;height:150px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 50%,#5A0F6A 62%,#0A0420 62.5%)">
+          <div style="position:absolute;left:50%;top:22px;width:120px;height:120px;margin-left:-60px;border-radius:50%;background:linear-gradient(180deg,#FFD23F,#FF3EA5);-webkit-mask:repeating-linear-gradient(180deg,#000 0 10px,transparent 10px 14px);mask:repeating-linear-gradient(180deg,#000 0 10px,transparent 10px 14px)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(90deg,rgba(45,226,230,.8) 1px,rgba(0,0,0,0) 1px) 0 0/24px 24px,linear-gradient(0deg,rgba(255,62,165,.8) 1px,rgba(0,0,0,0) 1px) 0 0/24px 14px,#0A0420"></div>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Backdrop</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">A neon void with a striped sunset sun and an endless perspective grid scrolling toward you. Stars overhead.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:16px;background:#05010F;display:flex;align-items:center;justify-content:center">
+          <span data-amb="score" style="font:400 30px 'Press Start 2P';color:#FFD23F;text-shadow:0 0 14px #FFD23F">+1 WON</span>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Motion character</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">Arcade: digital snaps and score-rolls in 3 frames, glow flashes, buttons that clunk down, and big "+1" pop-ups.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;border-radius:16px;background:#05010F;display:flex;align-items:center;justify-content:center;gap:22px">
+          <span style="width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#FFF1A8,#FFD23F 50%,#B8860B);box-shadow:inset 0 0 0 6px #E6B520;display:flex;align-items:center;justify-content:center;font:400 14px 'Press Start 2P';color:#6A4A00">W</span>
+          <span style="font:400 14px 'Press Start 2P';color:#FFD23F">INSERT<br>COIN</span>
+          <span style="font:400 22px 'Press Start 2P';color:#FF3EA5;text-shadow:0 0 10px #FF3EA5">1ST</span>
+        </div>
+        <div style="font:400 20px Audiowide;color:#2DE2E6">Ornament / mascot</div>
+        <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">Winnie coins, rank labels (1ST…8TH), INSERT COIN / PRESS START blinkers, chrome bezels. Optional mascot: none; the cabinet is the character.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="05 Wordmark" style="padding:44px;border:6px solid transparent;border-radius:28px;display:flex;flex-direction:column;gap:28px;background:linear-gradient(#0A0420,#0A0420) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box">
+    <div style="font:400 40px Audiowide;font-style:italic">WORDMARK</div>
+    <div style="position:relative;flex:1;min-height:380px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#0A0420 0%,#1B0A4A 50%,#5A0F6A 66%,#0A0420 66.3%);display:flex;align-items:center;justify-content:center">
+      <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(90deg,rgba(45,226,230,.7) 2px,rgba(0,0,0,0) 2px) 0 0/60px 60px,linear-gradient(0deg,rgba(255,62,165,.7) 2px,rgba(0,0,0,0) 2px) 0 0/60px 30px"></div>
+      <span data-amb="neon" style="position:relative;font:400 210px/1 Audiowide;font-style:italic;letter-spacing:4px;background:linear-gradient(180deg,#E8F7FF 0%,#7FD4FF 40%,#FFFFFF 49%,#3A1060 51%,#FF4FB0 70%,#FFD0EC 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px #FF3EA5);transform:skewX(-6deg)">WINNIES</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px">
+      <div style="height:130px;border-radius:14px;background:#FF3EA5;display:flex;align-items:center;justify-content:center;font:400 52px Audiowide;font-style:italic;color:#0A0420">WINNIES</div>
+      <div style="height:130px;border-radius:14px;background:#05010F;display:flex;align-items:center;justify-content:center;font:400 30px 'Press Start 2P';color:#2DE2E6;text-shadow:0 0 12px #2DE2E6">WINNIES</div>
+      <div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2;align-self:center">Audiowide Italic, skewed, in 80s sky-chrome with a laser-pink glow, sitting on the horizon line. A pixel-font version doubles as the in-game logo.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="05 Motion" style="padding:44px;border:6px solid transparent;border-radius:28px;display:flex;flex-direction:column;gap:26px;background:linear-gradient(#0A0420,#0A0420) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box">
+    <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:400 40px Audiowide;font-style:italic">MOTION SKETCH</div>
+      <div style="display:flex;gap:14px">
+        <button onClick="{{ onReplayWon }}" style="height:50px;padding:0 22px;border:0;border-radius:25px;background:radial-gradient(circle at 40% 30%,#FFF1A8,#FFD23F 50%,#B8860B);color:#0A0420;font:700 16px 'Chakra Petch';cursor:pointer;box-shadow:0 4px 0 #6A4A00" style-active="transform:translateY(4px);box-shadow:none">REPLAY WON</button>
+        <button onClick="{{ onReplayComplete }}" style="height:50px;padding:0 22px;border:0;border-radius:25px;background:radial-gradient(circle at 38% 30%,#FFB0DA,#FF3EA5 45%,#8A0F55 90%);color:#0A0420;font:700 16px 'Chakra Petch';cursor:pointer;box-shadow:0 4px 0 #5A0F3A" style-active="transform:translateY(4px);box-shadow:none">REPLAY COMPLETE</button>
+      </div></div>
+    <div data-demo="1" style="display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:16px;align-items:center;height:70px;padding:0 18px;border:2px solid #FFD23F;border-radius:10px;background:rgba(255,210,63,.08)">
+      <span style="font:400 16px 'Press Start 2P';color:#FFD23F;text-shadow:0 0 10px #FFD23F">4TH</span>
+      <span style="font:700 21px 'Chakra Petch';text-transform:uppercase">Celeste <span style="font-weight:500;font-size:15px;text-transform:none;color:#B9AEE0">Farewell, golden strawberry</span></span>
+      <span style="font:400 18px 'Press Start 2P';color:#FFD23F">1:02:13</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div><div style="font:400 18px Audiowide;color:#2DE2E6;margin-bottom:8px">Tick</div><div style="font:500 16px/1.5 'Chakra Petch';color:#D8D0F2">Changed digits roll up like a score counter in 3 hard frames with a phosphor flare (300ms). The running rank label flashes on the beat; the grid floor scrolls forever.</div></div>
+      <div><div style="font:400 18px Audiowide;color:#FFD23F;margin-bottom:8px">Won</div><div style="font:500 16px/1.5 'Chakra Petch';color:#D8D0F2">Row flashes coin-gold three times, "+1 WON" pops off with a shower of spinning coins, then the row slides into the Won ranks from the right like a new high score entry.</div></div>
+      <div><div style="font:400 18px Audiowide;color:#FF3EA5;margin-bottom:8px">Reduced motion · Sound</div><div style="font:500 16px/1.5 'Chakra Petch';color:#D8D0F2">Static: gold rank, coin icon, WON chip. Sound (muted): tick = coin-op blip, Won = coin drop + "+1" jingle, Complete = STAGE CLEAR fanfare with synth arpeggio.</div></div>
+    </div>
+  </section>
+
+  <section data-screen-label="05 Dialects" style="padding:44px;border:6px solid transparent;border-radius:28px;display:flex;flex-direction:column;gap:24px;background:linear-gradient(#0A0420,#0A0420) padding-box,linear-gradient(180deg,#FFFFFF,#9AA3B8 30%,#2A2050 50%,#C9B6E8 70%,#FFFFFF) border-box">
+    <div style="font:400 40px Audiowide;font-style:italic">DIALECT LEAN</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="padding:26px;border:2px solid #2DE2E6;border-radius:14px"><div style="font:400 22px Audiowide;margin-bottom:10px">Workspace</div><div style="font:500 17px/1.5 'Chakra Petch';color:#D8D0F2">The cabinet's operator menu: CRT screen and table up front, the sun and grid dimmed behind, glow only on running and Won.</div></div>
+      <div style="padding:26px;border-radius:14px;background:#FF3EA5;color:#0A0420"><div style="font:400 22px Audiowide;margin-bottom:10px">Broadcast</div><div style="font:700 17px/1.5 'Chakra Petch'">A chrome-bezelled high-score screen that sits on the stream like attract mode; STAGE CLEAR takes the whole frame on Complete.</div></div>
+      <div style="padding:26px;border-radius:14px;background:linear-gradient(180deg,#FFFFFF,#BFC6D8 45%,#6A6090 52%,#E6E9F0);color:#0A0420"><div style="font:400 22px Audiowide;margin-bottom:10px">Showcase</div><div style="font:700 17px/1.5 'Chakra Petch'">Full outrun hero: fly over the grid into the sun, the wordmark chromes in, sign-in is "PRESS START".</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    return {
+      wonDelay: 650,
+      amb: {
+        grid: [[{ backgroundPosition: '0 0,0 0' }, { backgroundPosition: '0 80px,0 80px' }], { duration: 900, easing: 'linear' }],
+        blink: [[{ opacity: 1 }, { opacity: 0.15 }], { duration: 800, easing: 'steps(1,end)' }],
+        neon: [[{ filter: 'drop-shadow(0 0 10px #FF3EA5)' }, { filter: 'drop-shadow(0 0 22px #FF3EA5) brightness(1.15)' }, { filter: 'drop-shadow(0 0 10px #FF3EA5)' }, { filter: 'drop-shadow(0 0 4px #FF3EA5) brightness(.9)', offset: .93 }, { filter: 'drop-shadow(0 0 10px #FF3EA5)' }], { duration: 3000, easing: 'ease-in-out' }],
+        score: [[{ transform: 'translateY(30px) scale(.6)', opacity: 0 }, { transform: 'translateY(0) scale(1.2)', opacity: 1, offset: .2 }, { transform: 'translateY(-8px) scale(1)', opacity: 1, offset: .6 }, { transform: 'translateY(-30px)', opacity: 0 }], { duration: 1600, easing: 'steps(10,end)' }],
+      },
+      tick: (k) => [[{ transform: 'translateY(55%)', opacity: 0, filter: 'brightness(2.5)' }, { transform: 'translateY(-10%)', opacity: 1, filter: 'brightness(2)', offset: .35 }, { transform: 'none', filter: 'brightness(1.4)', offset: .7 }, { transform: 'none', filter: 'none' }], { duration: k === 'total' ? 320 : 260, easing: 'steps(3,end)' }],
+      beat: () => [[{ opacity: 1 }, { opacity: .2 }, { opacity: 1 }], { duration: 400, easing: 'steps(2,end)' }],
+      won: (el, W, ov) => {
+        el.animate([{ background: 'rgba(255,210,63,0)' }, { background: 'rgba(255,210,63,.6)' }, { background: 'rgba(255,210,63,0)' }, { background: 'rgba(255,210,63,.6)' }, { background: 'rgba(255,210,63,0)' }], { duration: 600, easing: 'steps(1,end)' });
+        W.burst(el, { n: 1, shapes: ['text:+1 WON'], colors: ['#FFD23F'], size: 30, spread: 0.1, gravity: -90, dur: 1300, ox: .5, font: "'Press Start 2P'", spin: 0, endScale: 1.3, style: { textShadow: '0 0 14px #FFD23F', whiteSpace: 'nowrap' } });
+        W.burst(el, { n: ov ? 10 : 18, shapes: ['circle'], colors: ['#FFD23F', '#FFE680', '#E6B520'], size: 22, spread: 240, gravity: 160, dur: 1100, ox: .8, up: true, cone: 2.4, style: { boxShadow: 'inset 0 0 0 4px #B8860B' } });
+      },
+      land: (el) => el.animate([{ transform: 'translateX(110%)', opacity: 0 }, { transform: 'translateX(-3%)', opacity: 1, offset: .7 }, { transform: 'none' }], { duration: 420, easing: 'steps(7,end)' }),
+      complete: (root, W) => {
+        const t = root.querySelector('[data-kind="total"]');
+        if (!t) return;
+        W.burst(t.parentElement, { n: 1, shapes: ['text:STAGE CLEAR!'], colors: ['#FFD23F'], size: 60, spread: .1, gravity: -60, dur: 2400, font: "'Press Start 2P'", spin: 0, endScale: 1.4, style: { textShadow: '0 0 24px #FF3EA5', whiteSpace: 'nowrap' } });
+        W.burst(t.parentElement, { n: 50, shapes: ['circle', 'star'], colors: ['#FFD23F', '#FF3EA5', '#2DE2E6', '#E6E9F0'], size: 26, spread: 600, gravity: 260, dur: 2000 });
+      },
+    };
+  }
+  skin(r) {
+    const ranks = ['1ST', '2ND', '3RD', '4TH', '5TH', '6TH', '7TH', '8TH'];
+    const st = {
+      running: { bg: 'rgba(255,62,165,.14)', shadow: 'inset 0 0 0 2px #FF3EA5,inset 0 0 24px rgba(255,62,165,.35)', statusBg: '#FF3EA5', statusColor: '#0A0420', statusIcon: 'play_arrow', rankColor: '#FF6FBE', timeColor: '#FFFFFF', timeGlow: '0 0 10px #FF3EA5', gameColor: '#FFFFFF', wordGlow: '#FF8AC8', beat: 'run' },
+      idle: { bg: 'transparent', shadow: 'none', statusBg: '#2A1A5A', statusColor: '#D8D0F2', statusIcon: r.untouched ? 'radio_button_unchecked' : 'pause', rankColor: '#2DE2E6', timeColor: r.untouched ? '#A99BD0' : '#E6F8FF', timeGlow: r.untouched ? 'none' : '0 0 8px rgba(45,226,230,.7)', gameColor: '#F2EEFF', wordGlow: '#B9AEE0', beat: '' },
+      won: { bg: 'rgba(255,210,63,.07)', shadow: 'none', statusBg: '#FFD23F', statusColor: '#0A0420', statusIcon: 'toll', rankColor: '#FFD23F', timeColor: '#FFD23F', timeGlow: '0 0 8px rgba(255,210,63,.6)', gameColor: '#FFF1C2', wordGlow: '#FFD23F', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      bg: hov ? 'rgba(45,226,230,.14)' : st.bg, shadow: hov ? 'inset 4px 0 0 #2DE2E6' : st.shadow,
+      rank: ranks[r.n - 1], statusUp: r.statusWord.toUpperCase(), winUp: r.winLabel.toUpperCase(),
+      gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : 1,
+      countColor: r.full ? '#FFD23F' : '#F2EEFF',
+      playBg: r.running ? 'radial-gradient(circle at 38% 30%,#FFB0DA,#FF3EA5 45%,#8A0F55 90%)' : 'radial-gradient(circle at 38% 30%,#9AF6F8,#2DE2E6 45%,#0A6A70)', playOp: r.won ? 0.3 : 1,
+      winBg: r.won ? 'radial-gradient(circle at 40% 30%,#FFF1A8,#FFD23F 50%,#B8860B)' : 'transparent', winColor: r.won ? '#0A0420' : '#FFD23F', winBorder: '#FFD23F',
+      moreBorder: r.menu || hov ? '#2DE2E6' : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? 'rgba(45,226,230,.2)' : 'transparent', color: m.danger ? '#FF6F9A' : '#F2EEFF' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.7em' : '1em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      blocks: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, bg: i < v.wonCount ? '#FFD23F' : '#2A1A5A', glow: i < v.wonCount ? '0 0 8px #FFD23F' : 'none' })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.7em' : '1em' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, bg: p.on ? '#2DE2E6' : 'transparent' })) };
+  }
+}
+</script>
+</body>
+</html>

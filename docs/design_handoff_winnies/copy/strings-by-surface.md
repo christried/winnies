@@ -1,0 +1,1029 @@
+# Strings by surface (generated)
+
+Every user-facing string found in the final screen prototypes, de-duplicated (a string appears only under the first surface that uses it). Generated mechanically from the templates and logic of each prototype, so it also contains **sample data** (game names, Winnie names, the 50-game list) and **prototype-only scenario labels** (e.g. “Share menu open”, “Field error”). Ignore those two kinds. Interpolated parts (`{name}`, counts) were stripped, so some strings end mid-sentence; the full templates are in `06-copy.md` or in the prototype source.
+
+All of these strings are new (written during this project) unless `06-copy.md` lists them as kept from the brief. Every Landing and Changelog string is a rewrite/new by definition (the brief had none).
+
+## Workspace (Phase 5 core)
+
+- v0.9.2 · beta
+- Your Winnies ·
+- Report an issue
+- Create Winnie
+- Share
+- Both links update live while you play.
+- Signed in as
+- Settings
+- Language
+- English
+- Sign out
+- Offline. Changes won’t save until you’re back.
+- Last saved 0:42 ago
+- Track every Challenge, live on stream.
+- A Winnie is your list of up to 50 gaming Challenges with one Total Timer. Sign in to make one, then put it on stream with the Overlay.
+- Watching someone’s run? Shared Views and Overlays work without an account.
+- This page wandered off.
+- winnies.app/w/kitty-vs-the-wrld
+- Go to your Workspace
+- Something broke on our side.
+- Your Winnies and timers are safe. Give it another try, and if it keeps happening, tell us.
+- Error 500 · ref 7F3A-91C2
+- Loading…
+- Welcome, kittyspeedruns!
+- A Winnie is your list of gaming Challenges, up to 50 of them, with one Total Timer that runs while you play. Name your first one and let’s get winning.
+- Name your Winnie
+- Add your Challenges
+- Put the Overlay on stream
+- Give your Winnie a name.
+- Enter saves · Esc cancels
+- won ·
+- No Challenges yet
+- Rename
+- Duplicate Winnie
+- Reset all timers
+- Delete Winnie
+- Complete
+- Every Challenge Won!
+- Share the win
+- Run it again
+- Reserved for statistics (P6)
+- Add Challenge
+- Type a game first, then add it.
+- This Winnie is full: 50 / 50 Challenges. Delete one to add another, or
+- start a new Winnie
+- Challenges
+- Create your first Challenge
+- Type a game in the field above. Add a win condition if you like, such as “All stars” or “No deaths”. Every Challenge gets its own timer.
+- Add your first Challenge
+- Game
+- Win Condition (optional)
+- Target (optional)
+- Cancel
+- Save
+- Imprint
+- Privacy Policy
+- Changelog
+- GitHub
+- winnies v0.9.2 · beta
+- Name it after the run. You can rename it any time.
+- Winnie name
+- You can create 10 Winnies per day. Try again tomorrow.
+- Today’s 10 are in the Winnie picker. The count resets at midnight.
+- Got it
+- winnies, go to your Workspace
+- Switch Winnie
+- Your Winnies
+- Running
+- Open in a new tab
+- Theme
+- Account, kittyspeedruns
+- Account
+- Loading your Winnie
+- Name your Winnie, e.g. Kitty vs. the world
+- Save name
+- Total Timer
+- More Winnie options
+- Winnie options
+- Winnie Complete
+- Reserved for statistics
+- Edit Challenge
+- e.g. No deaths
+- No counter
+- Drag to reorder
+- Pinned
+- Decrease
+- Counter
+- Increase
+- Challenge Timer
+- Challenge options
+- Footer
+- Close
+- e.g. Kitty vs. the world
+- Dismiss
+- Elden Ring
+- Malenia, no summons
+- Super Mario 64
+- All stars
+- Expert, every boss
+- Farewell, golden strawberry
+- Dark Souls III
+- Soul Level 1 Nameless King
+- Hollow Knight
+- Pantheon of Hallownest
+- Heat 16 clear
+- Tetris Effect
+- 150 lines, Marathon
+- Kitty vs. the world
+- Cozy Sunday
+- Stardew Valley
+- Pikmin 4
+- Dandori 100%
+- Every room
+- A Short Hike
+- Golden feather
+- Soulsborne gauntlet
+- Orphan of Kos, level 4
+- Demon Bell, no charm
+- Lies of P
+- Laxasia, no Specter
+- Mario marathon
+- Super Mario Odyssey
+- All moons
+- Super Mario World
+- Every exit
+- Super Mario Bros. 3
+- Retro weekend
+- Mega Man 2
+- Buster only
+- No deaths
+- No Konami code
+- Hard mode
+- Ori and the Will of the Wisps
+- Katamari Damacy
+- Spelunky 2
+- Kirby and the Forgotten Land
+- Super Meat Boy
+- Shovel Knight
+- Dead Cells
+- Pizza Tower
+- Metroid Dread
+- Portal 2
+- Hitman 3
+- Doom Eternal
+- Sonic Mania
+- Crash Bandicoot
+- Spyro the Dragon
+- Rayman Legends
+- Donkey Kong Country
+- Super Metroid
+- A Link to the Past
+- Ocarina of Time
+- Breath of the Wild
+- Neon White
+- Outer Wilds
+- Animal Well
+- Armored Core VI
+- Astro Bot
+- All bosses
+- No upgrades
+- Every collectible
+- True ending
+- The Legend of Heroes: Trails of Cold Steel IV – The End of Saga (Nightmare Mode)
+- Every boss on Nightmare without upgrades, healing items, summons or a single death
+- Fifty-game gauntlet
+- Hades marked Won. 3 / 8 done.
+- Your Overlay updates live. No need to refresh OBS.
+- Couldn’t save the new order. It’s back where it was.
+- You appear to be offline, that change was not saved.
+- The Neverending Soulslike Saga
+- Hatsune Miku: Project DIVA Mega Mix+ — Every Song on Extreme with a Perfect Rank
+- Extreme and Extra Extreme, no Help items, no Sudden Death retries allowed at all
+- Kitty vs. the world: Soulsborne edition
+- Speedrun Saturday
+-  is ready. Add your first Challenge.
+- Deleted 
+- New Winnie
+- Duplicated. Fresh timers, same Challenges.
+- Use a whole number from 1 to 9999.
+- Won Challenges stay in the Won group.
+- Pinned Challenges stay on top. Unpin to move it.
+- Remove counter
+- Add counter
+- Reset timer
+- Won · undo
+- Mark Won
+- Shared View
+- A read-only page for chat, mods and friends.
+- No Winnies yet
+- No Challenges
+- Renaming the Winnie
+- Editing a Challenge
+- Field error
+- Winnie picker open
+- Share menu open
+- Account menu open
+- Winnie overflow open
+- Challenge overflow open
+- Limit reached
+- Long content
+- Create Winnie · name required
+- Create Winnie · name too long
+- Create Winnie · daily quota
+- Create Winnie · busy
+- Delete Winnie · busy
+- Delete Winnie · error
+- Signed out
+- Signed out · redirecting
+- Signed out · two providers
+- Not found
+- Something went wrong
+- Workspace · 
+- Redirecting to 
+- Trying again…
+- Try again
+- Opening GitHub Issues in a new tab.
+- Match system
+- My first Winnie
+- Pause Winnie
+- Start Winnie
+-  Challenges Won in 
+-  on the Total Timer. Share it, or line up the next run.
+- Shows a counter like 0 / 
+- Add a number to count progress
+- Keep it to 30 characters. This one has 
+- Creating…
+- Deleting…
+- We’ll keep trying in the background.
+- Stays until you close it.
+- Saved. The new order is in.
+
+## Shared View (Phase 5 core)
+
+- Retry now
+- View only
+- This Winnie doesn’t exist.
+- The link may have been deleted by its owner.
+- winnies.app/shared/kitty-vs-the-world
+- Make your own Winnie
+- · created
+- Nothing to watch yet
+- winnies home
+- Winnie summary
+- Shared View link
+- Couldn’t copy, the link is selected, press Ctrl+C yourself or don’t, whatever.
+- Fetching the latest from kittyspeedruns.
+- Catching you up on what you missed.
+- Back live
+- Reconnecting…
+- New data arrives
+- Updated 47s ago
+- Clipboard failure
+- Shared View · 
+- 1 Challenge
+-  Challenges
+- Copied!
+- Copy link
+
+## Overlay (Phase 5 core)
+
+- Complete!
+- This Winnie doesn’t exist
+- Streamer: paste a fresh Overlay link into OBS.
+- WON!
+- Every Challenge Won ·
+- Pinned ·
+- The Legend of Zelda: Tears of the Kingdom, Master Mode Randomizer Edition
+- Every shrine and lightroot, no fast travel, chat picks the weapon every hour
+- Teenage Mutant Ninja Turtles: Shredder’s Revenge, Dimension Shellshock
+- Gnarly difficulty, solo, every Radical Mode challenge, no continues
+- Dark Souls III: The Fire Fades Edition, Game of the Year
+- Soul Level 1 Nameless King, no shields, no summons, no parries, no fun
+- Kitty vs. absolutely everyone!
+- Single page
+- Page 1 of 2
+- Just Won
+- Complete entrance
+- Complete sustained
+- Calm preset
+- Long names
+- Overlay · 
+
+## Landing
+
+- Beta
+- Now in beta · free while it lasts
+- Challenge runs, but make it a party.
+- Line up the games, start the clock, and let chat watch you suffer in real time. One timer per Challenge, one Total Timer for the whole Winnie, and an Overlay that throws confetti when you finally pull it off.
+- Sign in with Twitch
+- Soon
+- Desktop only for now. Phones, we see you. We’re working on it.
+- Won · Hades
+- How it works
+- Two words. That’s the whole manual.
+- A Winnie is the run. A Challenge is one game in it. Everything else is timers, confetti and you yelling.
+- A Challenge
+- One game plus what winning it means. Add a Win Condition like “no hits” and a Counter like 87 / 120 stars. Each Challenge gets its own Challenge Timer. Try the Counter.
+- A Winnie
+- Your whole run. A named list of up to 50 Challenges with one Total Timer ticking over all of it. Start any Challenge and the Total Timer starts too.
+- 3 / 8 won · 38%
+- Challenges get Won
+- Winnies get Complete
+- Example run
+- Kitty vs. the world, live-ish
+- A real Winnie, playing itself. Timers tick, Challenges get Won, the Overlay below reacts. Click any toggle to take the wheel.
+- Autoplay
+- Replay demo
+- Created 03.10.26
+- Every Challenge Won. Total Timer stopped at .
+- Live · kittyspeedruns
+- For streamers
+- Made for going live
+- Two links, both free. One for chat, one for OBS. Both update on their own while you play.
+- Shared View for chat
+- Read-only. Refreshes itself. Nobody has to mash F5.
+- winnies.app/shared/k1tty-vs-world
+- Overlay for OBS
+- Transparent, glanceable, and fine running for hours.
+- winnies.app/shared/k1tty-vs-world/overlay
+- Your first Winnie is 30 seconds away
+- Sign in, name it, add a game, press start. Every face from Fired up to Fuming is included. The confetti comes pre-installed.
+- Free during beta. Up to 10 new Winnies a day, which is plenty, we promise.
+- winnies v0.9.2 · beta · made by people who should be asleep
+- Main
+- winnies
+- Boop Nini
+- Winnies in action, video
+- Hero video poster · 1920 × 1080. Drop the poster frame here. The muted, looping video plays on top of it.
+- Count down
+- Count up
+- You’re driving now. Autoplay is off until you flip it back on.
+- Pause 
+- Start 
+-  is Won. Mark not won
+- Mark 
+-  Won
+- Fired up
+- Locked in
+- Running on fumes
+- Too easy
+- Landing · 
+- Redirecting to Discord…
+- Sign in with Discord
+- Redirecting…
+- Sign in
+- Twitch sign-in is still in the oven. Discord works today.
+- Pause video
+- Play video
+- Unmute video
+- Mute video
+- Playing · muted
+- Playing · sound on
+- Paused · reduced motion
+- Won. Mark not won
+- Required. Any game, any length.
+- Win Condition
+- Optional. What “done” means.
+- Optional. Count / Target, typeable.
+- Its own stopwatch.
+- Won toggle
+- Flip it when you’ve done it.
+- 1 to 30 characters of pure intent.
+- Runs while any Challenge runs.
+- Won / total, as a percentage.
+- Pinned on top, Won sink down.
+- Kitty is playing. Click any toggle to take over.
+- Transparent background
+- Sits right on your gameplay. No box, no chroma key.
+- Long Winnies flip pages by themselves. Dots show where you are.
+- WON! stamp
+- Mark it Won in your Workspace and chat sees it seconds later.
+- Complete, once
+- The big one fires once per Winnie. Reloading OBS won’t replay it.
+- Updated just now
+- Copied. It’s Kitty’s demo Winnie, so chat will be very confused.
+- Copied. Demo link though, so maybe don’t put it in your real OBS.
+- Copy Overlay link
+- Copy your Overlay link
+- It lives in the Share menu of every Winnie.
+- Add a Browser Source
+- In OBS, paste the link and set it to 1920 × 1080. Leave the background alone, it’s already transparent.
+- Go live
+- It keeps itself up to date for hours. Pages flip, stamps stamp, you play.
+- 5 Challenges per page
+- Live Total Timer
+- Complete celebration
+
+## Changelog
+
+- Release notes
+- Everything new in Winnies, newest first. Written by humans, mostly. Proofread by a cat, occasionally.
+- Found a bug? Tell GitHub
+- Changelog not found
+- We went to fetch the release notes and came back empty-handed. The file moved, the server sneezed, or it’s hiding in a Dark Souls III boss room and refuses to come out.
+- CHANGELOG.md · 404 Not Found
+- Back to winnies
+- Still nothing. Try once more, the second try is the lucky one.
+- Read the release notes on GitHub instead
+- Releases
+- # Changelog
+- ## 0.9.2 · 2026-10-12 · Lights out
+- - Pick your theme in the account menu. It’s remembered per user, so your other PC knows too.
+- - The Shared View follows each Viewer’s own theme. The Overlay stays transparent, because OBS does not care about your feelings.
+- ## 0.9.0 · 2026-09-28 · Hello, beta
+- The first public beta. Sign in with Discord and go.
+- ### Winnies
+- - Create a **Winnie**: a named list of up to 50 Challenges. Names are 1–30 characters, and you can make 10 Winnies a day.
+- - Rename inline with a double-click. Delete with a confirm that tells you exactly how many Challenges go down with it.
+- ### Challenges
+- - Each **Challenge** is a game plus an optional Win Condition, like “Malenia, no summons”.
+- - Pin a Challenge to keep it on top. Won Challenges sink to the bottom. Drag to reorder the rest.
+- ### Timers and counters
+- - Add a Counter with a Target to track things like 87 / 120 stars.
+- - Mark Challenges Won. Win them all and the Winnie is **Complete**. There is confetti. A worrying amount of confetti.
+- ### Sharing
+-   - Transparent background, sits right on top of gameplay.
+-   - Up to 5 Challenges per page, flipping every 10 seconds.
+- ## 0.4.0 · 2026-06-14 · The spreadsheet era
+- 1. Make one Winnie. Just one. We were scared.
+- 2. Add Challenges and start their timers by hand.
+- 3. Screenshot the whole thing and paste it into OBS as your “overlay”.
+- - No sharing, no counters, no dark theme, no regrets.
+- - Thanks to everyone who sent bug reports at 4 a.m. You know who you are. Go to bed.
+- First beta
+- Closed alpha
+- Opening that issue on GitHub in a new tab.
+- Opening GitHub issues in a new tab. Be nice in there.
+- Opening GitHub in a new tab.
+- Copy link to 
+- Coming up
+- Changelog · 
+- That goes to the homepage. Which is the next phase. Patience.
+
+## Link-preview cards (OG)
+
+- winnies.app
+- Free for streamers
+- ’s Winnie
+- Live now · watch along
+- Paused · watch along
+
+## P6a · Workspace planned features
+
+- sticky_note_2
+- Click to rename
+- Winnie settings
+- Save · Enter
+- Cancel · Esc
+- Drag to reorder, or press Space
+- More options for 
+- Track losses
+- Stop tracking losses
+- Add note
+- Edit note
+- Note (optional)
+- Anything chat should know. Shows on the Shared View.
+- Shift+Enter for a new line
+- Winnie sections
+- Needs attention
+- Drag a Player onto a Challenge
+- Everyone’s on a Challenge. Drag a Player here to bench them.
+- Manage Players
+- Put 
+-  on…
+- Back to the bench
+- Drop 
+- Drop to bench 
+- Record a loss
+- Won. Losses are locked in.
+- At target
+- Picked up
+- ↑ ↓ move · Space drops · Esc cancels
+- Press Space or Enter to pick up. Use the arrow keys to move, Space to drop, Escape to cancel.
+- Back to English. Everything stayed put.
+- Discord notifications are failing. The last 3 didn’t arrive.
+- Fix it
+- Delete 
+- winnies, zu deinem Workspace
+- Winnie wechseln
+- Deine Winnies
+- Problem melden
+- Winnie erstellen
+- Diesen Winnie teilen
+- Beide Links aktualisieren sich live, während du spielst.
+- In neuem Tab öffnen
+- Eine Nur-lesen-Seite für Chat, Mods und Freunde.
+- In OBS als Browserquelle hinzufügen. Diesen Link geheim halten.
+- Wie das System
+- Konto, kittyspeedruns
+- Angemeldet als
+- Klicken zum Umbenennen
+- Noch keine Challenges
+- Winnie starten
+- Winnie pausieren
+- Weitere Winnie-Optionen
+- Winnie duplizieren
+- Alle Timer zurücksetzen
+- Winnie löschen
+- Name des Winnies
+- Gib deinem Winnie einen Namen.
+- Enter speichert · Esc bricht ab
+- Namen speichern
+- Speichern · Enter
+- Abbrechen · Esc
+- Jede Challenge gewonnen!
+- Sieg teilen
+- Nochmal spielen
+- Siegbedingung (optional)
+- Challenge hinzufügen
+- Erst ein Spiel eintippen, dann hinzufügen.
+-  · ziehen zum Sortieren
+- Ziehen zum Sortieren oder Leertaste drücken
+- Als gewonnen markieren
+- Gewonnen · rückgängig
+- Weitere Optionen für 
+- Zähler hinzufügen
+- Zähler entfernen
+- Timer zurücksetzen
+- Niederlagen zählen
+- Niederlagen nicht zählen
+- Notiz hinzufügen
+- Notiz bearbeiten
+- Challenge bearbeiten
+- Ziel (optional)
+- Kein Zähler
+- z. B. Ohne Tode
+- Notiz (optional)
+- Alles, was der Chat wissen sollte. Erscheint in der Zuschauer-Ansicht.
+- Umschalt+Enter für neue Zeile
+- Gib ein Spiel ein, um die Challenge zu speichern.
+- Nimm eine ganze Zahl von 1 bis 9999.
+- Zeigt einen Zähler wie 0 / 
+- Zahl eintragen, um Fortschritt zu zählen
+- Bereiche des Winnies
+- Braucht Aufmerksamkeit
+- Spieler auf eine Challenge ziehen
+- Alle sind auf einer Challenge. Zieh Spieler hierher, um sie auf die Bank zu setzen.
+- Spieler verwalten
+-  setzen auf…
+- Zurück auf die Bank
+-  auf die Bank
+- auf der Bank
+- Niederlage zählen
+- Gewonnen. Niederlagen sind festgeschrieben.
+-  über dem Ziel
+- Ziel erreicht
+- ↑ ↓ verschieben · Leertaste ablegen · Esc abbrechen
+- Leertaste oder Enter hebt auf. Pfeiltasten verschieben, Leertaste legt ab, Escape bricht ab.
+- Jetzt auf Deutsch. Alles bleibt, wo es war.
+- Bleibt, bis du es schließt.
+- Wir versuchen es im Hintergrund weiter.
+- Discord-Benachrichtigungen schlagen fehl. Die letzten 3 kamen nicht an.
+- Benenn ihn nach dem Run. Du kannst ihn jederzeit umbenennen.
+- z. B. Kitty gegen den Rest der Welt
+- Heute noch 
+- Wird erstellt…
+- Maximal 30 Zeichen. Dieser hat 
+- Du kannst 10 Winnies pro Tag erstellen. Versuch es morgen wieder.
+- Die heutigen 10 findest du im Winnie-Wechsler. Der Zähler setzt sich um Mitternacht zurück.
+- Damit werden auch 
+- seine 1 Challenge
+-  gelöscht. Das lässt sich nicht rückgängig machen.
+- Das lässt sich nicht rückgängig machen.
+- Timer und Zähler verschwinden mit.
+- Wird gelöscht…
+- Nochmal versuchen
+- Gespeichert. Die neue Reihenfolge steht.
+- Dupliziert. Frische Timer, gleiche Challenges.
+-  gelöscht.
+-  ist bereit. Füg deine erste Challenge hinzu.
+- Gewonnene Challenges bleiben in der Gewonnen-Gruppe.
+- Angepinnte Challenges bleiben oben. Lösen, um sie zu verschieben.
+- Bleed build only. Chat voted no Mimic Tear either, so it’s just me and my ego.
+- BLJs allowed. Save-state cheese is not.
+- Chat picks my weapon every time I die.
+- Complete + stats
+- Settings · Players
+- Settings · Players off
+- Discord · empty
+- Discord · invalid URL
+- Discord · saved
+- Discord · test sent
+- Discord · test failed
+- Discord · failing (Workspace)
+- Discord · failing (Settings)
+- Overlay settings
+- Game Mode
+- Loss counter
+- Counter overshoot
+- Players · bench
+- Players · dragging
+- Challenge note
+- Keyboard reorder
+- Deutsch · mid-run
+- Deutsch · menu
+- Deutsch · account menu
+- Deutsch · Discord
+- Deutsch · Overlay settings
+- Deutsch · Complete
+- Workspace P6 · 
+- Winnies
+- winnies.app/overlay/k7Hq2xR9vLp3mT8w
+- Only you see these. Changes save on their own.
+- Settings sections
+- Put names on Challenges. Great for co-op, relays and couch races. Off by default.
+- Players are off, so your Challenges look exactly like before. Turn them on to add up to 8 people.
+- Pick a colour
+- Every Player gets a colour and their initial, so nobody is just a colour.
+- Player 
+- Name of Player 
+- Colour for 
+- Remove 
+- On the bench
+- Add Player
+-  / 8 Players
+- That’s 8. The couch is full.
+- How Players work
+- Add Players here. Each gets a colour and an initial.
+- Drag a Player from the bench onto a Challenge. One Challenge per Player, as many Players per Challenge as you like.
+- Viewers and the Overlay see who’s on what. Drop a Player anywhere off the list to bench them.
+- Discord notifications
+- Not set up
+- Webhook URL
+- New webhook URL
+- Save webhook
+- Checking…
+- Keep current
+- Paste a webhook URL first.
+- That’s an invite link, not a webhook. In Discord: Edit Channel → Integrations → Webhooks → Copy Webhook URL.
+- In Discord: Edit Channel → Integrations → Webhooks → Copy Webhook URL.
+- Paste the new webhook. The current one keeps working until you save.
+- Saved webhook, mostly hidden
+- Send test message
+- Sending…
+- Sent!
+- Replace webhook
+- Remove webhook
+- Test message sent. Go look, Winnies just said hi in your channel.
+- Discord didn’t take the test message.
+- It answered 404 (Unknown Webhook), so the webhook was probably deleted on Discord’s side. Replace it with a fresh one.
+- Notifications are failing
+- The last 3 didn’t reach Discord. Since 13:20 it answers 404 (Unknown Webhook). We’ll keep trying with each new event and pause after 10 misses in a row.
+- Send a message when…
+- Save a webhook first, then pick what gets posted.
+- Everything starts off. Pick at least one, or Discord stays quiet.
+- A Challenge is Won
+- One message per Won Challenge.
+- The Winnie is Complete
+- Once, when every Challenge is Won.
+- Gauntlet reset
+- When a Gauntlet starts over.
+- Confirmation failed
+- When a Win doesn’t get confirmed.
+- Comes with Game Modes
+- What gets posted
+- Turn on an event to see the message.
+- Today at 14:31
+- Watch live
+- Recent deliveries
+- Failed · 
+- Test message
+-  · Won
+- Challenges per page
+- Show timers
+- Total Timer and Challenge Timers.
+- Quieter ticks, no confetti, slower idle life. For long streams.
+- Player markers show on rows while Players are on.
+- Overlay link
+- Live preview
+- Saves on its own
+- Preview background
+- OBS picks up changes within 5 seconds. No refresh needed.
+- Win every Challenge, in any order. Losses never count against you.
+- In use
+- Coming later
+- Rules still in the oven.
+- Nur du siehst das. Änderungen speichern sich von selbst.
+- Bereiche der Einstellungen
+- Namen auf Challenges setzen. Super für Koop, Staffeln und Couch-Rennen. Standardmäßig aus.
+- Spieler sind aus, deine Challenges sehen aus wie immer. Schalte sie an, um bis zu 8 Leute hinzuzufügen.
+- Farbe wählen
+- Jeder Spieler bekommt eine Farbe und seinen Anfangsbuchstaben, damit niemand nur eine Farbe ist.
+- Spieler 
+- Name von Spieler 
+- Farbe für 
+- Auf 
+- Auf der Bank
+- Spieler hinzufügen
+-  / 8 Spieler
+- Das sind 8. Die Couch ist voll.
+- So funktionieren Spieler
+- Füg hier Spieler hinzu. Jeder bekommt eine Farbe und einen Anfangsbuchstaben.
+- Zieh Spieler von der Bank auf eine Challenge. Eine Challenge pro Spieler, beliebig viele Spieler pro Challenge.
+- Zuschauer und das Overlay sehen, wer was spielt. Lass Spieler neben der Liste los, um sie auf die Bank zu setzen.
+- Poste in einen Discord-Kanal, wenn in diesem Winnie etwas Großes passiert.
+- Nicht eingerichtet
+- Neue Webhook-URL
+- Webhook speichern
+- Wird geprüft…
+- Aktuellen behalten
+- Füg zuerst eine Webhook-URL ein.
+- Das ist ein Einladungslink, kein Webhook. In Discord: Kanal bearbeiten → Integrationen → Webhooks → Webhook-URL kopieren.
+- In Discord: Kanal bearbeiten → Integrationen → Webhooks → Webhook-URL kopieren.
+- Füg den neuen Webhook ein. Der aktuelle funktioniert, bis du speicherst.
+- Gespeicherter Webhook, größtenteils verborgen
+- Testnachricht senden
+- Wird gesendet…
+- Gesendet!
+- Webhook ersetzen
+- Diesen Webhook entfernen? Benachrichtigungen stoppen sofort.
+- Webhook entfernen
+- Testnachricht gesendet. Schau nach, Winnies hat gerade Hallo gesagt.
+- Discord hat die Testnachricht nicht angenommen.
+- Die Antwort war 404 (Unknown Webhook), der Webhook wurde wohl in Discord gelöscht. Ersetz ihn durch einen neuen.
+- Benachrichtigungen schlagen fehl
+- Die letzten 3 sind nicht bei Discord angekommen. Seit 13:20 kommt 404 (Unknown Webhook). Wir versuchen es bei jedem neuen Ereignis weiter und pausieren nach 10 Fehlschlägen am Stück.
+- Eine Nachricht senden, wenn…
+- Speichere zuerst einen Webhook und wähl dann, was gepostet wird.
+- Alles startet aus. Wähl mindestens eins, sonst bleibt Discord still.
+- Eine Challenge gewonnen ist
+- Eine Nachricht pro gewonnener Challenge.
+- Der Winnie komplett ist
+- Einmal, wenn jede Challenge gewonnen ist.
+- Gauntlet zurückgesetzt
+- Wenn ein Gauntlet von vorn beginnt.
+- Bestätigung fehlgeschlagen
+- Wenn ein Sieg nicht bestätigt wird.
+- Kommt mit Spielmodi
+- Was gepostet wird
+- Schalte ein Ereignis an, um die Nachricht zu sehen.
+- Heute um 14:31
+- Live zuschauen
+- Letzte Zustellungen
+- Fehler · 
+-  · Gewonnen
+- Challenges pro Seite
+-  pro Seite
+- Timer zeigen
+- Gesamt-Timer und Challenge-Timer.
+- Leisere Ticks, kein Konfetti, gemächlicheres Leben. Für lange Streams.
+- Spieler-Marker erscheinen, solange Spieler an sind.
+- 1920 × 1080 · transparenter Hintergrund
+- Speichert sich selbst
+- OBS übernimmt Änderungen in 5 Sekunden. Kein Neuladen nötig.
+- Ein Spielmodus ist das Regelwerk für diesen Winnie. Vorerst läuft alles auf Standard. Mehr kommt.
+- Gewinn jede Challenge, in beliebiger Reihenfolge. Niederlagen zählen nie gegen dich.
+- Kommt später
+- Die Regeln sind noch im Ofen.
+- exposure_plus_1
+- Every Challenge, ranked
+- Sort by time
+- Fastest first
+- Slowest first
+- Losses never block a Win.
+- across 1 Counter
+- on 1 Challenge, Won anyway
+- Jede Challenge im Ranking
+- Nach Zeit sortieren
+- Schnellste zuerst
+- Langsamste zuerst
+- Zu einfach
+- Niederlagen verhindern nie einen Sieg.
+- Diesmal ohne Zähler.
+- Niederlagen wurden diesmal nicht gezählt. Beim nächsten Mal pro Challenge einschalten.
+- über 1 Zähler
+- bei 1 Challenge, trotzdem gewonnen
+- 1 Niederlage
+-  Niederlagen
+
+## P6a · Shared View planned features
+
+- Note
+- Note from kittyspeedruns
+- Just watching? You never need an account for that.
+- Signed in as beanbag. Picking up where you left off.
+- Name your copy
+- Comes with you
+- Starts fresh
+- Notes come along too. Players and Discord stay with kittyspeedruns. The original never changes.
+- You’ve made 10 Winnies today, and copies count too.
+- Go to my Workspace
+- Keep watching
+- Open my Winnie
+- Signed in as beanbag
+- Close note
+- What happens next
+- Kitty vs. the world: the rematch edition
+- Note revealed
+- Play · signed out
+- Play · redirecting to sign-in
+- Play · back from sign-in
+- Play · name too long
+- Play · copying
+- Play · copy ready
+- Play · daily quota reached
+- Shared View P6 · 
+- It’s yours. Go win.
+- That’s 10 for today
+- Copied from kittyspeedruns
+- Copy “
+- Land back here
+- Give your copy a name.
+-  of 10 Winnies left today
+- Copying…
+- Make my copy
+- Games and Win Conditions
+- Their order
+- Exactly as kittyspeedruns has it
+- 1 Pin
+-  Pins
+- Still on top
+- Like 0 / 120
+- Every timer
+- Total and Challenges at 0:00
+- Counter counts
+- Back to 0, targets kept
+- Won states
+- Nothing is Won yet
+- Back to 0 where tracked
+- It’s in your Workspace with 
+-  Challenges in the same order. Every timer is at 0:00, so it’s your run now.
+- Opening your Workspace in a new tab.
+
+## P6a · Overlay planned features
+
+- Overlay P6 · 
+
+## P6b · Future features (Workspace)
+
+- v1.4 · concept
+- Back to Kitty vs. the world
+- inventory_2
+- Archive
+- Deleted Winnies nap here for 30 days. Restore one and every Challenge, timer, Counter and Win comes back exactly as you left it.
+- Restore
+- Nothing in here. Suspiciously tidy.
+- Restoring counts toward your 10 new Winnies per day. Delete forever lives in the ⋯ menu and asks first.
+- Time’s up
+- Time’s up. This Winnie is lost for good.
+- 6:00:00 ran out with 5 Challenges still open. Final score 3 / 8 won. Every timer is frozen right where it died, for the highlight reel.
+- Move to Archive
+- Games
+- Use “” as typed
+- ↑ ↓ move
+- Enter picks
+- Esc closes
+- Popular for
+- Average time other Winnies needed
+- Randomizer
+- The wheel picks the next Challenge. Every slice is a game, every colour a genre. No take-backs. Okay, one take-back.
+- Genres on the wheel
+- The wheel says ·
+- Add as Challenge
+- Spin again
+- Linked · play back-to-back · one loss resets all 3
+- Confirmation Challenge
+- Play the Confirmation Challenge, then tell us. Failed resets , but its stays on the clock.
+- Confirmed
+- Failed
+- Name
+- Time budget
+- Genres
+- Roll a new Winnie
+- Generated name · rename it if you’re boring
+- 3 of 10 new Winnies left today
+- Gauntlet over
+- · attempt 5 of 5
+- took your last attempt.
+- The whole Winnie starts over. The Total Timer keeps its time, because time doesn’t do refunds.
+- Run it back
+- See the wreckage
+- Logged in as kittyspeedruns
+- Delete forever
+- Game suggestions
+- Win Condition suggestions
+- Show average times
+- Add a Counter
+- Spin the Randomizer wheel
+- Close Randomizer
+- Decrease count
+- Increase count
+- How to start
+- Less
+- More
+- Win every Challenge. That’s it.
+- Mark every Challenge Won and the Winnie is Complete.
+- Total Timer counts up while anything runs.
+- No extra rules. Your nerves are your own problem.
+- Viewers see no ribbon. No ribbon means Standard rules.
+- One special Challenge has to confirm every win.
+- Every win has to be confirmed by beating Celeste. Fail it and that Challenge resets.
+- Pick one Challenge as the Confirmation. It never counts toward progress.
+- Failed resets that Challenge. Its time stays on the clock.
+- You pick the Confirmation Challenge after adding Challenges.
+- Viewers see a sky ribbon and “waiting to confirm” on fresh wins.
+- Shared attempts. Run out and everything resets.
+- 5 attempts for the whole Winnie. Lose the last one and everything resets.
+- One pool of attempts for the whole Winnie.
+- Record a loss on any Challenge to spend one.
+- Spend the last one and every Win, Counter and Challenge Timer resets.
+- For the whole Winnie, 1–20
+- Viewers see the attempt shields drain live, on the Shared View and the Overlay.
+- Beat it all before the clock hits zero.
+- The Total Timer counts down from your limit.
+- Challenge Timers still count up, as usual.
+- Zero means lost. Forever. No overtime, no appeals.
+- Time limit
+- Viewers see a countdown instead of a Total Timer, and it gets loud in the last minute.
+- Cursed Incremental
+- Every loss makes what’s left harder.
+- Every loss curses what’s left: Targets grow 10% and one more house rule joins in.
+- Each loss raises the Curse level by one.
+- Every open Counter Target grows by your step.
+- Every open Challenge gains the next house rule from the curse deck.
+- Curse step
+- Added to every open Target per loss
+- Viewers see the Curse level and which house rules are active.
+- Chapters 1–7
+- Genichiro, no prosthetics
+- Reach Olmec
+- Single player, any%
+- Beat Saber
+- Expert+ full combo, one song
+- Author medal, 5 campaign maps
+- Father Gascoigne, no gun
+- One boss cell clear
+- Make the Moon
+- Cadence, all zones
+- Mario Kart 8 DX
+- All 150cc cups, gold
+- 2017 · Metroidvania
+- 1.2k Winnies
+- Hollow Knight: Silksong
+- 2025 · Metroidvania
+- 486 Winnies
+- 2024 · Survival horror
+- 31 Winnies
+- 2018 · Puzzle
+- 12 Winnies
+- 2020 · Roguelike
+- 2.4k Winnies
+- Hades II
+- 2025 · Roguelike
+- 1.1k Winnies
+- 2018 · Platformer
+- 1.9k Winnies
+- 2017 · Run and gun
+- 1.4k Winnies
+- 2022 · Soulslike
+- 3.1k Winnies
+- 2016 · Soulslike
+- 2.2k Winnies
+- 1996 · Platformer
+- 2.7k Winnies
+- 640 Winnies
+- Steel Soul, no deaths
+- Radiance, no damage
+- All bosses, Radiant difficulty
+- Inkwell Isle One, A+ ranks
+- First clear
+- Any%, no glitches
+- Iudex Gundyr at Soul Level 1
+- Mario Kart 8 Deluxe
+- Doom (2016)
+- Ultra-Violence clear
+- Any%, Sonic
+- Crypt of the NecroDancer
+- Cadence, zone 1
+- Author medal, 5 maps
+- Super Mario Bros.
+- World 1-1 to 8-4, no warps
+- Kitty vs. the world 2
+- Ten Hours, No Regrets
+- Souls before brunch
+- Speedrun Sunday
+- Cozy chaos
+- Rhythm heaven or hell
+- One win at a time. Confirm the waiting one first.
+- hue-rotate(40deg) saturate(1.3)
+- Not counted
+- Waiting to confirm
+- Curse 
+- Unlocks after Celeste
+- Celeste confirms · 
+- Lost for good
+- Last minute! Counting down
+- Counting down · limit 6:00:00
+- Round and round it goes…
+- Pick at least two genres. A wheel of one is just a choice.
+- Hit Spin. Whatever it lands on, you play.
+- Start empty
+- Generate one
+- 3 Wins undone
+- 2 Counters zeroed
+- 8 Challenge Timers reset
+-       pillIcon: pill[0], pillLabel: pill[1], pillBg: pill[2], pillC: pill[3], pillSh: pill[4],
+
+## P6b · Future features (Shared View)
+
+- Cuphead
+- Expert, every boss · attempt 5 of 5
+- Cuphead took Kitty’s last attempt.
+- Everything resets: 3 Wins, 2 Counters, 8 Challenge Timers. The Total Timer keeps its 14:32:07. Stay for the comeback.
+- 12s ago
+- kittyspeedruns · created 03.10.26
+- House rules
+- Hades waiting to confirm
+- Curse 3
+- 5 attempts for the whole Winnie. Every loss spends one. Lose the last one and everything resets.
+- A win only counts once Kitty beats Celeste, the Confirmation Challenge. Fail it and that Challenge resets.
+- Every loss curses what’s left: every open Target grows 10% and one more house rule joins in.
+- Confirmation · not counted
+- Just reset
+- Time’s up · lost for good
+- Last minute!
+
+## P6b · Future features (Overlay)
+
+- Cuphead took the last attempt
+- Everything resets
+- Lost · 3 / 8

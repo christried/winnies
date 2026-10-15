@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Space+Mono:wght@400;700&family=VT323&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#06000D}a{color:#B6FF00}a:hover{color:#FF2BD6}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;box-sizing:border-box;width:3584px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#06000D;font-family:'Space Mono',monospace;color:#FFFFFF">
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+  <header id="d3" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;background:#B6FF00;display:flex;align-items:center;justify-content:center;font:400 64px/1 Bungee;color:#0B0014;box-shadow:10px 10px 0 #FF2BD6,20px 20px 0 #00F0FF;transform:rotate(-4deg)">03</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:400 100px/0.95 'Bungee Shade';color:#FF2BD6;text-shadow:6px 6px 0 #00F0FF">CYBERDELIA</div>
+      <div style="font:700 22px/1.3 'Space Mono';color:#B6FF00">Parent: cyberdelia · Native mode: dark · Neon, glitch, psychedelic web-1.0 windows. A little chaotic, on purpose.</div>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ showWs }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="03 Workspace" style="position:relative;width:1440px;height:1400px;overflow:hidden;box-sizing:border-box;padding:0 0 28px;display:flex;flex-direction:column;gap:20px;background:radial-gradient(#ffffff 1px,rgba(0,0,0,0) 1.6px) 0 0/88px 88px,radial-gradient(circle at 15% 35%,rgba(255,43,214,.28),rgba(0,0,0,0) 28%),radial-gradient(circle at 85% 75%,rgba(0,240,255,.22),rgba(0,0,0,0) 30%),repeating-conic-gradient(#170030 0 25%,#0B0014 0 50%) 0 0/56px 56px">
+  <div style="position:relative;height:40px;flex:none;overflow:hidden;background:#FFE600;border-bottom:3px solid #0B0014;display:flex;align-items:center">
+    <div data-amb="marquee" style="display:flex;gap:40px;white-space:nowrap;font:700 18px 'Space Mono';color:#0B0014">
+      <span>★ KITTY VS. THE WORLD ★ {{ runningLabel }} ★ {{ summary }} ★ ELDEN RING IS HAPPENING ★ NOBODY BLINK ★ BEST VIEWED AT 1440 ★ KITTY VS. THE WORLD ★ {{ runningLabel }} ★ {{ summary }} ★ ELDEN RING IS HAPPENING ★ NOBODY BLINK ★ BEST VIEWED AT 1440 ★</span>
+    </div>
+  </div>
+
+  <nav style="position:relative;display:flex;align-items:center;gap:18px;height:60px;padding:0 48px">
+    <span data-amb="hue" style="font:400 44px/1 'Bungee Shade';color:#FF2BD6;text-shadow:3px 3px 0 #00F0FF">WINNIES</span>
+    <button style="margin-left:24px;display:flex;align-items:center;gap:14px;height:44px;padding:0 0 0 16px;border:0;background:#000;color:#fff;font:700 16px 'Space Mono';cursor:pointer;box-shadow:inset 3px 3px 0 #3A0A6A,inset -3px -3px 0 #00F0FF">
+      Kitty vs. the world<span style="color:#B6FF00">03.10.26</span><span style="height:44px;width:44px;display:flex;align-items:center;justify-content:center;background:#7A2BFF;box-shadow:inset 3px 3px 0 #C9A0FF,inset -3px -3px 0 #2A0060;font-family:'Material Symbols Sharp';font-size:24px">arrow_drop_down</span>
+    </button>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:8px;height:44px;padding:0 20px;border:0;background:#B6FF00;color:#0B0014;font:400 18px Bungee;cursor:pointer;box-shadow:inset 3px 3px 0 #EFFFB0,inset -3px -3px 0 #4C7000,5px 5px 0 #FF2BD6" style-active="box-shadow:inset -3px -3px 0 #EFFFB0,inset 3px 3px 0 #4C7000;transform:translate(3px,3px)"><span style="font-family:'Material Symbols Sharp';font-size:22px">link</span>SHARE</button>
+    <div role="radiogroup" aria-label="Theme" style="display:flex;gap:14px;font:700 14px 'Space Mono';color:#fff">
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #00F0FF;box-sizing:border-box"></span>LIGHT</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #00F0FF;box-sizing:border-box"></span>SYSTEM</span>
+      <span style="display:flex;align-items:center;gap:6px;color:#B6FF00"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #B6FF00;box-sizing:border-box;padding:2px"><span style="display:block;width:100%;height:100%;border-radius:50%;background:#B6FF00"></span></span>DARK</span>
+    </div>
+    <div title="Logged in as kittyspeedruns" style="width:46px;height:46px;background:#FF2BD6;display:flex;align-items:center;justify-content:center;font:400 22px Bungee;color:#0B0014;box-shadow:4px 4px 0 #00F0FF">K</div>
+  </nav>
+
+  <div style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) 640px;gap:28px;padding:0 48px">
+    <section style="border:3px solid #FF2BD6;background:#12002A;box-shadow:8px 8px 0 #00F0FF">
+      <div style="height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 12px;background:#FF2BD6;color:#0B0014;font:400 16px Bungee"><span>WINNIE.EXE</span><span style="display:flex;gap:4px"><span style="width:22px;height:22px;background:#0B0014;color:#FF2BD6;font:700 14px/22px 'Space Mono';text-align:center">_</span><span style="width:22px;height:22px;background:#0B0014;color:#FF2BD6;font:700 14px/22px 'Space Mono';text-align:center">×</span></span></div>
+      <div style="padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:14px;font:700 15px 'Space Mono'">
+          <span style="color:#00F0FF">CREATED 03.10.26</span>
+          <span style="display:flex;align-items:center;gap:6px;padding:4px 10px;background:#B6FF00;color:#0B0014"><span data-amb="blink" style="width:10px;height:10px;background:#0B0014"></span>{{ runningLabel }}</span>
+          <span data-amb="wobble" style="padding:3px 8px;background:#FFE600;color:#0B0014;font:400 13px Bungee;transform:rotate(-6deg)">NEW!</span>
+        </div>
+        <h1 style="margin:0;font:400 54px/1.02 Bungee;color:#fff;text-shadow:3px 0 #FF2BD6,-3px 0 #00F0FF;text-wrap:pretty">Kitty vs. the world</h1>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div aria-hidden="true" style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;width:420px;height:26px;padding:3px;background:#000;box-shadow:inset 2px 2px 0 #3A0A6A,inset -2px -2px 0 #00F0FF">
+            <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8"><span style="background:{{ b.bg }}"></span></sc-for>
+          </div>
+          <span style="font:700 18px 'Space Mono';color:#B6FF00">{{ summary }}</span>
+        </div>
+      </div>
+    </section>
+    <section style="border:3px solid #00F0FF;background:#12002A;box-shadow:8px 8px 0 #FF2BD6">
+      <div style="height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#00F0FF;color:#0B0014;font:400 16px Bungee"><span>TOTAL_TIMER.EXE</span><span style="font:700 13px 'Space Mono'">● REC</span></div>
+      <div style="padding:6px 24px 20px;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div aria-label="Total Timer" style="display:flex;font:400 168px/0.95 VT323;color:#fff">
+          <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;text-shadow:4px 0 #FF2BD6,-4px 0 #00F0FF">{{ d.c }}</span></sc-for>
+        </div>
+        <div style="display:flex;gap:12px;width:100%">
+          <button onClick="{{ onTotal }}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border:0;background:#FFE600;color:#0B0014;font:400 22px Bungee;cursor:pointer;box-shadow:inset 4px 4px 0 #FFF6A0,inset -4px -4px 0 #8A7A00" style-active="box-shadow:inset -4px -4px 0 #FFF6A0,inset 4px 4px 0 #8A7A00"><span style="font-family:'Material Symbols Sharp';font-size:30px;font-variation-settings:'FILL' 1">{{ totalBtnIcon }}</span>{{ totalBtnLabel }}</button>
+          <button aria-label="More" style="width:56px;height:56px;border:0;background:#7A2BFF;color:#fff;cursor:pointer;font-family:'Material Symbols Sharp';font-size:28px;box-shadow:inset 4px 4px 0 #C9A0FF,inset -4px -4px 0 #2A0060">more_horiz</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+    <div style="margin:0 48px;padding:14px 20px;background:#B6FF00;color:#0B0014;font:400 30px Bungee;box-shadow:8px 8px 0 #FF2BD6">★ COMPLETE ★ EVERY CHALLENGE WON ★ TOUCH GRASS? NEVER ★ <span style="font:700 13px 'Space Mono'">(new copy)</span></div>
+  </sc-if>
+
+  <section style="position:relative;margin:0 48px;border:3px solid #B6FF00;background:#12002A;box-shadow:8px 8px 0 #7A2BFF">
+    <div style="height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#B6FF00;color:#0B0014;font:400 14px Bungee"><span>NEW_CHALLENGE.TXT</span><span style="font:700 13px 'Space Mono'">8 / 50 CHALLENGES</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:14px">
+      <div style="flex:1.1;height:46px;background:#000;box-shadow:inset 3px 3px 0 #3A0A6A,inset -3px -3px 0 #B6FF00;display:flex;align-items:center;padding:0 14px;font:700 16px 'Space Mono';color:#C9B8E8">Game_</div>
+      <div style="flex:1.5;height:46px;background:#000;box-shadow:inset 3px 3px 0 #3A0A6A,inset -3px -3px 0 #B6FF00;display:flex;align-items:center;padding:0 14px;font:400 16px 'Space Mono';color:#C9B8E8">Win Condition (optional)</div>
+      <span style="display:flex;align-items:center;gap:8px;font:700 15px 'Space Mono';color:#fff"><span style="width:20px;height:20px;border:3px solid #00F0FF;box-sizing:border-box"></span>COUNTER</span>
+      <div style="width:100px;height:46px;background:#000;opacity:.5;box-shadow:inset 3px 3px 0 #3A0A6A;display:flex;align-items:center;padding:0 12px;font:400 16px 'Space Mono';color:#C9B8E8">Target</div>
+      <button style="display:flex;align-items:center;gap:6px;height:46px;padding:0 18px;border:0;background:#FF2BD6;color:#0B0014;font:400 17px Bungee;cursor:pointer;box-shadow:inset 3px 3px 0 #FFB0F0,inset -3px -3px 0 #8A0070" style-active="box-shadow:inset -3px -3px 0 #FFB0F0,inset 3px 3px 0 #8A0070"><span style="font-family:'Material Symbols Sharp';font-size:22px">add</span>ADD CHALLENGE</button>
+    </div>
+  </section>
+
+  <section style="position:relative;margin:0 48px;border:3px solid #FFE600;background:#12002A;box-shadow:8px 8px 0 #FF2BD6">
+    <div style="height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#FFE600;color:#0B0014;font:400 14px Bungee"><span>CHALLENGES.EXE (8)</span><span style="font:700 13px 'Space Mono'">DRAG TO REORDER</span></div>
+    <div style="display:grid;grid-template-columns:24px 40px 132px minmax(0,1fr) 196px 130px 46px 128px 40px;gap:12px;align-items:center;height:32px;padding:0 12px;border-bottom:2px solid #3A0A6A;font:700 12px 'Space Mono';color:#00F0FF;letter-spacing:1px">
+      <span></span><span>#</span><span>STATUS</span><span>GAME / WIN CONDITION</span><span style="text-align:right">COUNTER</span><span style="text-align:right">TIME</span><span></span><span></span><span></span>
+    </div>
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div data-row="{{ r.id }}" style="position:relative;z-index:{{ r.z }};display:grid;grid-template-columns:24px 40px 132px minmax(0,1fr) 196px 130px 46px 128px 40px;gap:12px;align-items:center;height:64px;padding:0 12px;border-bottom:2px solid #3A0A6A;background:{{ r.bg }};outline:{{ r.outline }};outline-offset:-3px" style-hover="background:rgba(0,240,255,.12)">
+        <span aria-label="Drag to reorder" style="font-family:'Material Symbols Sharp';font-size:22px;color:#00F0FF;opacity:{{ r.gripOp }};cursor:grab">drag_indicator</span>
+        <span style="font:400 30px/1 VT323;color:#FFE600">{{ r.num }}</span>
+        <span data-beat="{{ r.beat }}" style="display:flex;align-items:center;gap:4px;height:30px;padding:0 8px;width:max-content;background:{{ r.statusBg }};color:{{ r.statusColor }};border:2px solid {{ r.statusBorder }};font:700 14px 'Space Mono'"><span style="font-family:'Material Symbols Sharp';font-size:18px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:2px;padding:1px 7px 1px 3px;background:#00F0FF;color:#0B0014;font:700 12px 'Space Mono';transform:rotate(-3deg)"><span style="font-family:'Material Symbols Sharp';font-size:15px;font-variation-settings:'FILL' 1">push_pin</span>PINNED</span></sc-if>
+            <span style="font:400 20px/1.1 Bungee;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          </div>
+          <span style="font:400 15px/1.2 'Space Mono';color:#C9B8E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <sc-if value="{{ r.hasCounter }}">
+            <button onClick="{{ r.onDec }}" aria-label="Decrease" style="width:32px;height:32px;border:0;background:#7A2BFF;color:#fff;cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:inset 2px 2px 0 #C9A0FF,inset -2px -2px 0 #2A0060" style-active="box-shadow:inset -2px -2px 0 #C9A0FF,inset 2px 2px 0 #2A0060">remove</button>
+            <span style="min-width:96px;height:34px;background:#000;box-shadow:inset 2px 2px 0 #3A0A6A;display:flex;align-items:center;justify-content:center;font:400 28px/1 VT323;color:{{ r.countColor }}">{{ r.countStr }}</span>
+            <button onClick="{{ r.onInc }}" aria-label="Increase" style="width:32px;height:32px;border:0;background:#7A2BFF;color:#fff;cursor:pointer;font-family:'Material Symbols Sharp';font-size:18px;box-shadow:inset 2px 2px 0 #C9A0FF,inset -2px -2px 0 #2A0060" style-active="box-shadow:inset -2px -2px 0 #C9A0FF,inset 2px 2px 0 #2A0060">add</button>
+          </sc-if>
+        </div>
+        <span aria-label="Challenge Timer" style="display:flex;justify-content:flex-end;font:400 36px/1 VT323;color:{{ r.timeColor }}">
+          <sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for>
+        </span>
+        <button onClick="{{ r.onPlay }}" aria-label="{{ r.playLabel }}" style="width:46px;height:46px;border:0;cursor:pointer;background:{{ r.playBg }};color:#0B0014;opacity:{{ r.playOp }};font-family:'Material Symbols Sharp';font-size:28px;font-variation-settings:'FILL' 1;box-shadow:inset 3px 3px 0 rgba(255,255,255,.6),inset -3px -3px 0 rgba(0,0,0,.45)" style-active="box-shadow:inset -3px -3px 0 rgba(255,255,255,.6),inset 3px 3px 0 rgba(0,0,0,.45)">{{ r.playIcon }}</button>
+        <button onClick="{{ r.onWin }}" aria-pressed="{{ r.won }}" style="position:relative;height:42px;border:3px solid {{ r.winBorder }};cursor:pointer;background:{{ r.winBg }};color:{{ r.winColor }};font:400 15px Bungee" style-active="transform:translate(2px,2px)">{{ r.winText }}</button>
+        <button onClick="{{ r.onMenu }}" aria-label="More" style="width:40px;height:40px;border:2px solid {{ r.moreBorder }};cursor:pointer;background:transparent;color:#fff;font-family:'Material Symbols Sharp';font-size:24px">more_vert</button>
+        <sc-if value="{{ r.won }}"><span data-amb="spin" style="position:absolute;left:-18px;top:-8px;width:54px;height:54px;display:flex;align-items:center;justify-content:center;background:#FFE600;color:#0B0014;font:400 13px Bungee;clip-path:polygon(50% 0,61% 18%,82% 10%,80% 32%,100% 40%,86% 57%,98% 76%,76% 79%,70% 100%,52% 88%,32% 100%,25% 79%,3% 78%,14% 58%,0 40%,19% 31%,17% 9%,38% 18%);pointer-events:none">WON!</span></sc-if>
+        <sc-if value="{{ r.menu }}">
+          <div role="menu" style="position:absolute;right:10px;top:58px;width:240px;border:3px solid #00F0FF;background:#000;box-shadow:8px 8px 0 #FF2BD6;font:700 15px 'Space Mono'">
+            <sc-for list="{{ r.menuItems }}" as="m">
+              <div style="display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;background:{{ m.bg }};color:{{ m.color }};border-bottom:1px solid #3A0A6A"><span style="font-family:'Material Symbols Sharp';font-size:20px">{{ m.icon }}</span>{{ m.label }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </section>
+</div>
+<div style="font:700 20px 'Space Mono';color:#C9B8E8">Workspace · mid-run · 1440 · row 2 hovered, row 5 overflow menu open · click Start, Mark Won, ± to play</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showOv }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div data-screen-label="03 Overlay" style="position:relative;width:1920px;height:1080px;overflow:hidden">
+  <dc-import name="Gameplay" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;right:64px;top:130px;width:660px;transform:rotate(1.5deg);border:4px solid #00F0FF;background:#12002A;box-shadow:12px 12px 0 #FF2BD6,0 0 0 4px #0B0014">
+    <div style="height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#FF2BD6;color:#0B0014;font:400 20px Bungee"><span style="display:flex;align-items:center;gap:8px"><span data-amb="blink" style="width:14px;height:14px;background:#0B0014"></span>LIVE</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">KITTY VS. THE WORLD</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 20px 0">
+      <div aria-label="Total Timer" style="display:flex;font:400 128px/1 VT323;color:#fff">
+        <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" style="display:inline-block;width:{{ d.w }};text-align:center;text-shadow:4px 0 #FF2BD6,-4px 0 #00F0FF">{{ d.c }}</span></sc-for>
+      </div>
+      <span style="font:400 40px/1 VT323;color:#B6FF00;text-align:right">{{ wonCount }}/{{ totalCount }}<br>WON</span>
+    </div>
+    <div style="display:flex;flex-direction:column;padding:4px 14px 10px">
+      <sc-for list="{{ ovRows }}" as="r" hint-placeholder-count="5">
+        <div data-orow="{{ r.id }}" style="display:grid;grid-template-columns:118px minmax(0,1fr) auto auto;gap:14px;align-items:center;height:58px;padding:0 8px;border-top:2px solid #3A0A6A;background:{{ r.bg }}">
+          <span style="display:flex;align-items:center;gap:4px;height:32px;padding:0 8px;width:max-content;background:{{ r.statusBg }};color:{{ r.statusColor }};border:2px solid {{ r.statusBorder }};font:700 15px 'Space Mono'"><span style="font-family:'Material Symbols Sharp';font-size:18px;font-variation-settings:'FILL' 1">{{ r.statusIcon }}</span>{{ r.statusUp }}</span>
+          <span style="font:400 22px/1 Bungee;color:{{ r.gameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+          <span style="font:400 30px/1 VT323;color:#FFE600">{{ r.countStr }}</span>
+          <span style="display:flex;font:400 38px/1 VT323;color:{{ r.timeColor }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" style="display:inline-block;width:{{ d.w }};text-align:center">{{ d.c }}</span></sc-for></span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 20px;border-top:3px solid #00F0FF;font:700 16px 'Space Mono';color:#fff">
+      <sc-for list="{{ pageDots }}" as="p" hint-placeholder-count="2"><span style="width:18px;height:18px;border:3px solid #B6FF00;box-sizing:border-box;background:{{ p.bg }}"></span></sc-for>
+      <span style="margin-left:6px">PAGE {{ pageLabel }}</span><span style="flex:1"></span><span style="font:400 22px 'Bungee Shade';color:#FF2BD6">WINNIES</span>
+    </div>
+  </div>
+</div>
+<div style="font:700 20px 'Space Mono';color:#C9B8E8">Overlay · 1920×1080 · tilted pop-up window, transparent background over gameplay stand-in · page 1 of 2</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showFull }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;display:grid;grid-template-columns:1440px 1920px;gap:64px">
+  <section data-screen-label="03 Genome" style="border:3px solid #FF2BD6;background:#12002A;box-shadow:10px 10px 0 #00F0FF">
+    <div style="height:40px;display:flex;align-items:center;padding:0 16px;background:#FF2BD6;color:#0B0014;font:400 20px Bungee">GENOME.TXT</div>
+    <div style="padding:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;background:#0B0014;display:flex;align-items:center;justify-content:center;gap:16px">
+          <span style="width:110px;height:56px;background:#7A2BFF;box-shadow:inset 4px 4px 0 #C9A0FF,inset -4px -4px 0 #2A0060"></span>
+          <span style="width:110px;height:56px;border:3px solid #00F0FF;background:#12002A;box-shadow:6px 6px 0 #FF2BD6"></span>
+        </div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Material</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Flat neon panels with hard pixel bevels and solid offset shadows, like Windows 95 dropped in a blacklight club. No blur, no gradients on surfaces, ever.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font:700 11px 'Space Mono'">
+          <div style="background:#0B0014;box-shadow:inset 0 0 0 2px #3A0A6A;padding:8px;display:flex;align-items:flex-end">Void<br>#0B0014</div>
+          <div style="background:#FF2BD6;color:#0B0014;padding:8px;display:flex;align-items:flex-end">Magenta<br>#FF2BD6</div>
+          <div style="background:#B6FF00;color:#0B0014;padding:8px;display:flex;align-items:flex-end">Acid<br>#B6FF00</div>
+          <div style="background:#00F0FF;color:#0B0014;padding:8px;display:flex;align-items:flex-end">Cyan<br>#00F0FF</div>
+          <div style="background:#12002A;box-shadow:inset 0 0 0 2px #3A0A6A;padding:8px;display:flex;align-items:flex-end">Panel<br>#12002A</div>
+          <div style="background:#7A2BFF;padding:8px;display:flex;align-items:flex-end">UV<br>#7A2BFF</div>
+          <div style="background:#FFE600;color:#0B0014;padding:8px;display:flex;align-items:flex-end">Warning<br>#FFE600</div>
+          <div style="background:#C9B8E8;color:#0B0014;padding:8px;display:flex;align-items:flex-end">Haze<br>#C9B8E8</div>
+        </div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Palette</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Full-voltage neons on UV-black. Acid = running, Magenta = Won, Cyan = Pinned and structure, Yellow = alerts and counters.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;background:#0B0014;display:flex;align-items:center;justify-content:center;gap:18px">
+          <span style="font:400 56px/1 Bungee;color:#fff">Aa</span><span style="font:700 42px/1 'Space Mono';color:#C9B8E8">Aa</span><span style="font:400 76px/1 VT323;color:#fff;text-shadow:3px 0 #FF2BD6,-3px 0 #00F0FF">07</span>
+        </div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Type</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Bungee for display (Bungee Shade for the wordmark), Space Mono for text. Timers in VT323 pixel digits with a permanent cyan/magenta channel split.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;background:radial-gradient(#ffffff 1px,rgba(0,0,0,0) 1.6px) 0 0/30px 30px,radial-gradient(circle at 20% 40%,rgba(255,43,214,.4),rgba(0,0,0,0) 40%),repeating-conic-gradient(#170030 0 25%,#0B0014 0 50%) 0 0/28px 28px"></div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Backdrop</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Tiled checkerboard wallpaper, a star field and neon bloom spots, topped by a yellow scrolling marquee. Maximum GeoCities.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;background:#0B0014;display:flex;align-items:center;justify-content:center">
+          <span data-amb="glitch" style="font:400 72px/1 Bungee;color:#fff;text-shadow:4px 0 #FF2BD6,-4px 0 #00F0FF">WIN</span>
+        </div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Motion character</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Glitchy and stepped: no easing, only jumps, channel tears, strobes and blinks, like a CRT having a great day.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="height:150px;background:#0B0014;display:flex;align-items:center;justify-content:center;gap:16px">
+          <span style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;background:#FFE600;color:#0B0014;font:400 14px Bungee;clip-path:polygon(50% 0,61% 18%,82% 10%,80% 32%,100% 40%,86% 57%,98% 76%,76% 79%,70% 100%,52% 88%,32% 100%,25% 79%,3% 78%,14% 58%,0 40%,19% 31%,17% 9%,38% 18%)">WON!</span>
+          <span style="padding:4px 10px;background:#B6FF00;color:#0B0014;font:400 15px Bungee;transform:rotate(-6deg)">NEW!</span>
+          <span style="width:90px;height:22px;background:repeating-linear-gradient(45deg,#FFE600 0 10px,#0B0014 10px 20px)"></span>
+        </div>
+        <div style="font:400 22px Bungee;color:#B6FF00">Ornament / mascot</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Starbursts, NEW! badges, hazard tape, marquees, fake window chrome. No mascot: the chaos is the character.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Wordmark" style="border:3px solid #00F0FF;background:#12002A;box-shadow:10px 10px 0 #FF2BD6;display:flex;flex-direction:column">
+    <div style="height:40px;display:flex;align-items:center;padding:0 16px;background:#00F0FF;color:#0B0014;font:400 20px Bungee">WORDMARK.GIF</div>
+    <div style="padding:36px;display:flex;flex-direction:column;gap:28px;flex:1">
+      <div style="flex:1;min-height:380px;display:flex;align-items:center;justify-content:center;background:repeating-conic-gradient(#170030 0 25%,#0B0014 0 50%) 0 0/56px 56px">
+        <span data-amb="hue" style="font:400 230px/1 'Bungee Shade';color:#FF2BD6;text-shadow:10px 10px 0 #00F0FF,20px 20px 0 #B6FF00">WINNIES</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px">
+        <div style="height:130px;background:#B6FF00;display:flex;align-items:center;justify-content:center;font:400 56px Bungee;color:#0B0014">WINNIES</div>
+        <div style="height:130px;background:#000;display:flex;align-items:center;justify-content:center;font:400 56px Bungee;color:#fff;text-shadow:3px 0 #FF2BD6,-3px 0 #00F0FF">WINNIES</div>
+        <div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF;align-self:center">Bungee Shade in magenta with stacked hard echoes in cyan and acid; hue cycles slowly like a cheap animated GIF. Solid Bungee version for small sizes.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Motion" style="border:3px solid #B6FF00;background:#12002A;box-shadow:10px 10px 0 #7A2BFF">
+    <div style="height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;background:#B6FF00;color:#0B0014;font:400 20px Bungee"><span>MOTION.AVI</span>
+      <span style="display:flex;gap:6px"><button onClick="{{ onReplayWon }}" style="height:30px;padding:0 12px;border:0;background:#FF2BD6;color:#0B0014;font:400 14px Bungee;cursor:pointer">REPLAY WON</button><button onClick="{{ onReplayComplete }}" style="height:30px;padding:0 12px;border:0;background:#0B0014;color:#B6FF00;font:400 14px Bungee;cursor:pointer">REPLAY COMPLETE</button></span></div>
+    <div style="padding:36px;display:flex;flex-direction:column;gap:26px">
+      <div data-demo="1" style="position:relative;display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:16px;align-items:center;height:66px;padding:0 16px;background:#2A0040;border:2px solid #3A0A6A">
+        <span style="display:flex;align-items:center;gap:4px;height:30px;padding:0 8px;background:#FF2BD6;color:#0B0014;font:700 14px 'Space Mono'"><span style="font-family:'Material Symbols Sharp';font-size:18px;font-variation-settings:'FILL' 1">star</span>WON</span>
+        <span style="font:400 20px Bungee">Celeste <span style="font:400 14px 'Space Mono';color:#C9B8E8">Farewell, golden strawberry</span></span>
+        <span style="font:400 36px VT323;color:#FF8AE8">1:02:13</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+        <div><div style="font:400 18px Bungee;color:#00F0FF;margin-bottom:8px">Tick</div><div style="font:400 15px/1.55 'Space Mono';color:#E6DAFF">Each changed digit tears: two stepped jolts sideways with the colour channels flying apart, then snaps back (260ms, steps only). Running status chip blinks hard on the beat.</div></div>
+        <div><div style="font:400 18px Bungee;color:#FF2BD6;margin-bottom:8px">Won</div><div style="font:400 15px/1.55 'Space Mono';color:#E6DAFF">Row strobes through inverted hues, neon squares and WIN text spray out, the row teleports to the Won group with a skewed scan-in and gets a spinning WON! starburst.</div></div>
+        <div><div style="font:400 18px Bungee;color:#FFE600;margin-bottom:8px">Reduced motion · Sound</div><div style="font:400 15px/1.55 'Space Mono';color:#E6DAFF">Static: chip, star icon, WON! sticker. Sound (muted): tick = modem blip, Won = 8-bit power-up + air horn, Complete = dial-up handshake remix.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Dialects" style="border:3px solid #FFE600;background:#12002A;box-shadow:10px 10px 0 #00F0FF">
+    <div style="height:40px;display:flex;align-items:center;padding:0 16px;background:#FFE600;color:#0B0014;font:400 20px Bungee">DIALECTS.HTM</div>
+    <div style="padding:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="padding:24px;border:3px solid #00F0FF"><div style="font:400 22px Bungee;margin-bottom:10px">Workspace</div><div style="font:400 16px/1.55 'Space Mono';color:#E6DAFF">Windows stay but the wallpaper dims and the marquee pauses on hover; glitches only on ticks and Won so hours of use don't fry eyes.</div></div>
+      <div style="padding:24px;background:#FF2BD6;color:#0B0014"><div style="font:400 22px Bungee;margin-bottom:10px">Broadcast</div><div style="font:700 16px/1.55 'Space Mono'">Solid black pop-up windows with neon frames, tilted, slapped over the game like a virus warning everyone loves.</div></div>
+      <div style="padding:24px;background:#B6FF00;color:#0B0014"><div style="font:400 22px Bungee;margin-bottom:10px">Showcase</div><div style="font:700 16px/1.55 'Space Mono'">Full GeoCities: guestbook-style changelog, hit counter, under-construction tape, cursor trails, a page that never stops moving.</div></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;workspace&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'workspace'|'overlay'&quot;},&quot;overlayRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => { if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; } window.WinniesCore.mount(this, this.motion()); };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); this._wc && this._wc.stop(); }
+  motion() {
+    const SPLIT = '4px 0 #FF2BD6,-4px 0 #00F0FF';
+    return {
+      wonDelay: 620,
+      amb: {
+        marquee: [[{ transform: 'translateX(0)' }, { transform: 'translateX(-50%)' }], { duration: 22000, easing: 'linear' }],
+        blink: [[{ opacity: 1 }, { opacity: 0 }], { duration: 900, easing: 'steps(1,end)' }],
+        hue: [[{ filter: 'hue-rotate(0deg)' }, { filter: 'hue-rotate(360deg)' }], { duration: 6000, easing: 'steps(12,end)' }],
+        wobble: [[{ transform: 'rotate(-6deg) scale(1)' }, { transform: 'rotate(6deg) scale(1.15)' }, { transform: 'rotate(-6deg) scale(1)' }], { duration: 700, easing: 'steps(3,end)' }],
+        spin: [[{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 8000, easing: 'linear' }],
+        glitch: [[{ transform: 'none', textShadow: SPLIT }, { transform: 'translate(-8px,2px) skewX(-14deg)', textShadow: '10px 0 #FF2BD6,-10px 0 #00F0FF', offset: .06 }, { transform: 'translate(6px,-3px)', textShadow: '-8px 0 #B6FF00,8px 0 #FF2BD6', offset: .1 }, { transform: 'none', textShadow: SPLIT, offset: .14 }, { transform: 'none', textShadow: SPLIT }], { duration: 2000, easing: 'steps(1,end)' }],
+      },
+      tick: (k) => [[{ transform: 'none', textShadow: SPLIT }, { transform: 'translate(-6px,3px) skewX(-12deg)', textShadow: '9px 0 #FF2BD6,-9px 0 #00F0FF', offset: .3 }, { transform: 'translate(5px,-2px) skewX(8deg)', textShadow: '-7px 0 #B6FF00,7px 0 #FF2BD6', offset: .6 }, { transform: 'none', textShadow: k === 'row' ? 'none' : SPLIT }], { duration: 260, easing: 'steps(1,end)' }],
+      beat: () => [[{ filter: 'invert(1)' }, { filter: 'none' }], { duration: 300, easing: 'steps(1,end)' }],
+      won: (el, W, ov) => {
+        el.animate([{ filter: 'none', transform: 'none' }, { filter: 'invert(1) hue-rotate(90deg)', transform: 'translateX(-10px)' }, { filter: 'hue-rotate(200deg) saturate(4)', transform: 'translateX(12px) skewX(-8deg)' }, { filter: 'invert(1)', transform: 'translateX(-6px)' }, { filter: 'hue-rotate(300deg) saturate(3)', transform: 'none' }, { filter: 'none' }], { duration: 620, easing: 'steps(1,end)' });
+        W.burst(el, { n: ov ? 14 : 24, shapes: ['square', 'square', 'text:WIN', 'text:★'], colors: ['#FF2BD6', '#B6FF00', '#00F0FF', '#FFE600'], size: 18, spread: 280, gravity: 120, dur: 1000, ox: .7, font: 'Bungee', easing: 'steps(8,end)', spin: 90 });
+      },
+      land: (el) => el.animate([{ transform: 'translateX(-60%) skewX(40deg)', opacity: 0, filter: 'hue-rotate(180deg)' }, { transform: 'translateX(4%) skewX(-10deg)', opacity: 1, offset: .5 }, { transform: 'none', filter: 'none' }], { duration: 420, easing: 'steps(6,end)' }),
+      complete: (root, W) => {
+        root.animate([{ filter: 'none' }, { filter: 'invert(1)' }, { filter: 'hue-rotate(120deg)' }, { filter: 'invert(1) hue-rotate(240deg)' }, { filter: 'none' }], { duration: 900, easing: 'steps(1,end)' });
+        const t = root.querySelector('[data-kind="total"]');
+        if (t) W.burst(t.parentElement, { n: 60, shapes: ['square', 'text:WINNER!!', 'text:★', 'square'], colors: ['#FF2BD6', '#B6FF00', '#00F0FF', '#FFE600'], size: 30, spread: 640, gravity: 200, dur: 2000, font: 'Bungee', easing: 'steps(12,end)', spin: 120 });
+      },
+    };
+  }
+  skin(r) {
+    const st = {
+      running: { bg: 'rgba(182,255,0,.12)', outline: '3px solid #B6FF00', statusBg: '#B6FF00', statusColor: '#0B0014', statusBorder: '#B6FF00', statusIcon: 'play_arrow', timeColor: '#B6FF00', gameColor: '#FFFFFF', beat: 'blink' },
+      idle: { bg: 'transparent', outline: 'none', statusBg: 'transparent', statusColor: '#00F0FF', statusBorder: '#00F0FF', statusIcon: r.untouched ? 'check_box_outline_blank' : 'hourglass', timeColor: r.untouched ? '#B6A6D6' : '#FFFFFF', gameColor: '#FFFFFF', beat: '' },
+      won: { bg: 'rgba(255,43,214,.10)', outline: 'none', statusBg: '#FF2BD6', statusColor: '#0B0014', statusBorder: '#FF2BD6', statusIcon: 'star', timeColor: '#FF8AE8', gameColor: '#FFD6F6', beat: '' },
+    }[r.status];
+    const hov = r.hover && !r.won;
+    return {
+      ...st,
+      bg: hov ? 'rgba(0,240,255,.14)' : st.bg, outline: hov ? '3px dashed #00F0FF' : st.outline,
+      num: String(r.n).padStart(2, '0'), statusUp: r.statusWord.toUpperCase(),
+      gripOp: hov ? 1 : 0.4, z: r.menu ? 20 : r.won ? 2 : 1,
+      countColor: r.full ? '#FF2BD6' : '#FFE600',
+      playBg: r.running ? '#B6FF00' : '#00F0FF', playOp: r.won ? 0.3 : 1,
+      winBg: r.won ? '#FF2BD6' : 'transparent', winColor: r.won ? '#0B0014' : '#FFFFFF', winBorder: r.won ? '#FF2BD6' : '#FF2BD6',
+      winText: r.won ? 'WON!!' : 'MARK WON',
+      moreBorder: r.menu || hov ? '#00F0FF' : 'transparent',
+      menuItems: r.menuItems.map((m) => ({ ...m, bg: m.first ? '#7A2BFF' : 'transparent', color: m.danger ? '#FF5C8A' : '#FFFFFF' })),
+      td: r.td.map((d) => ({ ...d, w: d.sep ? '0.32em' : '0.5em' })),
+    };
+  }
+  renderVals() {
+    const view = this.props.view || 'full';
+    const base = { rootRef: this.rootRef, showFull: view === 'full', showWs: view !== 'overlay', showOv: view !== 'workspace' };
+    const v = this._wc && this._wc.vals();
+    if (!v) return base;
+    const sk = (r) => ({ ...r, ...this.skin(r) });
+    return { ...base, ...v, rows: v.rows.map(sk), ovRows: v.ovRows.map(sk),
+      blocks: Array.from({ length: v.totalCount }, (_, i) => ({ k: i, bg: i < v.wonCount ? '#B6FF00' : '#2A0A4A' })),
+      totalDigits: v.totalDigits.map((d) => ({ ...d, w: d.sep ? '0.3em' : '0.5em' })),
+      pageDots: v.pageDots.map((p) => ({ ...p, bg: p.on ? '#B6FF00' : 'transparent' })) };
+  }
+}
+</script>
+</body>
+</html>

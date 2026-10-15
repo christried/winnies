@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>body{margin:0;background:transparent}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-theme="{{ theme }}" data-dialect="broadcast" style="position:relative;width:1920px;height:1080px;overflow:hidden;font-family:var(--font-body);color:var(--color-text);-webkit-font-smoothing:antialiased">
+  <dc-import name="Gameplay" variant="busy" style="position:absolute;inset:0" hint-size="1920px,1080px"></dc-import>
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+
+  <sc-if value="{{ bannerOn }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;top:250px;z-index:50;display:flex;justify-content:center;pointer-events:none">
+      <div data-ovann="1" role="alert" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;padding:70px 64px 40px;border-radius:64px;background:var(--color-surface);box-shadow:0 0 0 7px var(--color-keyline),0 16px 0 3px var(--color-keyline),0 0 0 22px var(--color-danger),0 50px 90px rgba(0,0,0,.6)">
+        <div data-ovbanner="1" style="position:absolute;top:-62px;display:flex;align-items:center;gap:20px;height:124px;padding:0 54px 0 36px;border-radius:62px;background:var(--color-danger);color:var(--p-white);font:400 76px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 7px var(--color-keyline),0 14px 0 4px var(--color-keyline);transform:rotate(-3deg)"><span style="font-family:var(--font-icon);font-size:84px;font-variation-settings:'FILL' 1">swords</span>Gauntlet over</div>
+        <div style="display:flex;align-items:center;gap:22px">
+          <dc-import name="ClayFace" mood="fuming" size="96" hint-size="96px,96px"></dc-import>
+          <span style="font:400 54px/1.3 var(--font-display);white-space:nowrap">Cuphead took the last attempt</span>
+        </div>
+        <span style="display:flex;align-items:center;gap:12px;height:62px;padding:0 30px 0 20px;border-radius:31px;background:var(--color-danger-surface);color:var(--color-danger-text);font:400 30px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 4px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:38px;font-variation-settings:'FILL' 1">restart_alt</span>Everything resets</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <div data-ovwrap="1" style="position:absolute;right:48px;bottom:48px;width:660px">
+    <span data-ovtab="1" style="position:absolute;left:30px;top:-52px;z-index:2;display:inline-flex;align-items:center;gap:12px;height:62px;padding:0 26px 0 8px;border-radius:31px;background:var(--color-text);color:var(--color-surface);font:400 28px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 4px var(--color-surface),0 10px 0 0 var(--color-keyline);transform:rotate(-2deg)"><span style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ mode.disc }};color:{{ mode.ink }};font-family:var(--font-icon);font-size:32px;font-variation-settings:'FILL' 1">{{ mode.icon }}</span>{{ mode.name }}</span>
+    <div data-ovcard="1" data-amb="float" style="position:relative;box-sizing:border-box;padding:34px 22px 22px;border-radius:44px;background:{{ cardBg }};display:flex;flex-direction:column;gap:14px;box-shadow:{{ cardSh }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:0 4px 0 8px">
+        <span style="flex:1;min-width:0;font:400 28px/1.38 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kitty vs. the world</span>
+        <span style="flex:none;display:flex;align-items:center;gap:8px;height:46px;padding:0 18px 0 10px;border-radius:23px;background:{{ pillBg }};color:var(--color-on-accent);font:400 22px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1">{{ pillIcon }}</span>{{ pillText }}</span>
+      </div>
+      <div data-well="1" role="timer" aria-label="{{ timerAria }}" style="position:relative;display:flex;align-items:center;gap:14px;height:96px;padding:0 30px 0 20px;box-sizing:border-box;border-radius:48px;background:{{ wellBg }};box-shadow:{{ wellSh }};color:{{ totalC }}">
+        <span aria-hidden="true" style="flex:none;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ tIconBg }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:34px;font-variation-settings:'FILL' 1;box-shadow:0 0 0 3px var(--color-keyline)">{{ tIcon }}</span>
+        <span style="flex:none;font:800 18px/1.1 var(--font-body);color:{{ tLabelC }};text-transform:uppercase;letter-spacing:.04em">{{ tLabel }}</span>
+        <span aria-hidden="true" style="flex:1;display:flex;justify-content:flex-end;font:400 68px/1 var(--font-display)"><sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-kind="total" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+        <sc-if value="{{ lost }}" hint-placeholder-val="{{ false }}"><span data-stamp="1" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-7deg);display:flex;align-items:center;gap:10px;height:80px;padding:0 32px 0 22px;border-radius:40px;background:var(--color-danger);color:var(--p-white);font:400 44px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 5px var(--color-keyline),0 9px 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:48px;font-variation-settings:'FILL' 1">hourglass_bottom</span>Time’s up</span></sc-if>
+      </div>
+      <sc-if value="{{ mG }}" hint-placeholder-val="{{ false }}">
+        <div data-meter="1" role="img" aria-label="{{ attemptsLabel }}" style="display:flex;align-items:center;gap:14px;height:62px;padding:0 22px 0 10px;border-radius:31px;background:var(--color-danger-surface);box-shadow:0 0 0 3px var(--color-keyline)">
+          <span style="display:flex;gap:6px"><sc-for list="{{ tokens }}" as="t" hint-placeholder-count="5"><span data-token="{{ t.k }}" style="width:44px;height:44px;box-sizing:border-box;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};color:var(--color-danger-text);font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1,'wght' 700;box-shadow:{{ t.sh }};opacity:{{ t.op }}">{{ t.icon }}</span></sc-for></span>
+          <span style="flex:1;text-align:right;font:400 24px/1.4 var(--font-display);color:var(--color-danger-text);white-space:nowrap">{{ attemptsShort }}</span>
+        </div>
+      </sc-if>
+      <div role="list" style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+          <div data-orow="{{ r.id }}" role="listitem" aria-label="{{ r.aria }}" style="position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:12px;align-items:center;min-height:66px;padding:8px 20px 8px 9px;box-sizing:border-box;border-radius:33px;background:{{ r.bg }};box-shadow:{{ r.sh }}">
+            <sc-if value="{{ r.running }}"><span data-amb="ring" aria-hidden="true" style="position:absolute;inset:-6px;border-radius:39px;box-shadow:0 0 22px 6px var(--color-accent);opacity:.6;pointer-events:none"></span></sc-if>
+            <span aria-hidden="true" style="position:relative;display:flex"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="48" hint-size="48px,48px"></dc-import><sc-if value="{{ r.hasBadge }}"><span style="position:absolute;right:-7px;bottom:-5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.bBg }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:19px;font-variation-settings:'FILL' 1,'wght' 700;box-shadow:0 0 0 3px {{ r.bg }}">{{ r.bIcon }}</span></sc-if></span>
+            <span style="min-width:0;font:400 26px/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <sc-if value="{{ r.hasUsed }}"><span style="display:flex;align-items:center;gap:5px;height:40px;padding:0 14px 0 9px;border-radius:20px;background:var(--color-danger-surface);color:var(--color-danger-text);font:400 20px/1 var(--font-display);white-space:nowrap;box-shadow:0 0 0 2px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">swords</span>{{ r.used }}</span></sc-if>
+              <sc-if value="{{ r.hasCounter }}"><span style="display:flex;align-items:center;height:40px;padding:0 14px;border-radius:20px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:var(--shadow-well);font:400 21px/1 var(--font-display);white-space:nowrap">{{ r.count }} / {{ r.target }}</span></sc-if>
+            </div>
+            <span aria-hidden="true" style="display:flex;justify-content:flex-end;font:400 26px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-kind="row" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+          </div>
+        </sc-for>
+      </div>
+      <div aria-label="Page {{ pageLabel }}" style="display:flex;align-items:center;justify-content:center;gap:10px;height:20px">
+        <sc-for list="{{ dots }}" as="p" hint-placeholder-count="2"><span style="width:{{ p.w }};height:14px;border-radius:7px;background:{{ p.bg }};transition:width var(--dur-base) var(--spring-snappy)"></span></sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gauntlet&quot;,&quot;gauntlet-reset&quot;,&quot;timebox-last&quot;],&quot;default&quot;:&quot;gauntlet&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { sc: null };
+  MODES = {
+    gauntlet: { name: 'Gauntlet', icon: 'swords', disc: 'var(--p-cherry-100)', ink: 'var(--p-cherry-700)' },
+    timeboxed: { name: 'Timeboxed', icon: 'hourglass_top', disc: 'var(--p-butter-gold)', ink: 'var(--p-cocoa-900)' },
+  };
+  componentDidMount() {
+    this.setState(this.init(this.props.scenario || 'gauntlet'));
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.rootRef.current, fx: () => this.q('[data-fx]'), cfg: () => ({ amb: true, resp: true, cel: true, reduced: this.rm(), dialect: 'broadcast', calm: false, interval: 1000 }), cue: () => {} });
+      this.refresh(); this.later(() => this.refresh(), 800); this.later(() => this.intro(), 500);
+    };
+    boot();
+    this._iv = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() { clearInterval(this._iv); clearTimeout(this._bt); (this._ts || []).forEach(clearTimeout); }
+  componentDidUpdate(pp) {
+    if (pp.scenario !== this.props.scenario) { this.setState(this.init(this.props.scenario)); return; }
+    if (pp.theme !== this.props.theme) this.later(() => this.refresh(), 30); else if (this.m) this.m.syncLoops(false);
+    if (this.state.tickN !== this._lt) { this._lt = this.state.tickN; this.runTick(); }
+  }
+  q(s) { const r = this.rootRef.current; return r && r.querySelector(s); }
+  qa(s) { const r = this.rootRef.current; return r ? [...r.querySelectorAll(s)] : []; }
+  rm() { return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  refresh() { const r = this.rootRef.current; if (this.m && r) { this.m.refresh(r); this.m.syncLoops(true); } }
+  later(fn, ms) { (this._ts = this._ts || []).push(setTimeout(fn, ms)); }
+  anim(el, kf, o) { return el && !this.rm() ? el.animate(kf, o) : null; }
+  p2(n) { return String(n).padStart(2, '0'); }
+  fmt(s) { return !s ? '00:00' : Math.floor(s / 3600) + ':' + this.p2(Math.floor((s % 3600) / 60)) + ':' + this.p2(s % 60); }
+  fmtT(s) { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return h ? h + ':' + this.p2(m) + ':' + this.p2(x) : this.p2(m) + ':' + this.p2(x); }
+  digits(str, prev) { const off = prev ? prev.length - str.length : 0; return str.split('').map((c, i) => ({ k: i, c, pos: i, w: c === ':' ? 'var(--timer-colon-w)' : 'var(--timer-digit-w)', col: c === ':' ? 'var(--color-text-muted)' : 'inherit', chg: prev && prev[i + off] !== c ? '1' : '0' })); }
+  init(sc) {
+    const B = [
+      { id: 1, game: 'Elden Ring', secs: 11564, pinned: true, running: true },
+      { id: 2, game: 'Super Mario 64', count: 87, target: 120, secs: 14470 },
+      { id: 3, game: 'Cuphead', count: 12, target: 19, secs: 6482 },
+      { id: 4, game: 'Celeste', secs: 0 },
+      { id: 5, game: 'Dark Souls III', secs: 8431 },
+      { id: 6, game: 'Hollow Knight', secs: 4509, won: true },
+      { id: 7, game: 'Hades', secs: 3160, won: true },
+      { id: 8, game: 'Tetris Effect', count: 150, target: 150, secs: 2511, won: true },
+    ].map((q, i) => ({ count: null, target: null, pinned: false, running: false, won: false, used: 0, order: i, ...q }));
+    const by = (id, p) => Object.assign(B.find((x) => x.id === id), p);
+    const s = { sc, mode: sc === 'timebox-last' ? 'timeboxed' : 'gauntlet', ch: B, total: 52327, left: 0, used: 3, max: 5, banner: false, tickN: 0, page: 0, pt: 0, z: 0 };
+    if (sc === 'gauntlet') { by(1, { used: 2 }); by(3, { used: 1 }); }
+    if (sc === 'gauntlet-reset') { s.used = 0; s.banner = true; s.ch = B.map((q) => ({ ...q, won: false, running: false, secs: 0, count: q.target != null ? 0 : null })); }
+    if (sc === 'timebox-last') { [[1, 7100], [2, 4205], [3, 2882], [4, 0], [5, 1351], [6, 3130], [7, 1900], [8, 991]].forEach(([id, secs]) => by(id, { secs })); s.left = 24; }
+    return s;
+  }
+  live(s) { return s.ch.some((q) => q.running && !q.won) && !(s.mode === 'timeboxed' && s.left <= 0) && s.sc !== 'gauntlet-reset'; }
+  tick() {
+    const s = this.state; if (!s.sc) return;
+    const p = { pt: s.pt + 1 };
+    if (p.pt >= 10) { p.pt = 0; p.page = (s.page + 1) % 2; this.later(() => this.flipPage(), 20); }
+    if (s.sc === 'gauntlet-reset') { p.z = s.z + 1; if (p.z === 9) p.banner = false; if (p.z >= 16) { p.z = 0; p.banner = true; this.later(() => this.intro(), 40); } }
+    if (s.mode === 'timeboxed' && s.left <= 0) { p.z = s.z + 1; if (p.z > 8) { this.setState({ ...this.init(s.sc), page: s.page }); return; } }
+    if (this.live(s)) {
+      p.tickN = s.tickN + 1; p.ch = s.ch.map((q) => (q.running && !q.won ? { ...q, secs: q.secs + 1, _p: q.secs } : q));
+      if (s.mode === 'timeboxed') { p.left = s.left - 1; p.prevT = s.left; if (p.left === 0) this.later(() => this.onLost(), 60); } else { p.total = s.total + 1; p.prevT = s.total; }
+    }
+    this.setState(p);
+  }
+  flipPage() { this.qa('[data-orow]').forEach((el, i) => this.anim(el, [{ transform: 'rotateX(-80deg)', opacity: 0 }, { transform: 'rotateX(8deg)', opacity: 1, offset: 0.6 }, { transform: 'none', opacity: 1 }], { duration: 560, delay: i * 60, easing: 'ease-out', fill: 'backwards' })); }
+  runTick() {
+    if (!this.m) return;
+    const s = this.state;
+    const rows = this.qa('[data-kind="row"][data-chg="1"]'); if (rows.length) this.m.tick(rows, 'ov-row', 'sec');
+    const tot = this.qa('[data-kind="total"][data-chg="1"]'); if (tot.length) this.m.tick(tot, 'ov-total', 'sec', this.q('[data-well]'));
+    if (s.mode === 'timeboxed' && s.left > 0 && s.left <= 60) {
+      const k = s.left <= 10 ? 1.8 : 1;
+      this.anim(this.q('[data-well]'), [{ transform: 'none' }, { transform: `translateX(${-5 * k}px) rotate(${-1 * k}deg)`, offset: 0.2 }, { transform: `translateX(${5 * k}px) rotate(${k}deg)`, offset: 0.45 }, { transform: 'none' }], { duration: 420 });
+      this.anim(this.q('[data-glowring]'), [{ opacity: 0.3 }, { opacity: 1, offset: 0.15 }, { opacity: 0.3 }], { duration: 900 });
+    }
+  }
+  onLost() {
+    this.anim(this.q('[data-stamp]'), [{ transform: 'translate(-50%,-50%) rotate(-30deg) scale(3)', opacity: 0 }, { transform: 'translate(-50%,-50%) rotate(-7deg) scale(.9)', opacity: 1, offset: 0.6 }, { transform: 'translate(-50%,-50%) rotate(-7deg)', opacity: 1 }], { duration: 700, easing: 'cubic-bezier(.3,1.5,.5,1)' });
+    this.later(() => this.anim(this.q('[data-ovcard]'), [{ transform: 'none' }, { transform: 'translate(-12px,4px) rotate(-1deg)' }, { transform: 'translate(10px,-3px) rotate(1deg)' }, { transform: 'none' }], { duration: 460 }), 420);
+  }
+  intro() {
+    this.anim(this.q('[data-ovtab]'), [{ transform: 'translateY(40px) rotate(-12deg) scale(.6)', opacity: 0 }, { transform: 'rotate(-2deg)', opacity: 1 }], { duration: 640, easing: 'cubic-bezier(.3,1.7,.5,1)', fill: 'backwards' });
+    if (!this.state.banner) return;
+    this.anim(this.q('[data-ovann]'), [{ transform: 'scale(.3) rotate(-8deg)', opacity: 0 }, { transform: 'scale(1.06) rotate(1deg)', opacity: 1, offset: 0.55 }, { transform: 'scale(.98)', offset: 0.78 }, { transform: 'none', opacity: 1 }], { duration: 800, easing: 'cubic-bezier(.2,.9,.3,1)' });
+    this.anim(this.q('[data-ovbanner]'), [{ transform: 'scale(2.4) rotate(-16deg)', opacity: 0 }, { transform: 'scale(.92) rotate(-3deg)', opacity: 1, offset: 0.6 }, { transform: 'rotate(-3deg)', opacity: 1 }], { duration: 640, delay: 320, easing: 'cubic-bezier(.3,1.6,.5,1)', fill: 'backwards' });
+    this.later(() => { if (this.m) this.m.burst('cel', this.q('[data-ovbanner]'), { n: 34, shapes: ['spark', 'circle'], colors: ['#E0245E', '#FF6FAE', '#FFFFFF', '#4A2B3A'], size: 26, spread: 420, up: false, gravity: 160 }); this.qa('[data-token]').forEach((el, i) => this.anim(el, [{ transform: 'scale(0)' }, { transform: 'scale(1.3)', offset: 0.6 }, { transform: 'none' }], { duration: 500, delay: 600 + i * 120, easing: 'ease-out', fill: 'backwards' })); }, 640);
+  }
+  renderVals() {
+    const s = this.state.sc ? this.state : this.init(this.props.scenario || 'gauntlet');
+    const theme = this.props.theme === 'dark' ? 'dark' : 'light', MD = this.MODES[s.mode], live = this.live(s);
+    const tb = s.mode === 'timeboxed', last = tb && s.left <= 60 && s.left > 0, lost = tb && s.left <= 0;
+    const rank = (q) => (q.won ? 2 : q.pinned ? 0 : 1);
+    const all = [...s.ch].sort((a, b) => rank(a) - rank(b) || a.order - b.order);
+    const rows = all.slice(s.page * 5, s.page * 5 + 5).map((q) => {
+      const running = q.running && !q.won && live, t = this.fmt(q.secs), dead = lost && !q.won;
+      return { id: q.id, game: q.game, status: q.won ? 'won' : running ? 'running' : 'idle', secs: q.secs, untouched: !q.secs, running,
+        bg: dead ? 'var(--color-gone-surface)' : q.won ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface-raised)',
+        sh: q.won ? 'inset 0 0 0 2px var(--color-won-surface-lip)' : '0 4px 0 -1px var(--color-lip),inset 0 0 0 2px var(--color-border)',
+        hasBadge: q.won || running || dead, bIcon: dead ? 'lock' : q.won ? 'check' : 'play_arrow', bBg: dead ? 'var(--color-gone-border)' : q.won ? 'var(--color-won)' : 'var(--color-accent)',
+        hasUsed: s.mode === 'gauntlet' && q.used > 0, used: q.used,
+        hasCounter: q.target != null, count: q.count, target: q.target, cBg: q.target != null && q.count >= q.target ? 'var(--color-won)' : 'var(--color-complete-surface)', cC: q.target != null && q.count >= q.target ? 'var(--color-on-accent)' : 'var(--color-text)',
+        td: this.digits(t, running && q._p != null ? this.fmt(q._p) : null), timeC: q.won ? 'var(--color-won-text)' : running ? 'var(--color-running-text)' : dead ? 'var(--color-gone-text)' : 'var(--color-text)',
+        aria: `${q.game}, ${q.won ? 'Won' : running ? 'Running' : 'Open'}, ${t}` };
+    });
+    const won = s.ch.filter((q) => q.won).length, tstr = this.fmtT(tb ? Math.max(0, s.left) : s.total);
+    const left = s.max - s.used;
+    return {
+      rootRef: this.rootRef, theme, mode: MD, bannerOn: !!s.banner, lost,
+      cardBg: lost ? 'var(--color-gone-surface)' : 'var(--color-surface)',
+      cardSh: last ? '0 0 0 5px var(--color-keyline),0 13px 0 1px var(--color-keyline),0 0 0 16px var(--color-danger),0 30px 50px rgba(0,0,0,.5)' : 'var(--overlay-shadow)',
+      pillBg: lost ? 'var(--color-gone-border)' : s.sc === 'gauntlet-reset' ? 'var(--color-danger)' : 'var(--color-won)', pillIcon: lost ? 'lock' : s.sc === 'gauntlet-reset' ? 'restart_alt' : 'check_circle', pillText: lost ? 'Lost · 3 / 8' : `${won} / 8 won`,
+      wellBg: lost ? 'var(--color-gone-surface)' : last ? 'var(--color-danger-surface)' : 'var(--color-surface-sunken)', wellSh: last ? 'var(--shadow-well),0 0 0 4px var(--color-danger)' : 'var(--shadow-well)',
+      totalC: lost ? 'var(--color-gone-text)' : last ? 'var(--color-danger-text)' : live ? 'var(--color-running-text)' : 'var(--color-text)',
+      tIcon: tb ? (lost ? 'hourglass_bottom' : 'hourglass_top') : live ? 'timer' : 'pause', tIconBg: tb ? 'var(--color-complete)' : live ? 'var(--color-accent)' : 'var(--color-surface-raised)',
+      tLabel: tb ? (lost ? 'Over' : 'Left') : 'Total', tLabelC: last ? 'var(--color-danger-text)' : 'var(--color-text-muted)',
+      totalDigits: this.digits(tstr, s.prevT != null && live ? this.fmtT(s.prevT) : null), timerAria: tb ? `Time left ${tstr}` : `Total Timer ${tstr}`,
+      mG: s.mode === 'gauntlet', attemptsLabel: `${left} of ${s.max} attempts left`, attemptsShort: `${left} of ${s.max} left`,
+      tokens: Array.from({ length: s.max }, (_, k) => { const ok = k >= s.used; return { k, icon: ok ? 'shield' : 'close', bg: ok ? 'var(--color-surface-raised)' : 'transparent', sh: ok ? '0 0 0 3px var(--color-keyline)' : 'inset 0 0 0 3px var(--color-danger)', op: ok ? 1 : 0.75 }; }),
+      rows, pageLabel: s.page + 1 + ' of 2', dots: [0, 1].map((k) => ({ k, w: k === s.page ? '40px' : '14px', bg: k === s.page ? 'var(--color-text)' : 'var(--color-control-lip)' })),
+    };
+  }
+}
+</script>
+</body>
+</html>

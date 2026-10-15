@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>body{margin:0}a{color:#B0175A}a:hover{color:#4A2B3A}[data-theme="dark"] a{color:#FFB3D2}[data-theme="dark"] a:hover{color:#FFEEF5}[data-sv] :focus-visible{outline:3px solid var(--color-focus);outline-offset:3px}[data-sv] [data-link]::selection{background:var(--color-highlight-gold);color:#4A2B3A}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-sv="1" data-theme="{{ theme }}" data-motion="{{ motionAttr }}" data-dialect="broadcast" data-screen-label="{{ screenLabel }}" style="position:relative;width:100%;min-height:1000px;overflow:hidden;display:flex;flex-direction:column;background:var(--color-page);color:var(--color-text);font-family:var(--font-body);-webkit-font-smoothing:antialiased">
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+    <div data-amb="drift" style="position:absolute;inset:-52px;background:radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 0 0/52px 52px,radial-gradient(var(--color-page-pattern) 18%, transparent 19%) 26px 26px/52px 52px"></div>
+  </div>
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+  <div data-fxv="1" style="position:absolute;left:0;right:0;top:0;height:1000px;pointer-events:none;z-index:80;overflow:hidden"></div>
+  <div data-wipe="1" style="position:absolute;inset:0;pointer-events:none;z-index:90;overflow:hidden"></div>
+
+  <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;top:38px;z-index:55;display:flex;justify-content:center;pointer-events:none">
+      <div data-rbanner="1" role="status" style="pointer-events:auto;display:flex;align-items:center;gap:10px;height:48px;padding:0 6px 0 16px;border-radius:24px;background:{{ bannerBg }};color:{{ bannerC }};font:800 16px var(--font-body);box-shadow:0 0 0 4px var(--color-keyline),0 7px 0 2px var(--color-keyline)"><span data-ricon="1" data-loop="{{ bannerSpin }}" style="display:inline-block;font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ bannerIcon }}</span><span style="padding-right:10px">{{ bannerText }}</span><sc-if value="{{ bannerRetry }}" hint-placeholder-val="{{ false }}"><button data-press="1" onClick="{{ onRetry }}" style="height:36px;padding:0 16px;border:0;border-radius:18px;cursor:pointer;background:var(--color-control);color:var(--color-text);font:400 14px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 4px 0 -1px var(--color-control-lip)" style-active="transform:translateY(3px);box-shadow:0 1px 0 -1px var(--color-control-lip)">Retry now</button></sc-if></div>
+    </div>
+  </sc-if>
+
+  <div style="position:relative;flex:1;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:24px 32px 0;display:flex;flex-direction:column;gap:24px">
+
+    <header style="position:relative;z-index:20;display:flex;align-items:center;gap:14px;height:76px;box-sizing:border-box;padding:0 12px 0 26px;border-radius:38px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+      <a href="#" onClick="{{ noop }}" aria-label="winnies home" style="flex:none;display:flex;align-items:baseline;font:400 30px/1.2 var(--font-display);padding-bottom:4px;text-decoration:none;border-radius:14px">
+        <sc-for list="{{ letters }}" as="l" hint-placeholder-count="7"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></sc-for>
+      </a>
+      <sc-if value="{{ viewOnly }}" hint-placeholder-val="{{ true }}">
+        <span data-viewonly="1" style="flex:none;display:flex;align-items:center;gap:8px;height:38px;padding:0 16px 0 12px;border-radius:19px;background:var(--color-ready);color:var(--color-on-accent);font:800 15px/1 var(--font-body);white-space:nowrap;box-shadow:0 4px 0 -1px var(--color-ready-lip)"><span style="font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1">visibility</span>View only</span>
+      </sc-if>
+      <div style="flex:1;min-width:8px"></div>
+      <div role="radiogroup" aria-label="Theme" style="flex:none;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+        <sc-for list="{{ themeOpts }}" as="o" hint-placeholder-count="3"><button role="radio" aria-checked="{{ o.sel }}" aria-label="{{ o.label }}" title="{{ o.label }}" onClick="{{ o.on }}" style="width:40px;height:40px;border:0;border-radius:50%;cursor:pointer;background:{{ o.bg }};color:{{ o.c }};box-shadow:{{ o.sh }};font-family:var(--font-icon);font-size:21px;font-variation-settings:'FILL' 1;display:flex;align-items:center;justify-content:center">{{ o.icon }}</button></sc-for>
+      </div>
+    </header>
+
+    <main data-content="1" style="position:relative;display:flex;flex-direction:column;gap:24px;padding-bottom:12px">
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <section aria-busy="true" aria-label="Loading this Winnie" style="position:relative;display:flex;align-items:center;gap:32px;padding:30px 30px 30px 34px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised)">
+          <div style="flex:1;display:flex;flex-direction:column;gap:18px;min-width:0">
+            <span style="position:relative;overflow:hidden;width:260px;height:24px;border-radius:12px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+            <span style="position:relative;overflow:hidden;width:52%;height:46px;border-radius:23px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+            <span style="position:relative;overflow:hidden;width:420px;height:28px;border-radius:14px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+          </div>
+          <span style="position:relative;overflow:hidden;flex:none;width:340px;height:100px;border-radius:50px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+        </section>
+        <div style="display:flex;align-items:center;gap:8px;padding:0 16px;font:700 16px var(--font-body);color:var(--color-text-muted)"><span data-loop="spin" style="display:inline-block;font-family:var(--font-icon);font-size:22px">progress_activity</span>Loading…</div>
+        <div style="display:flex;flex-direction:column;gap:26px">
+          <sc-for list="{{ skel }}" as="k" hint-placeholder-count="6"><div aria-hidden="true" style="display:flex;align-items:center;gap:18px;height:var(--row-h);padding:0 24px 0 14px;border-radius:var(--row-radius);background:var(--color-surface);box-shadow:var(--shadow-raised)"><span style="position:relative;overflow:hidden;flex:none;width:44px;height:44px;border-radius:50%;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="display:flex;flex-direction:column;gap:7px;width:{{ k.w }}"><span style="position:relative;overflow:hidden;height:17px;border-radius:9px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="position:relative;overflow:hidden;width:60%;height:11px;border-radius:6px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></span><span style="flex:1"></span><span style="position:relative;overflow:hidden;width:110px;height:32px;border-radius:16px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="position:relative;overflow:hidden;width:120px;height:22px;border-radius:11px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></div></sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ gone }}" hint-placeholder-val="{{ false }}">
+        <section data-stag="1" aria-labelledby="sv-gone-title" style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;margin-top:40px;padding:56px 48px 60px;border-radius:var(--card-radius);background:var(--color-gone-surface);outline:4px dashed var(--color-gone-border);outline-offset:-4px">
+          <span data-gdisc="1" aria-hidden="true" style="width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface);color:var(--color-gone-text);font-family:var(--font-icon);font-size:60px;outline:3px dashed var(--color-gone-border);outline-offset:-3px">link_off</span>
+          <h1 id="sv-gone-title" style="margin:6px 0 0;display:flex;flex-direction:column;align-items:center;gap:4px;font:400 46px/1.3 var(--font-display);text-wrap:balance">
+            <span>This Winnie doesn’t exist.</span>
+            <span style="display:flex;gap:18px;color:var(--color-gone-text)"><span data-q1="1"><span style="display:inline-block">Does it?</span></span><span data-q2="1"><span style="display:inline-block">Did it?</span></span></span>
+          </h1>
+          <p style="margin:0;max-width:560px;font:500 19px/1.55 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">The link may have been deleted by its owner.</p>
+          <span style="display:flex;align-items:center;gap:8px;max-width:100%;height:46px;box-sizing:border-box;padding:0 20px 0 14px;border-radius:23px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:700 16px var(--font-body);color:var(--color-text)"><span style="flex:none;font-family:var(--font-icon);font-size:21px;color:var(--color-gone-text)">link_off</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">winnies.app/shared/kitty-vs-the-world</span></span>
+          <a href="#" onClick="{{ noop }}" data-press="1" style="margin-top:10px;display:flex;align-items:center;gap:10px;height:58px;padding:0 28px 0 22px;border-radius:29px;background:var(--color-accent);color:var(--color-on-accent);font:400 18px/1.45 var(--font-display);text-decoration:none;white-space:nowrap;box-shadow:0 0 0 4px var(--color-keyline),0 8px 0 2px var(--color-keyline)" style-hover="color:var(--color-on-accent)" style-active="transform:translateY(6px);box-shadow:0 0 0 4px var(--color-keyline),0 2px 0 2px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:24px;font-variation-settings:'wght' 700">add</span>Make your own Winnie</a>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ showW }}" hint-placeholder-val="{{ true }}">
+        <section data-stag="1" data-hero="1" aria-label="Winnie summary" style="position:relative;z-index:3;display:flex;align-items:center;gap:32px;padding:26px 30px 26px 34px;border-radius:var(--card-radius);background:var(--color-surface);box-shadow:var(--shadow-raised)">
+          <span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" style="position:absolute;top:-10%;bottom:-10%;left:0;width:20%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span>
+          <sc-if value="{{ heroHl }}" hint-placeholder-val="{{ false }}"><span data-hl="1" aria-hidden="true" style="position:absolute;inset:-14px;border-radius:72px;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 32px 8px var(--color-highlight-gold);pointer-events:none"></span></sc-if>
+          <div style="position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px;font:700 16px/1.4 var(--font-body);color:var(--color-text-muted)">
+              <span aria-hidden="true" style="flex:none;width:34px;height:34px;border-radius:50%;background:var(--color-pinned);color:var(--color-on-accent);display:flex;align-items:center;justify-content:center;font:400 15px/1 var(--font-display);box-shadow:0 3px 0 -1px var(--color-pinned-lip)">K</span>
+              <span style="color:var(--color-text);font-weight:800">kittyspeedruns</span><span>· created {{ created }}</span>
+            </div>
+            <h1 data-title="1" style="margin:0;font:400 48px/1.25 var(--font-display);text-wrap:pretty;overflow-wrap:anywhere">{{ title }}</h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <div data-track="1" aria-hidden="true" style="flex:1;min-width:160px;max-width:360px;height:28px;border-radius:14px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:4px;box-sizing:border-box">
+                <div style="position:relative;height:100%;border-radius:10px;overflow:hidden">
+                  <div data-fill="1" style="position:absolute;inset:0;border-radius:10px;overflow:hidden;transform:translateX({{ fillX }})">
+                    <span data-amb="{{ stripesAmb }}" style="position:absolute;top:0;bottom:0;left:-30px;right:0;background:var(--texture-stripes-won)"></span>
+                    <span style="position:absolute;inset:0;border-radius:10px;box-shadow:inset 0 -3px 4px rgba(40,140,80,.3),inset 0 2px 2px rgba(255,255,255,.6)"></span>
+                  </div>
+                </div>
+              </div>
+              <sc-if value="{{ hasCh }}" hint-placeholder-val="{{ true }}"><span style="white-space:nowrap;font:400 20px/1.45 var(--font-display)">{{ summary }}</span></sc-if>
+              <sc-if value="{{ noCh }}" hint-placeholder-val="{{ false }}"><span style="font:700 18px var(--font-body);color:var(--color-text-muted)">No Challenges yet</span></sc-if>
+              <sc-if value="{{ hasPill }}" hint-placeholder-val="{{ true }}"><span data-statepill="1" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 15px 0 10px;border-radius:17px;background:{{ pillBg }};color:{{ pillC }};font:800 15px/1 var(--font-body);white-space:nowrap;box-shadow:{{ pillSh }}"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ pillIcon }}</span>{{ pillLabel }}</span></sc-if>
+            </div>
+          </div>
+          <div style="position:relative;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <span style="padding-right:24px;font:800 14px/1.3 var(--font-body);color:var(--color-text-muted)">Total Timer</span>
+            <div data-well="1" role="timer" aria-label="Total Timer {{ total }}" style="position:relative;display:flex;align-items:center;height:var(--timer-total-h);padding:0 var(--timer-total-pad-x);border-radius:50px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:400 var(--timer-total-size)/1 var(--font-display);color:{{ totalC }}">
+              <sc-if value="{{ live }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="1400" style="position:absolute;top:-10%;bottom:-10%;left:0;width:26%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span></sc-if>
+              <span data-timer="total" data-kind="total" data-beat="{{ totalBeat }}" aria-hidden="true" style="position:relative;display:flex">
+                <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <sc-if value="{{ complete }}" hint-placeholder-val="{{ false }}">
+          <section data-stag="1" data-completion="1" aria-label="Winnie Complete" style="position:relative;z-index:2;transform-origin:50% 0;display:flex;align-items:center;gap:28px;padding:26px 34px;border-radius:var(--card-radius);background:var(--color-complete-surface);box-shadow:0 0 0 var(--border-keyline) var(--color-keyline),0 12px 0 1px var(--color-complete-lip)">
+            <span data-amb="wobble" aria-hidden="true" style="flex:none;width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-complete);color:var(--color-on-accent);font-family:var(--font-icon);font-size:58px;font-variation-settings:'FILL' 1;box-shadow:0 7px 0 -1px var(--color-complete-lip)">emoji_events</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <span style="align-self:flex-start;display:flex;align-items:center;gap:8px;height:34px;padding:0 15px 0 10px;border-radius:17px;background:var(--color-complete);color:var(--color-on-accent);font:800 15px/1 var(--font-body);box-shadow:0 4px 0 -1px var(--color-complete-lip)"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">emoji_events</span>Complete</span>
+              <h2 style="margin:0;font:400 40px/1.25 var(--font-display);text-wrap:balance">Every Challenge Won!</h2>
+              <p style="margin:0;font:500 19px/1.5 var(--font-body);color:var(--color-text);text-wrap:pretty">{{ completeLine }}</p>
+            </div>
+          </section>
+        </sc-if>
+
+        <div data-stag="1" style="position:relative;display:flex;justify-content:space-between;align-items:baseline;padding:4px 16px 0">
+          <h2 style="margin:0;font:400 23px/1.45 var(--font-display)">Challenges</h2>
+          <span style="font:700 16px var(--font-body);color:var(--color-text-muted)">{{ countLabel }}</span>
+        </div>
+
+        <sc-if value="{{ noCh }}" hint-placeholder-val="{{ false }}">
+          <div data-stag="1" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:48px 40px 52px;border-radius:var(--card-radius);background:var(--color-surface-sunken);box-shadow:var(--shadow-well)">
+            <span data-eface="1" data-amb="bob" style="display:flex"><dc-import name="ClayFace" mood="new" size="80" hint-size="80px,80px"></dc-import></span>
+            <h3 style="margin:6px 0 0;font:400 30px/1.3 var(--font-display)">Nothing to watch yet</h3>
+            <p style="margin:0;max-width:560px;font:500 19px/1.55 var(--font-body);color:var(--color-text-muted);text-wrap:pretty">kittyspeedruns hasn’t added any Challenges to this Winnie. Leave this tab open and they’ll pop up here on their own. Snacks are optional but recommended.</p>
+          </div>
+        </sc-if>
+
+        <div data-list="1" role="list" aria-label="Challenges" style="position:relative;z-index:1;display:flex;flex-direction:column;gap:26px">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div data-row="{{ r.id }}" data-stag="1" role="listitem" aria-label="{{ r.aria }}" style="position:relative">
+              <div data-mid="{{ r.id }}" style="transform-origin:50% 100%">
+                <div style="position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto 132px 140px;gap:18px;align-items:center;min-height:var(--row-h);padding:6px 26px 6px 14px;box-sizing:border-box;border-radius:var(--row-radius);background:{{ r.bg }};box-shadow:{{ r.shadow }}">
+                  <sc-if value="{{ r.running }}"><span data-amb="ring" data-ring="{{ r.id }}" aria-hidden="true" style="position:absolute;inset:-12px;border-radius:42px;box-shadow:0 0 0 3px var(--color-running-ring),0 0 26px 6px var(--color-accent);opacity:.5;pointer-events:none"></span></sc-if>
+                  <sc-if value="{{ r.pinned }}"><span aria-hidden="true" style="position:absolute;left:-14px;top:-14px;width:92px;height:24px;background:repeating-linear-gradient(90deg,#CDB8FF 0 10px,#E4D9FF 10px 20px);opacity:.95;transform:rotate(-10deg);box-shadow:0 2px 4px rgba(0,0,0,.12);pointer-events:none"></span></sc-if>
+                  <span data-face="{{ r.id }}" data-fbeat="{{ r.fbeat }}" aria-hidden="true" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="44" hint-size="44px,44px"></dc-import></span>
+                  <div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+                    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                      <span style="display:block;min-width:0;font:400 20px/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.game }}</span>
+                      <sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:3px;font:800 13px/1 var(--font-body);color:var(--color-pinned-text)"><span style="font-family:var(--font-icon);font-size:19px;font-variation-settings:'FILL' 1">push_pin</span>Pinned</span></sc-if>
+                    </div>
+                    <sc-if value="{{ r.hasCond }}"><span style="font:500 15px/1.3 var(--font-body);color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span></sc-if>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end">
+                    <sc-if value="{{ r.hasCounter }}"><span data-cwell="{{ r.id }}" style="position:relative;min-width:104px;height:40px;padding:0 14px;box-sizing:border-box;border-radius:20px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:{{ r.cSh }};display:flex;align-items:center;justify-content:center;gap:5px;font:400 18px/1 var(--font-display);overflow:hidden"><span data-count="{{ r.id }}" style="display:inline-block">{{ r.count }}</span><span style="opacity:.8">/ {{ r.target }}</span></span></sc-if>
+                  </div>
+                  <span style="justify-self:start;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 10px;border-radius:17px;background:{{ r.sBg }};color:{{ r.sC }};box-shadow:{{ r.sSh }};font:800 15px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">{{ r.sIcon }}</span>{{ r.sWord }}</span>
+                  <span data-timer="row" data-kind="row" data-beat="{{ r.tbeat }}" aria-hidden="true" style="display:flex;justify-content:flex-end;font:400 24px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span>
+                  <sc-if value="{{ r.won }}"><span data-amb="stick" aria-hidden="true" style="position:absolute;left:40px;top:-14px;width:30px;height:30px;border-radius:50%;background:var(--color-complete);border:3px solid #fff;box-shadow:var(--shadow-sticker);display:flex;align-items:center;justify-content:center;font:800 16px var(--font-body);color:var(--p-pink-700);transform:rotate(12deg);pointer-events:none">★</span></sc-if>
+                  <sc-if value="{{ r.changed }}">
+                    <span data-hl="1" aria-hidden="true" style="position:absolute;inset:-12px;border-radius:42px;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 24px 6px var(--color-highlight-gold);pointer-events:none"></span>
+                    <span data-hl="1" style="position:absolute;right:186px;top:-17px;z-index:2;display:flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 8px;border-radius:15px;background:var(--color-highlight-gold);color:#4A2B3A;font:800 14px/1 var(--font-body);white-space:nowrap;box-shadow:0 0 0 3px var(--color-keyline)"><span style="font-family:var(--font-icon);font-size:18px;font-variation-settings:'FILL' 1">bolt</span>{{ r.chip }}</span>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <footer style="position:relative;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:20px 32px 30px;display:flex;flex-direction:column;gap:22px">
+    <sc-if value="{{ hasBar }}" hint-placeholder-val="{{ true }}">
+      <div data-bar="1" style="display:flex;align-items:center;gap:18px;padding:12px 12px 12px 14px;border-radius:40px;background:var(--color-surface);box-shadow:var(--shadow-raised)">
+        <span style="position:relative;flex:none;width:50px;height:50px">
+          <sc-if value="{{ frRing }}" hint-placeholder-val="{{ false }}"><span data-amb="ring" aria-hidden="true" style="position:absolute;inset:-5px;border-radius:50%;box-shadow:0 0 0 3px var(--color-won);opacity:.5"></span></sc-if>
+          <span data-fresh="1" aria-hidden="true" style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ frBg }};color:{{ frC }};box-shadow:{{ frSh }}"><span data-loop="{{ frSpin }}" style="display:inline-block;width:26px;height:26px;font-family:var(--font-icon);font-size:26px;line-height:26px;font-variation-settings:'FILL' 1">{{ frIcon }}</span></span>
+        </span>
+        <div role="status" aria-live="polite" style="min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span style="font:400 19px/1.4 var(--font-display);white-space:nowrap">{{ frTitle }}</span>
+          <span style="font:700 15px/1.4 var(--font-body);color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ frSub }}</span>
+        </div>
+        <div style="flex:1;min-width:12px"></div>
+        <span data-link="1" tabindex="0" aria-label="Shared View link" style="flex:0 1 auto;min-width:0;max-width:420px;height:50px;box-sizing:border-box;display:flex;align-items:center;padding:0 22px;border-radius:25px;background:var(--color-surface-sunken);box-shadow:{{ linkSh }};font:700 16px var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;user-select:all">winnies.app/shared/kitty-vs-the-world</span>
+        <button data-press="1" data-copybtn="1" onClick="{{ onCopy }}" style="flex:none;display:flex;align-items:center;gap:8px;min-width:170px;justify-content:center;height:50px;padding:0 24px 0 18px;border:0;border-radius:25px;cursor:pointer;background:{{ copyBg }};color:var(--color-on-accent);font:400 17px/1.45 var(--font-display);white-space:nowrap;box-shadow:0 0 0 4px var(--color-keyline),0 7px 0 2px var(--color-keyline)" style-active="transform:translateY(5px);box-shadow:0 0 0 4px var(--color-keyline),0 2px 0 2px var(--color-keyline)"><span data-ci="1" style="display:inline-block;font-family:var(--font-icon);font-size:22px;font-variation-settings:'wght' 700">{{ copyIcon }}</span><span aria-live="polite">{{ copyLabel }}</span></button>
+      </div>
+    </sc-if>
+    <nav aria-label="Footer" style="display:flex;align-items:center;gap:8px 26px;flex-wrap:wrap;padding:0 24px;font:700 15px var(--font-body);color:var(--color-text-muted)">
+      <a href="#" onClick="{{ noop }}" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-text-accent);text-decoration:underline">Imprint</a>
+      <a href="#" onClick="{{ noop }}" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-text-accent);text-decoration:underline">Privacy Policy</a>
+      <a href="#" onClick="{{ noop }}" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-text-accent);text-decoration:underline">Changelog</a>
+      <span style="margin-left:auto;font:800 14px var(--font-body);color:var(--color-text-muted)">winnies v0.9.2 · beta</span>
+    </nav>
+  </footer>
+
+  <div style="position:absolute;right:32px;bottom:150px;z-index:65;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0"><div data-toast="{{ t.id }}" role="{{ t.role }}" style="pointer-events:auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:440px;box-sizing:border-box;padding:12px 8px 12px 12px;border-radius:var(--radius-xl);background:var(--color-surface-raised);color:var(--color-text);box-shadow:{{ t.sh }};font:700 16px/1.4 var(--font-body)"><span style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ t.discBg }};color:{{ t.discC }};font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1,'wght' 600">{{ t.icon }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0;text-wrap:pretty"><span>{{ t.text }}</span><sc-if value="{{ t.sticky }}"><span style="font:700 13px/1.3 var(--font-body);color:var(--color-text-muted)">Stays until you close it.</span></sc-if></span><button onClick="{{ t.close }}" aria-label="Dismiss" style="width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;background:transparent;color:var(--color-text);font-family:var(--font-icon);font-size:21px" style-hover="background:var(--color-surface-sunken)">close</button></div></sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1180},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loading&quot;,&quot;mid-run&quot;,&quot;update&quot;,&quot;stale&quot;,&quot;reconnecting&quot;,&quot;copied&quot;,&quot;copy-fail&quot;,&quot;no-challenges&quot;,&quot;complete&quot;,&quot;gone&quot;],&quot;default&quot;:&quot;mid-run&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  static URL = 'winnies.app/shared/kitty-vs-the-world';
+  static P0() {
+    return [
+      { id: 1, game: 'Elden Ring', cond: 'Malenia, no summons', secs: 11564, pinned: true, running: true },
+      { id: 2, game: 'Super Mario 64', cond: 'All stars', count: 87, target: 120, secs: 14470 },
+      { id: 3, game: 'Cuphead', cond: 'Expert, every boss', count: 12, target: 19, secs: 6482 },
+      { id: 4, game: 'Celeste', cond: 'Farewell, golden strawberry', secs: 0 },
+      { id: 5, game: 'Dark Souls III', cond: 'Soul Level 1 Nameless King', secs: 8431 },
+      { id: 6, game: 'Hollow Knight', cond: 'Pantheon of Hallownest', secs: 4509, won: true },
+      { id: 7, game: 'Hades', cond: 'Heat 16 clear', secs: 3160, won: true },
+      { id: 8, game: 'Tetris Effect', cond: '150 lines, Marathon', count: 150, target: 150, secs: 2511, won: true },
+    ];
+  }
+  static seed(scn) {
+    const w = { title: 'Kitty vs. the world', created: '03.10.26', total: 52327, ch: Component.P0().map((d, i) => ({ count: null, target: null, pinned: false, running: false, won: false, cond: '', secs: 0, ...d, order: i })) };
+    const st = { w, loading: false, gone: false, conn: 'live', agoMs: 0, holdCopy: false };
+    switch (scn) {
+      case 'loading': st.loading = true; break;
+      case 'stale': st.agoMs = 47000; break;
+      case 'reconnecting': st.conn = 'reconnecting'; st.agoMs = 12000; break;
+      case 'copied': st.holdCopy = true; break;
+      case 'no-challenges': st.w = { ...w, title: 'Speedrun Saturday', created: '14.10.26', total: 0, ch: [] }; break;
+      case 'complete': st.w = { ...w, ch: w.ch.map((x) => ({ ...x, won: true, running: false, count: x.target != null ? x.target : null })) }; break;
+      case 'gone': st.gone = true; break;
+      default: break;
+    }
+    return st;
+  }
+  fresh() {
+    const sd = Component.seed(this.props.scenario || 'mid-run'), now = Date.now();
+    return { ...sd, tickN: 0, changed: {}, heroHl: false, copied: false, linkSel: false, toasts: [], step: 0, now, lastUpd: now - sd.agoMs };
+  }
+  state = { ...this.fresh(), theme: this.props.theme === 'dark' ? 'dark' : 'light', mode: this.props.theme === 'dark' ? 'dark' : 'light' };
+  _tid = 10; _stg = {}; _vis = true;
+
+  root() { return this.rootRef.current; }
+  q(sel) { const r = this.root(); return r ? r.querySelector(sel) : null; }
+  qa(sel) { const r = this.root(); return r ? [...r.querySelectorAll(sel)] : []; }
+  sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  sc() { const r = this.root(); return r ? r.getBoundingClientRect().width / (r.offsetWidth || 1) || 1 : 1; }
+  stage(s) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && s >= t[i]) i++; return i; }
+  rank(q) { return q.won ? 2 : q.pinned ? 0 : 1; }
+  sorted(w) { return w ? [...w.ch].sort((a, b) => this.rank(a) - this.rank(b) || a.order - b.order) : []; }
+  live(w) { return !!w && w.ch.some((x) => x.running && !x.won); }
+  isReduced() { return !!this.props.reduced || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  cfg() { return { amb: true, resp: true, cel: true, reduced: this.isReduced(), dialect: 'broadcast', calm: false, interval: 1000 }; }
+  pct(w) { const n = w ? w.ch.length : 0; return n ? Math.round((w.ch.filter((x) => x.won).length / n) * 100) : 0; }
+  scn() { return this.props.scenario || 'mid-run'; }
+
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.root(), fx: () => this.q('[data-fx]'), fxv: () => this.q('[data-fxv]'), cfg: () => this.cfg(), cue: () => {} });
+      const now = Date.now(); this.setState((s) => ({ now, lastUpd: now - s.agoMs }));
+      this.refreshTokens(); setTimeout(() => this.refreshTokens(), 700); setTimeout(() => this.refreshTokens(), 1800);
+      this._iv = setInterval(() => this.tick(), 1000);
+      this._pv = setInterval(() => this.poll(), 5000);
+      this.maybeIntro();
+    };
+    const r = this.root();
+    const setAnims = (play) => { const el = this.root(); if (!el) return; el.getAnimations({ subtree: true }).forEach((a) => { try { play ? a.play() : a.pause(); } catch (e) {} }); };
+    if (typeof IntersectionObserver !== 'undefined') {
+      this._vis = false;
+      this._io = new IntersectionObserver((es) => {
+        const v = es[es.length - 1].isIntersecting; if (v === this._vis) return;
+        this._vis = v;
+        if (!v) { setAnims(false); return; }
+        if (!this._booted) { this._booted = true; boot(); return; }
+        setAnims(true); if (this.m) { this.refreshTokens(); this.maybeIntro(); }
+      }, { rootMargin: '100px' });
+      this._io.observe(r);
+    } else { this._booted = true; boot(); }
+    this._onClick = (e) => { const b = e.target.closest('[data-press]'); if (b && this.m && !b.disabled) this.m.release(b); };
+    r.addEventListener('click', this._onClick);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._bt); clearInterval(this._iv); clearInterval(this._pv); clearTimeout(this._hlT); clearTimeout(this._cp); clearTimeout(this._relapse); clearTimeout(this._hh);
+    (this._ts || []).forEach(clearTimeout); this._io && this._io.disconnect();
+    const r = this.root(); if (r) r.removeEventListener('click', this._onClick);
+  }
+  componentDidUpdate(pp) {
+    if (pp.scenario !== this.props.scenario) {
+      [this._hlT, this._cp, this._relapse, this._hh, ...(this._ts || [])].forEach(clearTimeout);
+      this._introDone = false; this._stg = {};
+      this.setState(this.fresh(), () => this.maybeIntro());
+      return;
+    }
+    if (pp.theme !== this.props.theme) { const t = this.props.theme === 'dark' ? 'dark' : 'light'; this.setState({ theme: t, mode: t }); }
+    if (!this.m || !this._vis) return;
+    const key = this.state.theme + '|' + this.isReduced();
+    if (key !== this._key) { this._key = key; this.refreshTokens(); }
+    else this.m.syncLoops(false);
+    if (this.state.tickN !== this._lastTick) { this._lastTick = this.state.tickN; this.runTick(); }
+  }
+  refreshTokens() { const el = this.root(); if (this.m && el && this._vis) { this.m.refresh(el); this.m.syncLoops(true); } }
+  later(fn, ms) { this._ts = this._ts || []; this._ts.push(setTimeout(fn, ms)); }
+  maybeIntro() {
+    if (!this.m || !this._vis || this._introDone) return;
+    this._introDone = true;
+    const scn = this.scn();
+    this.later(() => {
+      if (scn !== 'loading') this.m.stagIn(this.qa('[data-stag]'));
+      if (scn === 'reconnecting') { this.m.bannerIn(this.q('[data-rbanner]')); this.m.mute(this.q('[data-content]'), true); }
+      if (scn === 'copied' || scn === 'copy-fail') this.later(() => this.copyLink(), 800);
+      if (scn === 'complete') this.later(() => this.celebrate(), 550);
+      if (scn === 'update') this.later(() => this.applyChange(), 1300);
+      if (scn === 'no-challenges') this.later(() => this.m.jelly('resp', this.q('[data-eface]'), 1), 500);
+      if (scn === 'gone') {
+        this.later(() => this.m.jelly('resp', this.q('[data-gdisc]'), 1.2), 380);
+        this.later(() => this.m.wave(this.qa('[data-q1] > span'), 1.8), 760);
+        this.later(() => this.m.wave(this.qa('[data-q2] > span'), 1.8), 1180);
+      }
+    }, 250);
+  }
+  tick() {
+    if (!this._vis) return;
+    const now = Date.now(), s = this.state;
+    if (s.loading || s.gone || !this.live(s.w)) return this.setState({ now });
+    this.setState((st) => ({ now, tickN: st.tickN + 1, w: { ...st.w, total: st.w.total + 1, ch: st.w.ch.map((x) => (x.running && !x.won ? { ...x, secs: x.secs + 1 } : x)) } }));
+  }
+  runTick() {
+    const m = this.m;
+    this.qa('[data-timer]').forEach((t) => { const d = [...t.querySelectorAll('[data-chg="1"]')]; if (d.length) m.tick(d, t.dataset.kind, t.dataset.beat, t.closest('[data-well]')); });
+    const tb = this.q('[data-timer="total"]'), mb = tb && tb.dataset.beat !== 'sec';
+    this.qa('[data-fbeat]').forEach((el) => { if (el.dataset.fbeat !== '') m.beat(el, +el.dataset.fbeat, mb); });
+    this.state.w.ch.forEach((x) => {
+      if (!x.running || x.won) return;
+      const st = this.stage(x.secs);
+      if (this._stg[x.id] != null && this._stg[x.id] !== st) m.stageChange(this.q(`[data-face="${x.id}"]`));
+      this._stg[x.id] = st;
+    });
+  }
+  poll() {
+    if (!this._vis || !this.m) return;
+    const s = this.state, scn = this.scn();
+    if (s.loading || s.gone || s.conn !== 'live' || scn === 'stale') return;
+    if (scn === 'update') return this.applyChange();
+    this.setState({ lastUpd: Date.now(), now: Date.now() }, () => this.m.pop(this.q('[data-fresh]'), 1.12));
+  }
+  applyChange(force) {
+    const s = this.state, w = s.w; if (!w || !w.ch.length || !this.m) return;
+    const steps = [{ id: 2, kind: 'count', d: 1 }, { id: 5, kind: 'start' }, { id: 3, kind: 'count', d: 1 }, { id: 5, kind: 'pause' }];
+    const st = force || steps[s.step % steps.length], q = w.ch.find((x) => x.id === st.id);
+    if (!q || q.won) return this.setState({ step: s.step + 1 });
+    let patch, label;
+    if (st.kind === 'count') { const nx = Math.min(q.target, q.count + st.d); if (nx === q.count) return this.setState({ step: s.step + 1 }); patch = { count: nx }; label = q.count + ' → ' + nx; }
+    else if (st.kind === 'start') { patch = { running: true }; label = 'Started'; }
+    else { patch = { running: false }; label = 'Paused'; }
+    const now = Date.now();
+    this.setState((s2) => ({ step: force ? s2.step : s2.step + 1, lastUpd: now, now, changed: { [st.id]: label }, w: { ...s2.w, ch: s2.w.ch.map((x) => (x.id === st.id ? { ...x, ...patch } : x)) } }), () => {
+      const m = this.m;
+      this.qa('[data-hl]').forEach((h) => m.highlight(h));
+      m.jelly('resp', this.q(`[data-mid="${st.id}"]`), 0.35);
+      if (st.kind === 'count') { m.roll(this.q(`[data-count="${st.id}"]`), 1); if (patch.count >= q.target) m.full(this.q(`[data-cwell="${st.id}"]`)); }
+      if (st.kind === 'start') { m.ringIn(this.q(`[data-ring="${st.id}"]`)); m.jelly('resp', this.q(`[data-face="${st.id}"]`), 0.7); }
+      if (st.kind === 'pause') m.droop(this.qa(`[data-row="${st.id}"] [data-timer] > span`));
+      m.pop(this.q('[data-statepill]'), 1.15); m.pop(this.q('[data-fresh]'), 1.18);
+      m.cue('shared.update', 'B01');
+    });
+    clearTimeout(this._hlT); this._hlT = setTimeout(() => this.setState({ changed: {} }), 3000);
+  }
+  retry() {
+    if (this.state.conn !== 'reconnecting') return;
+    clearTimeout(this._relapse);
+    this.setState({ conn: 'back' }, async () => {
+      this.m.morph(this.q('[data-ricon]')); this.m.mute(this.q('[data-content]'), false); this.m.pop(this.q('[data-fresh]'), 1.2);
+      this.m.cue('reconnect.found', 'B03');
+      await this.sleep(1600);
+      if (this.state.conn !== 'back') return;
+      await this.m.bannerOut(this.q('[data-rbanner]'));
+      this.setState({ conn: 'live' }, () => this.applyChange({ id: 2, kind: 'count', d: 2 }));
+      this._relapse = setTimeout(() => this.lose(), 7000);
+    });
+  }
+  lose() {
+    if (this.state.conn !== 'live') return;
+    this.setState({ conn: 'reconnecting', lastUpd: Date.now() - 2000, now: Date.now() }, () => { this.m.bannerIn(this.q('[data-rbanner]')); this.m.mute(this.q('[data-content]'), true); this.m.cue('reconnect.lost', 'B02'); });
+  }
+  celebrate() {
+    this.setState({ heroHl: true }, () => {
+      const m = this.m;
+      m.unfurl(this.q('[data-completion]')); m.rain('cel');
+      m.wave(this.qa('[data-timer="total"] > span'), 1.4); m.flash(this.q('[data-track]')); m.jelly('cel', this.q('[data-well]'), 0.6);
+      m.highlight(this.q('[data-hero] [data-hl]'));
+      m.cue('shared.complete', 'C05', this.m.T().D.land * 0.4);
+    });
+    clearTimeout(this._hh); this._hh = setTimeout(() => this.setState({ heroHl: false }), 3000);
+  }
+  copyLink() {
+    if (!this.m) return;
+    if (this.scn() === 'copy-fail') {
+      const el = this.q('[data-link]');
+      try { const sel = window.getSelection(), rg = document.createRange(); rg.selectNodeContents(el); sel.removeAllRanges(); sel.addRange(rg); } catch (e) {}
+      this.setState({ linkSel: true });
+      this.m.shake(this.q('[data-copybtn]'));
+      const t = this.state.toasts.find((x) => x.kind === 'error');
+      if (t) this.m.shake(this.q(`[data-toast="${t.id}"]`));
+      else this.toast('Couldn’t copy, the link is selected, press Ctrl+C yourself or don’t, whatever.', 'error');
+      return;
+    }
+    try { navigator.clipboard && navigator.clipboard.writeText('https://' + Component.URL).catch(() => {}); } catch (e) {}
+    this.setState({ copied: true }, () => {
+      const b = this.q('[data-copybtn]'); if (!b) return;
+      this.m.morph(b.querySelector('[data-ci]'));
+      this.m.burst('resp', b, { n: 10, shapes: ['spark', 'circle'], colors: ['#FFC23D', '#FFFFFF', '#CDB8FF', '#9BE3B4'], size: 15, spread: 110, up: false, gravity: 0 });
+      this.m.cue('copy.pop', 'R31');
+    });
+    clearTimeout(this._cp); if (!this.state.holdCopy) this._cp = setTimeout(() => this.setState({ copied: false }), 2000);
+  }
+  toast(text, kind = 'success') {
+    const id = ++this._tid;
+    this.setState((s) => ({ toasts: [...s.toasts, { id, text, kind }].slice(-3) }), () => this.m && this.m.toastIn(this.q(`[data-toast="${id}"]`), kind === 'error'));
+    if (kind === 'success') setTimeout(() => this.dismiss(id), 4000);
+    if (kind === 'info') setTimeout(() => this.dismiss(id), 5000);
+  }
+  async dismiss(id) {
+    const el = this.q(`[data-toast="${id}"]`); if (!el) return;
+    await this.m.toastOut(el);
+    this.setState((s) => ({ toasts: s.toasts.filter((t) => t.id !== id), linkSel: false }));
+  }
+  setMode(mode, e) {
+    const next = mode === 'system' ? (typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : mode;
+    if (next === this.state.theme) return this.setState({ mode });
+    const root = this.root(), L = this.q('[data-wipe]');
+    if (!this.m || !this.m.on('resp') || !L) return this.setState({ mode, theme: next });
+    const rr = root.getBoundingClientRect(), sc = this.sc();
+    let x = root.offsetWidth - 100, y = 62;
+    if (e && e.currentTarget) { const b = e.currentTarget.getBoundingClientRect(); x = (b.left + b.width / 2 - rr.left) / sc; y = (b.top + b.height / 2 - rr.top) / sc; }
+    const W = root.offsetWidth, H = root.offsetHeight, r = Math.hypot(Math.max(x, W - x), Math.max(y, H - y));
+    const c = document.createElement('div');
+    Object.assign(c.style, { position: 'absolute', left: x - r + 'px', top: y - r + 'px', width: 2 * r + 'px', height: 2 * r + 'px', borderRadius: '50%', background: next === 'dark' ? '#231520' : '#FFE3EC', transform: 'scale(0)' });
+    L.appendChild(c);
+    const T = this.m.T();
+    c.animate([{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { duration: T.D.theme, easing: T.E['in-out'], fill: 'forwards' }).onfinish = () => {
+      this.setState({ mode, theme: next }, () => requestAnimationFrame(() => { c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T.D.base, easing: T.E.out, fill: 'forwards' }).onfinish = () => c.remove(); }));
+    };
+  }
+  digits(str, prev) {
+    const off = prev ? prev.length - str.length : 0, n = str.length;
+    return str.split('').map((c, i) => ({ k: i, c, pos: n - 1 - i, chg: prev && prev[i + off] !== c ? '1' : '0', w: c === ':' ? 'var(--timer-colon-w)' : 'var(--timer-digit-w)', wr: c === ':' ? '0.34em' : '0.66em', col: c === ':' ? 'var(--color-text-muted)' : 'inherit' }));
+  }
+  renderVals() {
+    const s = this.state, w = s.w, dark = s.theme === 'dark', scn = this.scn();
+    const p2 = (n) => String(n).padStart(2, '0');
+    const fmt = (x) => (!x ? '00:00' : Math.floor(x / 3600) + ':' + p2(Math.floor((x % 3600) / 60)) + ':' + p2(x % 60));
+    const fmtT = (x) => { const h = Math.floor(x / 3600), mm = Math.floor((x % 3600) / 60), ss = x % 60; return h ? h + ':' + p2(mm) + ':' + p2(ss) : p2(mm) + ':' + p2(ss); };
+    const beat = (x) => (x % 3600 === 0 ? 'hour' : x % 60 === 0 ? 'min' : 'sec');
+    const loading = !!s.loading, gone = !!s.gone, showW = !loading && !gone && !!w;
+    const ch = w ? w.ch : [], n = ch.length, won = ch.filter((x) => x.won).length, pct = this.pct(w), complete = n > 0 && won === n;
+    const live = this.live(w), list = this.sorted(w), runN = ch.filter((x) => x.running && !x.won).length;
+    const candy = [['#FF6FAE', '#B0175A'], ['#FFB547', '#B86A12'], ['#FFD84D', '#B88A00'], ['#4FD18B', '#1F8A52'], ['#5CB8FF', '#1F6FB8'], ['#A985FF', '#6A44C9'], ['#FF6FAE', '#B0175A']], rot = [-5, 3, -2, 5, -3, 2, -4];
+    const letters = 'winnies'.split('').map((c, i) => ({ k: i, ch: c, c: candy[i][0], rot: rot[i] + 'deg', sh: `0 2px 0 ${candy[i][1]},0 3px 0 ${candy[i][1]},0 5px 0 ${candy[i][1]},0 8px 9px rgba(0,0,0,.2)` }));
+    const kl = 'var(--border-keyline)';
+    const rows = list.map((x) => {
+      const running = x.running && !x.won, status = x.won ? 'won' : running ? 'running' : 'idle', t = fmt(x.secs), full = x.target != null && x.count >= x.target;
+      const S = x.won ? ['var(--color-won)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-won-lip)', 'check_circle', 'Won']
+        : running ? ['var(--color-accent)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-accent-lip)', 'timer', 'Running']
+        : ['var(--color-surface-sunken)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-border)', 'pause', 'Idle'];
+      return {
+        id: x.id, game: x.game, cond: x.cond, hasCond: !!x.cond, status, running, won: x.won, pinned: x.pinned && !x.won, untouched: !x.secs, secs: x.secs,
+        aria: x.game + (x.cond ? ', ' + x.cond : '') + ', ' + S[4] + (x.pinned && !x.won ? ', Pinned' : '') + (x.target != null ? ', ' + x.count + ' of ' + x.target : '') + ', ' + t,
+        bg: x.won ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface)',
+        shadow: x.won ? `0 0 0 ${kl} var(--color-keyline),0 6px 0 1px var(--color-won-surface-lip)` : running ? `0 0 0 ${kl} var(--color-keyline),0 13px 0 1px var(--color-running-lip),0 26px 40px -14px var(--color-drop)` : 'var(--shadow-raised)',
+        timeC: x.won ? 'var(--color-won-text)' : running ? 'var(--color-running-text)' : !x.secs ? 'var(--color-text-muted)' : 'var(--color-text)',
+        td: this.digits(t, running && s.tickN ? fmt(x.secs - 1) : null), tbeat: beat(x.secs), fbeat: running ? String(this.stage(x.secs)) : '',
+        hasCounter: x.target != null, count: x.count, target: x.target,
+        cBg: full ? 'var(--color-won)' : 'var(--color-surface-sunken)', cC: full ? 'var(--color-on-accent)' : 'var(--color-text)', cSh: full ? '0 4px 0 -1px var(--color-won-lip)' : 'var(--shadow-well)',
+        sBg: S[0], sC: S[1], sSh: S[2], sIcon: S[3], sWord: S[4],
+        changed: !!s.changed[x.id], chip: s.changed[x.id] || '',
+      };
+    });
+    const tt = fmtT(w ? w.total : 0);
+    const pill = complete ? ['var(--color-complete)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-complete-lip)', 'emoji_events', 'Complete']
+      : live ? ['var(--color-accent)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-accent-lip)', 'timer', runN + ' running']
+      : w && w.total > 0 ? ['var(--color-surface-sunken)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-border)', 'pause', 'Paused'] : null;
+    const ago = Math.max(0, Math.floor((s.now - s.lastUpd) / 1000));
+    let fr;
+    if (loading) fr = ['progress_activity', 'var(--color-surface-sunken)', 'var(--color-text)', 'inset 0 0 0 2px var(--color-border)', 'spin', false, 'Loading…', 'Fetching the latest from kittyspeedruns.'];
+    else if (s.conn === 'reconnecting') fr = ['cloud_off', 'var(--color-offline-surface)', 'var(--color-offline-text)', 'inset 0 0 0 2px var(--color-gone-border)', '', false, 'Reconnecting…', `Last update ${Math.floor(ago / 60)}:${p2(ago % 60)} ago. Timers keep counting from there.`];
+    else if (s.conn === 'back') fr = ['sensors', 'var(--color-won)', 'var(--color-on-accent)', '0 4px 0 -1px var(--color-won-lip)', '', true, 'Back live', 'Catching you up on what you missed.'];
+    else if (ago >= 20) fr = ['schedule', 'var(--color-complete)', 'var(--color-on-accent)', '0 4px 0 -1px var(--color-complete-lip)', '', false, ago < 60 ? `Updated ${ago}s ago` : `Updated ${Math.floor(ago / 60)} min ago`, 'Waiting for the next update. Timers keep counting.'];
+    else fr = ['sensors', 'var(--color-won)', 'var(--color-on-accent)', '0 4px 0 -1px var(--color-won-lip)', '', true, ago < 5 ? 'Updated just now' : `Updated ${ago}s ago`, 'This page refreshes itself. No need to reload.'];
+    const banner = s.conn === 'back' ? ['var(--color-won)', 'var(--color-on-accent)', 'check_circle', '', 'Back live', false] : ['var(--color-offline-surface)', 'var(--color-offline-text)', 'progress_activity', 'spin', 'Reconnecting…', true];
+    const toastKind = { success: ['check', 'var(--color-won)', 'var(--color-on-accent)', 'var(--shadow-popover)'], info: ['info', 'var(--color-ready)', 'var(--color-on-accent)', 'var(--shadow-popover)'], error: ['error', 'var(--color-danger-surface)', 'var(--color-danger-text)', 'var(--shadow-popover),0 0 0 3px var(--color-danger)'] };
+    const labels = { loading: 'Loading', 'mid-run': 'Mid-run', update: 'New data arrives', stale: 'Updated 47s ago', reconnecting: 'Reconnecting', copied: 'Copied', 'copy-fail': 'Clipboard failure', 'no-challenges': 'No Challenges', complete: 'Complete', gone: 'Gone' };
+    return {
+      rootRef: this.rootRef, theme: s.theme, motionAttr: this.isReduced() ? 'reduce' : 'full',
+      screenLabel: 'Shared View · ' + (labels[scn] || 'Mid-run') + ' · ' + s.theme,
+      letters, gloss: dark ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.7)', noop: (e) => e.preventDefault(),
+      viewOnly: !gone,
+      themeOpts: [['light', 'light_mode', 'Light'], ['dark', 'dark_mode', 'Dark'], ['system', 'contrast', 'Match system']].map(([v, icon, label], k) => { const on = s.mode === v; return { k, icon, label, sel: on, bg: on ? 'var(--color-control)' : 'transparent', c: on ? 'var(--color-text)' : 'var(--color-text-muted)', sh: on ? '0 4px 0 -1px var(--color-control-lip)' : 'none', on: (e) => this.setMode(v, e) }; }),
+      showBanner: !loading && !gone && (s.conn === 'reconnecting' || s.conn === 'back'),
+      bannerBg: banner[0], bannerC: banner[1], bannerIcon: banner[2], bannerSpin: banner[3], bannerText: banner[4], bannerRetry: banner[5], onRetry: () => this.retry(),
+      loading, gone, showW, skel: ['30%', '26%', '34%', '22%', '29%', '25%'].map((x, k) => ({ k, w: x })),
+      title: w ? w.title : '', created: w ? w.created : '', heroHl: !!s.heroHl,
+      fillX: -(100 - pct) + '%', stripesAmb: live ? 'stripes' : '', hasCh: n > 0, noCh: n === 0, summary: `${won} / ${n} won · ${pct}%`,
+      hasPill: !!pill, pillBg: pill ? pill[0] : '', pillC: pill ? pill[1] : '', pillSh: pill ? pill[2] : '', pillIcon: pill ? pill[3] : '', pillLabel: pill ? pill[4] : '',
+      total: tt, totalC: complete ? 'var(--color-won-text)' : live ? 'var(--color-running-text)' : n === 0 ? 'var(--color-text-muted)' : 'var(--color-text)', totalBeat: beat(w ? w.total : 0),
+      totalDigits: this.digits(tt, live && s.tickN ? fmtT(w.total - 1) : null), live,
+      complete, completeLine: `kittyspeedruns won all ${n} Challenges. The Total Timer stopped at ${tt}.`,
+      countLabel: n === 1 ? '1 Challenge' : n + ' Challenges', rows,
+      hasBar: !gone,
+      frIcon: fr[0], frBg: fr[1], frC: fr[2], frSh: fr[3], frSpin: fr[4], frRing: fr[5], frTitle: fr[6], frSub: fr[7],
+      linkSh: s.linkSel ? 'var(--shadow-well),0 0 0 3px var(--color-focus)' : 'var(--shadow-well)',
+      copyBg: s.copied ? 'var(--color-won)' : 'var(--color-accent)', copyIcon: s.copied ? 'check' : 'content_copy', copyLabel: s.copied ? 'Copied!' : 'Copy link', onCopy: () => this.copyLink(),
+      toasts: s.toasts.map((t) => { const K = toastKind[t.kind] || toastKind.info, sticky = t.kind === 'error'; return { ...t, icon: K[0], discBg: K[1], discC: K[2], sh: K[3], role: sticky ? 'alert' : 'status', sticky, close: () => this.dismiss(t.id) }; }),
+    };
+  }
+}
+</script>
+</body>
+</html>

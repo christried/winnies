@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<style>body{margin:0;background:#EFE6EA}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<section ref="{{ rootRef }}" style="display:flex;flex-direction:column;gap:72px;padding:80px;font-family:'M PLUS Rounded 1c',sans-serif;color:#4A2B3A">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:1200px">
+    <span style="font:800 15px/1 'M PLUS Rounded 1c';color:#B0175A">Phase 5f · Showcase dialect</span>
+    <h1 style="margin:0;font:400 56px/1.2 'Mochiy Pop One'">Landing</h1>
+    <p style="margin:0;font:500 20px/1.5 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty">What a signed-out visitor sees at /. Light and dark at 1440 wide, each a working prototype with its P4 motion running. The example run plays itself: Challenges start, Counters fill, Challenges get Won on the Workspace card, the Overlay and the Shared View at the same time, then the Winnie goes Complete and the loop resets. Click any toggle to take the wheel. Boop Nini, move the pointer over the hero, try the Counter in “A Challenge”, switch theme.</p>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;font:700 15px/1.5 'M PLUS Rounded 1c';color:#7A5C6A">
+      <span>New copy (all rewrites): every Landing headline, pitch, legend, stage note, OBS step, CTA, footer line, toast and both link-preview cards.</span>
+      <span>Placeholders: hero video poster (image slot, drop a frame in), gameplay stand-in (shared with the Overlay), demo share links (winnies.app/shared/k1tty-vs-world is invented).</span>
+    </div>
+  </div>
+
+  <sc-for list="{{ states }}" as="s" hint-placeholder-count="2">
+    <div id="{{ s.n }}" data-screen-label="{{ s.label }}" style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+        <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#A8DEFF;color:#4A2B3A">{{ s.n }}</span>
+        <h2 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">{{ s.t }}</h2>
+        <span style="font:600 18px/1.4 'M PLUS Rounded 1c';color:#7A5C6A">{{ s.d }}</span>
+      </div>
+      <div style="display:flex;gap:48px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:800 15px 'M PLUS Rounded 1c';color:#7A5C6A">Light</span>
+          <div data-half="{{ s.kl }}" style="width:1440px;min-height:{{ s.h }};border-radius:24px;overflow:clip;background:#FFE3EC;box-shadow:0 20px 50px -20px rgba(74,43,58,.35)"><sc-if value="{{ s.onL }}" hint-placeholder-val="{{ false }}"><dc-import name="LandingPage" theme="light" reduced="{{ s.red }}" hint-size="1440px,1200px"></dc-import></sc-if></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:800 15px 'M PLUS Rounded 1c';color:#7A5C6A">Dark</span>
+          <div data-half="{{ s.kd }}" style="width:1440px;min-height:{{ s.h }};border-radius:24px;overflow:clip;background:#231520;box-shadow:0 20px 50px -20px rgba(74,43,58,.35)"><sc-if value="{{ s.onD }}" hint-placeholder-val="{{ false }}"><dc-import name="LandingPage" theme="dark" reduced="{{ s.red }}" hint-size="1440px,1200px"></dc-import></sc-if></div>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+
+  <div id="19c" data-screen-label="19c Hero video slot" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#A8DEFF">19c</span>
+      <h2 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">Hero video slot + poster layout</h2>
+      <span style="font:600 18px/1.4 'M PLUS Rounded 1c';color:#7A5C6A">Produced separately. This is the frame it drops into.</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1100px minmax(0,1fr);gap:48px;align-items:start;max-width:2928px">
+      <div style="position:relative;width:1100px;aspect-ratio:16 / 9;border-radius:46px;overflow:hidden;background:repeating-linear-gradient(-45deg,#FFD2E5 0 14px,#FFE3EC 14px 28px);box-shadow:0 0 0 18px #FFF8FB,0 30px 0 2px #F5B8CF">
+        <div style="position:absolute;inset:5%;border:3px dashed #B0175A;border-radius:28px"></div>
+        <span style="position:absolute;left:6%;top:6.5%;font:800 15px/1 'M PLUS Rounded 1c';color:#B0175A;background:#FFF8FB;padding:6px 10px;border-radius:10px">Title-safe 90% · keep faces, UI and the Overlay inside</span>
+        <div style="position:absolute;left:30%;right:22%;top:22%;bottom:30%;border-radius:40px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px">
+          <span style="font:400 22px/1.4 'Mochiy Pop One'">Focal zone</span>
+          <span style="font:600 16px/1.5 'M PLUS Rounded 1c';color:#7A5C6A;text-wrap:pretty;max-width:380px">Poster frame = the video’s first frame. Suggested: the Overlay mid-WON! stamp over real gameplay, Nini reacting. No baked-in text: the page already says it, and German would need a second video.</span>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:19%;background:rgba(74,43,58,.82);display:flex;align-items:center;gap:14px;padding:0 32px">
+          <span style="width:58px;height:58px;border-radius:50%;background:#FF6FAE;box-shadow:0 0 0 4px #4A2B3A"></span>
+          <span style="width:50px;height:50px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 0 4px #4A2B3A"></span>
+          <span style="height:40px;width:170px;border-radius:20px;background:#FFF8FB"></span>
+          <span style="flex:1;height:14px;border-radius:7px;background:#FFF8FB"></span>
+          <span style="position:absolute;left:32px;top:-34px;font:800 15px/1 'M PLUS Rounded 1c';color:#FFF8FB;background:#4A2B3A;padding:6px 10px;border-radius:10px">Controls bar · keep the bottom 19% calm (no subject, no high-contrast detail)</span>
+        </div>
+        <span style="position:absolute;right:30px;top:40%;font:400 20px/1.4 'Mochiy Pop One';color:#4A2B3A;background:#FFF8FB;padding:8px 14px;border-radius:14px;transform:rotate(4deg)">16 : 9</span>
+      </div>
+      <div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px 24px;padding:32px 36px;border-radius:32px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF;font:500 17px/1.55 'M PLUS Rounded 1c'">
+        <sc-for list="{{ videoSpec }}" as="x" hint-placeholder-count="9"><span style="font:400 16px/1.5 'Mochiy Pop One'">{{ x.el }}</span><span style="text-wrap:pretty">{{ x.d }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="19d" data-screen-label="19d Link-preview cards" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#A8DEFF">19d</span>
+      <h2 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">Link-preview cards · Open Graph 1200 × 630</h2>
+      <span style="font:600 18px/1.4 'M PLUS Rounded 1c';color:#7A5C6A">Static images. One for the Landing, one template per shared Winnie.</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1200px);gap:48px 48px">
+      <sc-for list="{{ ogs }}" as="o" hint-placeholder-count="5">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font:800 15px/1.4 'M PLUS Rounded 1c';color:#7A5C6A">{{ o.cap }}</span>
+          <div style="width:1200px;height:630px;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px -20px rgba(74,43,58,.35)"><dc-import name="OGCard" variant="{{ o.v }}" theme="{{ o.theme }}" title="{{ o.name }}" won="{{ o.won }}" total="{{ o.total }}" timer="{{ o.timer }}" state="{{ o.state }}" hint-size="1200px,630px"></dc-import></div>
+        </div>
+      </sc-for>
+      <div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px 24px;align-content:start;padding:32px 36px;border-radius:32px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF;font:500 17px/1.55 'M PLUS Rounded 1c'">
+        <sc-for list="{{ ogSpec }}" as="x" hint-placeholder-count="8"><span style="font:400 16px/1.5 'Mochiy Pop One'">{{ x.el }}</span><span style="text-wrap:pretty">{{ x.d }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="19e" data-screen-label="19e Motion and sound" style="display:flex;flex-direction:column;gap:18px;max-width:1440px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="font:400 22px/1 'Mochiy Pop One';padding:8px 14px;border-radius:18px;background:#A8DEFF">19e</span>
+      <h2 style="margin:0;font:400 30px/1.3 'Mochiy Pop One'">Motion, sound and accessibility</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding:32px 36px;border-radius:32px;background:#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF;font:500 17px/1.55 'M PLUS Rounded 1c'">
+      <sc-for list="{{ motion }}" as="x" hint-placeholder-count="12"><div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px"><span style="font:800 14px/1.7 'M PLUS Rounded 1c';color:#B0175A">{{ x.id }}</span><span style="text-wrap:pretty">{{ x.d }}</span></div></sc-for>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  state = { on: {} };
+  componentDidMount() {
+    this._f = () => { if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = 0; this.scan(); }); };
+    window.addEventListener('scroll', this._f, true); window.addEventListener('resize', this._f);
+    this._iv = setInterval(() => this.scan(), 400);
+    this.scan();
+  }
+  componentWillUnmount() { window.removeEventListener('scroll', this._f, true); window.removeEventListener('resize', this._f); clearInterval(this._iv); cancelAnimationFrame(this._raf); }
+  scan() {
+    const r = this.rootRef.current; if (!r) return;
+    const vw = window.innerWidth, vh = window.innerHeight, on = this.state.on, next = {}, add = [];
+    r.querySelectorAll('[data-half]').forEach((el) => {
+      const k = el.dataset.half, b = el.getBoundingClientRect(); if (!k || !b.width) return;
+      const near = b.bottom > -vh * 0.75 && b.top < vh * 1.75 && b.right > -vw * 0.5 && b.left < vw * 1.5;
+      const far = b.bottom < -vh * 2.5 || b.top > vh * 3.5 || b.right < -vw * 2 || b.left > vw * 3;
+      if (on[k]) { if (!far) next[k] = true; } else if (near) add.push([Math.abs(b.top + b.height / 2 - vh / 2) + Math.abs(b.left + b.width / 2 - vw / 2), k]);
+    });
+    const now = Date.now();
+    if (add.length && now - (this._last || 0) > 450) { add.sort((a, b) => a[0] - b[0]); next[add[0][1]] = true; this._last = now; }
+    const a = Object.keys(on), b = Object.keys(next);
+    if (a.length !== b.length || b.some((k) => !on[k])) this.setState({ on: next });
+  }
+  renderVals() {
+    const on = this.state.on;
+    const S = [
+      ['19a', 'Landing', false, 'Nav, hero + Nini, video slot, “How it works”, the example run (Workspace card, Overlay over gameplay, synced), “Made for going live”, final call to action, footer.', '6900px'],
+      ['19b', 'Landing · reduced motion', true, 'prefers-reduced-motion: every animation off. Video doesn’t autoplay. The demo still plays, states just swap without movement. Nothing is hidden, nothing depends on motion.', '6900px'],
+    ];
+    const spec = (rows) => rows.map(([el, d], k) => ({ k, el, d }));
+    return {
+      rootRef: this.rootRef,
+      states: S.map(([n, t, red, d, h]) => ({ n, t, red, d, h, label: n + ' ' + t, kl: n + 'L', kd: n + 'D', onL: !!on[n + 'L'], onD: !!on[n + 'D'] })),
+      videoSpec: spec([
+        ['Element', '<video autoplay muted loop playsinline preload="metadata" poster="…">. Sits in a 16:9 well (aspect-ratio, so no layout shift) inside a clay bezel: 20px padding, 64px radius, raised-lg lip, grain + gloss sweep.'],
+        ['Files', '1920 × 1080, 20–45 s seamless loop. MP4 (H.264) + WebM (VP9 or AV1), ≤ 6 MB each. Poster as AVIF + JPEG, identical to frame 1 so the swap is invisible.'],
+        ['Content', 'Real gameplay with the Overlay running, one Won stamp, one Complete. No burned-in text or logos. No flashes faster than 3 per second (WCAG 2.3.1).'],
+        ['Controls', 'Play/Pause 64px Bubblegum disc, Mute 56px, status chip (“Playing · muted”), scrubber. Every control has a 4px keyline so it reads over any frame. Pause is required: it autoplays longer than 5 s (WCAG 2.2.2).'],
+        ['Sound', 'Muted by default, always. Unmute is the only way to hear it. If the video ever gets voice-over, ship a captions track.'],
+        ['Reduced motion', 'No autoplay. The poster shows with the Play button and “Paused · reduced motion”. Pressing Play still plays: it was asked for.'],
+        ['Loading', 'Until the poster loads, the well shows the sunken surface colour. Video src attaches after first paint so the hero text never waits for it.'],
+        ['Placeholder', 'In this prototype the poster is an image slot (drop any frame in) and the scrubber runs on a fake 47 s clock.'],
+        ['Tokens', '--card-radius (64px Showcase), --shadow-raised-lg, --shadow-well, --color-keyline, --color-accent.'],
+      ]),
+      ogs: [
+        ['landing', 'light', '', 3, 8, '', '', 'Landing · light (default, og:image for /)'],
+        ['landing', 'dark', '', 3, 8, '', '', 'Landing · dark (optional, e.g. for a dark-mode launch post)'],
+        ['winnie', 'light', 'Kitty vs. the world', 3, 8, '14:32:07', 'running', 'Shared Winnie · running · light'],
+        ['winnie', 'dark', 'Kitty vs. the world', 8, 8, '16:04:51', 'complete', 'Shared Winnie · Complete · dark'],
+        ['winnie', 'light', 'Kitty vs. absolutely everyone!', 0, 12, '1:02:33', 'paused', 'Shared Winnie · paused · 30-character name, 12 Challenges'],
+      ].map(([v, theme, name, won, total, timer, state, cap], k) => ({ k, v, theme, name, won, total, timer, state, cap })),
+      ogSpec: spec([
+        ['Where', '/ uses the Landing card. /shared/:id and /shared/:id/overlay use the Winnie template, rendered with that Winnie’s data.'],
+        ['Fields', 'Name (Mochiy 76, 64 above 22 characters, max 2 lines), Owner, state chip (Live now / Paused / Complete), Total Timer, progress bar, “won / total won · pct%”, one pip per Challenge (first 10).'],
+        ['Meta', 'og:title “Kitty vs. the world · kittyspeedruns on Winnies”. og:description “3 / 8 won · 38%. Total Timer 14:32:07. Watch along live.” twitter:card summary_large_image.'],
+        ['Rendering', 'Server-side at request time (nuxt-og-image / Satori). Flex only, no grid, no blur: every rule here is Satori-safe. Faces come from assets/faces SVG. Cache 60 s, so the timer in a preview is a snapshot.'],
+        ['Theme', 'Light by default. Dark is a per-Owner preference later; link previews don’t know the Viewer’s theme.'],
+        ['Gone', 'Deleted Winnie: fall back to the Landing card. A dead link should still sell the product.'],
+        ['Contrast', 'All text is Cocoa on pastel or Milk on Night, ≥ 4.5:1. The timer passes AAA. Previews get shrunk to ~500px wide, so nothing smaller than 18px.'],
+        ['Safe area', 'Some apps crop to 1.91:1 or a square centre. The name and timer stay in the middle 1080 × 560.'],
+      ]),
+      motion: [
+        ['A01 A02', 'Dots drift. Six clay-swirl blobs spread down the page so it never goes flat.'],
+        ['A03 A08', 'Nini breathes (320px, Locked in with headband). Wordmark waves in the nav and in the 136px hero wordmark.'],
+        ['New · S03', 'Hero wordmark drop: each letter falls from −200px, squashes on landing, bounces, 80ms stagger, then 26 sparkles burst. Responsive tier, once on load. Sound: hero.drop, seven rubbery plops in a rising scale.'],
+        ['New · S04', 'Hero parallax: five floating clay chips (timer, Won, Counter, Pinned, Complete) follow the pointer at different depths, each also bobbing on its own loop. Ambient tier. Off with reduced motion.'],
+        ['New · S05', 'Sign-in nudge: the hero Sign in button wiggles every 8 s unless hovered. A little unhinged, on purpose. Ambient tier. Sound: none (it would get old).'],
+        ['S02', 'Boop Nini: hop, 18 confetti, face switches to Cheer for --dur-cheer. Sound: nini.boop.'],
+        ['R30 R26', 'Every card jellies in once at 12% visible, then its blocks stagger at 40ms. The stream stage card triggers B07 Overlay card enter.'],
+        ['Demo', 'T01–T07 ticks on all three surfaces (Workspace dialect for the card, Broadcast for the Overlay and Shared View). C01 Won fountain on the row, B05 WON! stamp on the Overlay, B01 gold highlight on the Shared View row, progress fills, R17 FLIP travel to the Won group. R23/R24 Counter rolls up to its Target. C02 + C03 when Complete: unfurl, rain, Overlay banner drop and cannons.'],
+        ['New · S06', 'Demo reset: rows stagger out, data resets to the sample, rows stagger back in. Sound: demo.reset, a quick rewind zip.'],
+        ['Video', 'Play/Mute icons morph (R31 recipe). Scrubber is the only linear motion on the page.'],
+        ['R28 R08', 'Theme wipe from the picker. Copy link: icon morph + sparks + success toast 4s. Info toasts 5s.'],
+        ['Autoplay', 'The demo moves for more than 5 s, so it has a visible Autoplay switch (WCAG 2.2.2). Any click on a toggle turns it off with an info toast. Replay demo resets and resumes. The script only runs while the section is on screen.'],
+        ['Reduced', 'All animation off. Cards visible from the start. Video waits for Play. The demo keeps changing data without movement; the word, icon and colour of every state still carry it.'],
+        ['A11y', 'Wordmark h1 is labelled “winnies”. Timers are role=timer with a static label, digits aria-hidden, so screen readers aren’t told every second. Twitch button is aria-disabled with a visible “Soon” chip and dashed outline, not greyed out. Focus ring 3px --color-focus, 3px offset.'],
+      ].map(([id, d], k) => ({ k, id, d })),
+    };
+  }
+}
+</script>
+</body>
+</html>

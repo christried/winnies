@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<link rel="stylesheet" href="./tokens/winnies-tokens.css">
+<script src="./motion/winnies-motion.js"></script>
+<style>body{margin:0;background:transparent}a{color:#B0175A}a:hover{color:#4A2B3A}</style>
+</helmet>
+<div ref="{{ rootRef }}" data-theme="{{ theme }}" data-dialect="broadcast" data-motion-preset="{{ preset }}" data-motion="{{ motionAttr }}" data-screen-label="{{ screenLabel }}" style="position:relative;width:1920px;height:1080px;overflow:hidden;font-family:var(--font-body);color:var(--color-text);-webkit-font-smoothing:antialiased;--overlay-card-w:660px;--overlay-sidebar-w:520px;--overlay-safe:48px;--overlay-row-h:66px;--overlay-pad:22px;--overlay-radius:44px;--overlay-title-size:28px;--overlay-game-size:26px;--timer-overlay-size:68px;--timer-overlay-h:96px;--overlay-stamp-size:72px;--overlay-banner-size:60px">
+  <sc-if value="{{ hasBg }}" hint-placeholder-val="{{ true }}"><dc-import name="Gameplay" variant="{{ bg }}" style="position:absolute;inset:0" hint-size="1920px,1080px"></dc-import></sc-if>
+  <div data-fx="1" style="position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden"></div>
+
+  <sc-if value="{{ isCorner }}" hint-placeholder-val="{{ true }}">
+  <div data-ovwrap="1" style="position:absolute;right:var(--overlay-safe);bottom:var(--overlay-safe);width:var(--overlay-card-w)">
+    <sc-if value="{{ showComplete }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:0;right:0;bottom:calc(100% + 24px);display:flex;justify-content:center;pointer-events:none">
+        <div data-ovbanner="1" style="transform-origin:50% 100%"><div data-amb="wobble" role="status" style="display:flex;align-items:center;gap:16px;height:100px;padding:0 40px 0 28px;border-radius:50px;background:var(--color-complete);color:var(--color-on-accent);font:400 var(--overlay-banner-size)/1.4 var(--font-display);white-space:nowrap;box-shadow:0 0 0 5px var(--color-keyline),0 11px 0 1px var(--color-complete-lip),0 26px 40px rgba(0,0,0,.4)"><span style="font-family:var(--font-icon);font-size:64px;font-variation-settings:'FILL' 1">emoji_events</span>Complete!</div></div>
+      </div>
+    </sc-if>
+    <div data-ovcard="1" data-amb="{{ floatAmb }}" style="position:relative;box-sizing:border-box;padding:var(--overlay-pad);border-radius:var(--overlay-radius);background:{{ cardBg }};color:var(--color-text);display:flex;flex-direction:column;gap:14px;box-shadow:{{ cardSh }}">
+      <sc-if value="{{ showComplete }}" hint-placeholder-val="{{ false }}">
+        <span data-glow="1" aria-hidden="true" style="position:absolute;inset:-16px;border-radius:60px;pointer-events:none"><span data-amb="glow" style="position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 44px 12px var(--color-highlight-gold)"></span></span>
+        <sc-for list="{{ sparkles }}" as="p" hint-placeholder-count="0"><span data-amb="twinkle" data-ad="{{ p.ad }}" aria-hidden="true" style="position:absolute;left:{{ p.x }};top:{{ p.y }};z-index:2;width:38px;height:38px;background:var(--color-highlight-gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none"></span></sc-for>
+      </sc-if>
+      <span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="3000" style="position:absolute;top:-10%;bottom:-10%;left:0;width:18%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <div aria-busy="true" style="position:relative;display:flex;align-items:center;gap:14px;height:40px;padding:0 4px 0 8px">
+          <span style="position:relative;overflow:hidden;width:300px;height:26px;border-radius:13px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+          <span style="flex:1"></span>
+          <span style="position:relative;overflow:hidden;width:150px;height:42px;border-radius:21px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+        </div>
+        <div role="status" style="position:relative;display:flex;align-items:center;justify-content:center;gap:16px;height:var(--timer-overlay-h);border-radius:48px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:400 36px/1.4 var(--font-display)"><span data-loop="spin" style="display:inline-block;width:44px;height:44px;font-family:var(--font-icon);font-size:44px;line-height:44px">progress_activity</span>Loading…</div>
+        <div aria-hidden="true" style="position:relative;display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ skel }}" as="k" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:14px;height:var(--overlay-row-h);padding:0 18px 0 9px;box-sizing:border-box;border-radius:33px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip),inset 0 0 0 2px var(--color-border)"><span style="position:relative;overflow:hidden;flex:none;width:48px;height:48px;border-radius:50%;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="position:relative;overflow:hidden;width:{{ k.w }};height:24px;border-radius:12px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="flex:1"></span><span style="position:relative;overflow:hidden;width:104px;height:26px;border-radius:13px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></div></sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ gone }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="position:relative;display:flex;align-items:center;gap:24px;padding:18px 18px 18px 14px;border-radius:32px;outline:4px dashed var(--color-gone-border);outline-offset:0">
+          <span data-gdisc="1" aria-hidden="true" style="flex:none;width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface);color:var(--color-text);font-family:var(--font-icon);font-size:56px;outline:3px dashed var(--color-gone-border);outline-offset:-3px">link_off</span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:10px">
+            <span style="display:flex;flex-direction:column;font:400 32px/1.35 var(--font-display)"><span>This Winnie doesn’t exist</span><span data-anymore="1" style="display:flex"><sc-for list="{{ anymore }}" as="c" hint-placeholder-count="10"><span style="display:inline-block;white-space:pre">{{ c.c }}</span></sc-for></span></span>
+            <span style="font:700 19px/1.4 var(--font-body);text-wrap:pretty">Streamer: paste a fresh Overlay link into OBS.</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showW }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative;display:flex;align-items:center;gap:14px;padding:0 4px 0 8px">
+          <span style="flex:1;min-width:0;font:400 var(--overlay-title-size)/1.38 var(--font-display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere">{{ title }}</span>
+          <span data-wonpill="1" style="flex:none;display:flex;align-items:center;gap:8px;height:44px;padding:0 18px 0 10px;border-radius:22px;background:{{ pillBg }};color:var(--color-on-accent);font:400 22px/1.4 var(--font-display);white-space:nowrap;box-shadow:0 4px 0 -1px {{ pillLip }}"><span style="font-family:var(--font-icon);font-size:28px;font-variation-settings:'FILL' 1">{{ pillIcon }}</span>{{ wonStr }}</span>
+        </div>
+        <sc-if value="{{ showTimers }}" hint-placeholder-val="{{ true }}"><div data-well="1" role="timer" aria-label="Total Timer {{ total }}" style="position:relative;display:flex;align-items:center;gap:14px;height:var(--timer-overlay-h);padding:0 30px 0 20px;box-sizing:border-box;border-radius:48px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);color:{{ totalC }}">
+          <sc-if value="{{ live }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="1400" style="position:absolute;top:-10%;bottom:-10%;left:0;width:24%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span></sc-if>
+          <span data-ticon="1" aria-hidden="true" style="position:relative;flex:none;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ tIconBg }};color:{{ tIconC }};font-family:var(--font-icon);font-size:34px;font-variation-settings:'FILL' 1,'wght' 600;box-shadow:{{ tIconSh }}">{{ tIcon }}</span>
+          <span data-timer="total" data-kind="ov-total" data-beat="{{ totalBeat }}" aria-hidden="true" style="position:relative;flex:1;display:flex;justify-content:flex-end;font:400 var(--timer-overlay-size)/1 var(--font-display)">
+            <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+          </span>
+        </div>
+        </sc-if>
+        <div role="list" aria-label="Challenges, page {{ pageLabel }}" style="position:relative;display:flex;flex-direction:column;gap:10px;perspective:900px">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+            <div data-orow="{{ r.id }}" role="listitem" aria-label="{{ r.aria }}" style="position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:12px;align-items:center;min-height:var(--overlay-row-h);padding:8px 20px 8px 9px;box-sizing:border-box;border-radius:33px;background:{{ r.bg }};box-shadow:{{ r.sh }}">
+              <sc-if value="{{ r.running }}"><span data-amb="ring" data-ring="{{ r.id }}" aria-hidden="true" style="position:absolute;inset:-6px;border-radius:39px;box-shadow:0 0 22px 6px var(--color-accent);opacity:.6;pointer-events:none"></span></sc-if>
+              <span data-face="{{ r.id }}" data-fbeat="{{ r.fbeat }}" aria-hidden="true" style="position:relative;display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="48" hint-size="48px,48px"></dc-import><sc-if value="{{ r.hasBadge }}"><span style="position:absolute;right:-7px;bottom:-5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.bBg }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:19px;font-variation-settings:'FILL' 1,'wght' 700;box-shadow:0 0 0 3px {{ r.bg }}">{{ r.bIcon }}</span></sc-if></span>
+              <div style="position:relative;min-width:0;display:flex;align-items:center;gap:12px"><span style="min-width:0;font:400 var(--overlay-game-size)/1.4 var(--font-display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere">{{ r.game }}</span><sc-if value="{{ r.hasPl }}"><span aria-hidden="true" style="flex:none;display:flex;padding-left:6px"><sc-for list="{{ r.pl }}" as="p"><span style="width:34px;height:34px;margin-left:-7px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ p.bg }};color:{{ p.ink }};font:400 15px/1 var(--font-display);box-shadow:0 0 0 3px {{ r.bg }},0 0 0 4px var(--color-keyline)">{{ p.i }}</span></sc-for></span></sc-if></div>
+              <div style="position:relative;display:flex;justify-content:flex-end">
+                <sc-if value="{{ r.hasCounter }}"><span data-cwell="{{ r.id }}" style="display:flex;align-items:center;gap:5px;height:40px;padding:0 14px;box-sizing:border-box;border-radius:20px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:{{ r.cSh }};font:400 21px/1 var(--font-display);white-space:nowrap"><span>{{ r.count }}</span><span>/ {{ r.target }}</span><sc-if value="{{ r.over }}"><span style="margin-left:6px;height:26px;padding:0 9px;border-radius:13px;display:flex;align-items:center;background:var(--color-highlight-gold);color:#4A2B3A;font:400 16px/1 var(--font-display);box-shadow:0 0 0 2px var(--color-keyline)">{{ r.overStr }}</span></sc-if></span></sc-if>
+              </div>
+              <sc-if value="{{ showTimers }}" hint-placeholder-val="{{ true }}"><span data-timer="row" data-kind="ov-row" data-beat="{{ r.tbeat }}" aria-hidden="true" style="position:relative;display:flex;justify-content:flex-end;font:400 26px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ multiPage }}" hint-placeholder-val="{{ true }}">
+          <div aria-label="Page {{ pageLabel }}" style="position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:20px">
+            <sc-for list="{{ dots }}" as="p" hint-placeholder-count="2"><span data-dot="{{ p.k }}" style="position:relative;overflow:hidden;width:{{ p.w }};height:14px;border-radius:7px;background:var(--color-control-lip)"><sc-if value="{{ p.on }}"><span data-dotfill="1" style="position:absolute;inset:0;border-radius:7px;background:var(--color-text);transform-origin:0 50%"></span></sc-if></span></sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+    </div>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ false }}">
+      <div data-stamp="1" role="status" style="position:absolute;left:50%;top:50%;z-index:70;width:max-content;max-width:620px;box-sizing:border-box;transform:translate(-50%,-50%) rotate(-8deg);display:flex;flex-direction:column;align-items:center;padding:12px 44px 20px;border-radius:38px;background:var(--color-won);color:var(--color-on-accent);box-shadow:0 0 0 5px var(--color-keyline),0 11px 0 1px var(--color-won-lip),0 30px 44px rgba(0,0,0,.45);pointer-events:none">
+        <span style="display:flex;align-items:center;gap:12px;font:400 var(--overlay-stamp-size)/1.3 var(--font-display)"><span style="font-family:var(--font-icon);font-size:76px;font-variation-settings:'FILL' 1">check_circle</span>WON!</span>
+        <span style="max-width:100%;font:400 28px/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ stampGame }}</span>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isSide }}" hint-placeholder-val="{{ false }}">
+  <div data-ovwrap="1" style="position:absolute;top:24px;right:24px;bottom:{{ sideBottom }};width:var(--overlay-sidebar-w)">
+    <div data-ovcard="1" style="position:relative;height:{{ sideH }};box-sizing:border-box;padding:22px 24px;border-radius:var(--overlay-radius);background:{{ cardBg }};color:var(--color-text);display:flex;flex-direction:column;gap:14px;box-shadow:{{ cardSh }}">
+      <sc-if value="{{ showComplete }}" hint-placeholder-val="{{ false }}">
+        <span data-glow="1" aria-hidden="true" style="position:absolute;inset:-12px;border-radius:56px;pointer-events:none"><span data-amb="glow" style="position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 5px var(--color-highlight-gold),0 0 40px 10px var(--color-highlight-gold)"></span></span>
+        <sc-for list="{{ sparkles }}" as="p" hint-placeholder-count="0"><span data-amb="twinkle" data-ad="{{ p.ad }}" aria-hidden="true" style="position:absolute;left:{{ p.x }};top:{{ p.y }};z-index:2;width:38px;height:38px;background:var(--color-highlight-gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none"></span></sc-for>
+      </sc-if>
+      <span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="3000" style="position:absolute;top:-6%;bottom:-6%;left:0;width:22%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <div aria-busy="true" style="position:relative;display:flex;flex-direction:column;gap:12px">
+          <span style="position:relative;overflow:hidden;width:220px;height:22px;border-radius:11px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+          <span style="position:relative;overflow:hidden;width:340px;height:34px;border-radius:17px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+        </div>
+        <div role="status" style="position:relative;display:flex;align-items:center;justify-content:center;gap:16px;height:104px;border-radius:52px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);font:400 36px/1.4 var(--font-display)"><span data-loop="spin" style="display:inline-block;width:44px;height:44px;font-family:var(--font-icon);font-size:44px;line-height:44px">progress_activity</span>Loading…</div>
+        <span style="position:relative;overflow:hidden;height:28px;border-radius:14px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span>
+        <div aria-hidden="true" style="position:relative;display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ skel }}" as="k" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:14px;height:96px;padding:0 18px 0 12px;box-sizing:border-box;border-radius:34px;background:var(--color-surface-raised);box-shadow:0 4px 0 -1px var(--color-lip),inset 0 0 0 2px var(--color-border)"><span style="position:relative;overflow:hidden;flex:none;width:56px;height:56px;border-radius:50%;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="flex:1;display:flex;flex-direction:column;gap:10px"><span style="position:relative;overflow:hidden;width:{{ k.w }};height:22px;border-radius:11px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span><span style="position:relative;overflow:hidden;width:60%;height:14px;border-radius:7px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></span><span style="position:relative;overflow:hidden;width:96px;height:24px;border-radius:12px;background:var(--color-skeleton)"><span data-loop="skel" style="position:absolute;inset:0;background:var(--texture-shimmer)"></span></span></div></sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ gone }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:28px 20px 26px;border-radius:32px;outline:4px dashed var(--color-gone-border);outline-offset:0">
+          <span data-gdisc="1" aria-hidden="true" style="width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-surface);color:var(--color-text);font-family:var(--font-icon);font-size:56px;outline:3px dashed var(--color-gone-border);outline-offset:-3px">link_off</span>
+          <span style="display:flex;flex-direction:column;align-items:center;font:400 32px/1.35 var(--font-display)"><span>This Winnie doesn’t exist</span><span data-anymore="1" style="display:flex"><sc-for list="{{ anymore }}" as="c" hint-placeholder-count="10"><span style="display:inline-block;white-space:pre">{{ c.c }}</span></sc-for></span></span>
+          <span style="max-width:380px;font:700 19px/1.4 var(--font-body);text-wrap:pretty">Streamer: paste a fresh Overlay link into OBS.</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showW }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ showComplete }}" hint-placeholder-val="{{ false }}">
+          <div data-ovbanner="1" style="position:relative;transform-origin:50% 0"><div data-amb="wobble" role="status" style="display:flex;align-items:center;gap:18px;padding:14px 22px 14px 14px;border-radius:36px;background:var(--color-complete);color:var(--color-on-accent);box-shadow:0 0 0 4px var(--color-keyline),0 9px 0 1px var(--color-complete-lip)">
+            <span aria-hidden="true" style="flex:none;width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-highlight-gold);font-family:var(--font-icon);font-size:48px;font-variation-settings:'FILL' 1;box-shadow:0 5px 0 -1px var(--color-complete-lip)">emoji_events</span>
+            <span style="display:flex;flex-direction:column"><span style="font:400 46px/1.3 var(--font-display)">Complete!</span><span style="font:800 19px/1.35 var(--font-body)">Every Challenge Won · {{ wonStr }}</span></span>
+          </div></div>
+        </sc-if>
+        <div style="position:relative;display:flex;flex-direction:column;gap:6px;padding:0 4px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span aria-hidden="true" style="flex:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--color-pinned);color:var(--color-on-accent);font:400 15px/1 var(--font-display);box-shadow:0 3px 0 -1px var(--color-pinned-lip)">K</span>
+            <span style="flex:1;min-width:0;font:800 19px/1.3 var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">kittyspeedruns</span>
+            <span data-statechip="1" style="flex:none;display:flex;align-items:center;gap:6px;height:36px;padding:0 15px 0 10px;border-radius:18px;background:{{ chipBg }};color:{{ chipC }};box-shadow:{{ chipSh }};font:800 17px/1 var(--font-body);white-space:nowrap"><span style="font-family:var(--font-icon);font-size:22px;font-variation-settings:'FILL' 1">{{ chipIcon }}</span>{{ chipLabel }}</span>
+          </div>
+          <span style="font:400 30px/1.35 var(--font-display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere">{{ title }}</span>
+        </div>
+        <sc-if value="{{ showTimers }}" hint-placeholder-val="{{ true }}"><div data-well="1" role="timer" aria-label="Total Timer {{ total }}" style="position:relative;flex:none;display:flex;align-items:center;gap:14px;height:104px;padding:0 26px 0 20px;box-sizing:border-box;border-radius:52px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);color:{{ totalC }}">
+          <sc-if value="{{ live }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none"><span data-amb="shimmer" data-ad="1400" style="position:absolute;top:-10%;bottom:-10%;left:0;width:24%;background:linear-gradient(100deg,transparent,{{ gloss }},transparent)"></span></span></sc-if>
+          <span data-ticon="1" aria-hidden="true" style="position:relative;flex:none;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ tIconBg }};color:{{ tIconC }};font-family:var(--font-icon);font-size:34px;font-variation-settings:'FILL' 1,'wght' 600;box-shadow:{{ tIconSh }}">{{ tIcon }}</span>
+          <span data-timer="total" data-kind="ov-total" data-beat="{{ totalBeat }}" aria-hidden="true" style="position:relative;flex:1;display:flex;justify-content:flex-end;font:400 70px/1 var(--font-display)">
+            <sc-for list="{{ totalDigits }}" as="d" hint-placeholder-count="8"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.w }};text-align:center;color:{{ d.col }};transform-origin:50% 100%">{{ d.c }}</span></sc-for>
+          </span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;display:flex;align-items:center;gap:14px;padding:0 4px">
+            <div data-track="1" aria-hidden="true" style="flex:1;min-width:0;height:28px;border-radius:14px;background:var(--color-surface-sunken);box-shadow:var(--shadow-well);padding:4px;box-sizing:border-box">
+              <div style="position:relative;height:100%;border-radius:10px;overflow:hidden">
+                <div data-fill="1" style="position:absolute;inset:0;border-radius:10px;overflow:hidden;transform:translateX({{ fillX }})">
+                  <span data-amb="{{ stripesAmb }}" style="position:absolute;top:0;bottom:0;left:-30px;right:0;background:var(--texture-stripes-won)"></span>
+                </div>
+              </div>
+            </div>
+            <span style="flex:none;font:400 22px/1.4 var(--font-display);white-space:nowrap">{{ summary }}</span>
+          </div>
+        </sc-if>
+        <div role="list" aria-label="Challenges, page {{ pageLabel }}" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;gap:12px;perspective:900px">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+            <div data-orow="{{ r.id }}" role="listitem" aria-label="{{ r.aria }}" style="position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:14px;row-gap:4px;align-items:center;min-height:{{ sideRowH }};padding:10px 20px 10px 12px;box-sizing:border-box;border-radius:34px;background:{{ r.bg }};box-shadow:{{ r.sh }}">
+              <sc-if value="{{ r.running }}"><span data-amb="ring" data-ring="{{ r.id }}" aria-hidden="true" style="position:absolute;inset:-6px;border-radius:40px;box-shadow:0 0 22px 6px var(--color-accent);opacity:.6;pointer-events:none"></span></sc-if>
+              <span data-face="{{ r.id }}" data-fbeat="{{ r.fbeat }}" aria-hidden="true" style="position:relative;grid-row:1 / span 2;display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="{{ r.status }}" secs="{{ r.secs }}" untouched="{{ r.untouched }}" size="56" hint-size="56px,56px"></dc-import><sc-if value="{{ r.hasBadge }}"><span style="position:absolute;right:-7px;bottom:-5px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ r.bBg }};color:var(--color-on-accent);font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1,'wght' 700;box-shadow:0 0 0 3px {{ r.bg }}">{{ r.bIcon }}</span></sc-if></span>
+              <div style="position:relative;min-width:0;display:flex;align-items:center;gap:12px"><span style="min-width:0;font:400 var(--overlay-game-size)/1.4 var(--font-display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere">{{ r.game }}</span><sc-if value="{{ r.hasPl }}"><span aria-hidden="true" style="flex:none;display:flex;padding-left:6px"><sc-for list="{{ r.pl }}" as="p"><span style="width:34px;height:34px;margin-left:-7px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ p.bg }};color:{{ p.ink }};font:400 15px/1 var(--font-display);box-shadow:0 0 0 3px {{ r.bg }},0 0 0 4px var(--color-keyline)">{{ p.i }}</span></sc-for></span></sc-if></div>
+              <sc-if value="{{ showTimers }}" hint-placeholder-val="{{ true }}"><span data-timer="row" data-kind="ov-row" data-beat="{{ r.tbeat }}" aria-hidden="true" style="position:relative;align-self:start;padding-top:6px;display:flex;justify-content:flex-end;font:400 26px/1 var(--font-display);color:{{ r.timeC }}"><sc-for list="{{ r.td }}" as="d"><span data-chg="{{ d.chg }}" data-pos="{{ d.pos }}" style="display:inline-block;width:{{ d.wr }};text-align:center;transform-origin:50% 100%">{{ d.c }}</span></sc-for></span></sc-if>
+              <span style="position:relative;min-width:0;display:flex;align-items:center;gap:6px;font:700 18px/1.35 var(--font-body)"><sc-if value="{{ r.pinned }}"><span style="flex:none;display:flex;align-items:center;gap:2px;font-weight:800;color:var(--color-pinned-text)"><span style="font-family:var(--font-icon);font-size:20px;font-variation-settings:'FILL' 1">push_pin</span>Pinned ·</span></sc-if><span style="min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cond }}</span></span>
+              <div style="position:relative;display:flex;justify-content:flex-end">
+                <sc-if value="{{ r.hasCounter }}"><span data-cwell="{{ r.id }}" style="display:flex;align-items:center;gap:5px;height:34px;padding:0 13px;box-sizing:border-box;border-radius:17px;background:{{ r.cBg }};color:{{ r.cC }};box-shadow:{{ r.cSh }};font:400 19px/1 var(--font-display);white-space:nowrap"><span>{{ r.count }}</span><span>/ {{ r.target }}</span><sc-if value="{{ r.over }}"><span style="margin-left:6px;height:26px;padding:0 9px;border-radius:13px;display:flex;align-items:center;background:var(--color-highlight-gold);color:#4A2B3A;font:400 16px/1 var(--font-display);box-shadow:0 0 0 2px var(--color-keyline)">{{ r.overStr }}</span></sc-if></span></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ multiPage }}" hint-placeholder-val="{{ true }}">
+          <div aria-label="Page {{ pageLabel }}" style="position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:24px">
+            <sc-for list="{{ dots }}" as="p" hint-placeholder-count="2"><span data-dot="{{ p.k }}" style="position:relative;overflow:hidden;width:{{ p.w }};height:14px;border-radius:7px;background:var(--color-control-lip)"><sc-if value="{{ p.on }}"><span data-dotfill="1" style="position:absolute;inset:0;border-radius:7px;background:var(--color-text);transform-origin:0 50%"></span></sc-if></span></sc-for>
+            <span style="margin-left:6px;font:400 18px/1.4 var(--font-display)">{{ pageLabel }}</span>
+          </div>
+        </sc-if>
+      </sc-if>
+    </div>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ false }}">
+      <div data-stamp="1" role="status" style="position:absolute;left:50%;top:50%;z-index:70;width:max-content;max-width:500px;box-sizing:border-box;transform:translate(-50%,-50%) rotate(-8deg);display:flex;flex-direction:column;align-items:center;padding:12px 40px 20px;border-radius:38px;background:var(--color-won);color:var(--color-on-accent);box-shadow:0 0 0 5px var(--color-keyline),0 11px 0 1px var(--color-won-lip),0 30px 44px rgba(0,0,0,.45);pointer-events:none">
+        <span style="display:flex;align-items:center;gap:12px;font:400 var(--overlay-stamp-size)/1.3 var(--font-display)"><span style="font-family:var(--font-icon);font-size:76px;font-variation-settings:'FILL' 1">check_circle</span>WON!</span>
+        <span style="max-width:100%;font:400 28px/1.4 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ stampGame }}</span>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loading&quot;,&quot;single&quot;,&quot;pages&quot;,&quot;won&quot;,&quot;complete-in&quot;,&quot;complete&quot;,&quot;calm&quot;,&quot;gone&quot;,&quot;long&quot;],&quot;default&quot;:&quot;pages&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;placement&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;corner&quot;,&quot;sidebar&quot;],&quot;default&quot;:&quot;corner&quot;,&quot;tsType&quot;:&quot;'corner'|'sidebar'&quot;},&quot;bg&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bright&quot;,&quot;dark&quot;,&quot;busy&quot;,&quot;none&quot;],&quot;default&quot;:&quot;bright&quot;,&quot;tsType&quot;:&quot;'bright'|'dark'|'busy'|'none'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;perPage&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;min&quot;:1,&quot;max&quot;:5,&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Owner settings&quot;},&quot;timers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Owner settings&quot;},&quot;calm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Owner settings&quot;},&quot;players&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Owner settings&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  static P0() {
+    return [
+      { id: 1, game: 'Elden Ring', cond: 'Malenia, no summons', secs: 11564, pinned: true, running: true },
+      { id: 2, game: 'Super Mario 64', cond: 'All stars', count: 87, target: 120, secs: 14470 },
+      { id: 3, game: 'Cuphead', cond: 'Expert, every boss', count: 12, target: 19, secs: 6482 },
+      { id: 4, game: 'Celeste', cond: 'Farewell, golden strawberry', secs: 0 },
+      { id: 5, game: 'Dark Souls III', cond: 'Soul Level 1 Nameless King', secs: 8431 },
+      { id: 6, game: 'Hollow Knight', cond: 'Pantheon of Hallownest', secs: 4509, won: true },
+      { id: 7, game: 'Hades', cond: 'Heat 16 clear', secs: 3160, won: true },
+      { id: 8, game: 'Tetris Effect', cond: '150 lines, Marathon', count: 150, target: 150, secs: 2511, won: true },
+    ];
+  }
+  static LONG() {
+    const p = Component.P0();
+    return [
+      { ...p[0], game: 'The Legend of Zelda: Tears of the Kingdom, Master Mode Randomizer Edition', cond: 'Every shrine and lightroot, no fast travel, chat picks the weapon every hour' },
+      { ...p[1], game: 'Teenage Mutant Ninja Turtles: Shredder’s Revenge, Dimension Shellshock', cond: 'Gnarly difficulty, solo, every Radical Mode challenge, no continues' },
+      { ...p[2], game: 'Metal Gear Solid V: The Phantom Pain', cond: 'S-rank every main mission, no reflex mode, no kills, no alerts, no regrets' },
+      p[3],
+      { ...p[4], game: 'Dark Souls III: The Fire Fades Edition, Game of the Year', cond: 'Soul Level 1 Nameless King, no shields, no summons, no parries, no fun' },
+      p[5], p[6], p[7],
+    ];
+  }
+  static seed(scn) {
+    const mk = (arr) => arr.map((d, i) => ({ count: null, target: null, pinned: false, running: false, won: false, cond: '', secs: 0, ...d, order: i }));
+    const st = { title: 'Kitty vs. the world', total: 52327, ch: mk(Component.P0()), loading: scn === 'loading', gone: scn === 'gone', celebrated: false };
+    if (scn === 'single') st.ch = st.ch.filter((x) => [1, 2, 3, 6, 7].includes(x.id));
+    if (scn === 'long') { st.title = 'Kitty vs. absolutely everyone!'; st.ch = mk(Component.LONG()); }
+    if (scn === 'complete-in' || scn === 'complete') st.ch = st.ch.map((x) => (x.id === 1 && scn === 'complete-in' ? x : { ...x, won: true, running: false, count: x.target != null ? x.target : null }));
+    if (scn === 'complete') st.celebrated = true;
+    return st;
+  }
+  scn() { return this.props.scenario || 'pages'; }
+  fresh() { return { ...Component.seed(this.scn()), tickN: 0, page: 0, stamp: null, hold: null }; }
+  state = this.fresh();
+  _stg = {}; _vis = true; _lastFlip = Date.now();
+
+  root() { return this.rootRef.current; }
+  q(sel) { const r = this.root(); return r ? r.querySelector(sel) : null; }
+  qa(sel) { const r = this.root(); return r ? [...r.querySelectorAll(sel)] : []; }
+  sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  sc() { const r = this.root(); return r ? r.getBoundingClientRect().width / (r.offsetWidth || 1) || 1 : 1; }
+  T() { return this.m.T(); }
+  stage(s) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && s >= t[i]) i++; return i; }
+  rank(q) { return q.won && this.state.hold !== q.id ? 2 : q.pinned ? 0 : 1; }
+  sorted() { return [...this.state.ch].sort((a, b) => this.rank(a) - this.rank(b) || a.order - b.order); }
+  live() { return this.state.ch.some((x) => x.running && !x.won); }
+  per() { return Math.max(1, Math.min(5, Math.round(+(this.props.perPage ?? 5)) || 5)); }
+  pages() { return Math.max(1, Math.ceil(this.state.ch.length / this.per())); }
+  calm() { return this.scn() === 'calm' || !!this.props.calm; }
+  rotates() { return ['pages', 'long', 'complete', 'calm'].includes(this.scn()); }
+  isReduced() { return !!this.props.reduced || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  cfg() { return { amb: true, resp: true, cel: true, reduced: this.isReduced(), dialect: 'broadcast', calm: this.calm(), interval: 1000 }; }
+  ovEls() { return this.qa('[data-orow]').map((el) => ['o' + el.dataset.orow, el]); }
+  later(fn, ms) { this._ts = this._ts || []; this._ts.push(setTimeout(fn, ms)); }
+
+  componentDidMount() {
+    const boot = () => {
+      if (!window.WinniesMotion) { this._bt = setTimeout(boot, 40); return; }
+      this.m = window.WinniesMotion.engine({ root: () => this.root(), fx: () => this.q('[data-fx]'), cfg: () => this.cfg(), cue: () => {} });
+      this.refreshTokens(); setTimeout(() => this.refreshTokens(), 700); setTimeout(() => this.refreshTokens(), 1800);
+      this._iv = setInterval(() => this.tick(), 1000);
+      this._hk = setInterval(() => this.housekeep(), 400);
+      this.maybeIntro();
+    };
+    const setAnims = (play) => { const el = this.root(); if (!el) return; el.getAnimations({ subtree: true }).forEach((a) => { try { play ? a.play() : a.pause(); } catch (e) {} }); };
+    if (typeof IntersectionObserver !== 'undefined') {
+      this._vis = false;
+      this._io = new IntersectionObserver((es) => {
+        const v = es[es.length - 1].isIntersecting; if (v === this._vis) return;
+        this._vis = v;
+        if (!v) { setAnims(false); return; }
+        if (!this._booted) { this._booted = true; boot(); return; }
+        setAnims(true); if (this.m) { this.refreshTokens(); this.maybeIntro(); }
+      }, { rootMargin: '100px' });
+      this._io.observe(this.root());
+    } else { this._booted = true; boot(); }
+  }
+  componentWillUnmount() {
+    clearTimeout(this._bt); clearInterval(this._iv); clearInterval(this._hk); clearInterval(this._gw);
+    (this._ts || []).forEach(clearTimeout); this._io && this._io.disconnect(); this._dead = true;
+  }
+  componentDidUpdate(pp) {
+    if (pp.scenario !== this.props.scenario) {
+      (this._ts || []).forEach(clearTimeout); clearInterval(this._gw); this._introDone = false; this._stg = {};
+      this.setState(this.fresh(), () => this.maybeIntro());
+      return;
+    }
+    if (!this.m || !this._vis) return;
+    if (this.state.page >= this.pages()) this.setState({ page: 0 });
+    const key = this.props.theme + '|' + this.isReduced() + '|' + this.props.placement + '|' + this.calm() + '|' + this.props.perPage;
+    if (key !== this._key) { this._key = key; this.refreshTokens(); this.dotFill(); }
+    else this.m.syncLoops(false);
+    if (this.state.tickN !== this._lastTick) { this._lastTick = this.state.tickN; this.runTick(); }
+  }
+  refreshTokens() { const el = this.root(); if (this.m && el && this._vis) { this.m.refresh(el); this.m.syncLoops(true); } }
+
+  maybeIntro() {
+    if (!this.m || !this._vis || this._introDone) return;
+    this._introDone = true;
+    const scn = this.scn(), m = this.m;
+    this.later(() => {
+      if (this.props.placement === 'sidebar') m.stagIn(this.qa('[data-ovcard] > div, [data-orow]'));
+      else m.cardEnter(this.q('[data-ovcard]'));
+      this._lastFlip = Date.now() - (this.T().D.page - 3500); this.dotFill(3500);
+      if (scn === 'gone') {
+        this.later(() => m.jelly('resp', this.q('[data-gdisc]'), 1.2), 700);
+        this.later(() => this.waveAnymore(), 1100);
+        clearInterval(this._gw); this._gw = setInterval(() => this.waveAnymore(), 5000);
+      }
+      if (scn === 'won') this.loopWon(2600, 7000);
+      if (scn === 'calm') this.loopWon(5200, 8000);
+      if (scn === 'complete-in') this.loopWon(2600, 11000);
+    }, 200);
+  }
+  waveAnymore() { if (this._vis && this.m) this.m.wave(this.qa('[data-anymore] > span'), 1.8); }
+  loopWon(at, after) {
+    this.later(async () => {
+      if (this._dead) return;
+      if (!this._vis || !this.m) { this.loopWon(1500, after); return; }
+      await this.ovWon(1);
+      this.later(async () => { if (this._dead) return; await this.replay(); this.loopWon(at, after); }, after);
+    }, at);
+  }
+  async replay() {
+    const m = this.m, scn = this.scn(), keep = this.state;
+    const next = () => { const f = this.fresh(); return { ...f, total: keep.total, ch: f.ch.map((x) => { const c = keep.ch.find((y) => y.id === x.id); return c && x.running ? { ...x, secs: c.secs } : x; }) }; };
+    if (scn === 'complete-in') {
+      const wrap = this.q('[data-ovwrap]');
+      await m.done(m.play('resp', wrap, [{ opacity: 1 }, { opacity: 0 }], { duration: 280, easing: 'ease-in', fill: 'forwards' }));
+      this.setState(next(), () => { if (wrap) wrap.getAnimations().forEach((a) => a.cancel()); const w2 = this.q('[data-ovwrap]'); if (w2) w2.getAnimations().forEach((a) => a.cancel()); m.cardEnter(this.q('[data-ovcard]')); this._lastFlip = Date.now(); this.dotFill(); });
+    } else {
+      await m.pageFlipOut(this.qa('[data-orow]'));
+      this.setState(next(), () => { m.pageFlipIn(this.qa('[data-orow]')); this._lastFlip = Date.now(); this.dotFill(); });
+    }
+  }
+  housekeep() {
+    if (!this._vis || !this.m || !this.rotates()) return;
+    const s = this.state;
+    if (s.stamp || this._busy || this._flipping || s.loading || s.gone) return;
+    if (this.pages() > 1 && Date.now() - this._lastFlip > this.T().D.page) this.flipTo((s.page + 1) % this.pages());
+  }
+  async flipTo(to) {
+    if (this._flipping) return; this._flipping = true;
+    const m = this.m; m.cue('page.flip', 'B04');
+    await m.pageFlipOut(this.qa('[data-orow]'));
+    this.setState({ page: to }, () => {
+      m.pageFlipIn(this.qa('[data-orow]')); m.pop(this.q(`[data-dot="${to}"]`), 1.4);
+      this._flipping = false; this._lastFlip = Date.now(); this.dotFill();
+    });
+  }
+  dotFill(rem) {
+    const el = this.q('[data-dotfill]'), m = this.m; if (!el || !m) return;
+    el.getAnimations().forEach((a) => a.cancel());
+    if (!this.rotates()) return;
+    const P = this.T().D.page, r = rem == null ? Math.max(200, P - (Date.now() - this._lastFlip)) : rem, from = Math.max(0, 1 - r / P);
+    m.play('amb', el, [{ transform: `scaleX(${from})` }, { transform: 'scaleX(1)' }], { duration: r, easing: 'linear', fill: 'both' });
+  }
+  async ovWon(id) {
+    const m = this.m; if (!m) return;
+    const l = this.sorted(), q = l.find((x) => x.id === id); if (!q || q.won) return;
+    this._busy = true;
+    const pg = Math.floor(l.indexOf(q) / this.per());
+    if (pg !== this.state.page) { await this.flipTo(pg); await this.sleep(this.isReduced() ? 0 : this.T().D.land + 200); }
+    const el = this.q(`[data-orow="${id}"]`), wasLive = this.live(), n = this.state.ch.length;
+    const oldPct = Math.round((this.state.ch.filter((x) => x.won).length / n) * 100), newPct = Math.round(((this.state.ch.filter((x) => x.won).length + 1) / n) * 100);
+    m.cardHop(this.q('[data-ovcard]')); m.won(el, el && el.querySelector('[data-face]'), true);
+    this.setState((s) => ({ ch: s.ch.map((x) => (x.id === id ? { ...x, won: true, running: false, count: x.target != null ? x.target : x.count } : x)), hold: id, stamp: { game: q.game } }), () => {
+      m.stampIn(this.q('[data-stamp]')); m.pop(this.q('[data-wonpill]')); m.pop(this.q('[data-statechip]'), 1.15);
+      const f = this.q('[data-fill]'); if (f) m.progress(f, -(100 - oldPct), -(100 - newPct));
+      if (wasLive && !this.live()) { m.droop(this.qa('[data-timer="total"] > span')); m.morph(this.q('[data-ticon]')); }
+    });
+    await this.sleep(this.isReduced() ? 2200 : this.T().D.stamp + this.T().D.cheer);
+    if (this._dead) return;
+    await m.stampOut(this.q('[data-stamp]'));
+    const all = this.state.ch.every((x) => x.won), prev = m.capture(this.ovEls());
+    this.setState({ stamp: null, hold: null, celebrated: all || this.state.celebrated }, () => {
+      m.flip(prev, this.ovEls(), this.sc());
+      if (all) this.celebrate();
+      this._busy = false;
+    });
+  }
+  celebrate() {
+    const m = this.m, card = this.q('[data-ovcard]'), calm = this.calm();
+    m.jelly('cel', card, calm ? 0.3 : 1); m.bannerDrop(this.q('[data-ovbanner]')); m.ringIn(this.q('[data-glow]'));
+    m.wave(this.qa('[data-timer="total"] > span'), 1.4); m.morph(this.q('[data-ticon]'));
+    if (calm) m.burst('cel', card, { oy: 0, n: 10, size: 22, spread: 200 });
+    else {
+      m.burst('cel', card, { ox: 0, oy: 0, angle: -2.3, cone: 1.1, spread: 560, size: 30 });
+      m.burst('cel', card, { ox: 1, oy: 0, angle: -0.85, cone: 1.1, spread: 560, size: 30 });
+      m.rain('cel', { k: 1.5, size: 34 });
+    }
+    m.cue('overlay.complete', 'C03', this.T().D.land * 0.9);
+  }
+  tick() {
+    if (!this._vis) return;
+    const s = this.state; if (s.loading || s.gone || !this.live()) return;
+    this.setState((st) => ({ tickN: st.tickN + 1, total: st.total + 1, ch: st.ch.map((x) => (x.running && !x.won ? { ...x, secs: x.secs + 1 } : x)) }));
+  }
+  runTick() {
+    const m = this.m;
+    this.qa('[data-timer]').forEach((t) => { const d = [...t.querySelectorAll('[data-chg="1"]')]; if (d.length) m.tick(d, t.dataset.kind, t.dataset.beat, t.closest('[data-well]')); });
+    const tb = this.q('[data-timer="total"]'), mb = tb && tb.dataset.beat !== 'sec';
+    this.qa('[data-fbeat]').forEach((el) => { if (el.dataset.fbeat !== '') m.beat(el, +el.dataset.fbeat, mb); });
+    this.state.ch.forEach((x) => {
+      if (!x.running || x.won) return;
+      const st = this.stage(x.secs);
+      if (this._stg[x.id] != null && this._stg[x.id] !== st) m.stageChange(this.q(`[data-face="${x.id}"]`));
+      this._stg[x.id] = st;
+    });
+  }
+  digits(str, prev) {
+    const off = prev ? prev.length - str.length : 0, n = str.length;
+    return str.split('').map((c, i) => ({ k: i, c, pos: n - 1 - i, chg: prev && prev[i + off] !== c ? '1' : '0', w: c === ':' ? 'var(--timer-colon-w)' : 'var(--timer-digit-w)', wr: c === ':' ? '0.34em' : '0.66em', col: c === ':' ? 'var(--color-text-muted)' : 'inherit' }));
+  }
+  renderVals() {
+    const s = this.state, scn = this.scn(), dark = this.props.theme === 'dark', side = this.props.placement === 'sidebar', bg = this.props.bg || 'bright';
+    const p2 = (n) => String(n).padStart(2, '0');
+    const fmt = (x) => (!x ? '00:00' : Math.floor(x / 3600) + ':' + p2(Math.floor((x % 3600) / 60)) + ':' + p2(x % 60));
+    const fmtT = (x) => { const h = Math.floor(x / 3600), mm = Math.floor((x % 3600) / 60), ss = x % 60; return h ? h + ':' + p2(mm) + ':' + p2(ss) : p2(mm) + ':' + p2(ss); };
+    const beat = (x) => (x % 3600 === 0 ? 'hour' : x % 60 === 0 ? 'min' : 'sec');
+    const ch = s.ch, n = ch.length, won = ch.filter((x) => x.won).length, pct = n ? Math.round((won / n) * 100) : 0, live = this.live();
+    const complete = n > 0 && won === n && !!s.celebrated && !s.stamp;
+    const pages = this.pages(), page = Math.min(s.page, pages - 1), list = this.sorted();
+    const loading = !!s.loading, gone = !!s.gone, showW = !loading && !gone;
+    const per = this.per(), PL = [{ id: 1, name: 'Kitty', c: 1, on: 1 }, { id: 2, name: 'Bean', c: 2, on: 1 }, { id: 3, name: 'Momo', c: 3, on: 3 }, { id: 4, name: 'Rex', c: 4, on: null }];
+    const rows = list.slice(page * per, page * per + per).map((x) => {
+      const pl = this.props.players ? PL.filter((p) => p.on === x.id).map((p) => ({ k: p.id, i: p.name[0], bg: 'var(--player-' + p.c + ')', ink: 'var(--player-' + p.c + '-ink)' })) : [];
+      const over = x.target != null && x.count > x.target;
+      const running = x.running && !x.won, t = fmt(x.secs), full = x.target != null && x.count >= x.target;
+      const rbg = x.won ? 'var(--color-won-surface)' : running ? 'var(--color-running-surface)' : 'var(--color-surface-raised)';
+      const word = x.won ? 'Won' : running ? 'Running' : 'Idle';
+      return {
+        id: x.id, game: x.game, cond: x.cond, pinned: x.pinned && !x.won, running, won: x.won,
+        status: x.won ? 'won' : running ? 'running' : 'idle', secs: x.secs, untouched: !x.secs,
+        bg: rbg,
+        sh: x.won ? '0 4px 0 -1px var(--color-won-surface-lip)' : running ? '0 0 0 3px var(--color-running-ring),0 6px 0 0 var(--color-running-lip)' : '0 4px 0 -1px var(--color-lip),inset 0 0 0 2px var(--color-border)',
+        hasBadge: x.won || running, bIcon: x.won ? 'check' : 'timer', bBg: x.won ? 'var(--color-won)' : 'var(--color-accent)',
+        timeC: x.won ? 'var(--color-won-text)' : running ? 'var(--color-running-text)' : !x.secs ? 'var(--color-text-muted)' : 'var(--color-text)',
+        td: this.digits(t, running && s.tickN ? fmt(x.secs - 1) : null), tbeat: beat(x.secs), fbeat: running ? String(this.stage(x.secs)) : '',
+        hasCounter: x.target != null, count: x.count, target: x.target, over, overStr: over ? '+' + (x.count - x.target) : '', hasPl: pl.length > 0, pl,
+        cBg: over ? 'var(--color-complete)' : full ? 'var(--color-won)' : 'var(--color-surface-sunken)', cC: full ? 'var(--color-on-accent)' : 'var(--color-text)', cSh: over ? '0 3px 0 -1px var(--color-complete-lip)' : full ? '0 3px 0 -1px var(--color-won-lip)' : 'var(--shadow-well)',
+        aria: x.game + ', ' + word + (x.pinned && !x.won ? ', Pinned' : '') + (x.target != null ? ', ' + x.count + ' of ' + x.target + (over ? ', ' + (x.count - x.target) + ' over target' : '') : '') + (pl.length ? ', played by ' + PL.filter((p) => p.on === x.id).map((p) => p.name).join(' and ') : '') + ', ' + t,
+      };
+    });
+    const tt = fmtT(s.total);
+    const ti = complete ? ['emoji_events', 'var(--color-complete)', 'var(--color-on-accent)', '0 4px 0 -1px var(--color-complete-lip)']
+      : live ? ['timer', 'var(--color-accent)', 'var(--color-on-accent)', '0 4px 0 -1px var(--color-accent-lip)']
+      : ['pause', 'var(--color-control)', 'var(--color-text)', '0 4px 0 -1px var(--color-control-lip)'];
+    const runN = ch.filter((x) => x.running && !x.won).length;
+    const chip = complete ? ['emoji_events', 'var(--color-complete)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-complete-lip)', 'Complete']
+      : live ? ['timer', 'var(--color-accent)', 'var(--color-on-accent)', '0 3px 0 -1px var(--color-accent-lip)', runN + ' running']
+      : ['pause', 'var(--color-control)', 'var(--color-text)', '0 3px 0 -1px var(--color-control-lip)', 'Paused'];
+    const sparkles = (side ? [['-20px', '-22px', '0'], ['478px', '-24px', '500'], ['-26px', '46%', '900'], ['486px', '62%', '1300']] : [['-24px', '-26px', '0'], ['620px', '-30px', '500'], ['-30px', '60%', '900'], ['630px', '72%', '1300']]).map(([x, y, ad], k) => ({ k, x, y, ad }));
+    const labels = { loading: 'Loading', single: 'Single page', pages: 'Page 1 of 2', won: 'Just Won', 'complete-in': 'Complete entrance', complete: 'Complete sustained', calm: 'Calm preset', gone: 'Gone', long: 'Long names' };
+    return {
+      rootRef: this.rootRef, theme: dark ? 'dark' : 'light', preset: this.calm() ? 'calm' : 'standard', motionAttr: this.isReduced() ? 'reduce' : 'full',
+      screenLabel: 'Overlay P6 · ' + (labels[scn] || scn) + ' · ' + (side ? 'sidebar' : 'corner') + ' · ' + bg,
+      hasBg: bg !== 'none', bg, isCorner: !side, isSide: side,
+      floatAmb: gone || loading ? '' : 'float',
+      cardBg: gone ? 'var(--color-gone-surface)' : 'var(--overlay-card)',
+      cardSh: gone ? '0 0 0 var(--border-keyline) var(--color-keyline),0 26px 44px rgba(0,0,0,.45)' : 'var(--overlay-shadow)',
+      sideBottom: gone ? 'auto' : '24px', sideH: gone ? 'auto' : '100%',
+      gloss: dark ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.75)',
+      loading, gone, showW, skel: ['46%', '38%', '52%', '30%', '42%'].map((w, k) => ({ k, w })),
+      anymore: '(anymore).'.split('').map((c, k) => ({ k, c })),
+      title: s.title, wonStr: `${won} / ${n} won`, summary: `${won} / ${n} won · ${pct}%`,
+      pillBg: complete ? 'var(--color-complete)' : 'var(--color-won)', pillLip: complete ? 'var(--color-complete-lip)' : 'var(--color-won-lip)', pillIcon: complete ? 'emoji_events' : 'check_circle',
+      total: tt, totalC: complete || (n > 0 && won === n) ? 'var(--color-won-text)' : live ? 'var(--color-running-text)' : 'var(--color-text)', totalBeat: beat(s.total),
+      totalDigits: this.digits(tt, live && s.tickN ? fmtT(s.total - 1) : null), live,
+      tIcon: ti[0], tIconBg: ti[1], tIconC: ti[2], tIconSh: ti[3],
+      chipIcon: chip[0], chipBg: chip[1], chipC: chip[2], chipSh: chip[3], chipLabel: chip[4],
+      showProgress: !complete, fillX: -(100 - pct) + '%', stripesAmb: live ? 'stripes' : '',
+      rows, multiPage: pages > 1, pageLabel: page + 1 + ' / ' + pages,
+      dots: Array.from({ length: pages }, (_, k) => ({ k, on: k === page, w: k === page ? '48px' : '14px' })),
+      showComplete: complete, sparkles, sideRowH: complete ? '96px' : '108px',
+      hasStamp: !!s.stamp, stampGame: s.stamp ? s.stamp.game : '', showTimers: this.props.timers !== false,
+    };
+  }
+}
+</script>
+</body>
+</html>

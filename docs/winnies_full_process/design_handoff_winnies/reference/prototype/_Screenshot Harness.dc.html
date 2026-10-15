@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./_shots.js"></script>
+<style>body{margin:0;background:#FF00FF;overflow:hidden}</style>
+</helmet>
+<div style="position:fixed;left:0;top:0;width:100vw;height:100vh;overflow:hidden;background:#FF00FF">
+  <div style="position:absolute;left:0;top:{{ top }};width:{{ iw }};transform-origin:0 0;transform:scale({{ s }})">
+    <sc-if value="{{ isWs }}" hint-placeholder-val="{{ false }}"><dc-import name="WinniesWorkspace" scenario="{{ p.scenario }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1000px"></dc-import></sc-if>
+    <sc-if value="{{ isSv }}" hint-placeholder-val="{{ false }}"><dc-import name="SharedView" scenario="{{ p.scenario }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1180px"></dc-import></sc-if>
+    <sc-if value="{{ isOv }}" hint-placeholder-val="{{ false }}"><div style="position:relative;width:1920px;height:1080px;overflow:hidden"><dc-import name="OverlayFrame" scenario="{{ p.scenario }}" bg="{{ p.bg }}" placement="{{ p.placement }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1920px,1080px"></dc-import></div></sc-if>
+    <sc-if value="{{ isLp }}" hint-placeholder-val="{{ false }}"><dc-import name="LandingPage" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1200px"></dc-import></sc-if>
+    <sc-if value="{{ isCl }}" hint-placeholder-val="{{ false }}"><dc-import name="ChangelogPage" scenario="{{ p.scenario }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1200px"></dc-import></sc-if>
+    <sc-if value="{{ isOg }}" hint-placeholder-val="{{ false }}"><div style="width:1200px;height:630px;overflow:hidden"><dc-import name="OGCard" variant="{{ p.variant }}" theme="{{ p.theme }}" title="{{ p.title }}" won="{{ p.won }}" total="{{ p.total }}" timer="{{ p.timer }}" state="{{ p.state }}" hint-size="1200px,630px"></dc-import></div></sc-if>
+    <sc-if value="{{ isWs6 }}" hint-placeholder-val="{{ false }}"><dc-import name="WorkspaceP6" scenario="{{ p.scenario }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1000px"></dc-import></sc-if>
+    <sc-if value="{{ isSv6 }}" hint-placeholder-val="{{ false }}"><dc-import name="SharedViewP6" scenario="{{ p.scenario }}" theme="{{ p.theme }}" reduced="{{ p.reduced }}" hint-size="1440px,1180px"></dc-import></sc-if>
+    <sc-if value="{{ isOv6 }}" hint-placeholder-val="{{ false }}"><div style="position:relative;width:1920px;height:1080px;overflow:hidden"><dc-import name="OverlayFrameP6" scenario="{{ p.scenario }}" theme="{{ p.theme }}" placement="{{ p.placement }}" bg="{{ p.bg }}" per-page="{{ p.per }}" timers="{{ p.timers }}" calm="{{ p.calm }}" players="{{ p.players }}" reduced="{{ p.reduced }}" hint-size="1920px,1080px"></dc-import></div></sc-if>
+    <sc-if value="{{ isWsB }}" hint-placeholder-val="{{ false }}"><dc-import name="P6bWorkspace" scenario="{{ p.scenario }}" theme="{{ p.theme }}" hint-size="1440px,1000px"></dc-import></sc-if>
+    <sc-if value="{{ isSvB }}" hint-placeholder-val="{{ false }}"><dc-import name="P6bShared" scenario="{{ p.scenario }}" theme="{{ p.theme }}" hint-size="1440px,1100px"></dc-import></sc-if>
+    <sc-if value="{{ isOvB }}" hint-placeholder-val="{{ false }}"><div style="position:relative;width:1920px;height:1080px;overflow:hidden"><dc-import name="P6bOverlay" scenario="{{ p.scenario }}" theme="{{ p.theme }}" hint-size="1920px,1080px"></dc-import></div></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { shot: null, tile: 0 };
+  componentDidMount() {
+    const tiles = [];
+    (window.__SHOTS || []).forEach((s, i) => { for (let t = 0; t < s.T; t++) tiles.push([i, t]); });
+    this.tiles = tiles;
+    window.__step = (k) => {
+      const [i, t] = this.tiles[k] || [];
+      if (i == null) return;
+      if (t === 0) this.setState({ shot: null, tile: 0 }, () => setTimeout(() => this.setState({ shot: window.__SHOTS[i], tile: 0 }), 30));
+      else this.setState({ tile: t });
+    };
+  }
+  renderVals() {
+    const sh = this.state.shot || {}, c = sh.c || '', p = sh.p || {};
+    const iw = sh.iw || 1440, vw = window.innerWidth || 924, vh = window.innerHeight || 540, s = vw / iw;
+    return {
+      p, s, iw: iw + 'px', top: -(this.state.tile * vh) + 'px',
+      isWs: c === 'ws', isSv: c === 'sv', isOv: c === 'ov', isLp: c === 'lp', isCl: c === 'cl', isOg: c === 'og',
+      isWs6: c === 'ws6', isSv6: c === 'sv6', isOv6: c === 'ov6', isWsB: c === 'wsb', isSvB: c === 'svb', isOvB: c === 'ovb',
+    };
+  }
+}
+</script>
+</body>
+</html>

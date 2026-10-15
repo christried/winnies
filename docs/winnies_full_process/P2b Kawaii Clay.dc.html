@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<script src="./winnies-core.js"></script>
+<style>body{margin:0;background:#FBD3E1}a{color:#B0175A}a:hover{color:#4A2B3A}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+</helmet>
+<div style="position:relative;box-sizing:border-box;width:4064px;padding:80px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;background:#FBD3E1;font-family:'M PLUS Rounded 1c',sans-serif;color:#4A2B3A">
+
+  <header id="k2" style="width:100%;display:flex;align-items:flex-end;gap:40px">
+    <div style="width:132px;height:132px;border-radius:50%;background:#FFEFA1;display:flex;align-items:center;justify-content:center;font:400 48px/1 'Mochiy Pop One';border:6px solid #fff;box-shadow:0 10px 0 -2px #E8C860,0 20px 30px -10px rgba(220,80,140,.4);transform:rotate(-8deg)">K+</div>
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:2400px">
+      <div style="font:400 92px/1 'Mochiy Pop One';text-shadow:0 6px 0 #FF9FC8">Kawaii Clay+</div>
+      <div style="font:700 24px/1.4 'M PLUS Rounded 1c';color:#6E4558;text-wrap:pretty">P2b push of 04 Kawaii Clay. Richer fondant (grain, fingerprints, glossy tiles), a per-letter candy wordmark, Nini living in the Winnie header and reacting to the run, and challenge faces that get tired and grumpy the longer a run takes. Overlay stays calm: no mascot, just faces and timers.</div>
+      <div style="display:flex;gap:10px;font:800 16px 'M PLUS Rounded 1c'"><a href="#k-ws" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Workspace L / D</a><a href="#k-ov" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Overlay L / D</a><a href="#k-faces" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Faces</a><a href="#k-nini" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Nini moods</a><a href="#k-wm" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Wordmarks</a><a href="#k-bases" style="padding:6px 14px;border-radius:14px;background:#FFF8FB;text-decoration:none;color:#4A2B3A">Bases × backgrounds</a></div>
+    </div>
+  </header>
+
+  <div id="k-ws" style="display:flex;flex-direction:column;gap:20px">
+    <dc-import name="KawaiiScreensP2b" view="workspace" mode="light" hint-size="1440px,1400px"></dc-import>
+    <div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Workspace · native light · strawberry dots · mid-run (Elden Ring 3h+ → grumpy) · row 2 hovered, row 5 menu open · Start, Mark Won, ± are live</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <dc-import name="KawaiiScreensP2b" view="workspace" mode="dark" hint-size="1440px,1400px"></dc-import>
+    <div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Opposite mode · dark · cocoa-night clay with rim light; pastel tiles, faces and buttons stay pastel with Cocoa ink</div>
+  </div>
+
+  <div id="k-ov" style="display:flex;flex-direction:column;gap:20px">
+    <dc-import name="KawaiiScreensP2b" view="overlay" mode="light" hint-size="1920px,1080px"></dc-import>
+    <div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Overlay · light · no mascot, no toy: title, total, five rows with faces · page 1 of 2</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <dc-import name="KawaiiScreensP2b" view="overlay" mode="dark" hint-size="1920px,1080px"></dc-import>
+    <div style="font:800 20px 'M PLUS Rounded 1c';color:#6E4558">Overlay · dark · black keyline instead of Cocoa so it holds on bright game footage</div>
+  </div>
+
+  <div ref="{{ rootRef }}" style="position:relative;width:100%;display:flex;flex-wrap:wrap;gap:64px;align-items:stretch">
+
+    <section id="k-faces" data-screen-label="K Faces" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:30px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font:400 44px 'Mochiy Pop One'">Challenge faces</div><div style="font:700 17px 'M PLUS Rounded 1c';color:#6E4558">Running faces age with the challenge’s own timer</div></div>
+      <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px">
+        <sc-for list="{{ faceRun }}" as="f" hint-placeholder-count="6">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 10px 18px;border-radius:30px;background:{{ f.bg }};box-shadow:{{ f.ring }}">
+            <span data-beat="{{ f.beat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ f.mood }}" size="104" hint-size="104px,104px"></dc-import></span>
+            <span style="font:400 19px 'Mochiy Pop One';text-align:center">{{ f.name }}</span>
+            <span style="font:800 15px 'M PLUS Rounded 1c';color:#6E4558">{{ f.rule }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.5fr);gap:24px">
+        <div style="padding:26px;border-radius:32px;background:#FFE3EC;display:flex;align-items:center;gap:26px">
+          <span data-beat="{{ demoBeat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" status="running" secs="{{ demoSecs }}" size="150" hint-size="150px,150px"></dc-import></span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+            <span style="font:400 15px 'M PLUS Rounded 1c';font-weight:800;color:#6E4558">Live scrub</span>
+            <span style="font:400 40px/1 'Mochiy Pop One'">{{ demoTime }}</span>
+            <span style="font:800 18px 'M PLUS Rounded 1c'">{{ demoName }}</span>
+            <div style="display:flex;gap:10px">
+              <button onClick="{{ onMinus }}" style="height:46px;padding:0 16px;border:0;border-radius:23px;background:#FFFFFF;color:#4A2B3A;font:800 15px 'M PLUS Rounded 1c';cursor:pointer;box-shadow:0 4px 0 -1px #F5B8CF" style-active="transform:translateY(3px)">−30 min</button>
+              <button onClick="{{ onPlus }}" style="height:46px;padding:0 16px;border:0;border-radius:23px;background:#FFFFFF;color:#4A2B3A;font:800 15px 'M PLUS Rounded 1c';cursor:pointer;box-shadow:0 4px 0 -1px #F5B8CF" style-active="transform:translateY(3px)">+30 min</button>
+              <button onClick="{{ onAuto }}" style="height:46px;padding:0 18px;border:0;border-radius:23px;background:#FF6FAE;color:#4A2B3A;font:400 15px 'Mochiy Pop One';cursor:pointer;box-shadow:0 4px 0 -1px #D9478A" style-active="transform:translateY(3px)">{{ autoLabel }}</button>
+            </div>
+          </div>
+        </div>
+        <div style="padding:26px;border-radius:32px;background:#FFE3EC;display:flex;flex-direction:column;gap:16px">
+          <span style="font:400 20px 'Mochiy Pop One'">Idle</span>
+          <div style="display:flex;gap:26px">
+            <sc-for list="{{ faceIdle }}" as="f" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="ClayFace" mood="{{ f.mood }}" size="84" hint-size="84px,84px"></dc-import><span style="font:400 16px 'Mochiy Pop One'">{{ f.name }}</span><span style="font:800 13px 'M PLUS Rounded 1c';color:#6E4558">{{ f.rule }}</span></div></sc-for>
+          </div>
+        </div>
+        <div style="padding:26px;border-radius:32px;background:#D6F5E0;display:flex;flex-direction:column;gap:16px">
+          <span style="font:400 20px 'Mochiy Pop One'">Won · by how long it took</span>
+          <div style="display:flex;gap:30px">
+            <sc-for list="{{ faceWon }}" as="f" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><dc-import name="ClayFace" mood="{{ f.mood }}" size="84" hint-size="84px,84px"></dc-import><span style="font:400 16px 'Mochiy Pop One'">{{ f.name }}</span><span style="font:800 13px 'M PLUS Rounded 1c';color:#2E6B45">{{ f.rule }}</span></div></sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C;text-wrap:pretty">Faces carry status, so the status word chip is gone from rows. Each stage adds one tell (brows → sweat → eye bags → anger vein → steam) and changes the once-a-second beat. Disc colour also drifts from bubblegum toward a hot red, while Won stays Matcha. Thresholds are placeholders and could become a per-Winnie setting.</div>
+    </section>
+
+    <section id="k-nini" data-screen-label="K Nini" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:30px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font:400 44px 'Mochiy Pop One'">Nini · Winnie moods</div><div style="font:700 17px 'M PLUS Rounded 1c';color:#6E4558">Lives in the Winnie header · follows the longest-running challenge</div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px">
+        <sc-for list="{{ niniMoods }}" as="m" hint-placeholder-count="9">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:34px 12px 22px;border-radius:32px;background:{{ m.bg }}">
+            <div data-amb="jelly" data-ad="{{ m.ad }}" style="transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ m.mood }}" shape="mochi" mascot="{{ true }}" size="150" hint-size="150px,129px"></dc-import></div>
+            <span style="font:400 20px 'Mochiy Pop One'">{{ m.name }}</span>
+            <span style="font:800 14px/1.35 'M PLUS Rounded 1c';color:#6E4558;text-align:center">{{ m.rule }}</span>
+          </div>
+        </sc-for>
+        <div style="padding:26px;border-radius:32px;background:#FFEFA1;font:700 16px/1.55 'M PLUS Rounded 1c';text-wrap:pretty">Nini also talks in the header bubble (new copy), e.g. grumpy: “We’re not mad. We’re just… very focused.” The headband slips when tired. Complete = crown + happy tears + a two-hop jump.</div>
+      </div>
+    </section>
+
+    <section data-screen-label="K Genome" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF">
+      <div style="font:400 44px 'Mochiy Pop One';margin-bottom:28px">Genome</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px">
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;border-radius:30px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:18px"><span style="position:relative;width:62px;height:86px;border-radius:26px;background:#CDB8FF;box-shadow:0 8px 0 -1px #A68BE8,inset 0 6px 6px rgba(255,255,255,.75);display:flex;align-items:center;justify-content:center;font:400 52px 'Mochiy Pop One'">7<span style="position:absolute;left:12px;top:9px;width:16px;height:8px;border-radius:50%;background:rgba(255,255,255,.75);transform:rotate(-20deg)"></span></span><span style="width:120px;height:86px;border-radius:30px;background:repeating-radial-gradient(circle at 70% 30%,rgba(74,43,58,.06) 0 1.5px,rgba(0,0,0,0) 1.5px 5px),#FFF8FB;box-shadow:0 8px 0 -2px #F5B8CF,inset 0 6px 8px #fff"></span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Material</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4 pushed</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Fondant with a solid lip, now with grain speckle, fingerprint whorls on big surfaces and a gloss dot on every candy tile.</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font:800 11px 'M PLUS Rounded 1c'"><div style="border-radius:16px;background:#FFE3EC;padding:9px;display:flex;align-items:flex-end">Milk</div><div style="border-radius:16px;background:#FF6FAE;padding:9px;display:flex;align-items:flex-end">Bubblegum</div><div style="border-radius:16px;background:#9BE3B4;padding:9px;display:flex;align-items:flex-end">Matcha</div><div style="border-radius:16px;background:#FF6372;padding:9px;display:flex;align-items:flex-end">Fuming</div><div style="border-radius:16px;background:#CDB8FF;padding:9px;display:flex;align-items:flex-end">Lilac</div><div style="border-radius:16px;background:#FFEFA1;padding:9px;display:flex;align-items:flex-end">Butter</div><div style="border-radius:16px;background:#352230;color:#FFEEF5;padding:9px;display:flex;align-items:flex-end">Cocoa night</div><div style="border-radius:16px;background:#4A2B3A;color:#fff;padding:9px;display:flex;align-items:flex-end">Cocoa ink</div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Palette</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#CDB8FF;font:800 12px 'M PLUS Rounded 1c'">new dark</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Candy pastels, Cocoa ink. Dark = cocoa-night surfaces with rim light; pastels keep Cocoa text in both modes. A fatigue ramp runs from bubblegum to hot red.</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;border-radius:30px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:2px;font:400 64px/1 'Mochiy Pop One'"><span style="color:#FF6FAE;text-shadow:0 3px 0 #B0175A,0 6px 0 #B0175A;transform:rotate(-5deg)">w</span><span style="color:#FFB547;text-shadow:0 3px 0 #B86A12,0 6px 0 #B86A12;transform:rotate(3deg)">i</span><span style="color:#FFD84D;text-shadow:0 3px 0 #B88A00,0 6px 0 #B88A00">n</span><span style="font:700 40px 'M PLUS Rounded 1c';color:#7A5566;margin-left:20px">Aa</span></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Type</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#FFEFA1;font:800 12px 'M PLUS Rounded 1c'">new wordmark</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Mochiy Pop One for display and digits, M PLUS Rounded 1c for text. The wordmark is now per-letter candy clay with a 3-step extruded lip.</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px"><div style="border-radius:20px;background:radial-gradient(#FFCADD 18%,rgba(0,0,0,0) 19%) 0 0/26px 26px,#FFE3EC"></div><div style="border-radius:20px;background:linear-gradient(90deg,#DCCEFFAA 50%,rgba(0,0,0,0) 50%) 0 0/28px 28px,linear-gradient(#DCCEFFAA 50%,rgba(0,0,0,0) 50%) 0 0/28px 28px,#EEE6FF"></div><div style="border-radius:20px;background:radial-gradient(90px 70px at 20% 20%,#BDEBD0,rgba(0,0,0,0) 70%),radial-gradient(90px 90px at 90% 80%,#FFF0A8,rgba(0,0,0,0) 70%),#DFF6E8"></div><div style="border-radius:20px;background:#FFF4CC"></div></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Backdrop</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#9BE3B4;font:800 12px 'M PLUS Rounded 1c'">new</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Polka dots by default; gingham, clay swirl and plain as alternates, each on its own base colour (bottom row).</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;border-radius:30px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:22px"><sc-for list="{{ motionChips }}" as="m" hint-placeholder-count="3"><span data-beat="{{ m.beat }}" style="display:flex;transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ m.mood }}" size="64" hint-size="64px,64px"></dc-import></span></sc-for></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Motion</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4 pushed</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Jelly hops on tiptoe. Running faces beat once a second, and the beat itself gets tired: hop, nod, wobble, droop, shake, vibrate.</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div style="height:150px;border-radius:30px;background:#FFE3EC;display:flex;align-items:center;justify-content:center;gap:26px"><dc-import name="ClayFace" mood="focus" shape="mochi" mascot="{{ true }}" size="110" hint-size="110px,95px"></dc-import><dc-import name="ClayFace" mood="relief" size="64" hint-size="64px,64px"></dc-import></div><div style="display:flex;gap:8px;align-items:center"><span style="font:400 22px 'Mochiy Pop One'">Mascot / ornament</span><span style="padding:2px 8px;border-radius:8px;background:#FF6FAE;font:800 12px 'M PLUS Rounded 1c'">#4</span><span style="padding:2px 8px;border-radius:8px;background:#B7C49C;font:800 12px 'M PLUS Rounded 1c'">Remix E</span></div><div style="font:500 17px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Nini in the Winnie header with a mood (E’s idea, in clay). Faces on every challenge, star stickers on Won, washi tape on Pinned.</div></div>
+      </div>
+    </section>
+
+    <section data-screen-label="K Motion" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:26px">
+      <div style="display:flex;align-items:center;justify-content:space-between"><div style="font:400 44px 'Mochiy Pop One'">Motion sketch</div>
+        <div style="display:flex;gap:12px"><button onClick="{{ onReplayWon }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#9BE3B4;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 5px 0 -1px #6CC48D" style-active="transform:translateY(4px)">Replay Won</button><button onClick="{{ onReplayComplete }}" style="height:52px;padding:0 24px;border:0;border-radius:26px;background:#FFEFA1;color:#4A2B3A;font:400 17px 'Mochiy Pop One';cursor:pointer;box-shadow:0 5px 0 -1px #E8C860" style-active="transform:translateY(4px)">Replay Complete</button></div></div>
+      <div style="display:flex;align-items:flex-end;gap:30px">
+        <div data-nini="1" data-amb="jelly" style="transform-origin:50% 100%"><dc-import name="ClayFace" mood="{{ demoNini }}" shape="mochi" mascot="{{ true }}" size="150" hint-size="150px,129px"></dc-import></div>
+        <div data-demo="1" style="flex:1;display:grid;grid-template-columns:56px minmax(0,1fr) auto auto;gap:18px;align-items:center;height:80px;padding:0 24px 0 12px;border-radius:40px;background:#D6F5E0;box-shadow:0 6px 0 -1px #9BE3B4">
+          <dc-import name="ClayFace" mood="{{ demoWonMood }}" size="56" hint-size="56px,56px"></dc-import>
+          <span style="font:400 22px 'Mochiy Pop One'">Celeste <span style="font:500 15px 'M PLUS Rounded 1c';color:#6E4558">Farewell, golden strawberry</span></span>
+          <span style="font:400 22px 'Mochiy Pop One';color:#2E6B45">3:41:09</span>
+          <span style="padding:4px 14px;border-radius:12px;background:#9BE3B4;font:800 15px 'M PLUS Rounded 1c'">Won</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px">
+        <div><div style="font:400 19px 'Mochiy Pop One';color:#B0175A;margin-bottom:8px">Tick</div><div style="font:500 16px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Changed candy tiles hop higher with a tilt and land in a squash (520ms). Row digits flick up.</div></div>
+        <div><div style="font:400 19px 'Mochiy Pop One';color:#B0175A;margin-bottom:8px">Fatigue beat</div><div style="font:500 16px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Each running face (and Nini) beats on the tick in its stage’s style. Sweat drips, veins pulse, steam puffs on twos.</div></div>
+        <div><div style="font:400 19px 'Mochiy Pop One';color:#2E7D4F;margin-bottom:8px">Won</div><div style="font:500 16px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Row jellies, hearts, stars and flowers fountain, Nini cheers for 1.8s, the row drops into Won with a squash and a star sticker. The Won face depends on duration (this one took 3h+ → happy tears).</div></div>
+        <div><div style="font:400 19px 'Mochiy Pop One';color:#6A4BC4;margin-bottom:8px">Reduced motion · Sound</div><div style="font:500 16px/1.55 'M PLUS Rounded 1c';color:#5E3D4C">Static faces still show the stage. Sound (muted): tick squeak gets lower and grumpier with fatigue; Won = “yay!” chime; Complete = Nini’s song.</div></div>
+      </div>
+    </section>
+
+    <section id="k-wm" data-screen-label="K Wordmarks" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:26px">
+      <div style="font:400 44px 'Mochiy Pop One'">Wordmarks</div>
+      <sc-for list="{{ wordmarks }}" as="w" hint-placeholder-count="3">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 380px;gap:22px;align-items:center">
+          <div style="height:200px;border-radius:32px;background:radial-gradient(#FFCADD 18%,rgba(0,0,0,0) 19%) 0 0/40px 40px,#FFE3EC;display:flex;align-items:center;justify-content:center">
+            <span style="display:flex;align-items:baseline;font:400 108px/1 'Mochiy Pop One';padding-bottom:14px"><sc-for list="{{ w.letters }}" as="l"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for></span>
+          </div>
+          <div style="height:200px;border-radius:32px;background:radial-gradient(#2E1B29 18%,rgba(0,0,0,0) 19%) 0 0/40px 40px,#231520;display:flex;align-items:center;justify-content:center">
+            <span style="display:flex;align-items:baseline;font:400 108px/1 'Mochiy Pop One';padding-bottom:14px"><sc-for list="{{ w.lettersD }}" as="l"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px"><span style="font:400 24px 'Mochiy Pop One'">{{ w.name }}</span><span style="font:500 16px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">{{ w.note }}</span></div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section data-screen-label="K Dialects" style="box-sizing:border-box;width:1920px;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:24px">
+      <div style="font:400 44px 'Mochiy Pop One'">Dialect sketch</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;flex:1">
+        <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:340px;border-radius:30px;background:radial-gradient(#FFCADD 18%,rgba(0,0,0,0) 19%) 0 0/36px 36px,#FFE3EC;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px">
+          <div style="display:flex;align-items:center;gap:12px;height:62px;padding:0 16px 0 8px;border-radius:31px;background:#FFD2E5;box-shadow:0 0 0 3px #FF6FAE,0 6px 0 0 #D9478A"><dc-import name="ClayFace" mood="sweat" size="46" hint-size="46px,46px"></dc-import><span style="flex:1;font:400 18px 'Mochiy Pop One'">Cuphead</span><span style="font:400 18px 'Mochiy Pop One';color:#9E1450">1:48:02</span></div>
+          <div style="display:flex;align-items:center;gap:12px;height:62px;padding:0 16px 0 8px;border-radius:31px;background:#FFF8FB;box-shadow:0 6px 0 -2px #F5B8CF"><dc-import name="ClayFace" mood="snooze" size="46" hint-size="46px,46px"></dc-import><span style="flex:1;font:400 18px 'Mochiy Pop One'">Hades</span><span style="font:400 18px 'Mochiy Pop One'">0:52:40</span></div>
+        </div><div style="font:400 22px 'Mochiy Pop One'">Workspace</div><div style="font:500 16px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Material: full fondant, grain and fingerprints visible up close. Motion: beats only on running faces and changed digits; everything else rests. Hours-long sessions stay calm.</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:340px;border-radius:30px;background:linear-gradient(135deg,#3a8f3a,#1f5fbf);display:flex;align-items:center;justify-content:center;padding:24px">
+          <div style="width:100%;padding:16px;border-radius:30px;background:#FFF8FB;box-shadow:0 0 0 5px #4A2B3A,0 10px 0 1px #FF9FC8;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;height:58px;padding:0 16px 0 7px;border-radius:29px;background:#FFD2E5"><span data-beat="run5" style="display:flex"><dc-import name="ClayFace" mood="fuming" size="46" hint-size="46px,46px" outline="{{ true }}"></dc-import></span><span style="flex:1;font:400 20px 'Mochiy Pop One'">Elden Ring</span><span style="font:400 20px 'Mochiy Pop One';color:#9E1450">4:02:11</span></div>
+            <div style="display:flex;align-items:center;gap:12px;height:58px;padding:0 16px 0 7px;border-radius:29px;background:#D6F5E0"><dc-import name="ClayFace" mood="star" size="46" hint-size="46px,46px" outline="{{ true }}"></dc-import><span style="flex:1;font:400 20px 'Mochiy Pop One'">Tetris Effect</span><span style="font:400 20px 'Mochiy Pop One';color:#2E6B45">0:41:51</span></div>
+          </div>
+        </div><div style="font:400 22px 'Mochiy Pop One'">Broadcast</div><div style="font:500 16px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Material: flatter, keylined faces, no grain (it vanishes in stream compression). Motion: bigger, readable fatigue beats; chat sees the run getting to you.</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px"><div style="flex:1;min-height:340px;border-radius:30px;background:radial-gradient(420px 300px at 20% 20%,#FFC2DA,rgba(0,0,0,0) 70%),radial-gradient(420px 360px at 90% 80%,#E3D4FF,rgba(0,0,0,0) 70%),#FFE3EC;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+          <div data-amb="jelly" style="transform-origin:50% 100%"><dc-import name="ClayFace" mood="party" shape="mochi" size="130" hint-size="130px,112px"></dc-import></div>
+          <span style="display:flex;align-items:baseline;font:400 58px/1 'Mochiy Pop One';padding-bottom:8px"><sc-for list="{{ showLetters }}" as="l"><span data-amb="hop" data-ad="{{ l.ad }}" style="display:inline-block;transform-origin:50% 100%"><span style="display:inline-block;transform:rotate({{ l.rot }});color:{{ l.c }};text-shadow:{{ l.sh }}">{{ l.ch }}</span></span></sc-for></span>
+        </div><div style="font:400 22px 'Mochiy Pop One'">Showcase</div><div style="font:500 16px/1.5 'M PLUS Rounded 1c';color:#5E3D4C">Material: clay swirl backdrop, oversized squishy wordmark. Motion: everything jellies; Nini walks the landing and cycles through her moods as a demo.</div></div>
+      </div>
+    </section>
+  </div>
+
+  <section id="k-bases" data-screen-label="K Bases" style="box-sizing:border-box;width:100%;padding:48px;border-radius:48px;background:#FFF8FB;box-shadow:0 12px 0 -2px #F5B8CF;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font:400 44px 'Mochiy Pop One'">Bases × backgrounds × wordmarks</div><div style="font:700 17px 'M PLUS Rounded 1c';color:#6E4558">Frozen mid-run to keep the page light · every combo is a Tweak on KawaiiScreens</div></div>
+    <div style="display:flex;gap:64px">
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="width:864px;height:840px;overflow:hidden;border-radius:30px"><div style="width:1440px;height:1400px;transform:scale(.6);transform-origin:0 0"><dc-import live="{{ false }}" name="KawaiiScreensP2b" view="workspace" mode="light" base="lilac" bg="gingham" wordmark="berry" hint-size="1440px,1400px"></dc-import></div></div><div style="font:800 18px 'M PLUS Rounded 1c';color:#6E4558">Lilac · gingham · berry wordmark</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="width:864px;height:840px;overflow:hidden;border-radius:30px"><div style="width:1440px;height:1400px;transform:scale(.6);transform-origin:0 0"><dc-import live="{{ false }}" name="KawaiiScreensP2b" view="workspace" mode="light" base="mint" bg="swirl" wordmark="candy" hint-size="1440px,1400px"></dc-import></div></div><div style="font:800 18px 'M PLUS Rounded 1c';color:#6E4558">Mint · clay swirl · candy wordmark</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="width:864px;height:840px;overflow:hidden;border-radius:30px"><div style="width:1440px;height:1400px;transform:scale(.6);transform-origin:0 0"><dc-import live="{{ false }}" name="KawaiiScreensP2b" view="workspace" mode="light" base="butter" bg="plain" wordmark="sticker" hint-size="1440px,1400px"></dc-import></div></div><div style="font:800 18px 'M PLUS Rounded 1c';color:#6E4558">Butter · plain · sticker wordmark</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px"><div style="width:864px;height:840px;overflow:hidden;border-radius:30px"><div style="width:1440px;height:1400px;transform:scale(.6);transform-origin:0 0"><dc-import live="{{ false }}" name="KawaiiScreensP2b" view="workspace" mode="dark" base="lilac" bg="swirl" wordmark="sticker" hint-size="1440px,1400px"></dc-import></div></div><div style="font:800 18px 'M PLUS Rounded 1c';color:#6E4558">Lilac night · clay swirl · sticker wordmark</div></div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { demoSecs: 600, auto: false };
+  rootRef = React.createRef();
+  componentDidMount() {
+    const go = () => {
+      if (!window.WinniesCore) { this._t = setTimeout(go, 40); return; }
+      this._M = this.motion();
+      const W = window.WinniesCore.mount(this, this._M);
+      clearInterval(W.iv);
+      this._bi = setInterval(() => {
+        const root = this.rootRef.current;
+        if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.querySelectorAll('[data-beat]').forEach((el) => { const t = el.dataset.beat && this._M.beat(el.dataset.beat); if (t) el.animate(t[0], t[1]); });
+      }, 1000);
+    };
+    go();
+  }
+  componentDidUpdate() { this._wc && this._wc.afterUpdate(); }
+  componentWillUnmount() { clearTimeout(this._t); clearInterval(this._ai); clearInterval(this._bi); clearTimeout(this._ct); this._wc && this._wc.stop(); }
+  stage(s) { const t = [1200, 3600, 7200, 10800, 14400]; let i = 0; while (i < 5 && s >= t[i]) i++; return i; }
+  motion() {
+    const beats = {
+      run0: [[{ transform: 'none' }, { transform: 'translateY(-8px) scale(.94,1.07)', offset: .35 }, { transform: 'scale(1.07,.93)', offset: .7 }, { transform: 'none' }], { duration: 420, easing: 'ease-out' }],
+      run1: [[{ transform: 'none' }, { transform: 'translateY(2px) rotate(-5deg)', offset: .4 }, { transform: 'none' }], { duration: 420, easing: 'ease-in-out' }],
+      run2: [[{ transform: 'rotate(0)' }, { transform: 'rotate(-11deg)', offset: .3 }, { transform: 'rotate(9deg)', offset: .65 }, { transform: 'rotate(0)' }], { duration: 520, easing: 'ease-in-out' }],
+      run3: [[{ transform: 'none' }, { transform: 'translateY(3px) scale(1.07,.88)', offset: .45 }, { transform: 'translateY(3px) scale(1.07,.88)', offset: .7 }, { transform: 'none' }], { duration: 950, easing: 'ease-in-out' }],
+      run4: [[{ transform: 'none' }, { transform: 'translateX(-4px)', offset: .2 }, { transform: 'translateX(4px)', offset: .4 }, { transform: 'translateX(-3px)', offset: .6 }, { transform: 'translateX(2px)', offset: .8 }, { transform: 'none' }], { duration: 380, easing: 'linear' }],
+      run5: [[{ transform: 'none' }, { transform: 'translateX(-4px) scale(1.06)' }, { transform: 'translateX(4px) scale(1.06)' }, { transform: 'translateX(-4px) scale(1.06)' }, { transform: 'translateX(3px) scale(1.04)' }, { transform: 'none' }], { duration: 460, easing: 'steps(6,end)' }],
+    };
+    return {
+      wonDelay: 700,
+      amb: {
+        hop: [[{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.12,.88)', offset: .08 }, { transform: 'translateY(-22px) scale(.92,1.1)', offset: .2 }, { transform: 'translateY(0) scale(1.1,.9)', offset: .32 }, { transform: 'scale(1,1)', offset: .42 }, { transform: 'scale(1,1)' }], { duration: 2600, easing: 'ease-in-out' }],
+        jelly: [[{ transform: 'scale(1,1)' }, { transform: 'scale(1.05,.95)' }, { transform: 'scale(.98,1.03)' }, { transform: 'scale(1,1)' }], { duration: 2200, easing: 'ease-in-out' }],
+        drip: [[{ transform: 'translateY(0)' }, { transform: 'translateY(5px)', offset: .7 }, { transform: 'translateY(0)' }], { duration: 1400, easing: 'ease-in' }],
+        vein: [[{ transform: 'scale(1)' }, { transform: 'scale(1.3)', offset: .15 }, { transform: 'scale(1)', offset: .3 }, { transform: 'scale(1)' }], { duration: 900 }],
+        steam: [[{ transform: 'translateY(2px) scale(.9)' }, { transform: 'translateY(-6px) scale(1.08)' }, { transform: 'translateY(2px) scale(.9)' }], { duration: 700, easing: 'steps(4,end)' }],
+        twinkle: [[{ transform: 'scale(.6) rotate(0)' }, { transform: 'scale(1.15) rotate(20deg)' }, { transform: 'scale(.6) rotate(0)' }], { duration: 1100, easing: 'ease-in-out' }],
+        zzz: [[{ transform: 'translate(0,0)', opacity: .3 }, { transform: 'translate(4px,-6px)', opacity: 1 }, { transform: 'translate(0,0)', opacity: .3 }], { duration: 2400, easing: 'ease-in-out' }],
+      },
+      beat: (n) => beats[n],
+      won: (el, W) => {
+        el.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.07,.88)', offset: .18 }, { transform: 'scale(.94,1.08)', offset: .42 }, { transform: 'scale(1.03,.97)', offset: .68 }, { transform: 'scale(1,1)' }], { duration: 700, easing: 'ease-out' });
+        this.setState({ cheer: Date.now() });
+        W.burst(el, { n: 24, shapes: ['text:♥', 'text:★', 'circle', 'text:✿'], colors: ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF', '#A8DEFF'], size: 26, spread: 240, gravity: 60, dur: 1300, ox: .1, up: true, cone: 2, font: "'M PLUS Rounded 1c'", spin: 120 });
+      },
+      land: (el) => el.animate([{ transform: 'translateY(-40px) scale(.9,1.1)', opacity: 0 }, { transform: 'translateY(0) scale(1.08,.9)', opacity: 1, offset: .5 }, { transform: 'scale(.97,1.04)', offset: .75 }, { transform: 'none' }], { duration: 600, easing: 'ease-out' }),
+      complete: (root, W) => {
+        this.setState({ party: Date.now() });
+        root.querySelectorAll('[data-nini]').forEach((n) => {
+          n.animate([{ transform: 'translateY(0) scale(1,1)' }, { transform: 'translateY(0) scale(1.2,.8)', offset: .15 }, { transform: 'translateY(-90px) scale(.9,1.15) rotate(-10deg)', offset: .45 }, { transform: 'translateY(0) scale(1.15,.85)', offset: .75 }, { transform: 'none' }], { duration: 1100, easing: 'ease-in-out', iterations: 2 });
+          W.burst(n, { n: 50, shapes: ['text:♥', 'text:★', 'circle', 'text:✿'], colors: ['#FF6FAE', '#FFC23D', '#9BE3B4', '#CDB8FF', '#A8DEFF'], size: 34, spread: 560, gravity: 160, dur: 2300, up: true, cone: 3, font: "'M PLUS Rounded 1c'" });
+        });
+      },
+    };
+  }
+  letters(kind, size, dark) {
+    const candy = [['#FF6FAE', '#B0175A'], ['#FFB547', '#B86A12'], ['#FFD84D', '#B88A00'], ['#4FD18B', '#1F8A52'], ['#5CB8FF', '#1F6FB8'], ['#A985FF', '#6A44C9'], ['#FF6FAE', '#B0175A']];
+    const rot = [-5, 3, -2, 5, -3, 2, -4], u = size / 40;
+    const r = (n) => Math.round(n * u * 10) / 10;
+    const ring = [[3, 0], [-3, 0], [0, 3], [0, -3], [2, 2], [-2, 2], [2, -2], [-2, -2]].map(([x, y]) => `${r(x)}px ${r(y)}px 0 #fff`).join(',');
+    return 'winnies'.split('').map((ch, i) => {
+      const [c, lip] = kind === 'berry' ? ['#FF6FAE', '#B0175A'] : candy[i];
+      const sh = kind === 'sticker' ? `${ring},0 ${r(6)}px 0 #fff,0 ${r(9)}px 0 ${dark ? '#000' : 'rgba(74,43,58,.25)'},0 ${r(12)}px ${r(14)}px rgba(0,0,0,.2)` : `0 ${r(2)}px 0 ${lip},0 ${r(4)}px 0 ${lip},0 ${r(6)}px 0 ${lip},0 ${r(10)}px ${r(12)}px rgba(0,0,0,.22)`;
+      return { k: i, ch, c, sh, rot: (kind === 'berry' ? 0 : rot[i]) + 'deg', ad: String(-i * 110) };
+    });
+  }
+  renderVals() {
+    const ds = this.state.demoSecs, stg = this.stage(ds);
+    const runDefs = [['fresh', 'Fired up', '< 20 min'], ['focus', 'Locked in', '20 min – 1 h'], ['sweat', 'Sweating', '1 – 2 h'], ['tired', 'Running on fumes', '2 – 3 h'], ['grumpy', 'Grumpy', '3 – 4 h'], ['fuming', 'Fuming', '4 h +']];
+    const cheering = this.state.cheer && Date.now() - this.state.cheer < 1800;
+    const partying = this.state.party && Date.now() - this.state.party < 3000;
+    if ((cheering || partying) && !this._ct) this._ct = setTimeout(() => { this._ct = null; this.forceUpdate(); }, 1900);
+    const v = this._wc && this._wc.vals();
+    return {
+      rootRef: this.rootRef,
+      faceRun: runDefs.map(([mood, name, rule], i) => ({ k: i, mood, name, rule, beat: 'run' + i, bg: i === stg ? '#FFD2E5' : '#FFE3EC', ring: i === stg ? '0 0 0 4px #FF6FAE' : 'none' })),
+      faceIdle: [{ k: 0, mood: 'new', name: 'Ready', rule: 'Never started' }, { k: 1, mood: 'snooze', name: 'Snoozing', rule: 'Paused, has time' }],
+      faceWon: [{ k: 0, mood: 'star', name: 'Too easy', rule: '< 1 h' }, { k: 1, mood: 'happy', name: 'Won', rule: '1 – 3 h' }, { k: 2, mood: 'relief', name: 'Finally', rule: '3 h +' }],
+      niniMoods: [['snooze', 'Snooze', 'Paused or nothing running'], ['fresh', 'Jogging', 'Longest run < 20 min'], ['focus', 'Locked in', '20 min – 1 h'], ['sweat', 'Sweating', '1 – 2 h'], ['tired', 'Fumes', '2 – 3 h · headband slips'], ['grumpy', 'Grumpy', '3 – 4 h'], ['fuming', 'Fuming', '4 h +'], ['cheer', 'Cheer', 'Any Mark Won · 1.8 s'], ['party', 'Party', 'Complete']].map(([mood, name, rule], i) => ({ k: i, mood, name, rule, ad: String(-i * 240), bg: mood === 'cheer' ? '#D6F5E0' : mood === 'party' ? '#FFF4CC' : '#FFE3EC' })),
+      motionChips: [{ k: 0, mood: 'fresh', beat: 'run0' }, { k: 1, mood: 'tired', beat: 'run3' }, { k: 2, mood: 'fuming', beat: 'run5' }],
+      wordmarks: [
+        { k: 0, name: 'Candy', note: 'Rainbow candy clay, one colour per letter, each with its own darker 3-step lip and a slight tilt. Hops in a wave every 2.6s. Strongest on both modes.', letters: this.letters('candy', 108, false), lettersD: this.letters('candy', 108, true) },
+        { k: 1, name: 'Berry', note: 'P1’s single bubblegum + berry lip, upright. Calmer and more “logo” for small sizes and the favicon.', letters: this.letters('berry', 108, false), lettersD: this.letters('berry', 108, true) },
+        { k: 2, name: 'Sticker', note: 'Candy letters die-cut with a white border and a drop shadow, like a sticker sheet. Best on busy backdrops and on dark.', letters: this.letters('sticker', 108, false), lettersD: this.letters('sticker', 108, true) },
+      ],
+      showLetters: this.letters('candy', 58, false),
+      demoSecs: ds, demoBeat: 'run' + stg, demoName: runDefs[stg][1],
+      demoTime: Math.floor(ds / 3600) + 'h ' + String(Math.floor((ds % 3600) / 60)).padStart(2, '0') + 'm',
+      onMinus: () => this.setState((s) => ({ demoSecs: Math.max(0, s.demoSecs - 1800) })),
+      onPlus: () => this.setState((s) => ({ demoSecs: Math.min(17999, s.demoSecs + 1800) })),
+      onAuto: () => {
+        if (this._ai) { clearInterval(this._ai); this._ai = null; this.setState({ auto: false }); return; }
+        this._ai = setInterval(() => this.setState((s) => ({ demoSecs: (s.demoSecs + 600) % 18000 })), 700);
+        this.setState({ auto: true });
+      },
+      autoLabel: this.state.auto ? 'Stop' : 'Time-lapse',
+      demoNini: partying ? 'party' : cheering ? 'cheer' : 'focus',
+      demoWonMood: 'relief',
+      onReplayWon: v ? v.onReplayWon : null, onReplayComplete: v ? v.onReplayComplete : null,
+    };
+  }
+}
+</script>
+</body>
+</html>
