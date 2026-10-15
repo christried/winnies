@@ -1,2 +1,2 @@
-pnpm lint-staged
+pnpm lint-staged --max-arg-length 4000
 pnpm typecheck 
