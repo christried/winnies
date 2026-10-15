@@ -71,7 +71,7 @@ The compact, auto-paging view of a Winnie made to sit in an OBS browser source o
 _Avoid_: widget, stream view
 
 **Landing**:
-What a signed-out visitor sees at `/`. Planned (#124).
+What a signed-out visitor sees at `/`, and the only place to sign in. A signed-in Owner never sees it: `/` is their Workspace. Planned (#124).
 
 ## Relationships
 
