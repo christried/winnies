@@ -26,6 +26,10 @@ _Avoid_: done, finished, completed (reserved for the Winnie)
 A Winnie with at least one Challenge, all of them Won. All timers stop.
 _Avoid_: won (reserved for Challenges), finished
 
+**Winnie state**:
+Where a Winnie stands, read off its Total Timer: **Not started** (the Total Timer has never run), **Running** (it runs), **Paused** (it has run and is stopped) or **Complete** (which beats the other three). Un-winning a Challenge of a Complete Winnie makes it Paused.
+_Avoid_: idle (it blurs Not started and Paused)
+
 **Total Timer**:
 The Winnie-wide stopwatch. Starting any Challenge Timer starts it; pausing it pauses every Challenge Timer.
 
@@ -41,6 +45,10 @@ A Challenge the Owner keeps at the top of the list, above unpinned open Challeng
 
 **Game Mode**:
 A ruleset a Winnie is created with, changing how Challenges are won, lost or reset (e.g. Confirmation, Gauntlet, Timeboxed). Planned; today every Winnie is Standard.
+
+**Quota**:
+How many Winnies and how many Challenges an Owner may create in any rolling 24 hours. It counts creations, so deleting gives nothing back.
+_Avoid_: limit (that's the cap on a field or on a Winnie's Challenges), daily cap
 
 ### People
 
@@ -76,6 +84,7 @@ What a signed-out visitor sees at `/`, and the only place to sign in. A signed-i
 ## Relationships
 
 - An **Owner** has many **Winnies**; a **Winnie** has many **Challenges** (at most 50).
+- An **Owner**'s **Quota** covers both the **Winnies** and the **Challenges** they create, across all their Winnies.
 - A **Winnie** has exactly one **Share Link**, which opens both its **Shared View** and its **Overlay**.
 - A **Winnie** is **Complete** exactly when every one of its **Challenges** is **Won**.
 
