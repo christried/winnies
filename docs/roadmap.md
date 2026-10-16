@@ -1,6 +1,6 @@
 # Roadmap
 
-What's being built, what comes next and what's only an idea. Maintained by the planning agent as product manager; every change is approved and committed by the maintainer. Last updated 2026-10-15.
+What's being built, what comes next and what's only an idea. Maintained by the planning agent as product manager; every change is approved and committed by the maintainer. Last updated 2026-10-16.
 
 Only **Now** has tickets. Everything else lives here until its turn, then becomes a batch of tickets under one milestone. Entries link the closed issue they came from ("was #125") and the handoff frames that design them (IDs from `docs/design_handoff_winnies/01-screen-index.md`).
 
@@ -16,7 +16,7 @@ Not yet ready to ticket. A redesign planning map comes first ([Redesign 1.0: Cor
 | R1 Engine      | Motion composable, one clock per surface, particle layer                                                                                                                               | 04-motion       | –         | Not started |
 | R2 Primitives  | Button, inputs, switch, win toggle, counter, timer, state pill, menu, modal, toast, tooltip (was #134, #158)                                                                           | 03-components   | –         | Not started |
 | R3 Workspace   | Nav, summary + Winniebert, add row (was #147), Challenge rows, drag and keyboard reordering (was #157, 6a 10a), menus, modals, sign-in, error pages, Complete, long content (was #149) | 01–16           | –         | Not started |
-| R4 Broadcast   | Shared View with freshness and reconnect, share menu (was #162), Overlay corner and sidebar                                                                                            | 17a–j, 18·0–18i | –         | Not started |
+| R4 Broadcast   | Shared View with freshness and reconnect, share menu (was #162), Overlay (corner)                                                                                                      | 17a–j, 18·0–18i | –         | Not started |
 | R5 Showcase    | Landing (was #124), Changelog, link-preview cards (was #152)                                                                                                                           | 19a–e, CL-a–b   | –         | Not started |
 | Release        | Merge `redesign` into `main`, 1.0.0 changelog entry, link updates                                                                                                                      | –               | –         | Not started |
 
@@ -30,7 +30,7 @@ Decided for 1.0:
 Designed in 6a. Ranked, provisional; re-checked when R5 starts.
 
 1. **Play this myself!** A Viewer copies a Winnie into their own account from the Shared View. 6a 04a–i, was #125.
-2. **Overlay settings.** Per page, timers, Calm, placement, with a live preview; add the Overlay theme (08 Q5). 6a 03a–c, was #138.
+2. **Overlay settings.** Per page, timers, Calm, placement, with a live preview; add the Overlay theme (08 Q5). Placement brings the sidebar layout (Core 18·0–18i sidebar frames: Owner name, Win Condition, Pinned word, progress, page count). 6a 03a–c, was #138.
 3. **Completion statistics.** 6a 05a–b, was #151.
 4. **Loss counter.** 6a 06a–b, was #135.
 5. **Challenge notes.** 6a 09a–b, was #154.
@@ -60,6 +60,7 @@ Unordered.
 - **Shared Game record** that several Challenges point to, so autocomplete and statistics stay consistent. From #149.
 - **Personal dashboard** for signed-in Owners: past Winnies, settings. From #124.
 - **"Still running?" dialog**: after X minutes of the Total Timer running with no Challenge running, offer to pause the Winnie. Must-have after 1.0; X undecided. From #180.
+- **Changeable display name**: an Owner picks the name Winnies shows for them, separate from their Discord name, and can change it as often as they like, behind a reasonable rate limit. Definitely to look into. It would also reopen showing the Owner's name on public surfaces, which 1.0 leaves out. From #184.
 
 ## Engineering backlog
 

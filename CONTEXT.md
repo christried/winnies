@@ -19,7 +19,7 @@ Free text that says what winning a Challenge's game means (e.g. "no hits").
 _Avoid_: spec (the code name), rule
 
 **Won**:
-A Challenge state the Owner sets explicitly, or that a Counter sets on reaching its Target. Un-winning reverses it.
+A Challenge state the Owner sets explicitly, or that a Counter sets on reaching its Target. Un-winning reverses it and puts a Counter one below its Target, so a Counter at its Target always means Won.
 _Avoid_: done, finished, completed (reserved for the Winnie)
 
 **Complete**:
