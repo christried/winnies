@@ -59,6 +59,7 @@ Unordered.
 - **Mobile** for Workspace and Shared View; touch alternatives for tooltips and drag. The Overlay stays desktop. Was #165.
 - **Shared Game record** that several Challenges point to, so autocomplete and statistics stay consistent. From #149.
 - **Personal dashboard** for signed-in Owners: past Winnies, settings. From #124.
+- **"Still running?" dialog**: after X minutes of the Total Timer running with no Challenge running, offer to pause the Winnie. Must-have after 1.0; X undecided. From #180.
 
 ## Engineering backlog
 

@@ -31,7 +31,7 @@ Where a Winnie stands, read off its Total Timer: **Not started** (the Total Time
 _Avoid_: idle (it blurs Not started and Paused)
 
 **Total Timer**:
-The Winnie-wide stopwatch. Starting any Challenge Timer starts it; pausing it pauses every Challenge Timer.
+The Winnie-wide stopwatch. Starting the Winnie or any Challenge Timer starts it. It keeps running while no Challenge Timer runs; only pausing the Winnie or the Winnie becoming Complete stops it. Pausing the Winnie pauses every Challenge Timer and remembers which were running, so starting the Winnie again resumes exactly those.
 
 **Challenge Timer**:
 A Challenge's own stopwatch, accumulating time across starts and pauses.
