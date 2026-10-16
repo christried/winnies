@@ -10,15 +10,15 @@ The whole visual layer rebuilt from `docs/design_handoff_winnies/` (Kawaii Clay)
 
 Not yet ready to ticket. A redesign planning map comes first ([Redesign 1.0: Core planning map](https://github.com/christried/winnies/issues/166)): the open product questions in `08-open-questions.md`, how today's behaviour differs from the design's assumptions, and what safety net the rebuild needs (dependency update (was #146), unit tests (was #126), e2e tests (was #127), Storybook (was #119)).
 
-| Phase          | Goal                                                                                                                                                                             | Frames          | Milestone | Status      |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------- | ----------- |
-| R0 Foundations | Old design and daisyUI out; tokens, fonts, Tailwind entry, theme/dialect/motion plumbing in                                                                                      | 02-tokens       | –         | Not started |
-| R1 Engine      | Motion composable, one clock per surface, particle layer                                                                                                                         | 04-motion       | –         | Not started |
-| R2 Primitives  | Button, inputs, switch, win toggle, counter, timer, state pill, menu, modal, toast, tooltip (was #134, #158)                                                                     | 03-components   | –         | Not started |
-| R3 Workspace   | Nav, summary + Nini, add row (was #147), Challenge rows, drag and keyboard reordering (was #157, 6a 10a), menus, modals, sign-in, error pages, Complete, long content (was #149) | 01–16           | –         | Not started |
-| R4 Broadcast   | Shared View with freshness and reconnect, share menu (was #162), Overlay corner and sidebar                                                                                      | 17a–j, 18·0–18i | –         | Not started |
-| R5 Showcase    | Landing (was #124), Changelog, link-preview cards (was #152)                                                                                                                     | 19a–e, CL-a–b   | –         | Not started |
-| Release        | Merge `redesign` into `main`, 1.0.0 changelog entry, link updates                                                                                                                | –               | –         | Not started |
+| Phase          | Goal                                                                                                                                                                                   | Frames          | Milestone | Status      |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------- | ----------- |
+| R0 Foundations | Old design and daisyUI out; tokens, fonts, Tailwind entry, theme/dialect/motion plumbing in                                                                                            | 02-tokens       | –         | Not started |
+| R1 Engine      | Motion composable, one clock per surface, particle layer                                                                                                                               | 04-motion       | –         | Not started |
+| R2 Primitives  | Button, inputs, switch, win toggle, counter, timer, state pill, menu, modal, toast, tooltip (was #134, #158)                                                                           | 03-components   | –         | Not started |
+| R3 Workspace   | Nav, summary + Winniebert, add row (was #147), Challenge rows, drag and keyboard reordering (was #157, 6a 10a), menus, modals, sign-in, error pages, Complete, long content (was #149) | 01–16           | –         | Not started |
+| R4 Broadcast   | Shared View with freshness and reconnect, share menu (was #162), Overlay corner and sidebar                                                                                            | 17a–j, 18·0–18i | –         | Not started |
+| R5 Showcase    | Landing (was #124), Changelog, link-preview cards (was #152)                                                                                                                           | 19a–e, CL-a–b   | –         | Not started |
+| Release        | Merge `redesign` into `main`, 1.0.0 changelog entry, link updates                                                                                                                      | –               | –         | Not started |
 
 Decided for 1.0:
 

@@ -23,7 +23,7 @@ A Challenge state the Owner sets explicitly, or that a Counter sets on reaching 
 _Avoid_: done, finished, completed (reserved for the Winnie)
 
 **Complete**:
-A Winnie with at least one Challenge, all of them Won. All timers stop.
+A Winnie with at least one Challenge, all of them Won. All timers stop. Only the first time a Winnie becomes Complete is celebrated; becoming Complete again after an un-win is not.
 _Avoid_: won (reserved for Challenges), finished
 
 **Winnie state**:
@@ -41,7 +41,7 @@ An optional per-Challenge tally with a **Target**; reaching the Target wins the 
 _Avoid_: progress, score
 
 **Pinned**:
-A Challenge the Owner keeps at the top of the list, above unpinned open Challenges.
+A Challenge the Owner keeps at the top of the list, above unpinned open Challenges. Once Won it sorts with the other Won Challenges and stays Pinned, so un-winning brings it back to the top.
 
 **Game Mode**:
 A ruleset a Winnie is created with, changing how Challenges are won, lost or reset (e.g. Confirmation, Gauntlet, Timeboxed). Planned; today every Winnie is Standard.
@@ -81,6 +81,12 @@ _Avoid_: widget, stream view
 **Landing**:
 What a signed-out visitor sees at `/`, and the only place to sign in. A signed-in Owner never sees it: `/` is their Workspace. Planned (#124).
 
+### Character
+
+**Winniebert**:
+The Winnies mascot, a white mochi whose face shows how the Winnie is going. Appears on the Workspace, the Landing and the Changelog; never on the Shared View or the Overlay.
+_Avoid_: Nini (the design handoff's name for it), mascot as a name
+
 ## Relationships
 
 - An **Owner** has many **Winnies**; a **Winnie** has many **Challenges** (at most 50).
@@ -92,3 +98,4 @@ What a signed-out visitor sees at `/`, and the only place to sign in. A signed-i
 
 - "Completed" was used for both Challenges and Winnies. Resolved: Challenges are **Won**, Winnies are **Complete**.
 - "Spec" (code) and "Win Condition" (UI) are the same field. Resolved: **Win Condition** is canonical.
+- The design handoff calls the mascot "Nini". Resolved: it is **Winniebert**.
