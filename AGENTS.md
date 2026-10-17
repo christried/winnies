@@ -28,7 +28,7 @@ The redesign ships from a long-lived branch (see `docs/adr/0002-redesign-ships-f
 - `redesign` branches from `main`. Each ticket gets a branch `<type>/<issue#>-<slug>` (e.g. `feat/171-tokens`) and a PR into `redesign`. Small tickets may go straight to `redesign`.
 - Manual QA happens on the PR's Vercel preview.
 - `main` is frozen except for hotfixes; every hotfix is merged forward into `redesign`.
-- `redesign` merges into `main` as **v1.0.0**. `CHANGELOG.md` is not touched during the redesign; one 1.0.0 entry is drafted at release.
+- `redesign` merges into `main` as **v1.0.0**. Release notes live in `content/releases/`, one file per release; the Changelog ticket moves 0.9.0 there and deletes `CHANGELOG.md`. No other release notes are written during the redesign; the 1.0.0 file is drafted at release.
 
 ## Building
 

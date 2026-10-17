@@ -61,6 +61,7 @@ Unordered.
 - **Personal dashboard** for signed-in Owners: past Winnies, settings. From #124.
 - **"Still running?" dialog**: after X minutes of the Total Timer running with no Challenge running, offer to pause the Winnie. Must-have after 1.0; X undecided. From #180.
 - **Changeable display name**: an Owner picks the name Winnies shows for them, separate from their Discord name, and can change it as often as they like, behind a reasonable rate limit. Definitely to look into. It would also reopen showing the Owner's name on public surfaces, which 1.0 leaves out. From #184.
+- **Try the Overlay before signing in**: a demo route (e.g. `/shared/demo` and `/shared/demo/overlay`) that plays the Landing's demo script through the real Shared View and Overlay, so a streamer can test it in OBS first. The Landing's Copy buttons would come back with it. Needs its own design: the route skips Share Link validation, a fixture data source, and the demo reset vs "Complete celebrates once". From #191.
 
 ## Engineering backlog
 
