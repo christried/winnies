@@ -9,6 +9,7 @@ Every ticket is written for the **human** who implements it. They may hand it to
 - No per-ticket mobile criteria. The standing "doesn't break on a phone" rule in `AGENTS.md` covers it.
 - One ticket fits one fresh implementation session.
 - Tickets come in batches, one milestone per batch (a redesign phase or a feature). Don't create tickets for work that isn't scheduled; it lives in `docs/roadmap.md` until then.
+- Each batch goes through `/to-spec` (one spec issue), then `/to-tickets` (sub-issues of the spec), then implementation. The next phase's spec is written only once the current batch is implemented.
 - Labels: one type label (`feat`, `fix`, `chore`, `docs`) plus `ready-to-implement` once it's fully specified.
 - Blocking edges use GitHub's native issue dependencies (see `issue-tracker.md`).
 
