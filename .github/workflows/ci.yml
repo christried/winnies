@@ -163,6 +163,10 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      # The image has Python but no compiler, and `better-sqlite3` is built by node-gyp on install.
+      - name: Install a compiler
+        run: apt-get update && apt-get install -y --no-install-recommends build-essential
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
