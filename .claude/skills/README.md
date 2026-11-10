@@ -1,6 +1,6 @@
 # Skills
 
-These folders are a copy of `.claude/skills/` in the compies repository (`christried/compies`, branch `staging` at `bc54f17`, 2026-11-10), so both projects run the same skills. There, every folder except `thermo-nuclear-code-quality-review` and `implement-spec-max` is a copy of [mattpocock/skills](https://github.com/mattpocock/skills) **1.3.1** (commit `49dd158`): the skills its `.claude-plugin/plugin.json` ships, without the Codex-only `agents/openai.yaml` files.
+These folders are a copy of `.claude/skills/` in the compies repository (`christried/compies`, branch `staging` at `102752a9`, 2026-11-10), so both projects run the same skills. There, every folder except `thermo-nuclear-code-quality-review`, `implement-spec-max` and `capture-idea` (compies' own: an Idea issue in two minutes) is a copy of [mattpocock/skills](https://github.com/mattpocock/skills) **1.3.1** (commit `49dd158`): the skills its `.claude-plugin/plugin.json` ships, without the Codex-only `agents/openai.yaml` files.
 
 They're committed so the patches travel with the repo, and because cloud sessions load a repo's `.claude/skills/` but no plugins. `.claude/settings.json` turns the `mattpocock-skills` plugin off in this repo, so local sessions load these copies too, under the same names. `code-review` here replaces Claude Code's built-in `/code-review`; the built-in stays reachable as `/review`. ESLint ignores `.claude/`, so its Markdown formatter leaves the copies byte for byte.
 
@@ -14,6 +14,7 @@ Each patch is a paragraph starting with `**WINNIES:**`, in the place where compi
 - `implement-spec-max`: a copy of the patched `implement-spec` whose extra paragraph, `**WINNIES (max):**`, and closing section, `## Model tiers`, put every subagent on `fable`, or on `opus` or `sonnet` at `effort: "high"`, by how hard its task is. A change to `implement-spec` is mirrored here: `diff .claude/skills/implement-spec/SKILL.md .claude/skills/implement-spec-max/SKILL.md` shows only the name, the description, that paragraph and that section. The tiers' anchors are Winnies' own.
 - `grill-with-docs`, `to-spec`, `to-tickets`: design hand-off flags and tickets, `docs/agents/tickets.md`, migrations by position and code-site counts by `grep`
 - `handoff`: names the subagents still running
+- `capture-idea`: English replies and UI strings, Owners and Viewers, a type label (usually `feat`) instead of `enhancement`, and `gh` instead of compies' cloud-session calls. It has no `**COMPIES:**` paragraph, so its patch follows the paragraph on language.
 
 Everything outside those paragraphs and `## Model tiers` equals compies: `diff -r` against its `.claude/skills/` shows only them and this file.
 
