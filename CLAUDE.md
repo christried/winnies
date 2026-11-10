@@ -58,7 +58,7 @@ What the review checks, on top of the glossary and the ADRs: `CODING_STANDARDS.m
 
 ### Subagents
 
-Pass `model` on every spawn: `haiku` for implementers by default, `sonnet` when the brief can't carry the task and for reviewers. See `docs/agents/subagents.md`. `/implement-spec-max` is `/implement-spec` with every subagent on `fable`, or on `opus` or `sonnet` at high effort, by how hard its task is.
+Pass `model` and `effort: "high"` on every spawn: `sonnet` for the harder half of this repository's tasks and for reviewers, `haiku` for the easier half. See `docs/agents/subagents.md`. `/implement-spec-max` is `/implement-spec` with every subagent on `fable`, or on `opus` or `sonnet` at high effort, by how hard its task is.
 
 ### Design hand-off
 

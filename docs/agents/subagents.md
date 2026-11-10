@@ -4,14 +4,18 @@ The orchestrating session plans, briefs, supervises and decides; subagents imple
 
 They come from the compies repository, where each one answers a retro finding; "(compies …)" names it. A Winnies `/retro` changes them as this project learns its own.
 
-**Why:** the human wants the cheapest model a precise brief allows doing the work, with the orchestrator controlling everything that lands.
+**Why:** the human wants the cheaper model on every task a precise brief can carry, with the orchestrator controlling everything that lands.
 
 ## Model per subagent
 
-Pass `model` on every Agent call. `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in `.claude/settings.json` only catches a spawn that leaves it out.
+Pass `model` and `effort: "high"` on every Agent call. `CLAUDE_CODE_SUBAGENT_MODEL=haiku` in `.claude/settings.json` only catches a spawn that leaves the model out.
 
-- **`haiku`**: implementers and merge jobs, by default.
-- **`sonnet`**: an implementer whose task the brief can't carry, because the work needs judgement the brief can't settle in advance. Also both `code-review` sub-agents, the phase reviewers and the brief drafter.
+Rate each task by the hardest thing it asks, the way `/implement-spec-max` § Model tiers does, against the work this repository realistically has. The harder half of that work runs on Sonnet, the easier half on Haiku, both at high effort (the human, 2026-11-10):
+
+- **`sonnet`**: a task with a risk a green test run can hide (that section's Fable tier), or a feature whose decisions the brief can't all settle in advance. Also both `code-review` sub-agents and the three phase reviewers, since a review reasons about correctness.
+- **`haiku`**: a task the brief settles, including work built to a reference (a frame, a motion spec), and the review report merger.
+- A ticket's brief drafter, implementer and merge job run on the ticket's model. Rate the ticket from its text and the spec before the drafter, and again from the brief: a brief that names a risk raises it.
+- In doubt between the two, take Sonnet.
 - Under `/implement-spec-max` every subagent runs on the tier its task rates in that skill's § Model tiers instead. The rest of this document applies there unchanged.
 
 Reviewers and brief drafters run with `isolation: "worktree"`: a reviewer told to stay read-only still checked out a detached head in the main checkout (compies 0.5.1). Merge jobs work in the main checkout.
@@ -20,7 +24,7 @@ Reviewers and brief drafters run with `isolation: "worktree"`: a reviewer told t
 
 One brief per ticket: files to change, data shapes, migration, tests at which seam with which cases, edge cases, what not to touch and an acceptance checklist. The more precise the brief, the more of the work Haiku can take.
 
-A `sonnet` brief drafter writes it. Its prompt names the ticket, the integration branch and this section; it reads the ticket, its spec and the code, writes the brief to a file in the orchestrator's scratchpad, and returns the path and its open questions. The orchestrator reads the brief rather than the code, checks it against this list and the ticket, settles the questions, and edits it before the spawn. (compies 0.7: the orchestrator wrote every brief from the code itself, and that reading filled its context in each of five sessions.)
+A brief drafter writes it, on the ticket's model. Its prompt names the ticket, the integration branch and this section; it reads the ticket, its spec and the code, writes the brief to a file in the orchestrator's scratchpad, and returns the path and its open questions. The orchestrator reads the brief rather than the code, checks it against this list and the ticket, settles the questions, and edits it before the spawn. (compies 0.7: the orchestrator wrote every brief from the code itself, and that reading filled its context in each of five sessions.)
 
 A brief aims under 25 KB; a drafter whose brief would run longer proposes a split into parts that touch no common file. A brief for a ticket whose predecessor is not merged yet is drafted after that merge.
 

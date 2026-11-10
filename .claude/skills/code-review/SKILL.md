@@ -59,7 +59,7 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 Issue both sub-agent calls together, in the foreground, and aggregate the reports they return.
 
-**WINNIES:** pass `model: "sonnet"` and `isolation: "worktree"` on both calls (`docs/agents/subagents.md`).
+**WINNIES:** pass `model: "sonnet"`, `effort: "high"` and `isolation: "worktree"` on both calls (`docs/agents/subagents.md`).
 
 **Standards sub-agent prompt** should include:
 
