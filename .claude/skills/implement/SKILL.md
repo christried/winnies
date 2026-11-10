@@ -1,0 +1,19 @@
+---
+name: implement
+description: "Implement a piece of work based on a spec or set of tickets."
+disable-model-invocation: true
+---
+
+Implement the work described by the user in the spec or tickets.
+
+If the user passes a ticket reference, fetch it from the issue tracker and state its title before starting. If the reference is ambiguous, ask.
+
+Call the Skill tool with "tdd" where possible, at pre-agreed seams.
+
+Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+
+Once done, call the Skill tool with "code-review" to review the work.
+
+Commit your work to the current branch.
+
+**WINNIES:** then deliver it as `docs/agents/delivery.md` describes: a PR into `redesign`, or into `main` while `redesign` doesn't exist yet (the human merges that one), then verify and close the issue. Commits and the PR carry no attribution (`CLAUDE.md` § Attribution).

@@ -2,8 +2,11 @@ name: CI
 
 on:
   pull_request:
+  # Every pushed branch, not only main: an implementer's branch has no PR, and `scripts/ci-wait.mjs` waits for its run
+  # before the orchestrator merges it (docs/agents/implementer-frame.md). A branch with a PR runs twice per push;
+  # Actions minutes are free on a public repo.
   push:
-    branches: [main]
+    branches: ["**"]
 
 # A new push to a PR cancels the in-flight run for that PR.
 concurrency:

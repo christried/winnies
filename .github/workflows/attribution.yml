@@ -1,0 +1,40 @@
+name: Attribution
+
+# No commit, PR title or PR body may credit an agent, and no commit may be authored or committed by one
+# (CLAUDE.md § Attribution). The git hooks in .husky/ say so first; this job is the check `--no-verify` cannot skip.
+# `edited` is listed so a changed PR title or body is checked again.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  push:
+    branches: [main, redesign]
+
+jobs:
+  attribution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Commits
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          # A branch that was just created has no "before": check what main does not have.
+          case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
+          node scripts/attribution.mjs range "$BASE..$HEAD"
+
+      - name: PR title and body
+        if: github.event_name == 'pull_request'
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          printf '%s\n\n%s\n' "$TITLE" "$BODY" > "$RUNNER_TEMP/pr.txt"
+          node scripts/attribution.mjs text "$RUNNER_TEMP/pr.txt"

@@ -1,0 +1,1 @@
+node scripts/attribution.mjs message "$1"
