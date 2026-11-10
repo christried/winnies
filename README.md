@@ -55,7 +55,9 @@ the browser tests (the `e2e` job) on every pull request.
   2. Create `.env.test` (git-ignored) with the `TEST_DATABASE_URL` line from `.env.example`. The
      other values the tests need are committed in `tests/support/env.ts`.
   3. `pnpm test:db:up` starts the test database, `pnpm test:api` runs the tests,
-     `pnpm test:db:down` removes the database again.
+     `pnpm test:db:down` removes the database again. The compose project is named `winnies-test`, so
+     `up` and `down` act on the same database from every checkout and worktree. `test:db:down` therefore
+     stops it for every checkout, also under another checkout's run in progress: run it only when no run is going.
 - The database is two containers: Postgres and a WebSocket proxy in front of it, because the Neon
   driver the app uses only speaks WebSocket. The image and the reason for it are written at the top
   of [`compose.test.yaml`](compose.test.yaml); CI uses the same images as `services:`.

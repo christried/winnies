@@ -22,6 +22,12 @@
 # in the `api-tests` job of .github/workflows/ci.yml; keep the two in sync.
 #
 # No volume: every `pnpm test:api` empties the database, and `down -v` leaves nothing behind.
+
+# Named, because without `name:` the project is named after the directory: every git worktree gets its own
+# project, all of them publish port 4444, so a second `pnpm test:db:up` fails and `down -v` from one checkout
+# misses the containers of another. The run lock (tests/support/test-server.ts) assumes one shared database.
+name: winnies-test
+
 services:
   postgres:
     image: postgres:17
