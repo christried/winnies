@@ -14,7 +14,7 @@ Better Auth (Discord) · Pinia · Vitest. Deployed on Vercel.
 
 ## Running locally
 
-Requires Node 24 (see `.nvmrc`) and pnpm 11 via Corepack.
+Requires Node 24.15 or newer in the 24 line (see `.nvmrc`) and pnpm 11 via Corepack.
 
 ```bash
 corepack enable
