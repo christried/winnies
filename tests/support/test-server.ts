@@ -1,7 +1,9 @@
-import type { PoolClient } from "@neondatabase/serverless";
+import type { Pool, PoolClient } from "@neondatabase/serverless";
+import type { TestEnv } from "./env";
 import { rm } from "node:fs/promises";
 import { createServer } from "node:net";
 import process from "node:process";
+import { setTimeout as sleep } from "node:timers/promises";
 import { buildFixture, createTestContext, getServerLogs, loadFixture, startServer, stopServer } from "@nuxt/test-utils/e2e";
 import { migrate } from "drizzle-orm/neon-serverless/migrator";
 import { createTestDb } from "./db";
@@ -41,8 +43,14 @@ export interface TestServer {
   stop: () => Promise<void>;
 }
 
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+type TestDb = ReturnType<typeof createTestDb>["db"];
+
+/**
+ * The run lock on the test database, held until released
+ */
+interface RunLock {
+  /** Stops the keep-alive, unlocks and gives the connection back */
+  release: () => Promise<void>;
 }
 
 // The WebSocket behind the Neon driver reports a refused connection as an event with an empty message.
@@ -65,16 +73,16 @@ async function assertPortFree(port: number, command: string) {
 }
 
 /**
- * Takes the run lock on the test database, empties and migrates it, then builds the app and starts
- * it on `TEST_SERVER_PORT`. Waits behind any other run (either suite, any agent) for up to 30 minutes.
+ * Reaches the database (retrying while `up -d` is still starting it), then takes the run-long advisory
+ * lock, waiting up to 30 minutes, and keeps its connection alive. When it throws it has released what
+ * it held; the caller still ends the pool.
  *
- * @param options what the calling suite is called
- * @returns the running server; the caller must `stop()` it
+ * @param pool the pool over the test database
+ * @param connectionUrl the test database's URL, named in the message when it is unreachable
+ * @param command the command that starts the suite, named in messages
+ * @returns the held lock
  */
-export async function startTestServer(options: TestServerOptions): Promise<TestServer> {
-  const { command } = options;
-  const env = readTestEnv();
-  const { pool, db } = createTestDb(2_000);
+async function acquireRunLock(pool: Pool, connectionUrl: string, command: string): Promise<RunLock> {
   let lockClient: PoolClient | undefined;
   let keepAlive: NodeJS.Timeout | undefined;
 
@@ -88,7 +96,6 @@ export async function startTestServer(options: TestServerOptions): Promise<TestS
     }
     lockClient?.release(true);
     lockClient = undefined;
-    await pool.end().catch(() => {});
   }
 
   try {
@@ -106,7 +113,7 @@ export async function startTestServer(options: TestServerOptions): Promise<TestS
       }
     }
     if (!lockClient) {
-      throw new Error(`The test database is not running or not reachable at ${describeTarget(env.TEST_DATABASE_URL)} (${describeError(lastError)}). Start it with "pnpm test:db:up" and run "${command}" again.`);
+      throw new Error(`The test database is not running or not reachable at ${describeTarget(connectionUrl)} (${describeError(lastError)}). Start it with "pnpm test:db:up" and run "${command}" again.`);
     }
 
     // Take the run-long lock before anything is emptied: two runs against one database (three agents
@@ -130,87 +137,156 @@ export async function startTestServer(options: TestServerOptions): Promise<TestS
     // Idle connections can be dropped by the proxy, and with them the lock.
     keepAlive = setInterval(() => void lockClient?.query("select 1").catch(() => {}), LOCK_KEEPALIVE_MS).unref();
 
-    // Empty it. The `drizzle` schema holds the migration journal: leaving it would make the migrate skip everything.
-    try {
-      await db.execute("drop schema if exists drizzle cascade");
-      await db.execute("drop schema if exists public cascade");
-      await db.execute("create schema public");
-    }
-    catch (error) {
-      throw new Error(`Could not empty the test database: ${describeError(error)}. The role in TEST_DATABASE_URL must own the "public" schema (the compose superuser does).`);
-    }
-    await migrate(db, { migrationsFolder: "server/db/migrations" });
+    return { release };
+  }
+  catch (error) {
+    await release();
+    throw error;
+  }
+}
 
-    await assertPortFree(TEST_SERVER_PORT, command);
+/**
+ * Empties the test database (the `drizzle` and `public` schemas) and migrates it.
+ *
+ * @param db the Drizzle instance over the test database
+ */
+async function resetDatabase(db: TestDb): Promise<void> {
+  // Empty it. The `drizzle` schema holds the migration journal: leaving it would make the migrate skip everything.
+  try {
+    await db.execute("drop schema if exists drizzle cascade");
+    await db.execute("drop schema if exists public cascade");
+    await db.execute("create schema public");
+  }
+  catch (error) {
+    throw new Error(`Could not empty the test database: ${describeError(error)}. The role in TEST_DATABASE_URL must own the "public" schema (the compose superuser does).`);
+  }
+  await migrate(db, { migrationsFolder: "server/db/migrations" });
+}
 
-    // The build and the server get the six variables explicitly: the Nuxt config loader also reads a
-    // developer's .env, which holds a real database. Variables already in the process win over .env.
-    // Only for the build: the test workers inherit this process's environment, and the guard in
-    // readTestEnv() must not see DATABASE_URL there.
-    const streams = { stdout: process.stdout.write, stderr: process.stderr.write };
-    const consoleMethods = { ...console };
-    const buildEnv = serverEnv(env);
-    const before = Object.fromEntries(Object.keys(buildEnv).map(key => [key, process.env[key]]));
-    Object.assign(process.env, buildEnv);
-    const nodeOptions = [process.env.NODE_OPTIONS, `--import=${PRELOAD}`].filter(Boolean).join(" ");
-    const context = createTestContext({
-      rootDir: process.cwd(),
-      browser: false,
-      // Errors only: the build otherwise lists every file it writes.
-      logLevel: 0,
-      port: TEST_SERVER_PORT,
-      env: { ...buildEnv, NODE_OPTIONS: nodeOptions },
-    });
-    // test-utils' default compatibility date would override the app's own.
-    delete context.options.nuxtConfig.compatibilityDate;
+/**
+ * Runs `run` with the server's six variables in process.env, then puts process.env, the console and the
+ * standard streams back as they were, whether `run` returned or threw.
+ *
+ * The build and the server get the six variables explicitly: the Nuxt config loader also reads a
+ * developer's .env, which holds a real database. Variables already in the process win over .env.
+ * Only for the build: the test workers inherit this process's environment, and the guard in
+ * readTestEnv() must not see DATABASE_URL there.
+ *
+ * @param env the validated test environment
+ * @param run what needs the variables, given them
+ * @returns what `run` returns
+ */
+async function withBuildEnv<T>(env: TestEnv, run: (buildEnv: Record<string, string>) => Promise<T>): Promise<T> {
+  const streams = { stdout: process.stdout.write, stderr: process.stderr.write };
+  const consoleMethods = { ...console };
+  const buildEnv = serverEnv(env);
+  const before = Object.fromEntries(Object.keys(buildEnv).map(key => [key, process.env[key]]));
+  Object.assign(process.env, buildEnv);
 
-    // A dying run must not leave the server alive.
-    const killServer = () => context.serverProcess?.kill();
-    process.once("exit", killServer);
+  try {
+    return await run(buildEnv);
+  }
+  finally {
+    // Nuxt takes over the console and the standard streams while it loads, and the test runner's own
+    // report would vanish into its logger.
+    process.stdout.write = streams.stdout;
+    process.stderr.write = streams.stderr;
+    Object.assign(console, consoleMethods);
 
-    try {
-      await loadFixture();
-      await buildFixture();
-      await startServer(context.options.env);
-    }
-    catch (error) {
-      const tail = getServerLogs().slice(-30).join("\n");
-      await stopServer();
-      throw new Error(`${describeError(error)}${tail
-        ? `\n--- last server output ---\n${tail}`
-        : ""}`);
-    }
-    finally {
-      // Nuxt takes over the console and the standard streams while it loads, and the test runner's own
-      // report would vanish into its logger.
-      process.stdout.write = streams.stdout;
-      process.stderr.write = streams.stderr;
-      Object.assign(console, consoleMethods);
-
-      for (const [key, value] of Object.entries(before)) {
-        if (value === undefined) {
-          delete process.env[key];
-        }
-        else {
-          process.env[key] = value;
-        }
+    for (const [key, value] of Object.entries(before)) {
+      if (value === undefined) {
+        delete process.env[key];
+      }
+      else {
+        process.env[key] = value;
       }
     }
+  }
+}
+
+/**
+ * Builds the app with test-utils and starts it on `TEST_SERVER_PORT`. When it throws the server is
+ * stopped and the error carries the server's last output.
+ *
+ * @param buildEnv the six variables of the build and the server
+ * @returns the started server, which the caller must `stop()`
+ */
+async function buildAndStart(buildEnv: Record<string, string>): Promise<{ stop: () => Promise<void> }> {
+  const nodeOptions = [process.env.NODE_OPTIONS, `--import=${PRELOAD}`].filter(Boolean).join(" ");
+  const context = createTestContext({
+    rootDir: process.cwd(),
+    browser: false,
+    // Errors only: the build otherwise lists every file it writes.
+    logLevel: 0,
+    port: TEST_SERVER_PORT,
+    env: { ...buildEnv, NODE_OPTIONS: nodeOptions },
+  });
+  // test-utils' default compatibility date would override the app's own.
+  delete context.options.nuxtConfig.compatibilityDate;
+
+  // A dying run must not leave the server alive.
+  const killServer = () => context.serverProcess?.kill();
+  process.once("exit", killServer);
+
+  try {
+    await loadFixture();
+    await buildFixture();
+    await startServer(context.options.env);
+  }
+  catch (error) {
+    const tail = getServerLogs().slice(-30).join("\n");
+    await stopServer();
+    throw new Error(`${describeError(error)}${tail
+      ? `\n--- last server output ---\n${tail}`
+      : ""}`);
+  }
+
+  return {
+    async stop() {
+      process.off("exit", killServer);
+      await stopServer();
+      // test-utils only removes the build directory when it created it itself, and Nuxt already has.
+      await rm(context.nuxt!.options.buildDir, { recursive: true, force: true });
+    },
+  };
+}
+
+/**
+ * Takes the run lock on the test database, empties and migrates it, then builds the app and starts
+ * it on `TEST_SERVER_PORT`. Waits behind any other run (either suite, any agent) for up to 30 minutes.
+ *
+ * @param options what the calling suite is called
+ * @returns the running server; the caller must `stop()` it
+ */
+export async function startTestServer(options: TestServerOptions): Promise<TestServer> {
+  const { command } = options;
+  const env = readTestEnv();
+  const { pool, db } = createTestDb(2_000);
+  let lock: RunLock | undefined;
+
+  async function endRun() {
+    await lock?.release();
+    lock = undefined;
+    await pool.end().catch(() => {});
+  }
+
+  try {
+    lock = await acquireRunLock(pool, env.TEST_DATABASE_URL, command);
+    await resetDatabase(db);
+    await assertPortFree(TEST_SERVER_PORT, command);
+    const built = await withBuildEnv(env, buildAndStart);
 
     return {
       url: `http://127.0.0.1:${TEST_SERVER_PORT}`,
       logs: () => getServerLogs(),
       async stop() {
-        process.off("exit", killServer);
-        await stopServer();
-        // test-utils only removes the build directory when it created it itself, and Nuxt already has.
-        await rm(context.nuxt!.options.buildDir, { recursive: true, force: true });
-        await release();
+        await built.stop();
+        await endRun();
       },
     };
   }
   catch (error) {
-    await release();
+    await endRun();
     throw error;
   }
 }

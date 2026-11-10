@@ -19,9 +19,16 @@
 # Connection string: postgres://postgres:postgres@localhost:5432/winnies_test (TEST_DATABASE_URL).
 # The host and port in it are not dialled: the driver is pointed at the proxy, which is the only port
 # published, and the proxy reaches Postgres by service name. The same two images run as `services:`
-# in the `api-tests` job of .github/workflows/ci.yml; keep the two in sync.
+# in the `api-tests` and `e2e` jobs of .github/workflows/ci.yml; scripts/harness-sync.test.mjs fails
+# `pnpm test` when the images, their environment or the ports differ.
 #
 # No volume: every `pnpm test:api` empties the database, and `down -v` leaves nothing behind.
+
+# Named, because without `name:` the project is named after the directory: every git worktree gets its own
+# project, all of them publish port 4444, so a second `pnpm test:db:up` fails and `down -v` from one checkout
+# misses the containers of another. The run lock (tests/support/test-server.ts) assumes one shared database.
+name: winnies-test
+
 services:
   postgres:
     image: postgres:17

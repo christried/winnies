@@ -61,7 +61,8 @@ jobs:
     timeout-minutes: 15
 
     # The test database as service containers: Postgres, and Neon's WebSocket proxy in front of it (the
-    # Neon driver the app uses only speaks WebSocket). Same images as compose.test.yaml, which says why.
+    # Neon driver the app uses only speaks WebSocket). Same images as compose.test.yaml, which says why;
+    # scripts/harness-sync.test.mjs fails the `check` job when they, their environment or the ports differ.
     # Only the proxy is reached from the steps; it reaches Postgres by service name.
     services:
       postgres:
@@ -83,8 +84,9 @@ jobs:
           - 4444:4444
 
     # Plain literals, no `secrets.*`: the API tests never see a production value. Job-level for the same
-    # reason as in `check`: `nuxt prepare` runs on install and validates all six app variables. Keep
-    # the five in sync with HARNESS_ENV in tests/support/env.ts.
+    # reason as in `check`: `nuxt prepare` runs on install and validates all six app variables. The five
+    # of HARNESS_ENV in tests/support/env.ts are repeated here and in `e2e`; scripts/harness-sync.test.mjs
+    # fails the `check` job when a copy differs.
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/winnies_test
       # Only has to parse, for `nuxt prepare`; nothing connects to it. The harness gives the build and the
@@ -122,8 +124,8 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.65.0-noble
       options: --ipc=host --init
 
-    # The same test database as `api-tests`. In a container job the services are reached by their name and
-    # need no published ports.
+    # The same test database as `api-tests` (scripts/harness-sync.test.mjs checks it). In a container job the
+    # services are reached by their name and need no published ports.
     services:
       postgres:
         image: postgres:17
@@ -141,7 +143,8 @@ jobs:
         env:
           PG_CONNECTION_STRING: postgres://postgres:postgres@postgres:5432/winnies_test
 
-    # Plain literals, no `secrets.*`, as in `api-tests`.
+    # Plain literals, no `secrets.*`, the same as in `api-tests` bar the host of TEST_DATABASE_URL
+    # (scripts/harness-sync.test.mjs checks that too).
     env:
       # The host is the proxy's service name, not localhost: tests/support/neon-local.mjs dials the proxy
       # at the host of this URL (and refuses any host but `localhost` and `neon-proxy`).
