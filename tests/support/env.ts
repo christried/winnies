@@ -14,8 +14,9 @@ export const TEST_SERVER_PORT = 3101;
 
 // Not secrets: they only ever meet the throwaway test database and a server that nobody else can
 // reach. The test Better Auth instance and the server under test share the secret by construction.
-// Keep in sync with the job-level `env:` of `api-tests` and `e2e` in .github/workflows/ci.yml.
-const HARNESS_ENV = {
+// Repeated in the job-level `env:` of `api-tests` and `e2e` in .github/workflows/ci.yml, which
+// scripts/harness-sync.test.mjs compares with this object (it fails `pnpm test` on a difference).
+export const HARNESS_ENV = {
   BETTER_AUTH_SECRET: "winnies-test-secret-not-a-secret-0123456789",
   BETTER_AUTH_URL: `http://localhost:${TEST_SERVER_PORT}`,
   DISCORD_CLIENT_ID: "test-discord-client-id",

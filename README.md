@@ -31,10 +31,16 @@ Each variable lives in four places: `.env.example`, the Zod schema in
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) plus the repository secrets behind it and
 your hosting provider (Vercel in my case).
 
-The one exception is `TEST_DATABASE_URL`, which only the API tests read. It is validated by the
+The one exception is `TEST_DATABASE_URL`, which only the API and e2e tests read. It is validated by the
 test harness's own schema in [`tests/support/env.ts`](tests/support/env.ts) (the app's schema runs
-at every build, and the app never needs it), lives in `.env.example`, `.env.test` and the `api-tests`
-job of the CI workflow, and is never set on the hosting provider.
+at every build, and the app never needs it). It lives in `.env.example`, `.env.test` and every CI job
+that runs a suite, which are the `api-tests` and `e2e` jobs, with a different host in each: `localhost`
+in `api-tests`, `neon-proxy` (the service's name) in `e2e`, which runs in a container. It is never set
+on the hosting provider.
+
+The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
+and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
+`compose.test.yaml` disagree.
 
 ## Scripts
 
@@ -55,7 +61,9 @@ the browser tests (the `e2e` job) on every pull request.
   2. Create `.env.test` (git-ignored) with the `TEST_DATABASE_URL` line from `.env.example`. The
      other values the tests need are committed in `tests/support/env.ts`.
   3. `pnpm test:db:up` starts the test database, `pnpm test:api` runs the tests,
-     `pnpm test:db:down` removes the database again.
+     `pnpm test:db:down` removes the database again. The compose project is named `winnies-test`, so
+     `up` and `down` act on the same database from every checkout and worktree. `test:db:down` therefore
+     stops it for every checkout, also under another checkout's run in progress: run it only when no run is going.
 - The database is two containers: Postgres and a WebSocket proxy in front of it, because the Neon
   driver the app uses only speaks WebSocket. The image and the reason for it are written at the top
   of [`compose.test.yaml`](compose.test.yaml); CI uses the same images as `services:`.
