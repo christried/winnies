@@ -11,6 +11,7 @@ The shape comes from the compies repository, where it grew out of ten retros; ru
   - Auto-merge needs the repo setting `allow_auto_merge`, which is off today (`gh api repos/christried/winnies --jq .allow_auto_merge`). The human turns it on with `gh repo edit --enable-auto-merge`; until then, wait for CI with `node scripts/ci-wait.mjs <sha> --until-done` in the background and merge on green.
   - Before you verify a merged ticket, confirm the merge happened: `gh pr view <n> --json mergedAt,state`.
 - **Into `main`**: open the PR yourself; merging it is the human's. That covers the Safety net, every hotfix and the 1.0.0 release. Once CI is green, hand the human `! gh pr merge <n> --merge`. A hotfix is merged forward into `redesign` after it lands.
+- **Branch protection and repo settings are the human's.** `main`, and `redesign` once it exists, require the checks `check` and `attribution`, admins included. The auto-mode classifier refuses an agent's call to change branch protection (tried 2026-11-10), so hand the human the command.
 - **Subagents** hand their work back; the orchestrating session does every merge (`docs/agents/subagents.md`).
 - A PR body is written with the `pr` skill and carries no attribution (CLAUDE.md § Attribution).
 
