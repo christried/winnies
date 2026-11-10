@@ -38,7 +38,7 @@ export function postWinnie(owner: SignedInOwner, body: unknown): Promise<Respons
  * @param name the Winnie's name
  * @returns the created row (the Challenges come with a read, not with the creation)
  */
-export async function createWinnie(owner: SignedInOwner, name = "Test Winnie"): Promise<WinnieRow> {
+export async function createWinnie(owner: SignedInOwner, name = "Test Winnie"): Promise<Omit<WinnieRow, "challenges">> {
   const created = await postWinnie(owner, { name });
   expect(created.status).toBe(200);
   return created.json();
