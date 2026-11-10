@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import process from "node:process";
 import { parseEnv } from "node:util";
 import { z } from "zod";
+import { proxyAddress } from "./neon-local.mjs";
 
 // The one place the tests read the environment (like server/utils/env.ts for the app).
 
@@ -13,7 +14,7 @@ export const TEST_SERVER_PORT = 3101;
 
 // Not secrets: they only ever meet the throwaway test database and a server that nobody else can
 // reach. The test Better Auth instance and the server under test share the secret by construction.
-// Keep in sync with the job-level `env:` of `api-tests` in .github/workflows/ci.yml.
+// Keep in sync with the job-level `env:` of `api-tests` and `e2e` in .github/workflows/ci.yml.
 const HARNESS_ENV = {
   BETTER_AUTH_SECRET: "winnies-test-secret-not-a-secret-0123456789",
   BETTER_AUTH_URL: `http://localhost:${TEST_SERVER_PORT}`,
@@ -78,6 +79,8 @@ export function readTestEnv(): TestEnv {
   }
   const env = result.data;
 
+  // The driver refuses any other host when it connects; this stops the run before anything is emptied.
+  proxyAddress(new URL(env.TEST_DATABASE_URL).hostname);
   if (!/test/i.test(databaseName(env.TEST_DATABASE_URL))) {
     throw new Error(`Refusing to run: the database name in TEST_DATABASE_URL ("${databaseName(env.TEST_DATABASE_URL)}") does not contain "test", and a run empties that database.`);
   }

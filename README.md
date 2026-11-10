@@ -39,10 +39,11 @@ job of the CI workflow, and is never set on the hosting provider.
 ## Scripts
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
-`pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` · `pnpm db:migrate` · `pnpm db:studio`
+`pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` · `pnpm db:migrate` ·
+`pnpm db:studio`
 
-CI runs lint, typecheck, test and build (the `check` job) and the API tests (the `api-tests` job)
-on every pull request.
+CI runs lint, typecheck, test and build (the `check` job), the API tests (the `api-tests` job) and
+the browser tests (the `e2e` job) on every pull request.
 
 ## Tests
 
@@ -60,7 +61,20 @@ on every pull request.
   of [`compose.test.yaml`](compose.test.yaml); CI uses the same images as `services:`.
 - The app's database setup is untouched. A test-only file (`tests/support/neon-local.mjs`) points the
   Neon driver at the proxy, inside the test server process and the test process only.
-- `pnpm test:api` builds into `.nuxt/test/` (not `.output`) and removes that build afterwards.
+- `pnpm test:api` and `pnpm test:e2e` build into `.nuxt/test/` (not `.output`) and remove that build afterwards.
+- The e2e tests drive the same built server in a real browser with [Playwright](https://playwright.dev),
+  signed in as a throwaway Owner. Same setup as the API tests (the database, `.env.test`), plus once
+  per machine `pnpm exec playwright install chromium`. Then `pnpm test:e2e` runs them, natively on
+  Windows. Spec files are `tests/e2e/*.spec.ts`; read the header of `tests/e2e/fixtures.ts` before adding one.
+  - `pnpm test:api` and `pnpm test:e2e` share the build, the database and the run lock, so two runs
+    (yours, or another person's) queue behind each other, for up to 30 minutes.
+  - A failed test leaves its trace in `test-results/`: `pnpm exec playwright show-trace <trace.zip>`.
+    In CI the `e2e` job uploads `playwright-report/` and `test-results/` as the `playwright-report` artifact.
+  - CI runs the e2e tests in the `mcr.microsoft.com/playwright:v<X.Y.Z>-noble` image
+    (ADR-0004). The image tag and `@playwright/test` in `package.json` move together:
+    `scripts/playwright-pin.test.mjs` fails `pnpm test` when they differ.
+- The one flow automation cannot cover, signing in with Discord, is checked by hand before a release:
+  [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## License
 

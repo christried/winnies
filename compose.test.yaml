@@ -9,9 +9,11 @@
 #   ghcr.io/timowilhelm/local-neon-http-proxy@sha256:cd2ae14e... (multi-arch index of tag `main`, built
 #     2026-03-27; the repository publishes no versioned tags, so it is pinned by digest)
 # Result: with the driver's defaults the Pool dials wss://<host>/v2 on 443 and fails with an empty
-# ErrorEvent. With `neonConfig.useSecureWebSocket = false` and `wsProxy` set to 127.0.0.1:4444/v1 it
-# runs queries, including through Drizzle and Better Auth. That configuration is test code
-# (tests/support/neon-local.mjs), loaded into the server under test and the test process only.
+# ErrorEvent. With `neonConfig.useSecureWebSocket = false` and `wsProxy` set to the proxy (127.0.0.1:4444/v1
+# here, from the `localhost` host of TEST_DATABASE_URL) it runs queries, including through Drizzle and
+# Better Auth. That configuration is test code (tests/support/neon-local.mjs), loaded into the server under
+# test and the test process only. It dials the proxy of exactly two hosts: `localhost` (this file) and
+# `neon-proxy` (the service name in the `e2e` job's container) and refuses any other.
 # Not tried, because this one passed: ghcr.io/neondatabase/wsproxy.
 #
 # Connection string: postgres://postgres:postgres@localhost:5432/winnies_test (TEST_DATABASE_URL).

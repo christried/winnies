@@ -88,9 +88,10 @@ export default withNuxt(
     },
   },
   {
-    // Test harness: it reports to the console, and tests/support/env.ts is the only place that reads the environment.
+    // Test harness: it reports to the console, and tests/support/env.ts is the only place that reads the
+    // environment (the Playwright config only asks whether it runs in CI).
     name: "tests",
-    files: ["tests/**"],
+    files: ["tests/**", "playwright.config.ts"],
     rules: {
       "no-console": "off",
       "node/no-process-env": "off",
