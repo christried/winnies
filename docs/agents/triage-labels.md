@@ -6,15 +6,15 @@ Every label in the tracker is listed here. Phases and feature batches are **mile
 
 The skills speak of five canonical triage roles. This table maps them to our labels.
 
-| Label in mattpocock/skills | Label in our tracker | Meaning                              |
-| -------------------------- | -------------------- | ------------------------------------ |
-| `needs-triage`             | `needs-triage`       | Not evaluated yet                    |
-| `needs-info`               | `needs-info`         | Waiting on the reporter              |
-| `ready-for-agent`          | `ready-to-implement` | Fully specified, ready for the human |
-| `ready-for-human`          | `ready-to-implement` | Fully specified, ready for the human |
-| `wontfix`                  | `wontfix`            | Will not be actioned                 |
+| Label in mattpocock/skills | Label in our tracker | Meaning                             |
+| -------------------------- | -------------------- | ----------------------------------- |
+| `needs-triage`             | `needs-triage`       | Not evaluated yet                   |
+| `needs-info`               | `needs-info`         | Waiting on the reporter             |
+| `ready-for-agent`          | `ready-to-implement` | Fully specified, an agent builds it |
+| `ready-for-human`          | `ready-for-human`    | Only the human can do it            |
+| `wontfix`                  | `wontfix`            | Will not be actioned                |
 
-The human implements every ticket, sometimes by driving an agent. There is no agent-only work, so both "ready" roles share one label.
+Agents implement (CLAUDE.md § Roles), so `ready-to-implement` means ready for an agent. `ready-for-human` marks what only the human can do: a Claude Design prompt to run, a walk-through, a repo setting.
 
 `duplicate` marks an issue closed as a duplicate.
 

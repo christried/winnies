@@ -1,6 +1,6 @@
 # Roadmap
 
-What's being built, what comes next and what's only an idea. Maintained by the planning agent as product manager; every change is approved and committed by the maintainer. Last updated 2026-10-18.
+What's being built, what comes next and what's only an idea. Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-10-18.
 
 Only **Now** has tickets. Everything else lives here until its turn, then becomes a batch of tickets under one milestone. Entries link the closed issue they came from ("was #125") and the handoff frames that design them (IDs from `docs/design_handoff_winnies/01-screen-index.md`).
 
@@ -8,7 +8,7 @@ Only **Now** has tickets. Everything else lives here until its turn, then become
 
 The whole visual layer rebuilt from `docs/design_handoff_winnies/` (Kawaii Clay). Behaviour stays as is unless a ticket says otherwise (ADR-0001). Built on the `redesign` branch, released as v1.0.0 (ADR-0002).
 
-Every product question is decided in [Redesign 1.0: Core planning map](https://github.com/christried/winnies/issues/166) (closed); its Decisions so far list is the index specs and tickets link back to. Phases run one at a time, in table order, each through the same loop: `/to-spec` writes the phase's spec, `/to-tickets` cuts it into a batch under the phase's milestone, the batch is implemented, and only then does the next phase get its spec. No phase is specced or ticketed ahead of its turn.
+Every product question is decided in [Redesign 1.0: Core planning map](https://github.com/christried/winnies/issues/166) (closed); its Decisions so far list is the index specs and tickets link back to. Phases run one at a time, in table order, each through the same loop: `/to-spec` writes the phase's spec, `/to-tickets` cuts it into a batch under the phase's milestone, the batch is implemented (`/implement-spec`), reviewed, walked through and looked back on in a `/retro` (`docs/agents/delivery.md`), and only then does the next phase get its spec. No phase is specced or ticketed ahead of its turn.
 
 | Phase          | Goal                                                                                                                                                                                   | Frames          | Milestone                                                       | Status      |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------- | ----------- |

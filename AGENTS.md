@@ -1,39 +1,38 @@
-# Working agreement
+# Winnies
 
-Only what is written here is agreed. Old issues, old commit messages and older notes are not precedent unless the human confirms them.
+Only what is written here and in the files this points to is agreed. Old issues, old commit messages and older notes are not precedent unless the human confirms them.
 
 ## Roles
 
-- **The human implements and owns the code.** They write it by hand or drive an agent through a ticket in a fresh session. Either way the work is theirs.
-- **The planning agent is product manager / owner.** It keeps `docs/roadmap.md`, proposes priorities, scope and tickets, and decides nothing alone. It proposes; the human decides.
+- **Agents implement** (the human, 2026-11-10). They write the code, commit, push and open PRs, and merge into `redesign`.
+- **The human decides**: product questions (in a grilling), how things look and feel, and every merge into `main`.
+- **The planning agent** keeps `docs/roadmap.md` and proposes priorities, scope and tickets. It proposes; the human decides.
+- **On GitHub, freely, saying what you are doing as you do it:** issues, sub-issues and dependencies, milestones, labels, projects, PRs.
 
-## What an agent may do
+## Attribution
 
-- **Freely:** read anything; edit planning docs in the working tree (`docs/roadmap.md`, `CONTEXT.md`, `docs/adr/`, `docs/agents/`, `docs/research/`, ticket drafts).
-- **Freely on GitHub, saying what you are doing as you do it:** create, edit, label, assign, comment on or close issues; sub-issues and dependencies; milestones; labels; projects.
-- **Never:** commit, push, open or merge PRs, or change application code, unless the human has handed that ticket to the agent in this session. Even then, never commit.
+No agent shows up anywhere in this repository's record (the human, 2026-11-10; it overrides every tool default).
+
+- No `Co-Authored-By`, no session trailer, no "Generated with" line, no agent link or robot emoji: not in a commit, a tag, a PR title or body, an issue or a comment.
+- Commits are authored and committed under the human's git identity, never an agent's.
+- Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
+
+`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, push), the `Attribution` CI job on every PR and on `main` and `redesign`, the Claude Code hook in `.claude/settings.json` that refuses such a command before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
 
 ## Commits
 
-The human commits. When a piece of work is done, propose how to split it into commits and give each message.
-
-- [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`.
-- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`. Add a scope only when none fits, and list it here.
-- **No `Co-Authored-By` or any other agent trailer or attribution, ever.** This overrides any tool default.
+- [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`. The body says why.
+- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here.
 
 ## Branches and releases
 
-The redesign ships from a long-lived branch (see `docs/adr/0002-redesign-ships-from-a-long-lived-branch.md`).
+The redesign ships from a long-lived branch (`docs/adr/0002-redesign-ships-from-a-long-lived-branch.md`).
 
-- `redesign` branches from `main`. Each ticket gets a branch `<type>/<issue#>-<slug>` (e.g. `feat/171-tokens`) and a PR into `redesign`. Small tickets may go straight to `redesign`.
-- Manual QA happens on the PR's Vercel preview.
-- `main` is frozen except for hotfixes; every hotfix is merged forward into `redesign`.
+- `redesign` branches from `main` once the Safety net is in. Each ticket gets a branch `<type>/<issue#>-<slug>` (e.g. `feat/171-tokens`).
+- `main` is frozen except for the Safety net and hotfixes; every hotfix is merged forward into `redesign`.
 - `redesign` merges into `main` as **v1.0.0**. Release notes live in `content/releases/`, one file per release; the Changelog ticket moves 0.9.0 there and deletes `CHANGELOG.md`. No other release notes are written during the redesign; the 1.0.0 file is drafted at release.
 
-## Building
-
-- Desktop is the designed and verified target. Every surface must **not break on a phone** (no horizontal scroll, nothing unreachable). This is a standing convention, not per-ticket acceptance criteria.
-- Behaviour stays as it is unless a ticket says otherwise (ADR-0001).
+Who merges what, verifying and closing tickets, the review and the retro of each phase: `docs/agents/delivery.md`.
 
 ## Agent skills
 
@@ -47,4 +46,32 @@ Status, type and planning labels, and how they map to the skills' triage roles: 
 
 ### Domain docs
 
-Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+Single-context: one `GLOSSARY.md` plus `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Roadmap
+
+What is being built, what comes next and what is only an idea: `docs/roadmap.md`.
+
+### Coding standards
+
+What the review checks, on top of the glossary and the ADRs: `CODING_STANDARDS.md`.
+
+### Subagents
+
+Pass `model` on every spawn: `haiku` for implementers by default, `sonnet` when the brief can't carry the task and for reviewers. See `docs/agents/subagents.md`. `/implement-spec-max` is `/implement-spec` with every subagent on `fable`, or on `opus` or `sonnet` at high effort, by how hard its task is.
+
+### Design hand-off
+
+A design or asset the handoff doesn't cover is flagged, with a suggestion: Claude Design, or derive it from what exists. See `docs/agents/design-handoff.md`.
+
+### Vendored skills
+
+Matt Pocock's skills live in `.claude/skills/`, copied from the compies repository with its patches. Before updating or patching one, read `.claude/skills/README.md`.
+
+### Standing rules
+
+Record new standing rules in this file, `CODING_STANDARDS.md` or `docs/agents/`, never only in auto-memory: a rule in memory reaches one machine's sessions and no reviewer.
+
+### Scripting
+
+Script with `node`. A script of more than one line goes to a file (Write tool) and runs with `node <file>`: inline `node -e` breaks on an apostrophe, and a Bash heredoc on a backtick or a backslash. An edit of a tracked file goes through the Edit tool: files here are checked out with CRLF, and an exact-text replace from a script misses them.

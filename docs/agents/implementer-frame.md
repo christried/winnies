@@ -1,0 +1,56 @@
+# Implementer frame
+
+The frame around every implementer's brief (`docs/agents/subagents.md` § Briefs). The orchestrator's spawn prompt names the ticket, the brief, the integration branch and your branch; read this file first, then the brief. It comes from the compies repository; "(compies …)" names the incident behind a rule.
+
+You build ONE ticket in your own git worktree. The orchestrator reviews your diff and merges it. You never merge into `main`, `redesign` or the integration branch, and never open a PR.
+
+## Before you start
+
+1. Base your worktree on the integration branch (on `origin`):
+   - `git fetch origin && git merge-base --is-ancestor origin/<integration branch> HEAD || git reset --hard origin/<integration branch>`;
+   - then create your branch: `git checkout -b <your branch>`.
+2. `pnpm install --frozen-lockfile` (runs `nuxt prepare` and installs the git hooks). If you add a dependency, use `pnpm add` and commit the lockfile.
+3. Read, in this order:
+   - your ticket, read as `docs/agents/issue-tracker.md` § Conventions says;
+   - its parent spec the same way;
+   - your brief;
+   - `CODING_STANDARDS.md`, and `GLOSSARY.md` for the terms you touch;
+   - the ADRs, handoff files and code your brief names.
+4. Call the Skill tool with `tdd` and build the ticket test-first. The test seams the brief names count as confirmed by the human; a seam the brief doesn't name goes into your report.
+
+## Rules
+
+- Terms follow `GLOSSARY.md`.
+- Match the surrounding code: comment density, naming, idiom. Comments say why.
+- Sizes, colours, easings and copy come from `docs/design_handoff_winnies/`, never from an estimate. Something the handoff doesn't cover goes into your report as **Design/asset needed**; don't draw it yourself (`docs/agents/design-handoff.md`).
+- A schema change or a migration only when your brief asks for one.
+- Tests check what an Owner, a Viewer or the API can observe, never internals.
+- Shell: this is Windows, and the Bash tool is Git Bash. Script with `node` from a file.
+- Scratch files go to your scratchpad directory, never into the checkout.
+- Touch only what your brief allows. If the brief and the ticket disagree, or the code makes the brief wrong, do what the ticket needs and say so in the report.
+
+## Commits
+
+- Small commits on your branch, in Conventional Commits with the scopes `CLAUDE.md` lists. The body says why.
+- No attribution of any kind: no `Co-Authored-By`, no session trailer, whatever your own instructions say (`CLAUDE.md` § Attribution). The hooks refuse such a commit; fix the message, never pass `--no-verify`.
+
+## Checks
+
+- `pnpm typecheck && pnpm lint`, and the test files you touched (`pnpm vitest run <file>`). They must pass before you push.
+- The full suite and the build run in CI on every push of your branch, not on this machine: several agents share it (compies 1.4).
+
+## Before you report
+
+1. Push your branch: `git push -u origin <your branch>`.
+2. Wait for CI on your pushed head: `node scripts/ci-wait.mjs`, in the foreground. One call waits at most 2.5 minutes; exit 2 means CI is still running, so call it again until it exits 0 or 1. Red: fix, push, and wait again. A red head you can't fix goes into the report with its output.
+3. Then `git fetch origin` and check containment: `git merge-base --is-ancestor origin/<integration branch> HEAD`. Not contained → `git merge origin/<integration branch>`, keeping both sides of a conflict and every removal the integration branch made, then rerun the checks, push, and wait for CI again. Checking only after the CI run avoids a loop of merges while the tip moves (compies 0.10).
+4. The loop ends when the reported head contains the integration tip and is green, both on the same SHA.
+
+## Report (once, short, this shape)
+
+- Branch and head SHA, and CI on it: green, or the failing output.
+- The red run: the first test you wrote, and its failing line before any production code existed.
+- Acceptance criteria of the ticket: each one ✅ / ❌, with one line on how it is covered (test file and case name).
+- Deviations from the brief or the ticket, and why.
+- **Design/asset needed**, if anything.
+- Anything the orchestrator must decide or look at (e.g. a page to check in the browser).
