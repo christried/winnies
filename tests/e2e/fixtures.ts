@@ -4,9 +4,11 @@ import { waitForHydration } from "@nuxt/test-utils/e2e";
 import { test as base, expect } from "@nuxt/test-utils/playwright";
 import { signInAsOwner } from "../support/owner";
 
-// Shared by every e2e spec. A later e2e ticket adds files of its own and edits none of fixtures.ts,
-// global-setup.ts, playwright.config.ts or tests/support/**: a fixture or helper it needs lives in
-// tests/e2e/support/<topic>.ts (or in its spec file) and extends this `test` with `test.extend`.
+// Shared by every e2e spec. Helpers shared with the API tests live in tests/support/: owner.ts signs an
+// Owner in, owner-api.ts seeds and reads as that Owner, rows.ts types the answers. A later e2e ticket
+// adds files of its own and edits none of fixtures.ts, global-setup.ts or playwright.config.ts, and
+// does not edit tests/support/test-server.ts or env.ts: a fixture or helper only this suite needs lives
+// in tests/e2e/support/<topic>.ts (or in its spec file) and extends this `test` with `test.extend`.
 // Every test creates its own Owner and its own Winnies through `owner` and never reads another test's
 // data: the config runs tests in parallel.
 

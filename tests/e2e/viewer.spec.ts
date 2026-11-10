@@ -1,12 +1,10 @@
-import type { SignedInOwner } from "../support/owner";
-import { TEST_SERVER_PORT } from "../support/env";
+import type { WinnieRow } from "../support/rows";
+import { ownerRequest, seedWinnie } from "../support/owner-api";
 import { expect, test, visit } from "./fixtures";
 
 // What a Viewer sees through a Share Link, pinned as the built app does it today (ADR-0001: behaviour
-// stays). The Owner acts through the API with the Owner's session cookie; the default `page` is a
-// signed-out browser context, which is the Viewer.
-
-const SERVER = `http://127.0.0.1:${TEST_SERVER_PORT}`; // same address the API tests use (tests/support/test-server.ts)
+// stays). The Owner acts through the API with the Owner's session cookie (`ownerPage.request`); the
+// default `page` is a signed-out browser context, which is the Viewer.
 
 const NAME = "Viewer test Winnie";
 // One Challenge with a counter, one with a Win Condition and no counter, one with neither.
@@ -25,42 +23,10 @@ const CHALLENGES = [
 const POLL_INTERVAL_MS = 10_000;
 const POLL_WAIT_MS = POLL_INTERVAL_MS + 5_000;
 
-interface OwnerChallenge { id: string; game: string; spec: string; target: number; count: number }
-interface OwnerWinnie { id: string; name: string; shareSlug: string; challenges: OwnerChallenge[] }
-
-// The Owner's side of a test: an authenticated request, the same way tests/api/api.ts does it (which needs
-// Vitest's `inject` and so cannot be imported here). Same helper as in owner-journey.spec.ts, on purpose:
-// a candidate for tests/e2e/support/ once a third spec needs it.
-async function ownerRequest<T>(owner: SignedInOwner, path: string, method: string, json?: unknown): Promise<T> {
-  const headers = new Headers(owner.headers);
-  if (json !== undefined)
-    headers.set("content-type", "application/json");
-  const response = await fetch(new URL(path, SERVER), {
-    method,
-    headers,
-    body: json === undefined
-      ? undefined
-      : JSON.stringify(json),
-  });
-  // A failed setup call must say so, instead of showing up later as a confusing missing element
-  if (!response.ok)
-    throw new Error(`${method} ${path} answered ${response.status}: ${await response.text()}`);
-  return await response.json() as T;
-}
-
-async function createWinnie(owner: SignedInOwner) {
-  const winnie = await ownerRequest<{ id: string; shareSlug: string }>(owner, "/api/winnies", "POST", { name: NAME });
-  const challenges: { id: string }[] = [];
-  // In order: `position` follows creation order.
-  for (const challenge of CHALLENGES)
-    challenges.push(await ownerRequest<{ id: string }>(owner, `/api/winnies/${winnie.id}/challenges`, "POST", challenge));
-  return { winnie, challenges };
-}
-
-test("a Share Link opened signed out shows the same Winnie as the Owner's", async ({ page, owner }) => {
-  const { winnie } = await createWinnie(owner);
+test("a Share Link opened signed out shows the same Winnie as the Owner's", async ({ page, ownerPage }) => {
+  const winnie = await seedWinnie(ownerPage.request, { name: NAME, challenges: CHALLENGES });
   // The expected values are the Owner's own read. This first check keeps the comparison from passing vacuously.
-  const ownersView = await ownerRequest<OwnerWinnie>(owner, `/api/winnies/${winnie.id}`, "GET");
+  const ownersView = await ownerRequest<WinnieRow>(ownerPage.request, "GET", `/api/winnies/${winnie.id}`);
   expect(ownersView.name).toBe(NAME);
   expect(ownersView.challenges.map(challenge => challenge.game)).toEqual(CHALLENGES.map(challenge => challenge.game));
 
@@ -88,10 +54,10 @@ test("a Share Link opened signed out shows the same Winnie as the Owner's", asyn
   await expect(page.getByRole("button", { name: "Create new Winnie" })).toHaveCount(0);
 });
 
-test("the Shared View shows a change the Owner makes within the polling cadence, without a reload", async ({ page, owner }) => {
+test("the Shared View shows a change the Owner makes within the polling cadence, without a reload", async ({ page, ownerPage }) => {
   // Hydration, the setup calls, then up to POLL_WAIT_MS: more than the default 30 s allows for.
   test.setTimeout(60_000);
-  const { winnie, challenges } = await createWinnie(owner);
+  const winnie = await seedWinnie(ownerPage.request, { name: NAME, challenges: CHALLENGES });
   await visit(page, `/shared/${winnie.shareSlug}`);
   let navigations = 0;
   page.on("framenavigated", () => navigations++);
@@ -102,16 +68,16 @@ test("the Shared View shows a change the Owner makes within the polling cadence,
   await expect(afterChange).toHaveCount(0);
 
   // Wins "Speedrun", which has no counter. One of three leaves the Winnie not Complete, and polling stops once it is.
-  await ownerRequest(owner, `/api/challenges/${challenges[0]!.id}`, "PATCH", { status: "won" });
+  await ownerRequest(ownerPage.request, "PATCH", `/api/challenges/${winnie.challengeIds[0]!}`, { status: "won" });
 
   await expect(afterChange).toBeVisible({ timeout: POLL_WAIT_MS });
   expect(navigations).toBe(0);
   await expect(page.getByText("Win-challenge complete")).toHaveCount(0);
 });
 
-test("a deleted Winnie's Share Link shows the gone state", async ({ page, owner }) => {
-  const { winnie } = await createWinnie(owner);
-  await ownerRequest(owner, `/api/winnies/${winnie.id}`, "DELETE");
+test("a deleted Winnie's Share Link shows the gone state", async ({ page, ownerPage }) => {
+  const winnie = await seedWinnie(ownerPage.request, { name: NAME, challenges: CHALLENGES });
+  await ownerRequest(ownerPage.request, "DELETE", `/api/winnies/${winnie.id}`);
 
   await visit(page, `/shared/${winnie.shareSlug}`);
 
@@ -120,8 +86,8 @@ test("a deleted Winnie's Share Link shows the gone state", async ({ page, owner 
   await expect(page.getByText(NAME, { exact: true })).toHaveCount(0);
 });
 
-test("the Overlay of a live Winnie's Share Link loads and shows the Winnie", async ({ page, owner }) => {
-  const { winnie } = await createWinnie(owner);
+test("the Overlay of a live Winnie's Share Link loads and shows the Winnie", async ({ page, ownerPage }) => {
+  const winnie = await seedWinnie(ownerPage.request, { name: NAME, challenges: CHALLENGES });
 
   await visit(page, `/shared/${winnie.shareSlug}/overlay`);
 
