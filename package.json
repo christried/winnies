@@ -21,7 +21,10 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:api": "vitest run --config vitest.api.config.ts",
+    "test:db:up": "podman compose -f compose.test.yaml up -d",
+    "test:db:down": "podman compose -f compose.test.yaml down -v"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.29",
