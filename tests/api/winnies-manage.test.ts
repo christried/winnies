@@ -7,7 +7,11 @@ const NOT_SIGNED_IN = "not signed in!";
 const NOT_YOUR_WINNIE = "Not your Winnie.";
 
 async function createWinnie(owner: SignedInOwner, name: string): Promise<{ id: string; name: string }> {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name },
+  });
   expect(created.status).toBe(200);
   return created.json();
 }
@@ -17,7 +21,11 @@ async function listed(owner: SignedInOwner): Promise<{ id: string; name: string 
 }
 
 function rename(id: string, name: unknown, as?: SignedInOwner) {
-  return api(`/api/winnies/${id}`, { as, method: "PATCH", json: { name } });
+  return api(`/api/winnies/${id}`, {
+    as,
+    method: "PATCH",
+    json: { name },
+  });
 }
 
 // A 422 from validation: the message text and the field errors, both in the body.
@@ -142,7 +150,9 @@ describe("renaming a Winnie", () => {
     const renamed = await rename(winnie.id, "x".repeat(30), owner);
 
     expect(renamed.status).toBe(200);
-    expect((await listed(owner)).map(w => w.name)).toEqual(["x".repeat(30)]);
+    expect((await listed(owner)).map(w => w.name)).toEqual([
+      "x".repeat(30),
+    ]);
   });
 
   it("surrounding spaces are trimmed and the trimmed name is stored", async () => {
@@ -152,7 +162,9 @@ describe("renaming a Winnie", () => {
     const renamed = await rename(winnie.id, `  ${"x".repeat(30)}  `, owner);
 
     expect(renamed.status).toBe(200);
-    expect((await listed(owner)).map(w => w.name)).toEqual(["x".repeat(30)]);
+    expect((await listed(owner)).map(w => w.name)).toEqual([
+      "x".repeat(30),
+    ]);
   });
 
   it("a body without a name is a validation error and the name stays", async () => {

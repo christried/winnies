@@ -7,7 +7,11 @@ const NOT_SIGNED_IN = "not signed in!";
 const MISMATCH = "Order must list every challenge exactly once";
 
 async function createWinnie(owner: SignedInOwner, name = "A Winnie"): Promise<string> {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name },
+  });
   expect(created.status).toBe(200);
   return (await created.json()).id;
 }
@@ -16,7 +20,11 @@ async function createWinnie(owner: SignedInOwner, name = "A Winnie"): Promise<st
 async function createChallenges(owner: SignedInOwner, winnieId: string, games: string[]): Promise<string[]> {
   const ids: string[] = [];
   for (const game of games) {
-    const created = await api(`/api/winnies/${winnieId}/challenges`, { as: owner, method: "POST", json: { game } });
+    const created = await api(`/api/winnies/${winnieId}/challenges`, {
+      as: owner,
+      method: "POST",
+      json: { game },
+    });
     expect(created.status).toBe(200);
     ids.push((await created.json()).id);
   }
@@ -30,7 +38,11 @@ async function challengeOrder(owner: SignedInOwner, winnieId: string): Promise<s
 }
 
 function reorder(winnieId: string, ids: unknown, as?: SignedInOwner) {
-  return api(`/api/winnies/${winnieId}/reorder`, { as, method: "POST", json: { ids } });
+  return api(`/api/winnies/${winnieId}/reorder`, {
+    as,
+    method: "POST",
+    json: { ids },
+  });
 }
 
 // The mismatch is thrown inside the query, not by validation: a 422 with the message and no `data`.
@@ -91,7 +103,11 @@ describe("reordering a Winnie's Challenges", () => {
   it("a list with an unknown id is refused and the order stays", async () => {
     const { owner, winnieId, a, b, c } = await winnieWithThree();
 
-    await expectMismatch(await reorder(winnieId, [c, b, crypto.randomUUID()], owner));
+    await expectMismatch(await reorder(winnieId, [
+      c,
+      b,
+      crypto.randomUUID(),
+    ], owner));
 
     expect(await challengeOrder(owner, winnieId)).toEqual([a, b, c]);
   });
@@ -145,7 +161,9 @@ describe("reordering a Winnie's Challenges", () => {
     const owner = await signInAsOwner();
     const winnieId = await createWinnie(owner);
 
-    await expectMismatch(await reorder(winnieId, [crypto.randomUUID()], owner));
+    await expectMismatch(await reorder(winnieId, [
+      crypto.randomUUID(),
+    ], owner));
   });
 
   it("a signed-out reorder is rejected and the order stays", async () => {

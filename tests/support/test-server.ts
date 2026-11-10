@@ -176,7 +176,9 @@ export async function startTestServer(options: TestServerOptions): Promise<TestS
     catch (error) {
       const tail = getServerLogs().slice(-30).join("\n");
       await stopServer();
-      throw new Error(`${describeError(error)}${tail ? `\n--- last server output ---\n${tail}` : ""}`);
+      throw new Error(`${describeError(error)}${tail
+        ? `\n--- last server output ---\n${tail}`
+        : ""}`);
     }
     finally {
       // Nuxt takes over the console and the standard streams while it loads, and the test runner's own

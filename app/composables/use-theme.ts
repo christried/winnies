@@ -23,7 +23,10 @@ export function useTheme() {
       return;
 
     try {
-      await $fetch("/api/user/theme", { method: "PUT", body: { theme: nextPreference } });
+      await $fetch("/api/user/theme", {
+        method: "PUT",
+        body: { theme: nextPreference },
+      });
     }
     catch (error) {
       if ($themePreference.value === nextPreference)

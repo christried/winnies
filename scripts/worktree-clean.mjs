@@ -13,7 +13,12 @@ import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import process from "node:process";
 
-const git = (...args) => execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+function git(...args) {
+  return execFileSync("git", args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
+}
 const root = git("rev-parse", "--show-toplevel");
 const home = join(root, ".claude", "worktrees");
 /** Forward slashes, lower case: Windows writes one path several ways. */
@@ -37,22 +42,33 @@ function processes() {
   const listing = process.platform === "win32"
     ? execFileSync("powershell", ["-NoProfile", "-Command", "Get-CimInstance Win32_Process | ForEach-Object { \"$($_.ProcessId) $($_.CommandLine)\" }"], { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 })
     : execFileSync("ps", ["-eo", "pid=,args="], { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
-  return listing.split(/\r?\n/).map(line => /^\s*(\d+) (.*)$/.exec(line)).filter(Boolean).map(([, pid, command]) => ({ pid: Number(pid), command: command.replaceAll("\\", "/").toLowerCase() }));
+  return listing.split(/\r?\n/).map(line => /^\s*(\d+) (.*)$/.exec(line)).filter(Boolean).map(([, pid, command]) => ({
+    pid: Number(pid),
+    command: command.replaceAll("\\", "/").toLowerCase(),
+  }));
 }
 
 /** The worktrees git lists under .claude/worktrees/, from `git worktree list --porcelain`. */
 function worktrees() {
   return git("worktree", "list", "--porcelain").split(/\n{2,}/).map((block) => {
     const field = name => block.split("\n").find(line => line === name || line.startsWith(`${name} `))?.slice(name.length + 1);
-    return { path: field("worktree"), head: field("HEAD"), branch: field("branch")?.replace("refs/heads/", ""), lock: field("locked") };
+    return {
+      path: field("worktree"),
+      head: field("HEAD"),
+      branch: field("branch")?.replace("refs/heads/", ""),
+      lock: field("locked"),
+    };
   }).filter(tree => tree.path && same(tree.path).startsWith(`${same(home)}/`));
 }
 
 /** Why a done worktree stays, or null when nothing in it would be lost. */
 function keepReason(tree, all) {
   const changes = git("-C", tree.path, "status", "--porcelain").split("\n").filter(Boolean).length;
-  if (changes > 0)
-    return `${changes} uncommitted change${changes === 1 ? "" : "s"}`;
+  if (changes > 0) {
+    return `${changes} uncommitted change${changes === 1
+      ? ""
+      : "s"}`;
+  }
   if (git("branch", "-r", "--contains", tree.head) === "")
     return `${tree.head.slice(0, 7)} is on no remote branch`;
   const inside = all.filter(item => item.command.includes(`${same(tree.path)}/`));
@@ -93,12 +109,18 @@ for (const tree of worktrees()) {
     if (git("branch", "-r", "--contains", git("rev-parse", branch)) !== "")
       git("branch", "-D", branch);
   }
-  console.log(`removed ${name}${branches.length > 0 ? ` and ${[...new Set(branches)].join(", ")}` : ""}`);
+  console.log(`removed ${name}${branches.length > 0
+    ? ` and ${[
+      ...new Set(branches),
+    ].join(", ")}`
+    : ""}`);
 }
 
 // What a broken-off removal leaves: a folder without `.git`, which git no longer knows.
 const listed = new Set(worktrees().map(tree => same(tree.path)));
-for (const name of existsSync(home) ? readdirSync(home) : []) {
+for (const name of existsSync(home)
+  ? readdirSync(home)
+  : []) {
   const path = join(home, name);
   if (listed.has(same(path)))
     continue;

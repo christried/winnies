@@ -12,7 +12,9 @@ const newWinnie = useTemplateRef("newWinnie");
 const requestUrl = useRequestURL();
 
 const shareUrl = computed(() =>
-  currentWinnie.value ? `${requestUrl.origin}/shared/${currentWinnie.value.shareSlug}` : "",
+  currentWinnie.value
+    ? `${requestUrl.origin}/shared/${currentWinnie.value.shareSlug}`
+    : "",
 );
 
 /**

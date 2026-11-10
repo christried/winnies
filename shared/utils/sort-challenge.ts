@@ -23,7 +23,9 @@ function groupOf(challenge: SortableChallenge): number {
   if (challenge.pinned)
     return 0;
 
-  return challenge.status === "won" ? 2 : 1;
+  return challenge.status === "won"
+    ? 2
+    : 1;
 }
 
 /**
@@ -32,7 +34,9 @@ function groupOf(challenge: SortableChallenge): number {
  * @returns A group: 1 when the challenge is won, otherwise 0.
  */
 function wonRank(challenge: SortableChallenge): number {
-  return challenge.status === "won" ? 1 : 0;
+  return challenge.status === "won"
+    ? 1
+    : 0;
 }
 
 /**

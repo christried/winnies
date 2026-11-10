@@ -4,14 +4,25 @@ import { api } from "./api";
 
 describe("signing in as an Owner", () => {
   it("two signed-in Owners do not collide", async () => {
-    const [first, second] = await Promise.all([signInAsOwner(), signInAsOwner()]);
+    const [first, second] = await Promise.all([
+      signInAsOwner(),
+      signInAsOwner(),
+    ]);
 
     expect(first.user.id).not.toBe(second.user.id);
     expect(first.user.email).not.toBe(second.user.email);
 
     const [firstWinnie, secondWinnie] = await Promise.all([
-      api("/api/winnies", { as: first, method: "POST", json: { name: "First Owner's Winnie" } }).then(response => response.json()),
-      api("/api/winnies", { as: second, method: "POST", json: { name: "Second Owner's Winnie" } }).then(response => response.json()),
+      api("/api/winnies", {
+        as: first,
+        method: "POST",
+        json: { name: "First Owner's Winnie" },
+      }).then(response => response.json()),
+      api("/api/winnies", {
+        as: second,
+        method: "POST",
+        json: { name: "Second Owner's Winnie" },
+      }).then(response => response.json()),
     ]);
 
     const firstList = await (await api("/api/winnies", { as: first })).json();

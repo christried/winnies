@@ -20,5 +20,7 @@ export default defineNuxtPlugin(() => {
     },
   });
 
-  return { provide: { themePreference: preference } };
+  return {
+    provide: { themePreference: preference },
+  };
 });

@@ -13,7 +13,11 @@ interface ChallengeRow {
 }
 
 async function createWinnie(owner: SignedInOwner): Promise<string> {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "Test Winnie" } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name: "Test Winnie" },
+  });
   expect(created.status).toBe(200);
   return (await created.json()).id;
 }
@@ -36,7 +40,11 @@ function counter(owner: SignedInOwner | undefined, challengeId: string, body: un
 }
 
 function patchStatus(owner: SignedInOwner | undefined, challengeId: string, status: unknown): Promise<Response> {
-  return api(`/api/challenges/${challengeId}`, { as: owner, method: "PATCH", json: { status } });
+  return api(`/api/challenges/${challengeId}`, {
+    as: owner,
+    method: "PATCH",
+    json: { status },
+  });
 }
 
 // A Challenge as the Owner sees it on the Winnie, to pin the response and the stored state together.

@@ -39,7 +39,9 @@ export const winnieRelations = relations(winnie, ({ many }) => ({
 
 export const insertWinnieSchema = createInsertSchema(winnie,
   // this is just refinement of not-omitted columns
-  { name: () => winnieNameSchema }).omit({
+  {
+    name: () => winnieNameSchema,
+  }).omit({
   id: true,
   ownerId: true,
   shareSlug: true,

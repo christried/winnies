@@ -90,11 +90,15 @@ describe("pushSelections", () => {
   const zero = "0".repeat(40);
 
   it("selects what the remote branch lacks", () => {
-    expect(pushSelections("refs/heads/a aaa refs/heads/a bbb\n")).toEqual([["bbb..aaa"]]);
+    expect(pushSelections("refs/heads/a aaa refs/heads/a bbb\n")).toEqual([
+      ["bbb..aaa"],
+    ]);
   });
 
   it("selects everything no remote has for a new branch", () => {
-    expect(pushSelections(`refs/heads/a aaa refs/heads/a ${zero}\n`)).toEqual([["aaa", "--not", "--remotes"]]);
+    expect(pushSelections(`refs/heads/a aaa refs/heads/a ${zero}\n`)).toEqual([
+      ["aaa", "--not", "--remotes"],
+    ]);
   });
 
   it("selects nothing for a deleted branch", () => {

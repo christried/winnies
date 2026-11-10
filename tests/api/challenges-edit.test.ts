@@ -16,7 +16,11 @@ interface ChallengeRow {
 }
 
 async function createWinnie(owner: SignedInOwner): Promise<string> {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "Test Winnie" } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name: "Test Winnie" },
+  });
   expect(created.status).toBe(200);
   return (await created.json()).id;
 }
@@ -97,10 +101,17 @@ describe("editing a Challenge", () => {
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     expect((await patchChallenge(owner, challenge.id, { game: "a" })).status).toBe(200);
-    expect((await patchChallenge(owner, challenge.id, { game: "a".repeat(30) })).status).toBe(200);
-    expect((await patchChallenge(owner, challenge.id, { spec: "b".repeat(40) })).status).toBe(200);
+    expect((await patchChallenge(owner, challenge.id, {
+      game: "a".repeat(30),
+    })).status).toBe(200);
+    expect((await patchChallenge(owner, challenge.id, {
+      spec: "b".repeat(40),
+    })).status).toBe(200);
 
-    expect((await readChallenges(owner, winnieId))[0]).toMatchObject({ game: "a".repeat(30), spec: "b".repeat(40) });
+    expect((await readChallenges(owner, winnieId))[0]).toMatchObject({
+      game: "a".repeat(30),
+      spec: "b".repeat(40),
+    });
   });
 
   it("an edit with an invalid game or spec is rejected", async () => {
@@ -109,8 +120,12 @@ describe("editing a Challenge", () => {
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", spec: "no hits" });
 
     await expectValidationError(await patchChallenge(owner, challenge.id, { game: "" }), "game", "Game is required");
-    await expectValidationError(await patchChallenge(owner, challenge.id, { game: "a".repeat(31) }), "game", "Game is too long");
-    await expectValidationError(await patchChallenge(owner, challenge.id, { spec: "a".repeat(41) }), "spec", "Spec is too long");
+    await expectValidationError(await patchChallenge(owner, challenge.id, {
+      game: "a".repeat(31),
+    }), "game", "Game is too long");
+    await expectValidationError(await patchChallenge(owner, challenge.id, {
+      spec: "a".repeat(41),
+    }), "spec", "Spec is too long");
 
     expect((await readChallenges(owner, winnieId))[0]).toMatchObject({ game: "Hollow Knight", spec: "no hits" });
   });
@@ -211,7 +226,11 @@ describe("duplicating a Challenge", () => {
     const owner = await signInAsOwner();
     const winnieId = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", target: 5 });
-    const counted = await api(`/api/challenges/${challenge.id}/counter`, { as: owner, method: "PATCH", json: { op: "set", count: 2 } });
+    const counted = await api(`/api/challenges/${challenge.id}/counter`, {
+      as: owner,
+      method: "PATCH",
+      json: { op: "set", count: 2 },
+    });
     expect(counted.status).toBe(200);
 
     const duplicated = await duplicateChallenge(owner, challenge.id);
@@ -219,7 +238,10 @@ describe("duplicating a Challenge", () => {
     expect(duplicated.status).toBe(200);
     expect(await duplicated.json()).toMatchObject({ target: 5, count: 0 });
     const challenges = await readChallenges(owner, winnieId);
-    expect(challenges.map(c => [c.target, c.count])).toEqual([[5, 2], [5, 0]]);
+    expect(challenges.map(c => [c.target, c.count])).toEqual([
+      [5, 2],
+      [5, 0],
+    ]);
   });
 
   it("duplicating a Won Challenge gives a todo copy", async () => {

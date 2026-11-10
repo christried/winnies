@@ -35,7 +35,13 @@ async function ownerRequest<T>(owner: SignedInOwner, path: string, method: strin
   const headers = new Headers(owner.headers);
   if (json !== undefined)
     headers.set("content-type", "application/json");
-  const response = await fetch(new URL(path, SERVER), { method, headers, body: json === undefined ? undefined : JSON.stringify(json) });
+  const response = await fetch(new URL(path, SERVER), {
+    method,
+    headers,
+    body: json === undefined
+      ? undefined
+      : JSON.stringify(json),
+  });
   // A failed setup call must say so, instead of showing up later as a confusing missing element
   if (!response.ok)
     throw new Error(`${method} ${path} answered ${response.status}: ${await response.text()}`);

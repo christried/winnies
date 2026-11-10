@@ -24,7 +24,9 @@ const sha = execFileSync("git", ["rev-parse", args.find(arg => !arg.startsWith("
 const POLL_MS = 15_000;
 const APPEAR_MS = 120_000;
 const RERUN_SETTLE_MS = 30_000;
-const CALL_MS = untilDone ? 20 * 60_000 : 150_000;
+const CALL_MS = untilDone
+  ? 20 * 60_000
+  : 150_000;
 
 const gh = (...args) => execFileSync("gh", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -50,7 +52,9 @@ function failures(id) {
     // The log writes colour codes either as escapes or as a literal caret „^[“.
     .map(line => line.replace(/^[^\t]*\t[^\t]*\t\S+ ?/, "").replace(new RegExp(`(?:${String.fromCharCode(27)}|\\^\\[)\\[[0-9;]*m`, "g"), ""));
   const start = lines.findIndex(line => /Failed Tests|Unhandled Error|error TS\d+|ERR_PNPM|✖ \d+ problems?|Unused (?:files|exports|dependencies)/.test(line));
-  return (start === -1 ? lines.slice(-60) : lines.slice(start, start + 80)).join("\n");
+  return (start === -1
+    ? lines.slice(-60)
+    : lines.slice(start, start + 80)).join("\n");
 }
 
 const started = Date.now();
@@ -59,7 +63,11 @@ let runs = [];
 // show the old completed state, which does not count as done.
 const rerunAt = new Map();
 // The jobs are counted for a failed run only.
-const decisionOf = run => rerunDecision(run, run.conclusion === "success" ? 1 : jobCountOf(run), rerunAt.has(run.databaseId));
+function decisionOf(run) {
+  return rerunDecision(run, run.conclusion === "success"
+    ? 1
+    : jobCountOf(run), rerunAt.has(run.databaseId));
+}
 const done = run => run.status === "completed" && !(Date.now() - (rerunAt.get(run.databaseId) ?? -Infinity) < RERUN_SETTLE_MS);
 console.log(`waiting for CI on ${sha.slice(0, 7)} …`);
 while (Date.now() - started < CALL_MS) {

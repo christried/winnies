@@ -18,7 +18,10 @@ const folder = join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"),
 const given = process.argv[2];
 const transcripts = readdirSync(folder)
   .filter(name => name.endsWith(".jsonl") && (!given || name === `${given}.jsonl`))
-  .map(name => ({ file: join(folder, name), at: statSync(join(folder, name)).mtimeMs }))
+  .map(name => ({
+    file: join(folder, name),
+    at: statSync(join(folder, name)).mtimeMs,
+  }))
   .sort((a, b) => b.at - a.at);
 if (transcripts.length === 0)
   throw new Error(`No session transcript in ${folder}`);
@@ -52,4 +55,6 @@ if (!usage)
   throw new Error(`No assistant turn with usage in the last ${TAIL_BYTES} bytes of ${file}`);
 
 const tokens = (usage.input_tokens ?? 0) + (usage.cache_creation_input_tokens ?? 0) + (usage.cache_read_input_tokens ?? 0);
-console.log(`Context: ${Math.round(tokens / 1000)}k tokens (${tokens}); limit for a new implementer: ${LIMIT / 1000}k → ${tokens >= LIMIT ? "HAND OFF" : "ok"}`);
+console.log(`Context: ${Math.round(tokens / 1000)}k tokens (${tokens}); limit for a new implementer: ${LIMIT / 1000}k → ${tokens >= LIMIT
+  ? "HAND OFF"
+  : "ok"}`);

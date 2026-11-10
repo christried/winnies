@@ -17,7 +17,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
   if (requestBody.data.action === "reset") {
     const resetChallenge = await resetChallengeTimer(challengeId);
 
-    return { changed: Boolean(resetChallenge), serverNow: await serverTimestamp() };
+    return {
+      changed: Boolean(resetChallenge),
+      serverNow: await serverTimestamp(),
+    };
   }
 
   const winnieId = await findChallengeWinnieId(challengeId);

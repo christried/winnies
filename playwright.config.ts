@@ -17,11 +17,24 @@ export default defineConfig<ConfigOptions>({
   // A flaky test is fixed or deleted, never retried (CODING_STANDARDS, Behaviour).
   retries: 0,
   workers: process.env.CI ? 2 : undefined,
-  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
+  reporter: process.env.CI
+    ? [
+        ["list"],
+        [
+          "html",
+          { open: "never" },
+        ],
+      ]
+    : "list",
   use: {
     // `localhost`, not 127.0.0.1: the session cookies of signInAsOwner() are for `localhost` (BETTER_AUTH_URL).
     nuxt: { host: `http://localhost:${TEST_SERVER_PORT}` },
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
 });

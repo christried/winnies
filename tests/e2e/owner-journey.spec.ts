@@ -16,7 +16,9 @@ interface ChallengeInput {
 // Seeding goes through the page's own request context: it shares the Owner's cookies and the baseURL.
 // Only the step a test is about goes through the UI; the rest is set up here to keep a failure local.
 async function seedWinnie(page: Page, name: string): Promise<string> {
-  const response = await page.request.post("/api/winnies", { data: { name } });
+  const response = await page.request.post("/api/winnies", {
+    data: { name },
+  });
   expect(response.ok()).toBe(true);
   return (await response.json()).id;
 }
@@ -145,7 +147,10 @@ test("counts a Counter to its Target and wins the timer Challenge until the Winn
   const saved = ownerPage.waitForResponse(response => response.request().method() === "PATCH"
     && /\/api\/challenges\/[^/]+\/counter$/.test(new URL(response.url()).pathname)
     && response.request().postDataJSON()?.count === 2);
-  await Promise.all([saved, increase.click()]);
+  await Promise.all([
+    saved,
+    increase.click(),
+  ]);
 
   await expect(count).toHaveValue("2");
   await expect(bossRush.getByRole("button", { name: "Mark as not won" })).toBeVisible();

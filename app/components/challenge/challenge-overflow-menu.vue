@@ -9,7 +9,9 @@ const props = defineProps<{
 const winnieStore = useWinnieStore();
 
 // dynamix labels
-const counterLabel = computed(() => props.challenge.target > 0 ? "Remove counter" : "Add counter");
+const counterLabel = computed(() => props.challenge.target > 0
+  ? "Remove counter"
+  : "Add counter");
 const pinLabel = computed(() => props.challenge.pinned ? "Unpin" : "Pin");
 
 /**
@@ -22,7 +24,12 @@ async function toggleCounter(close: () => void) {
   try {
     const updatedChallenge = await $fetch(`/api/challenges/${props.challenge.id}/counter`, {
       method: "PATCH",
-      body: { op: "target", target: props.challenge.target > 0 ? 0 : 1 },
+      body: {
+        op: "target",
+        target: props.challenge.target > 0
+          ? 0
+          : 1,
+      },
     });
 
     winnieStore.replaceChallenge(updatedChallenge);
