@@ -1,0 +1,3 @@
+# Gitignored files Claude Code copies into every new worktree, an agent's `isolation: "worktree"` included,
+# so `pnpm dev` and the tests run there as in the main checkout.
+.env
