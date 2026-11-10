@@ -2,54 +2,19 @@ import type { SignedInOwner } from "../support/owner";
 import { describe, expect, it } from "vitest";
 import { signInAsOwner } from "../support/owner";
 import { api } from "./api";
-
-// A timestamp as JSON carries it: a Date turned into an ISO-8601 string.
-const ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-
-// serverNow is the raw text of Postgres's `select now()`, not an ISO string: a space instead of the T,
-// microseconds, and the session's UTC offset. Date.parse reads it, which is all a client does with it.
-const SERVER_NOW = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d{1,6})?[+-]\d{2}$/;
-
-interface ChallengeRow {
-  id: string;
-  runningSince: string | null;
-}
-
-// Fixtures: these call endpoints owned by other tickets to set state up; no test asserts on them.
-async function winnieWith<const T extends readonly { game: string; spec?: string; target?: number }[]>(owner: SignedInOwner, name: string, inputs: T) {
-  const created = await api("/api/winnies", {
-    as: owner,
-    method: "POST",
-    json: { name },
-  });
-  expect(created.status).toBe(200);
-  const winnie: { id: string; shareSlug: string } = await created.json();
-
-  const challenges: ChallengeRow[] = [];
-  for (const input of inputs) {
-    const challenge = await api(`/api/winnies/${winnie.id}/challenges`, { as: owner, method: "POST", json: input });
-    expect(challenge.status).toBe(200);
-    challenges.push(await challenge.json());
-  }
-  return { winnie, challenges: challenges as { -readonly [K in keyof T]: ChallengeRow } };
-}
+import { expectError, ISO, SERVER_NOW, winnieWith } from "./helpers";
 
 function share(slug: string, owner?: SignedInOwner): Promise<Response> {
   return api(`/api/share/${slug}`, { as: owner });
 }
 
-async function expectError(response: Response, status: number, message: string) {
-  expect(response.status).toBe(status);
-  expect((await response.json()).statusMessage).toBe(message);
-}
-
 describe("reading a Share Link", () => {
   it("a Viewer signed out gets the Winnie and serverNow", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, "Share me", [
+    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [
       { game: "Game One", spec: "Any%" },
       { game: "Game Two", target: 3 },
-    ]);
+    ], "Share me");
     // A running timer makes a running field visible.
     const started = await api(`/api/challenges/${c1.id}/timer`, {
       as: owner,
@@ -127,9 +92,9 @@ describe("reading a Share Link", () => {
   it("a signed-in Owner who is not the Owner gets the same Winnie", async () => {
     const owner = await signInAsOwner();
     const other = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "Same for all", [
+    const { winnie } = await winnieWith(owner, [
       { game: "One" },
-    ]);
+    ], "Same for all");
 
     const signedOut = await share(winnie.shareSlug);
     const signedIn = await share(winnie.shareSlug, other);
@@ -143,18 +108,18 @@ describe("reading a Share Link", () => {
 describe("a Share Link that does not lead to a Winnie", () => {
   it("the share endpoint answers by Share Link, not by Winnie id", async () => {
     const owner = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "By slug", [
+    const { winnie } = await winnieWith(owner, [
       { game: "One" },
-    ]);
+    ], "By slug");
 
     await expectError(await share(winnie.id), 404, "Winnie doesn't exist.");
   });
 
   it("a Share Link to a deleted Winnie is not found", async () => {
     const owner = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "Soon gone", [
+    const { winnie } = await winnieWith(owner, [
       { game: "One" },
-    ]);
+    ], "Soon gone");
     expect((await share(winnie.shareSlug)).status).toBe(200);
 
     const deleted = await api(`/api/winnies/${winnie.id}`, { as: owner, method: "DELETE" });
