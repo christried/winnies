@@ -2,32 +2,15 @@ import type { SignedInOwner } from "../support/owner";
 import { describe, expect, it } from "vitest";
 import { signInAsOwner } from "../support/owner";
 import { api } from "./api";
+import { createChallenge, createWinnie, expectError, expectValidationError, NOT_SIGNED_IN } from "./helpers";
 
-const NOT_SIGNED_IN = "not signed in!";
 const MISMATCH = "Order must list every challenge exactly once";
-
-async function createWinnie(owner: SignedInOwner, name = "A Winnie"): Promise<string> {
-  const created = await api("/api/winnies", {
-    as: owner,
-    method: "POST",
-    json: { name },
-  });
-  expect(created.status).toBe(200);
-  return (await created.json()).id;
-}
 
 // Challenges are set up through the API and read back in the order they were made. #198 pins that endpoint.
 async function createChallenges(owner: SignedInOwner, winnieId: string, games: string[]): Promise<string[]> {
   const ids: string[] = [];
-  for (const game of games) {
-    const created = await api(`/api/winnies/${winnieId}/challenges`, {
-      as: owner,
-      method: "POST",
-      json: { game },
-    });
-    expect(created.status).toBe(200);
-    ids.push((await created.json()).id);
-  }
+  for (const game of games)
+    ids.push((await createChallenge(owner, winnieId, { game })).id);
   return ids;
 }
 
@@ -47,24 +30,14 @@ function reorder(winnieId: string, ids: unknown, as?: SignedInOwner) {
 
 // The mismatch is thrown inside the query, not by validation: a 422 with the message and no `data`.
 async function expectMismatch(response: Response) {
-  expect(response.status).toBe(422);
-  const body = await response.json();
-  expect(body.statusMessage).toBe(MISMATCH);
+  const body = await expectError(response, 422, MISMATCH);
   expect(body.data).toBeUndefined();
-}
-
-// A 422 from validation: the message text and the field errors, both in the body.
-async function expectValidationError(response: Response, field: string, message: string) {
-  expect(response.status).toBe(422);
-  const body = await response.json();
-  expect(body.statusMessage).toContain(message);
-  expect(body.data.fieldErrors[field]).toContain(message);
 }
 
 describe("reordering a Winnie's Challenges", () => {
   async function winnieWithThree() {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const [a, b, c] = await createChallenges(owner, winnieId, ["a", "b", "c"]);
     return { owner, winnieId, a: a!, b: b!, c: c! };
   }
@@ -83,7 +56,7 @@ describe("reordering a Winnie's Challenges", () => {
 
   it("a Winnie with one Challenge reorders to itself", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const [only] = await createChallenges(owner, winnieId, ["only"]);
 
     const reordered = await reorder(winnieId, [only], owner);
@@ -114,7 +87,7 @@ describe("reordering a Winnie's Challenges", () => {
 
   it("a list with a Challenge of another Winnie is refused as a mismatch, not as not-yours", async () => {
     const { owner, winnieId, a, b, c } = await winnieWithThree();
-    const secondWinnie = await createWinnie(owner, "Second");
+    const { id: secondWinnie } = await createWinnie(owner, "Second");
     const [foreign] = await createChallenges(owner, secondWinnie, ["foreign"]);
 
     await expectMismatch(await reorder(winnieId, [c, b, foreign], owner));
@@ -159,7 +132,7 @@ describe("reordering a Winnie's Challenges", () => {
 
   it("a Winnie with no Challenges refuses any list as a mismatch", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     await expectMismatch(await reorder(winnieId, [
       crypto.randomUUID(),
@@ -189,7 +162,7 @@ describe("another Owner reordering", () => {
   it("is refused as not-yours and the order stays", async () => {
     const owner = await signInAsOwner();
     const intruder = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const [a, b, c] = await createChallenges(owner, winnieId, ["a", "b", "c"]);
 
     const refused = await reorder(winnieId, [c, b, a], intruder);
@@ -204,7 +177,7 @@ describe("another Owner reordering", () => {
   it("is told about an invalid list before being told the Winnie is not theirs", async () => {
     const owner = await signInAsOwner();
     const intruder = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     await createChallenges(owner, winnieId, ["a"]);
 
     await expectValidationError(await reorder(winnieId, [], intruder), "ids", "Nothing to reorder");

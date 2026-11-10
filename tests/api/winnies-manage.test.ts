@@ -2,19 +2,9 @@ import type { SignedInOwner } from "../support/owner";
 import { describe, expect, it } from "vitest";
 import { signInAsOwner } from "../support/owner";
 import { api } from "./api";
+import { createWinnie, expectError, expectValidationError, NOT_SIGNED_IN } from "./helpers";
 
-const NOT_SIGNED_IN = "not signed in!";
 const NOT_YOUR_WINNIE = "Not your Winnie.";
-
-async function createWinnie(owner: SignedInOwner, name: string): Promise<{ id: string; name: string }> {
-  const created = await api("/api/winnies", {
-    as: owner,
-    method: "POST",
-    json: { name },
-  });
-  expect(created.status).toBe(200);
-  return created.json();
-}
 
 async function listed(owner: SignedInOwner): Promise<{ id: string; name: string }[]> {
   return (await api("/api/winnies", { as: owner })).json();
@@ -28,19 +18,9 @@ function rename(id: string, name: unknown, as?: SignedInOwner) {
   });
 }
 
-// A 422 from validation: the message text and the field errors, both in the body.
-async function expectValidationError(response: Response, field: string, message: string) {
-  expect(response.status).toBe(422);
-  const body = await response.json();
-  expect(body.statusMessage).toContain(message);
-  expect(body.data.fieldErrors[field]).toContain(message);
-}
-
 // A 403 for a Winnie the caller does not own. It carries no `data` and no part of the Winnie.
 async function expectNotYourWinnie(response: Response) {
-  expect(response.status).toBe(403);
-  const body = await response.json();
-  expect(body.statusMessage).toBe(NOT_YOUR_WINNIE);
+  const body = await expectError(response, 403, NOT_YOUR_WINNIE);
   expect(body.data).toBeUndefined();
   return JSON.stringify(body);
 }

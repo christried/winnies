@@ -1,42 +1,9 @@
 import type { SignedInOwner } from "../support/owner";
+import type { ChallengeRow } from "../support/rows";
 import { describe, expect, it } from "vitest";
 import { signInAsOwner } from "../support/owner";
 import { api } from "./api";
-
-interface ChallengeRow {
-  id: string;
-  winnieId: string;
-  game: string;
-  spec: string;
-  status: string;
-  pinned: boolean;
-  position: number;
-  target: number;
-  count: number;
-}
-
-async function createWinnie(owner: SignedInOwner): Promise<string> {
-  const created = await api("/api/winnies", {
-    as: owner,
-    method: "POST",
-    json: { name: "Test Winnie" },
-  });
-  expect(created.status).toBe(200);
-  return (await created.json()).id;
-}
-
-async function createChallenge(owner: SignedInOwner, winnieId: string, body: unknown): Promise<ChallengeRow> {
-  const created = await api(`/api/winnies/${winnieId}/challenges`, { as: owner, method: "POST", json: body });
-  expect(created.status).toBe(200);
-  return created.json();
-}
-
-// What the Owner sees on the Winnie: the Challenges in position order.
-async function readChallenges(owner: SignedInOwner, winnieId: string): Promise<ChallengeRow[]> {
-  const winnie = await api(`/api/winnies/${winnieId}`, { as: owner });
-  expect(winnie.status).toBe(200);
-  return (await winnie.json()).challenges;
-}
+import { createChallenge, createWinnie, expectValidationError, readChallenges } from "./helpers";
 
 function patchChallenge(owner: SignedInOwner | undefined, challengeId: string, body: unknown): Promise<Response> {
   return api(`/api/challenges/${challengeId}`, { as: owner, method: "PATCH", json: body });
@@ -50,18 +17,10 @@ function deleteChallenge(owner: SignedInOwner | undefined, challengeId: string):
   return api(`/api/challenges/${challengeId}`, { as: owner, method: "DELETE" });
 }
 
-// A 422 names the field and the message in `data.fieldErrors`, and the message is in the body (as JSON text, so quotes are escaped).
-async function expectValidationError(res: Response, field: string, message: string) {
-  expect(res.status).toBe(422);
-  const text = await res.text();
-  expect(text).toContain(JSON.stringify(message).slice(1, -1));
-  expect(JSON.parse(text).data.fieldErrors[field]).toContain(message);
-}
-
 describe("editing a Challenge", () => {
   it("an Owner edits a Challenge's game and spec", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", spec: "no hits" });
 
     const gameEdited = await patchChallenge(owner, challenge.id, { game: "Celeste" });
@@ -81,7 +40,7 @@ describe("editing a Challenge", () => {
 
   it("an Owner pins and unpins a Challenge", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const pinned = await patchChallenge(owner, challenge.id, { pinned: true });
@@ -97,7 +56,7 @@ describe("editing a Challenge", () => {
 
   it("a game of 1 and of 30 characters and a spec of 40 characters are accepted", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     expect((await patchChallenge(owner, challenge.id, { game: "a" })).status).toBe(200);
@@ -116,7 +75,7 @@ describe("editing a Challenge", () => {
 
   it("an edit with an invalid game or spec is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", spec: "no hits" });
 
     await expectValidationError(await patchChallenge(owner, challenge.id, { game: "" }), "game", "Game is required");
@@ -132,7 +91,7 @@ describe("editing a Challenge", () => {
 
   it("an edit with nothing to update is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", target: 5 });
 
     const empty = await patchChallenge(owner, challenge.id, {});
@@ -149,7 +108,7 @@ describe("editing a Challenge", () => {
 
   it("a whitespace-only game is accepted today", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const edited = await patchChallenge(owner, challenge.id, { game: "   " });
@@ -158,9 +117,9 @@ describe("editing a Challenge", () => {
     expect((await readChallenges(owner, winnieId))[0]?.game).toBe("   ");
   });
 
-  it("a status sent with other fields changes only the status today (Q9)", async () => {
+  it("a status sent with other fields changes only the status today", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", spec: "no hits" });
 
     const edited = await patchChallenge(owner, challenge.id, { status: "won", game: "Celeste", pinned: true });
@@ -173,7 +132,7 @@ describe("editing a Challenge", () => {
 describe("duplicating a Challenge", () => {
   it("an Owner duplicates a Challenge", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const first = await createChallenge(owner, winnieId, { game: "First" });
     const middle = await createChallenge(owner, winnieId, { game: "Middle", spec: "no hits", target: 5 });
     const last = await createChallenge(owner, winnieId, { game: "Last" });
@@ -206,7 +165,7 @@ describe("duplicating a Challenge", () => {
 
   it("duplicating the first and the last Challenge puts the copy right after it", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const first = await createChallenge(owner, winnieId, { game: "First" });
     const last = await createChallenge(owner, winnieId, { game: "Last" });
 
@@ -224,7 +183,7 @@ describe("duplicating a Challenge", () => {
 
   it("duplicating a Counter keeps the Target and resets the count", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", target: 5 });
     const counted = await api(`/api/challenges/${challenge.id}/counter`, {
       as: owner,
@@ -246,7 +205,7 @@ describe("duplicating a Challenge", () => {
 
   it("duplicating a Won Challenge gives a todo copy", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
     const won = await patchChallenge(owner, challenge.id, { status: "won" });
     expect(won.status).toBe(200);
@@ -260,7 +219,7 @@ describe("duplicating a Challenge", () => {
 
   it("duplicating a pinned Challenge gives an unpinned copy", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
     expect((await patchChallenge(owner, challenge.id, { pinned: true })).status).toBe(200);
 
@@ -272,9 +231,9 @@ describe("duplicating a Challenge", () => {
 
   // Only adding checks the limit of 50 (challenges.test.ts); duplicating does not. Pinned as it
   // is today; whether that is wanted is the human's to decide.
-  it("duplicate of the 50th Challenge is not refused today (Q1)", async () => {
+  it("duplicate of the 50th Challenge is not refused today", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     let last: ChallengeRow | undefined;
     for (let position = 0; position < 50; position++) {
       last = await createChallenge(owner, winnieId, { game: `Game ${position}` });
@@ -290,7 +249,7 @@ describe("duplicating a Challenge", () => {
 describe("deleting a Challenge", () => {
   it("an Owner deletes a Challenge", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const first = await createChallenge(owner, winnieId, { game: "First" });
     const second = await createChallenge(owner, winnieId, { game: "Second" });
 
@@ -303,7 +262,7 @@ describe("deleting a Challenge", () => {
 
   it("deleting the only Challenge reports not complete", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const deleted = await deleteChallenge(owner, challenge.id);
@@ -315,7 +274,7 @@ describe("deleting a Challenge", () => {
 
   it("deleting a Challenge again is refused", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
     expect((await deleteChallenge(owner, challenge.id)).status).toBe(200);
 
@@ -330,7 +289,7 @@ describe("deleting a Challenge", () => {
 describe("editing, duplicating and deleting without being allowed", () => {
   it("signed out, PATCH /api/challenges/:id is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const valid = await patchChallenge(undefined, challenge.id, { game: "Celeste" });
@@ -347,7 +306,7 @@ describe("editing, duplicating and deleting without being allowed", () => {
 
   it("signed out, DELETE /api/challenges/:id is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const rejected = await deleteChallenge(undefined, challenge.id);
@@ -359,7 +318,7 @@ describe("editing, duplicating and deleting without being allowed", () => {
 
   it("signed out, POST /api/challenges/:id/duplicate is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight" });
 
     const rejected = await duplicateChallenge(undefined, challenge.id);
@@ -372,7 +331,7 @@ describe("editing, duplicating and deleting without being allowed", () => {
   it("another Owner cannot edit my Challenge", async () => {
     const me = await signInAsOwner();
     const other = await signInAsOwner();
-    const winnieId = await createWinnie(me);
+    const { id: winnieId } = await createWinnie(me);
     const challenge = await createChallenge(me, winnieId, { game: "Hollow Knight" });
 
     const rejected = await patchChallenge(other, challenge.id, { game: "Celeste" });
@@ -386,7 +345,7 @@ describe("editing, duplicating and deleting without being allowed", () => {
   it("another Owner cannot delete my Challenge", async () => {
     const me = await signInAsOwner();
     const other = await signInAsOwner();
-    const winnieId = await createWinnie(me);
+    const { id: winnieId } = await createWinnie(me);
     const challenge = await createChallenge(me, winnieId, { game: "Hollow Knight" });
 
     const rejected = await deleteChallenge(other, challenge.id);
@@ -399,7 +358,7 @@ describe("editing, duplicating and deleting without being allowed", () => {
   it("another Owner cannot duplicate my Challenge", async () => {
     const me = await signInAsOwner();
     const other = await signInAsOwner();
-    const winnieId = await createWinnie(me);
+    const { id: winnieId } = await createWinnie(me);
     const challenge = await createChallenge(me, winnieId, { game: "Hollow Knight" });
 
     const rejected = await duplicateChallenge(other, challenge.id);
