@@ -10,7 +10,7 @@ defineProps<{
   needReload?: boolean;
 }>();
 
-const runtimeConfig = useRuntimeConfig();
+const { appVersion } = useRuntimeConfig().public;
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const runtimeConfig = useRuntimeConfig();
 
     <template v-if="!isFooter">
       <div class="badge badge-outline badge-warning">
-        v{{ runtimeConfig.public.appVersion }} · beta
+        v{{ appVersion }} · beta
       </div>
 
       <NuxtLink
