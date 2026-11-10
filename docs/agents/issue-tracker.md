@@ -26,6 +26,18 @@ When set to `yes`, PRs run through the same labels and states as issues, using t
 
 GitHub shares one number space across issues and PRs, so a bare `#42` may be either: resolve with `gh pr view 42` and fall back to `gh issue view 42`.
 
+## Ideas
+
+An idea that isn't grilled yet is an **Idea issue**, never a line in `docs/roadmap.md` (the human, 2026-11-10, #212). The roadmap holds what a grilling has designed: Now, Next, Later and the Engineering backlog. `/capture-idea` files an Idea issue in about two minutes: a few quick questions, a draft, the human's OK.
+
+- **Title**: `Idea: <the idea in a few words>`. The prefix says what the issue is: a placeholder, not a ticket.
+- **Labels**: `needs-triage`, meaning "not grilled yet", plus the type label of the work it would produce, usually `feat` (`triage-labels.md`). An Idea issue waits for a grilling, not for `/triage`: it is the human's own.
+- **Body**: unfinished on purpose. The idea in the human's words, where it came from (a walk-through, a stream, a session), and, where known, what it contradicts (`GLOSSARY.md`, an ADR, the design hand-off) and the open questions. People appear as roles (an Owner, a Viewer): the repo is public.
+- **One idea per issue**: a note that holds several ideas becomes several issues.
+- **Create**: `gh issue create --title "Idea: …" --label feat --label needs-triage --body-file body.md`.
+- **Find**: `gh issue list --state open --label needs-triage --search "Idea in:title" --json number,title,body`. The planning agent reads them beside the roadmap whenever it proposes what comes next.
+- **Picked up**: a grilling that takes an idea into a spec closes the Idea issue with a link to the spec, or rewrites it into one of the spec's tickets (new title, `ready-to-implement` instead of `needs-triage`). An idea that is designed but not yet scheduled becomes a roadmap entry (Next, Later or the Engineering backlog) that says "was #n", and its issue closes with a link. An idea too small for a spec is grilled with `/grill-with-docs` and built in the same session with `/implement`, or rewritten into a `ready-to-implement` ticket. An idea the human drops is closed as not planned (`gh issue close <n> --reason "not planned"`), with the reason in a comment.
+
 ## When a skill says "publish to the issue tracker"
 
 Create a GitHub issue.

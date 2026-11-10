@@ -38,7 +38,7 @@ Who merges what, verifying and closing tickets, the review and the retro of each
 
 ### Issue tracker
 
-Issues live in GitHub Issues on `christried/winnies`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`. How tickets are written: `docs/agents/tickets.md`.
+Issues live in GitHub Issues on `christried/winnies`, managed with the `gh` CLI. An idea that isn't grilled yet is an `Idea: …` issue (`needs-triage`), captured with `/capture-idea`, never a roadmap line. See `docs/agents/issue-tracker.md`. How tickets are written: `docs/agents/tickets.md`.
 
 ### Triage labels
 
@@ -50,7 +50,7 @@ Single-context: one `GLOSSARY.md` plus `docs/adr/` at the repo root. See `docs/a
 
 ### Roadmap
 
-What is being built, what comes next and what is only an idea: `docs/roadmap.md`.
+What is being built and what comes next: `docs/roadmap.md`. Ideas that aren't grilled yet are Idea issues (§ Issue tracker).
 
 ### Coding standards
 
