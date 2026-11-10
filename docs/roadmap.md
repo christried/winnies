@@ -1,6 +1,6 @@
 # Roadmap
 
-What's being built, what comes next and what's only an idea. Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-10-18.
+What's being built and what comes next. Ideas that aren't grilled yet are Idea issues, not lines here (§ Ideas). Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-11-10.
 
 Only **Now** has tickets. Everything else lives here until its turn, then becomes a batch of tickets under one milestone. Entries link the closed issue they came from ("was #125") and the handoff frames that design them (IDs from `docs/design_handoff_winnies/01-screen-index.md`).
 
@@ -52,17 +52,9 @@ Visual direction designed in 6b; rules not decided (08 Q13). Unordered. The Game
 - **Generate a Winnie.** 6b 09a, was #143.
 - **Archive**: deleted Winnies kept 30 days with Restore. 6b 10a, was #160.
 
-## Ideas: no design yet
+## Ideas
 
-Unordered.
-
-- **Admin panel**: role-gated, inspect and delete Winnies, Challenges and Owners. Was #116.
-- **Mobile** for Workspace and Shared View; touch alternatives for tooltips and drag. The Overlay stays desktop. Was #165.
-- **Shared Game record** that several Challenges point to, so autocomplete and statistics stay consistent. From #149.
-- **Personal dashboard** for signed-in Owners: past Winnies, settings. From #124.
-- **"Still running?" dialog**: after X minutes of the Total Timer running with no Challenge running, offer to pause the Winnie. Must-have after 1.0; X undecided. From #180.
-- **Changeable display name**: an Owner picks the name Winnies shows for them, separate from their Discord name, and can change it as often as they like, behind a reasonable rate limit. Definitely to look into. It would also reopen showing the Owner's name on public surfaces, which 1.0 leaves out. From #184.
-- **Try the Overlay before signing in**: a demo route (e.g. `/shared/demo` and `/shared/demo/overlay`) that plays the Landing's demo script through the real Shared View and Overlay, so a streamer can test it in OBS first. The Landing's Copy buttons would come back with it. Needs its own design: the route skips Share Link validation, a fixture data source, and the demo reset vs "Complete celebrates once". From #191.
+An idea that isn't grilled yet is an `Idea: …` issue, captured with `/capture-idea` ([open Idea issues](https://github.com/christried/winnies/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage+%22Idea%3A%22+in%3Atitle); `docs/agents/issue-tracker.md` § Ideas). A grilling turns one into an entry above or a ticket. The ideas this section held moved there on 2026-11-10 (#212): Admin panel #116, Mobile #165, Shared Game record #213, Personal dashboard #214, "Still running?" dialog #215, Changeable display name #216, Try the Overlay before signing in #217.
 
 ## Engineering backlog
 

@@ -16,6 +16,8 @@ The skills speak of five canonical triage roles. This table maps them to our lab
 
 Agents implement (CLAUDE.md § Roles), so `ready-to-implement` means ready for an agent. `ready-for-human` marks what only the human can do: a Claude Design prompt to run, a walk-through, a repo setting.
 
+On an `Idea: …` issue, `needs-triage` means "not grilled yet": it waits for a grilling, not for `/triage` (`issue-tracker.md` § Ideas).
+
 `duplicate` marks an issue closed as a duplicate.
 
 ## Type
