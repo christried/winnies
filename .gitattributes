@@ -1,0 +1,2 @@
+# Text files are LF in the index and in every checkout, so lint on Windows reads what CI reads (#223).
+* text=auto eol=lf
