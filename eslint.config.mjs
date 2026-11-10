@@ -74,8 +74,19 @@ export default withNuxt(
       ".output/**",
       "**/migrations/**",
       ".pnpm-store/**",
+      // Vendored skills, kept byte for byte as their source ships them (.claude/skills/README.md).
+      ".claude/**",
     ],
   }),
+  {
+    // Command-line tools for agents and hooks: they print, and they read the environment they run in.
+    name: "scripts",
+    files: ["scripts/**"],
+    rules: {
+      "no-console": "off",
+      "node/no-process-env": "off",
+    },
+  },
   {
     name: "better-tailwindcss",
     files: ["**/*.vue"],
