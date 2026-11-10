@@ -10,4 +10,4 @@ The redesign (ADR-0001) is built on a long-lived `redesign` branch, one PR per t
 ## Consequences
 
 - No user-facing release between 0.9.x and 1.0.0 except hotfixes. `CHANGELOG.md` gets one 1.0.0 entry at release.
-- Manual QA runs on Vercel preview deploys of the ticket PRs, so sign-in must work on previews.
+- Manual QA runs on staging, the Vercel deployment of `redesign` (ADR-0005). It was first planned on the preview deploys of the ticket PRs, where sign-in can't work.
