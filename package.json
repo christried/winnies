@@ -48,9 +48,9 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^9.2.0",
+    "@antfu/eslint-config": "^10.0.0",
     "@iconify-json/tabler": "^1.2.43",
-    "@nuxt/eslint": "^1.16.0",
+    "@nuxt/eslint": "^1.17.0",
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.6.2",
     "@nuxt/test-utils": "^4.4.0",
@@ -59,11 +59,11 @@
     "@types/node": "^24.15.0",
     "daisyui": "^5.7.14",
     "drizzle-kit": "^0.31.11",
-    "eslint": "^10.8.0",
-    "eslint-plugin-better-tailwindcss": "^4.7.0",
+    "eslint": "^10.14.0",
+    "eslint-plugin-better-tailwindcss": "^4.10.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.3.0",
+    "lint-staged": "^17.6.0",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0",
     "vue-tsc": "^3.3.14"
