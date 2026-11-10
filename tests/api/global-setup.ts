@@ -1,12 +1,6 @@
 import type { TestProject } from "vitest/node";
 import { startTestServer } from "../support/test-server";
 
-declare module "vitest" {
-  export interface ProvidedContext {
-    serverUrl: string;
-  }
-}
-
 // Once per run, not once per file: the server is built and started by tests/support/test-server.ts,
 // which the e2e suite shares.
 export default async function setup(project: TestProject) {

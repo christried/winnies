@@ -1,61 +1,11 @@
-import type { SignedInOwner } from "../support/owner";
 import { describe, expect, it } from "vitest";
 import { signInAsOwner } from "../support/owner";
-import { api } from "./api";
-
-interface ChallengeRow {
-  id: string;
-  winnieId: string;
-  game: string;
-  spec: string;
-  status: string;
-  pinned: boolean;
-  position: number;
-  target: number;
-  count: number;
-  accumulatedSeconds: number;
-  runningSince: string | null;
-}
-
-async function createWinnie(owner: SignedInOwner): Promise<string> {
-  const created = await api("/api/winnies", {
-    as: owner,
-    method: "POST",
-    json: { name: "Test Winnie" },
-  });
-  expect(created.status).toBe(200);
-  return (await created.json()).id;
-}
-
-function postChallenge(owner: SignedInOwner | undefined, winnieId: string, body: unknown): Promise<Response> {
-  return api(`/api/winnies/${winnieId}/challenges`, { as: owner, method: "POST", json: body });
-}
-
-async function createChallenge(owner: SignedInOwner, winnieId: string, body: unknown): Promise<ChallengeRow> {
-  const created = await postChallenge(owner, winnieId, body);
-  expect(created.status).toBe(200);
-  return created.json();
-}
-
-// What the Owner sees on the Winnie: the Challenges in position order.
-async function readChallenges(owner: SignedInOwner, winnieId: string): Promise<ChallengeRow[]> {
-  const winnie = await api(`/api/winnies/${winnieId}`, { as: owner });
-  expect(winnie.status).toBe(200);
-  return (await winnie.json()).challenges;
-}
-
-// A 422 names the field and the message in `data.fieldErrors`, and the message is in the body (as JSON text, so quotes are escaped).
-async function expectValidationError(res: Response, field: string, message: string) {
-  expect(res.status).toBe(422);
-  const text = await res.text();
-  expect(text).toContain(JSON.stringify(message).slice(1, -1));
-  expect(JSON.parse(text).data.fieldErrors[field]).toContain(message);
-}
+import { createChallenge, createWinnie, expectValidationError, postChallenge, readChallenges } from "./helpers";
 
 describe("adding a Challenge", () => {
   it("an Owner adds a Challenge with only a game", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
     expect(await readChallenges(owner, winnieId)).toEqual([]);
 
     const added = await postChallenge(owner, winnieId, { game: "Hollow Knight" });
@@ -81,7 +31,7 @@ describe("adding a Challenge", () => {
 
   it("an Owner adds a Challenge with a Win Condition", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const added = await postChallenge(owner, winnieId, { game: "Hollow Knight", spec: "no hits" });
 
@@ -92,7 +42,7 @@ describe("adding a Challenge", () => {
 
   it("an Owner adds a Challenge with a Counter", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const added = await postChallenge(owner, winnieId, { game: "Hollow Knight", target: 5 });
 
@@ -103,7 +53,7 @@ describe("adding a Challenge", () => {
 
   it("a second Challenge goes to the next position", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const first = await createChallenge(owner, winnieId, { game: "First" });
     const second = await createChallenge(owner, winnieId, { game: "Second" });
@@ -118,7 +68,7 @@ describe("adding a Challenge", () => {
 
   it("an invalid game is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     await expectValidationError(await postChallenge(owner, winnieId, { game: "" }), "game", "Game is required");
     await expectValidationError(await postChallenge(owner, winnieId, {
@@ -131,7 +81,7 @@ describe("adding a Challenge", () => {
 
   it("a game of 1 and of 30 characters is accepted", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     expect((await postChallenge(owner, winnieId, { game: "a" })).status).toBe(200);
     expect((await postChallenge(owner, winnieId, {
@@ -142,7 +92,7 @@ describe("adding a Challenge", () => {
 
   it("a whitespace-only game is accepted today", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const added = await postChallenge(owner, winnieId, { game: "   " });
 
@@ -152,7 +102,7 @@ describe("adding a Challenge", () => {
 
   it("an invalid spec is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     await expectValidationError(await postChallenge(owner, winnieId, {
       game: "Hollow Knight",
@@ -164,7 +114,7 @@ describe("adding a Challenge", () => {
 
   it("a spec of 0 and of 40 characters is accepted", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     expect((await postChallenge(owner, winnieId, { game: "Hollow Knight", spec: "" })).status).toBe(200);
     expect((await postChallenge(owner, winnieId, {
@@ -176,7 +126,7 @@ describe("adding a Challenge", () => {
 
   it("an invalid Target is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     await expectValidationError(await postChallenge(owner, winnieId, { game: "Hollow Knight", target: -1 }), "target", "Target cannot be negative");
     await expectValidationError(await postChallenge(owner, winnieId, { game: "Hollow Knight", target: 1.5 }), "target", "Invalid input: expected int, received number");
@@ -186,7 +136,7 @@ describe("adding a Challenge", () => {
 
   it("a Target of 1 is the smallest Counter", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const added = await postChallenge(owner, winnieId, { game: "Hollow Knight", target: 1 });
 
@@ -194,9 +144,9 @@ describe("adding a Challenge", () => {
     expect(await added.json()).toMatchObject({ target: 1, count: 0, status: "todo" });
   });
 
-  it("a Target beyond the 32-bit integer range is rejected today (Q6)", async () => {
+  it("a Target beyond the 32-bit integer range is rejected today", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const added = await postChallenge(owner, winnieId, { game: "Hollow Knight", target: 2147483648 });
 
@@ -210,7 +160,7 @@ describe("the limit of Challenges on one Winnie", () => {
   // timeout of 15 s is too short for them.
   it("the 51st Challenge on one Winnie is refused", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     for (let position = 0; position < 50; position++) {
       const added = await postChallenge(owner, winnieId, { game: `Game ${position}` });
@@ -229,7 +179,7 @@ describe("the limit of Challenges on one Winnie", () => {
 describe("adding a Challenge without being allowed", () => {
   it("signed out, POST /api/winnies/:id/challenges is rejected", async () => {
     const owner = await signInAsOwner();
-    const winnieId = await createWinnie(owner);
+    const { id: winnieId } = await createWinnie(owner);
 
     const valid = await postChallenge(undefined, winnieId, { game: "Hollow Knight" });
     expect(valid.status).toBe(401);
@@ -246,7 +196,7 @@ describe("adding a Challenge without being allowed", () => {
   it("another Owner cannot add a Challenge to my Winnie", async () => {
     const me = await signInAsOwner();
     const other = await signInAsOwner();
-    const winnieId = await createWinnie(me);
+    const { id: winnieId } = await createWinnie(me);
 
     const rejected = await postChallenge(other, winnieId, { game: "Hollow Knight" });
 

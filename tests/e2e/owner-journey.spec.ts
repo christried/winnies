@@ -1,4 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
+import type { ChallengeInput } from "../support/owner-api";
+import { seedWinnie } from "../support/owner-api";
 import { expect, test, visit } from "./fixtures";
 
 // The Owner's journey from an empty Workspace to a Complete Winnie, one test per step of it. Every
@@ -7,26 +9,8 @@ import { expect, test, visit } from "./fixtures";
 
 const NAME = "Kitty vs. the world";
 
-interface ChallengeInput {
-  game: string;
-  spec?: string;
-  target?: number;
-}
-
-// Seeding goes through the page's own request context: it shares the Owner's cookies and the baseURL.
-// Only the step a test is about goes through the UI; the rest is set up here to keep a failure local.
-async function seedWinnie(page: Page, name: string): Promise<string> {
-  const response = await page.request.post("/api/winnies", {
-    data: { name },
-  });
-  expect(response.ok()).toBe(true);
-  return (await response.json()).id;
-}
-
-async function seedChallenge(page: Page, winnieId: string, challenge: ChallengeInput) {
-  const response = await page.request.post(`/api/winnies/${winnieId}/challenges`, { data: challenge });
-  expect(response.ok()).toBe(true);
-}
+// Only the step a test is about goes through the UI; the rest is seeded through the API as the Owner
+// (`seedWinnie`, on the page's own request context), to keep a failure local.
 
 // Challenges are ordered (Pinned, open, Won last), never by insertion, so a row is found by its game.
 // Keep the games of one test from being substrings of each other.
@@ -64,7 +48,7 @@ async function expectFrozen(timeText: Locator) {
 const TIME_TEXT = /^\d{1,2}:\d{2}(:\d{2})?$/;
 
 test("adds a timer Challenge and a Counter Challenge", async ({ ownerPage }) => {
-  await seedWinnie(ownerPage, NAME);
+  await seedWinnie(ownerPage.request, { name: NAME });
   await visit(ownerPage, "/");
   await expect(ownerPage.getByText("Create your first Challenge")).toBeVisible();
 
@@ -91,8 +75,12 @@ test("adds a timer Challenge and a Counter Challenge", async ({ ownerPage }) => 
 });
 
 test("starts a Challenge Timer and pauses it", async ({ ownerPage }) => {
-  const winnieId = await seedWinnie(ownerPage, NAME);
-  await seedChallenge(ownerPage, winnieId, { game: "Speedrun", spec: "Any%" });
+  await seedWinnie(ownerPage.request, {
+    name: NAME,
+    challenges: [
+      { game: "Speedrun", spec: "Any%" },
+    ],
+  });
   await visit(ownerPage, "/");
 
   const row = rowOf(ownerPage, "Speedrun");
@@ -125,10 +113,14 @@ test("starts a Challenge Timer and pauses it", async ({ ownerPage }) => {
 });
 
 test("counts a Counter to its Target and wins the timer Challenge until the Winnie is Complete", async ({ ownerPage }) => {
-  const winnieId = await seedWinnie(ownerPage, NAME);
-  await seedChallenge(ownerPage, winnieId, { game: "Speedrun", spec: "Any%" });
-  // A small Target on purpose: fewer clicks, fewer ways to race the save.
-  await seedChallenge(ownerPage, winnieId, { game: "Boss Rush", spec: "Beat 3 bosses", target: 2 });
+  await seedWinnie(ownerPage.request, {
+    name: NAME,
+    challenges: [
+      { game: "Speedrun", spec: "Any%" },
+      // A small Target on purpose: fewer clicks, fewer ways to race the save.
+      { game: "Boss Rush", spec: "Beat 3 bosses", target: 2 },
+    ],
+  });
   await visit(ownerPage, "/");
 
   const banner = ownerPage.getByText(/Win-challenge complete/);
@@ -178,7 +170,7 @@ test("counts a Counter to its Target and wins the timer Challenge until the Winn
 
 test("renames a Winnie and sees the new name", async ({ ownerPage }) => {
   const renamed = "Kitty beats the world";
-  await seedWinnie(ownerPage, NAME);
+  await seedWinnie(ownerPage.request, { name: NAME });
   await visit(ownerPage, "/");
 
   await ownerPage.getByRole("button", { name: "More actions" }).click();
@@ -201,8 +193,12 @@ test("renames a Winnie and sees the new name", async ({ ownerPage }) => {
 });
 
 test("deletes a Winnie and it is gone from the Workspace", async ({ ownerPage }) => {
-  const winnieId = await seedWinnie(ownerPage, NAME);
-  await seedChallenge(ownerPage, winnieId, { game: "Speedrun", spec: "Any%" });
+  await seedWinnie(ownerPage.request, {
+    name: NAME,
+    challenges: [
+      { game: "Speedrun", spec: "Any%" },
+    ],
+  });
   await visit(ownerPage, "/");
 
   const winnie = ownerPage.getByRole("button", { name: NAME, exact: true });
