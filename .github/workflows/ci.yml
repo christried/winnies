@@ -83,10 +83,13 @@ jobs:
           - 4444:4444
 
     # Plain literals, no `secrets.*`: the API tests never see a production value. Job-level for the same
-    # reason as in `check`: `nuxt prepare` runs on install and validates the five app variables. Keep
+    # reason as in `check`: `nuxt prepare` runs on install and validates all six app variables. Keep
     # the five in sync with HARNESS_ENV in tests/support/env.ts.
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/winnies_test
+      # Only has to parse, for `nuxt prepare`; nothing connects to it. The harness gives the build and the
+      # server TEST_DATABASE_URL as their DATABASE_URL, and refuses to run if the two were the same.
+      DATABASE_URL: postgres://placeholder:placeholder@localhost:5432/placeholder
       BETTER_AUTH_SECRET: winnies-test-secret-not-a-secret-0123456789
       BETTER_AUTH_URL: http://localhost:3101
       DISCORD_CLIENT_ID: test-discord-client-id
