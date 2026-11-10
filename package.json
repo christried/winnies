@@ -30,14 +30,14 @@
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.18",
     "@formkit/drag-and-drop": "^0.7.0",
-    "@neondatabase/serverless": "^1.1.0",
+    "@neondatabase/serverless": "^1.2.0",
     "@nuxt/content": "3.16.2",
     "@pinia/nuxt": "1.0.3",
     "@tailwindcss/vite": "^4.3.5",
     "better-auth": "^1.7.18",
     "better-sqlite3": "^13.0.3",
     "canvas-confetti": "^1.9.4",
-    "drizzle-orm": "^0.45.2",
+    "drizzle-orm": "^0.45.4",
     "drizzle-zod": "^0.8.3",
     "nuxt": "^4.6.4",
     "pinia": "^4.1.0",
@@ -45,7 +45,7 @@
     "vee-validate": "^4.15.1",
     "vue": "^3.5.45",
     "vue-router": "^5.4.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.2.0",
@@ -58,7 +58,7 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^24.15.0",
     "daisyui": "^5.7.14",
-    "drizzle-kit": "^0.31.10",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^10.8.0",
     "eslint-plugin-better-tailwindcss": "^4.7.0",
     "eslint-plugin-format": "^2.0.1",
