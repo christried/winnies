@@ -88,6 +88,15 @@ export default withNuxt(
     },
   },
   {
+    // Test harness: it reports to the console, and tests/support/env.ts is the only place that reads the environment.
+    name: "tests",
+    files: ["tests/**"],
+    rules: {
+      "no-console": "off",
+      "node/no-process-env": "off",
+    },
+  },
+  {
     name: "better-tailwindcss",
     files: ["**/*.vue"],
     plugins: { "better-tailwindcss": betterTailwindcss },
