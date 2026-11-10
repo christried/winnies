@@ -111,3 +111,72 @@ jobs:
 
       - name: API tests
         run: pnpm test:api
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # The pinned image of ADR-0004: its browsers belong to one Playwright version, which must be the repo's
+    # @playwright/test. scripts/playwright-pin.test.mjs fails the `check` job when the two differ.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --ipc=host --init
+
+    # The same test database as `api-tests`. In a container job the services are reached by their name and
+    # need no published ports.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: winnies_test
+        options: >-
+          --health-cmd "pg_isready -U postgres -d winnies_test"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+      neon-proxy:
+        image: ghcr.io/timowilhelm/local-neon-http-proxy@sha256:cd2ae14edf2feafbc3330492de5c80506f77274c3bd013154cdef697bdeb768a
+        env:
+          PG_CONNECTION_STRING: postgres://postgres:postgres@postgres:5432/winnies_test
+
+    # Plain literals, no `secrets.*`, as in `api-tests`.
+    env:
+      # The host is the proxy's service name, not localhost: tests/support/neon-local.mjs dials the proxy
+      # at the host of this URL (and refuses any host but `localhost` and `neon-proxy`).
+      TEST_DATABASE_URL: postgres://postgres:postgres@neon-proxy:5432/winnies_test
+      DATABASE_URL: postgres://placeholder:placeholder@localhost:5432/placeholder
+      BETTER_AUTH_SECRET: winnies-test-secret-not-a-secret-0123456789
+      BETTER_AUTH_URL: http://localhost:3101
+      DISCORD_CLIENT_ID: test-discord-client-id
+      DISCORD_CLIENT_SECRET: test-discord-client-secret
+      NUXT_PUBLIC_APP_URL: http://localhost:3101
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # No `playwright install`: the image carries the browsers.
+      - name: e2e tests
+        run: pnpm test:e2e
+
+      - name: Upload Playwright report and traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
