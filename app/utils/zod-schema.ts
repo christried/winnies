@@ -20,10 +20,15 @@ export function zodSchema<T extends ZodType>(schema: T): TypedSchema<z.input<T>,
 
       for (const issue of result.error.issues) {
         const path = issue.path.map(String).join(".");
-        byPath.set(path, [...byPath.get(path) ?? [], issue.message]);
+        byPath.set(path, [
+          ...byPath.get(path) ?? [],
+          issue.message,
+        ]);
       }
 
-      return { errors: [...byPath].map(([path, errors]) => ({ path, errors })) };
+      return {
+        errors: [...byPath].map(([path, errors]) => ({ path, errors })),
+      };
     },
   };
 }

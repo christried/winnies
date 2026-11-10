@@ -18,5 +18,7 @@ export const testAuth = betterAuth({
     database: { generateId: "uuid" },
   },
   // Static array: a conditional spread would stop `ctx.test` from being inferred.
-  plugins: [testUtils()],
+  plugins: [
+    testUtils(),
+  ],
 });

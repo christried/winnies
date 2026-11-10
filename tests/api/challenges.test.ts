@@ -18,7 +18,11 @@ interface ChallengeRow {
 }
 
 async function createWinnie(owner: SignedInOwner): Promise<string> {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "Test Winnie" } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name: "Test Winnie" },
+  });
   expect(created.status).toBe(200);
   return (await created.json()).id;
 }
@@ -106,7 +110,10 @@ describe("adding a Challenge", () => {
 
     expect([first.position, second.position]).toEqual([0, 1]);
     const challenges = await readChallenges(owner, winnieId);
-    expect(challenges.map(c => [c.id, c.position])).toEqual([[first.id, 0], [second.id, 1]]);
+    expect(challenges.map(c => [c.id, c.position])).toEqual([
+      [first.id, 0],
+      [second.id, 1],
+    ]);
   });
 
   it("an invalid game is rejected", async () => {
@@ -114,7 +121,9 @@ describe("adding a Challenge", () => {
     const winnieId = await createWinnie(owner);
 
     await expectValidationError(await postChallenge(owner, winnieId, { game: "" }), "game", "Game is required");
-    await expectValidationError(await postChallenge(owner, winnieId, { game: "a".repeat(31) }), "game", "Game is too long");
+    await expectValidationError(await postChallenge(owner, winnieId, {
+      game: "a".repeat(31),
+    }), "game", "Game is too long");
     await expectValidationError(await postChallenge(owner, winnieId, {}), "game", "Invalid input: expected string, received undefined");
 
     expect(await readChallenges(owner, winnieId)).toEqual([]);
@@ -125,7 +134,9 @@ describe("adding a Challenge", () => {
     const winnieId = await createWinnie(owner);
 
     expect((await postChallenge(owner, winnieId, { game: "a" })).status).toBe(200);
-    expect((await postChallenge(owner, winnieId, { game: "a".repeat(30) })).status).toBe(200);
+    expect((await postChallenge(owner, winnieId, {
+      game: "a".repeat(30),
+    })).status).toBe(200);
     expect(await readChallenges(owner, winnieId)).toHaveLength(2);
   });
 
@@ -143,7 +154,10 @@ describe("adding a Challenge", () => {
     const owner = await signInAsOwner();
     const winnieId = await createWinnie(owner);
 
-    await expectValidationError(await postChallenge(owner, winnieId, { game: "Hollow Knight", spec: "a".repeat(41) }), "spec", "Spec is too long");
+    await expectValidationError(await postChallenge(owner, winnieId, {
+      game: "Hollow Knight",
+      spec: "a".repeat(41),
+    }), "spec", "Spec is too long");
 
     expect(await readChallenges(owner, winnieId)).toEqual([]);
   });
@@ -153,7 +167,10 @@ describe("adding a Challenge", () => {
     const winnieId = await createWinnie(owner);
 
     expect((await postChallenge(owner, winnieId, { game: "Hollow Knight", spec: "" })).status).toBe(200);
-    expect((await postChallenge(owner, winnieId, { game: "Hollow Knight", spec: "a".repeat(40) })).status).toBe(200);
+    expect((await postChallenge(owner, winnieId, {
+      game: "Hollow Knight",
+      spec: "a".repeat(40),
+    })).status).toBe(200);
     expect(await readChallenges(owner, winnieId)).toHaveLength(2);
   });
 

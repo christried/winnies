@@ -29,7 +29,11 @@ describe("creating a Winnie", () => {
   it("a signed-in Owner creates a Winnie", async () => {
     const owner = await signInAsOwner();
 
-    const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "First Winnie" } });
+    const created = await api("/api/winnies", {
+      as: owner,
+      method: "POST",
+      json: { name: "First Winnie" },
+    });
 
     expect(created.status).toBe(200);
     const winnie = await created.json();
@@ -50,7 +54,10 @@ describe("creating a Winnie", () => {
   it("the same request signed out is rejected", async () => {
     const owner = await signInAsOwner();
 
-    const rejected = await api("/api/winnies", { method: "POST", json: { name: "First Winnie" } });
+    const rejected = await api("/api/winnies", {
+      method: "POST",
+      json: { name: "First Winnie" },
+    });
 
     expect(rejected.status).toBe(401);
     expect(await rejected.text()).toContain("not signed in!");
@@ -99,7 +106,9 @@ describe("creating a Winnie", () => {
   it("a name of 31 characters is refused", async () => {
     const owner = await signInAsOwner();
 
-    await expectValidationError(await createWinnie(owner, { name: "x".repeat(31) }), "name", "Name is too long");
+    await expectValidationError(await createWinnie(owner, {
+      name: "x".repeat(31),
+    }), "name", "Name is too long");
 
     expect(await listedIds(owner)).toEqual([]);
   });
@@ -107,7 +116,9 @@ describe("creating a Winnie", () => {
   it("a name of 30 characters is accepted", async () => {
     const owner = await signInAsOwner();
 
-    const created = await createWinnie(owner, { name: "x".repeat(30) });
+    const created = await createWinnie(owner, {
+      name: "x".repeat(30),
+    });
 
     expect(created.status).toBe(200);
     expect((await created.json()).name).toBe("x".repeat(30));

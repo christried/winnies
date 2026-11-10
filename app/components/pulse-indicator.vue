@@ -11,7 +11,9 @@ const props = withDefaults(defineProps<{
 const isActive = computed(() => props.count > 0);
 
 const label = computed(() =>
-  isActive.value ? `· ${props.count} running` : props.emptyLabel,
+  isActive.value
+    ? `· ${props.count} running`
+    : props.emptyLabel,
 );
 
 const pulseDelay = usePulseDelay(isActive);

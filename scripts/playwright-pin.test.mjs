@@ -7,7 +7,9 @@ const MOVE_TOGETHER = "Bump `@playwright/test` and the e2e image in .github/work
 
 const dependency = JSON.parse(readFileSync("package.json", "utf8")).devDependencies["@playwright/test"];
 const workflow = readFileSync(".github/workflows/ci.yml", "utf8");
-const images = [...workflow.matchAll(/^\s*image: mcr\.microsoft\.com\/playwright:v(\S+)-noble\s*$/gm)].map(match => match[1]);
+const images = [
+  ...workflow.matchAll(/^\s*image: mcr\.microsoft\.com\/playwright:v(\S+)-noble\s*$/gm),
+].map(match => match[1]);
 
 describe("the Playwright pin", () => {
   it("the Playwright dependency is pinned exactly", () => {

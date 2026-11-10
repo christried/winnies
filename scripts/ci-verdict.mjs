@@ -5,7 +5,9 @@
 export function verdict(run, jobCount) {
   if (run.conclusion === "success")
     return "green";
-  return run.conclusion === "failure" && jobCount === 0 ? "start-failure" : "red";
+  return run.conclusion === "failure" && jobCount === 0
+    ? "start-failure"
+    : "red";
 }
 
 /**
@@ -17,5 +19,7 @@ export function rerunDecision(run, jobCount, alreadyRerun) {
   const result = verdict(run, jobCount);
   if (result !== "start-failure")
     return result;
-  return alreadyRerun || (run.attempt ?? 1) > 1 ? "twice" : "rerun";
+  return alreadyRerun || (run.attempt ?? 1) > 1
+    ? "twice"
+    : "rerun";
 }

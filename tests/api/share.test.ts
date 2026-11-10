@@ -17,7 +17,11 @@ interface ChallengeRow {
 
 // Fixtures: these call endpoints owned by other tickets to set state up; no test asserts on them.
 async function winnieWith<const T extends readonly { game: string; spec?: string; target?: number }[]>(owner: SignedInOwner, name: string, inputs: T) {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name },
+  });
   expect(created.status).toBe(200);
   const winnie: { id: string; shareSlug: string } = await created.json();
 
@@ -47,7 +51,11 @@ describe("reading a Share Link", () => {
       { game: "Game Two", target: 3 },
     ]);
     // A running timer makes a running field visible.
-    const started = await api(`/api/challenges/${c1.id}/timer`, { as: owner, method: "POST", json: { action: "start" } });
+    const started = await api(`/api/challenges/${c1.id}/timer`, {
+      as: owner,
+      method: "POST",
+      json: { action: "start" },
+    });
     expect(started.status).toBe(200);
 
     const response = await share(winnie.shareSlug);
@@ -56,18 +64,56 @@ describe("reading a Share Link", () => {
     const text = await response.text();
     const body = JSON.parse(text);
     expect(Object.keys(body).sort()).toEqual(["serverNow", "winnie"]);
-    expect(Object.keys(body.winnie).sort()).toEqual(["challenges", "createdAt", "name", "totalAccumulatedSeconds", "totalRunningSince"]);
+    expect(Object.keys(body.winnie).sort()).toEqual([
+      "challenges",
+      "createdAt",
+      "name",
+      "totalAccumulatedSeconds",
+      "totalRunningSince",
+    ]);
     expect(body.winnie).toMatchObject({ name: "Share me", totalAccumulatedSeconds: 0 });
     expect(body.winnie.createdAt).toMatch(ISO);
     expect(body.winnie.totalRunningSince).toMatch(ISO);
 
-    const challengeKeys = ["accumulatedSeconds", "count", "game", "id", "pinned", "position", "runningSince", "spec", "status", "target"];
+    const challengeKeys = [
+      "accumulatedSeconds",
+      "count",
+      "game",
+      "id",
+      "pinned",
+      "position",
+      "runningSince",
+      "spec",
+      "status",
+      "target",
+    ];
     expect(body.winnie.challenges).toHaveLength(2);
     for (const challenge of body.winnie.challenges)
       expect(Object.keys(challenge).sort()).toEqual(challengeKeys);
-    expect(body.winnie.challenges[0]).toMatchObject({ id: c1.id, game: "Game One", spec: "Any%", status: "active", position: 0, pinned: false, target: 0, count: 0, accumulatedSeconds: 0 });
+    expect(body.winnie.challenges[0]).toMatchObject({
+      id: c1.id,
+      game: "Game One",
+      spec: "Any%",
+      status: "active",
+      position: 0,
+      pinned: false,
+      target: 0,
+      count: 0,
+      accumulatedSeconds: 0,
+    });
     expect(body.winnie.challenges[0].runningSince).toMatch(ISO);
-    expect(body.winnie.challenges[1]).toMatchObject({ id: c2.id, game: "Game Two", spec: "", status: "todo", position: 1, pinned: false, target: 3, count: 0, accumulatedSeconds: 0, runningSince: null });
+    expect(body.winnie.challenges[1]).toMatchObject({
+      id: c2.id,
+      game: "Game Two",
+      spec: "",
+      status: "todo",
+      position: 1,
+      pinned: false,
+      target: 3,
+      count: 0,
+      accumulatedSeconds: 0,
+      runningSince: null,
+    });
 
     // serverNow is the database clock that stamped the start, so it is never earlier than it.
     expect(body.serverNow).toMatch(SERVER_NOW);
@@ -81,7 +127,9 @@ describe("reading a Share Link", () => {
   it("a signed-in Owner who is not the Owner gets the same Winnie", async () => {
     const owner = await signInAsOwner();
     const other = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "Same for all", [{ game: "One" }]);
+    const { winnie } = await winnieWith(owner, "Same for all", [
+      { game: "One" },
+    ]);
 
     const signedOut = await share(winnie.shareSlug);
     const signedIn = await share(winnie.shareSlug, other);
@@ -95,14 +143,18 @@ describe("reading a Share Link", () => {
 describe("a Share Link that does not lead to a Winnie", () => {
   it("the share endpoint answers by Share Link, not by Winnie id", async () => {
     const owner = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "By slug", [{ game: "One" }]);
+    const { winnie } = await winnieWith(owner, "By slug", [
+      { game: "One" },
+    ]);
 
     await expectError(await share(winnie.id), 404, "Winnie doesn't exist.");
   });
 
   it("a Share Link to a deleted Winnie is not found", async () => {
     const owner = await signInAsOwner();
-    const { winnie } = await winnieWith(owner, "Soon gone", [{ game: "One" }]);
+    const { winnie } = await winnieWith(owner, "Soon gone", [
+      { game: "One" },
+    ]);
     expect((await share(winnie.shareSlug)).status).toBe(200);
 
     const deleted = await api(`/api/winnies/${winnie.id}`, { as: owner, method: "DELETE" });

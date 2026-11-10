@@ -37,15 +37,22 @@ tableColumns => [
 ]);
 
 export const challengeRelations = relations(challenge, ({ one }) => ({
-  winnie: one(winnie, { fields: [challenge.winnieId], references: [winnie.id] }),
+  winnie: one(winnie, {
+    fields: [challenge.winnieId],
+    references: [winnie.id],
+  }),
 }));
 
 export const insertChallengeSchema = createInsertSchema(challenge,
   // this is just refinement of not-omitted columns
-  { game: string => string.min(1, "Game is required")
-    .max(30, "Game is too long"), spec: string => string.max(40, "Spec is too long").optional(), target: number => number
-    .min(0, "Target cannot be negative")
-    .optional() })
+  {
+    game: string => string.min(1, "Game is required")
+      .max(30, "Game is too long"),
+    spec: string => string.max(40, "Spec is too long").optional(),
+    target: number => number
+      .min(0, "Target cannot be negative")
+      .optional(),
+  })
   .omit({
     id: true,
     winnieId: true,

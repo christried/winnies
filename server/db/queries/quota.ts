@@ -10,7 +10,9 @@ import { challenge, winnie } from "../schema";
  */
 export async function countWinniesToday(ownerId: string) {
   const [countedWinnies] = await db
-    .select({ count: count() })
+    .select({
+      count: count(),
+    })
     .from(winnie)
     .where(and(
       eq(winnie.ownerId, ownerId),
@@ -46,7 +48,9 @@ export async function assertWinnieQuota(ownerId: string) {
  */
 export async function countChallenges(winnieId: string) {
   const [countedChallenges] = await db
-    .select({ count: count() })
+    .select({
+      count: count(),
+    })
     .from(challenge)
     .where(eq(challenge.winnieId, winnieId));
 

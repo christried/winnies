@@ -10,25 +10,39 @@ describe("isWinnieComplete", () => {
 
   it("completes as soon as all Challenges are completed", () => {
     const challenges: CompletableChallenge[]
-      = [{ status: "won" }, { status: "won" }, { status: "won" }];
+      = [
+        { status: "won" },
+        { status: "won" },
+        { status: "won" },
+      ];
     expect(isWinnieComplete(challenges)).toBe(true);
   });
 
   it("completes as soon as THE single Challenge in the Winnie is completed", () => {
     const challenges: CompletableChallenge[]
-      = [{ status: "won" }];
+      = [
+        { status: "won" },
+      ];
     expect(isWinnieComplete(challenges)).toBe(true);
   });
 
   it("never completes as long as any Challenge is todo", () => {
     const challenges: CompletableChallenge[]
-      = [{ status: "won" }, { status: "todo" }, { status: "won" }];
+      = [
+        { status: "won" },
+        { status: "todo" },
+        { status: "won" },
+      ];
     expect(isWinnieComplete(challenges)).toBe(false);
   });
 
   it("never completes as long as any Challenge is active", () => {
     const challenges: CompletableChallenge[]
-      = [{ status: "won" }, { status: "active" }, { status: "won" }];
+      = [
+        { status: "won" },
+        { status: "active" },
+        { status: "won" },
+      ];
     expect(isWinnieComplete(challenges)).toBe(false);
   });
 });

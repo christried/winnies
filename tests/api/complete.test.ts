@@ -32,7 +32,11 @@ const W = 2500;
 
 // Fixtures: these call endpoints owned by other tickets to set state up; only the Complete rules are asserted.
 async function winnieWith<const T extends readonly { game: string; target?: number }[]>(owner: SignedInOwner, inputs: T) {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "Complete" } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name: "Complete" },
+  });
   expect(created.status).toBe(200);
   const winnie: { id: string; shareSlug: string } = await created.json();
 
@@ -46,14 +50,22 @@ async function winnieWith<const T extends readonly { game: string; target?: numb
 }
 
 async function startChallenge(owner: SignedInOwner, challengeId: string): Promise<TimerResponse> {
-  const response = await api(`/api/challenges/${challengeId}/timer`, { as: owner, method: "POST", json: { action: "start" } });
+  const response = await api(`/api/challenges/${challengeId}/timer`, {
+    as: owner,
+    method: "POST",
+    json: { action: "start" },
+  });
   expect(response.status).toBe(200);
   return response.json();
 }
 
 // PATCH with a status: "won" wins, anything else un-wins. Returns the Challenge row.
 async function setStatus(owner: SignedInOwner, challengeId: string, status: string): Promise<ChallengeRow> {
-  const response = await api(`/api/challenges/${challengeId}`, { as: owner, method: "PATCH", json: { status } });
+  const response = await api(`/api/challenges/${challengeId}`, {
+    as: owner,
+    method: "PATCH",
+    json: { status },
+  });
   expect(response.status).toBe(200);
   return response.json();
 }
@@ -79,7 +91,9 @@ function isComplete(winnie: WinnieRow): boolean {
 describe("winning a Challenge", () => {
   it("winning the only Challenge of a never started Winnie makes it Complete", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
     const won = await setStatus(owner, c1.id, "won");
 
@@ -92,8 +106,14 @@ describe("winning a Challenge", () => {
 
   it("winning the last Challenge through its Counter completes the Winnie", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One", target: 2 }]);
-    const step = () => api(`/api/challenges/${c1.id}/counter`, { as: owner, method: "PATCH", json: { op: "step", delta: 1 } });
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One", target: 2 },
+    ]);
+    const step = () => api(`/api/challenges/${c1.id}/counter`, {
+      as: owner,
+      method: "PATCH",
+      json: { op: "step", delta: 1 },
+    });
 
     const first = await step();
     expect(first.status).toBe(200);
@@ -111,7 +131,9 @@ describe("winning a Challenge", () => {
 describe("un-winning a Challenge", () => {
   it("un-winning a Challenge of a Complete Winnie makes it not Complete and starts nothing", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     await setStatus(owner, c1.id, "won");
     expect(isComplete(await read(owner, winnie.id))).toBe(true);
 
@@ -134,7 +156,10 @@ describe("un-winning a Challenge", () => {
 describe("deleting a Challenge", () => {
   it("deleting the last open Challenge makes the Winnie Complete", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [{ game: "One" }, { game: "Two" }]);
+    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [
+      { game: "One" },
+      { game: "Two" },
+    ]);
     await setStatus(owner, c1.id, "won");
     await startChallenge(owner, c2.id);
 
@@ -154,7 +179,10 @@ describe("deleting a Challenge", () => {
 describe.concurrent("completing a Winnie with running timers", () => {
   it("winning the last open Challenge completes the Winnie and stops all timers", { timeout: 30_000 }, async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [{ game: "One" }, { game: "Two" }]);
+    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [
+      { game: "One" },
+      { game: "Two" },
+    ]);
     const first = await startChallenge(owner, c1.id);
     await startChallenge(owner, c2.id);
     const totalStart = first.winnie.totalRunningSince!;
@@ -187,7 +215,9 @@ describe.concurrent("completing a Winnie with running timers", () => {
 
   it("un-winning a Challenge that has time puts it back to active", { timeout: 30_000 }, async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     await startChallenge(owner, c1.id);
     await sleep(W);
     const won = await setStatus(owner, c1.id, "won");

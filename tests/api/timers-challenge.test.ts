@@ -42,7 +42,11 @@ const W = 2500;
 
 // Fixtures: these call endpoints owned by other tickets to set state up; no test asserts on them.
 async function winnieWith<const T extends readonly { game: string; target?: number }[]>(owner: SignedInOwner, inputs: T) {
-  const created = await api("/api/winnies", { as: owner, method: "POST", json: { name: "Timers" } });
+  const created = await api("/api/winnies", {
+    as: owner,
+    method: "POST",
+    json: { name: "Timers" },
+  });
   expect(created.status).toBe(200);
   const winnie: { id: string; shareSlug: string } = await created.json();
 
@@ -56,7 +60,11 @@ async function winnieWith<const T extends readonly { game: string; target?: numb
 }
 
 function timer(owner: SignedInOwner | undefined, challengeId: string, action: TimerAction): Promise<Response> {
-  return api(`/api/challenges/${challengeId}/timer`, { as: owner, method: "POST", json: { action } });
+  return api(`/api/challenges/${challengeId}/timer`, {
+    as: owner,
+    method: "POST",
+    json: { action },
+  });
 }
 
 async function timerOk(owner: SignedInOwner, challengeId: string, action: "start" | "stop"): Promise<TimerResponse> {
@@ -95,7 +103,10 @@ async function expectError(response: Response, status: number, message: string) 
 describe("starting a Challenge Timer", () => {
   it("starting a Challenge Timer starts it and the Total Timer", async () => {
     const owner = await signInAsOwner();
-    const { challenges: [c1, c2] } = await winnieWith(owner, [{ game: "One" }, { game: "Two" }]);
+    const { challenges: [c1, c2] } = await winnieWith(owner, [
+      { game: "One" },
+      { game: "Two" },
+    ]);
 
     const started = await timerOk(owner, c1.id, "start");
 
@@ -113,7 +124,10 @@ describe("starting a Challenge Timer", () => {
 
   it("starting a second Challenge Timer leaves the first running and the Total Timer's start unchanged", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [{ game: "One" }, { game: "Two" }]);
+    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [
+      { game: "One" },
+      { game: "Two" },
+    ]);
 
     const first = await timerOk(owner, c1.id, "start");
     const second = await timerOk(owner, c2.id, "start");
@@ -129,7 +143,9 @@ describe("starting a Challenge Timer", () => {
 
   it("starting a running Challenge Timer again keeps its start", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
     const first = await timerOk(owner, c1.id, "start");
     const again = await timerOk(owner, c1.id, "start");
@@ -143,8 +159,14 @@ describe("starting a Challenge Timer", () => {
 
   it("starting a Won Challenge starts nothing", async () => {
     const owner = await signInAsOwner();
-    const { challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
-    const won = await api(`/api/challenges/${c1.id}`, { as: owner, method: "PATCH", json: { status: "won" } });
+    const { challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
+    const won = await api(`/api/challenges/${c1.id}`, {
+      as: owner,
+      method: "PATCH",
+      json: { status: "won" },
+    });
     expect(won.status).toBe(200);
 
     const started = await timerOk(owner, c1.id, "start");
@@ -158,7 +180,9 @@ describe("starting a Challenge Timer", () => {
 describe("pausing a Challenge Timer that never ran", () => {
   it("pausing a Challenge Timer that never ran changes nothing", async () => {
     const owner = await signInAsOwner();
-    const { challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
     const paused = await timerOk(owner, c1.id, "stop");
 
@@ -171,7 +195,10 @@ describe("pausing a Challenge Timer that never ran", () => {
 describe("resetting a Challenge Timer", () => {
   it("resetting a running Challenge Timer stops it at zero and leaves the Total Timer running", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [{ game: "One" }, { game: "Two" }]);
+    const { winnie, challenges: [c1, c2] } = await winnieWith(owner, [
+      { game: "One" },
+      { game: "Two" },
+    ]);
     await timerOk(owner, c1.id, "start");
 
     const reset = await timer(owner, c1.id, "reset");
@@ -189,8 +216,14 @@ describe("resetting a Challenge Timer", () => {
 
   it("resetting a Won Challenge's timer works and keeps it Won", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
-    const won = await api(`/api/challenges/${c1.id}`, { as: owner, method: "PATCH", json: { status: "won" } });
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
+    const won = await api(`/api/challenges/${c1.id}`, {
+      as: owner,
+      method: "PATCH",
+      json: { status: "won" },
+    });
     expect(won.status).toBe(200);
 
     const reset = await timer(owner, c1.id, "reset");
@@ -205,7 +238,9 @@ describe("resetting a Challenge Timer", () => {
 describe.concurrent("a Challenge Timer over time", () => {
   it("pausing a Challenge Timer stops it and leaves the Total Timer running", { timeout: 30_000 }, async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     const started = await timerOk(owner, c1.id, "start");
     const startedSince = pick(started.winnie, c1.id).runningSince!;
 
@@ -227,7 +262,9 @@ describe.concurrent("a Challenge Timer over time", () => {
 
   it("resetting a stopped Challenge Timer with time on it zeroes it", { timeout: 30_000 }, async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     await timerOk(owner, c1.id, "start");
     await sleep(W);
     const paused = await timerOk(owner, c1.id, "stop");
@@ -242,7 +279,9 @@ describe.concurrent("a Challenge Timer over time", () => {
 
   it("elapsed time reads against serverNow while a timer runs and after it stops", { timeout: 30_000 }, async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
     const started = await timerOk(owner, c1.id, "start");
     const running = pick(started.winnie, c1.id);
@@ -277,7 +316,9 @@ describe("refused Challenge timer requests", () => {
 
   it.each(actions)("signed out, a Challenge timer request is rejected (%s)", async (action) => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
     const rejected = await timer(undefined, c1.id, action);
 
@@ -297,7 +338,9 @@ describe("refused Challenge timer requests", () => {
   it.each(actions)("another Owner cannot start, pause or reset someone else's timers (%s)", async (action) => {
     const owner = await signInAsOwner();
     const other = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     const started = await timerOk(owner, c1.id, "start");
 
     await expectError(await timer(other, c1.id, action), 403, "Not your Challenge.");
@@ -310,7 +353,9 @@ describe("refused Challenge timer requests", () => {
 
   it("a timer request for a deleted Winnie's Challenge is refused like another Owner's", async () => {
     const owner = await signInAsOwner();
-    const { winnie, challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { winnie, challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
     const deleted = await api(`/api/winnies/${winnie.id}`, { as: owner, method: "DELETE" });
     expect(deleted.status).toBe(200);
 
@@ -331,9 +376,15 @@ describe("refused Challenge timer requests", () => {
 
   it("an unknown action or a missing body is a validation error", async () => {
     const owner = await signInAsOwner();
-    const { challenges: [c1] } = await winnieWith(owner, [{ game: "One" }]);
+    const { challenges: [c1] } = await winnieWith(owner, [
+      { game: "One" },
+    ]);
 
-    const unknown = await api(`/api/challenges/${c1.id}/timer`, { as: owner, method: "POST", json: { action: "pause" } });
+    const unknown = await api(`/api/challenges/${c1.id}/timer`, {
+      as: owner,
+      method: "POST",
+      json: { action: "pause" },
+    });
     expect(unknown.status).toBe(422);
     expect((await unknown.json()).data.fieldErrors).toHaveProperty("action");
 

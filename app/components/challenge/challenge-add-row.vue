@@ -13,7 +13,9 @@ const atCap = computed(() => totalCount.value >= MAX_CHALLENGES_PER_WINNIE);
 // empty number input one hands back "" rather than undefined
 const formSchema = insertChallengeSchema.extend({
   target: z.preprocess(
-    value => value === "" ? undefined : value,
+    value => value === ""
+      ? undefined
+      : value,
     insertChallengeSchema.shape.target,
   ),
 });

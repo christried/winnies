@@ -5,7 +5,13 @@ import "./server/utils/env";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@pinia/nuxt", "@nuxt/content"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@pinia/nuxt",
+    "@nuxt/content",
+  ],
   eslint: {
     config: {
       // Let @antfu/eslint-config own the general rules and all formatting.
@@ -34,7 +40,9 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+    ],
   },
   app: {
     head: {

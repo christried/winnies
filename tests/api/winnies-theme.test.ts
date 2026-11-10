@@ -4,7 +4,11 @@ import { signInAsOwner } from "../support/owner";
 import { api } from "./api";
 
 function saveTheme(theme: unknown, as?: SignedInOwner) {
-  return api("/api/user/theme", { as, method: "PUT", json: { theme } });
+  return api("/api/user/theme", {
+    as,
+    method: "PUT",
+    json: { theme },
+  });
 }
 
 // The only read path is the session Better Auth hands out. Its cookie cache is on, yet a read right

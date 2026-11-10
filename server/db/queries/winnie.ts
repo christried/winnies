@@ -11,7 +11,9 @@ import { challenge, winnie } from "../schema";
 export function findWinniesByOwner(ownerId: string) {
   return db.query.winnie.findMany({
     where: eq(winnie.ownerId, ownerId),
-    orderBy: [desc(winnie.createdAt)],
+    orderBy: [
+      desc(winnie.createdAt),
+    ],
   });
 }
 
@@ -24,7 +26,9 @@ export function findWinnieWithChallenges(winnieId: string) {
   return db.query.winnie.findFirst({
     where: eq(winnie.id, winnieId),
     with: {
-      challenges: { orderBy: [challenge.position] },
+      challenges: {
+        orderBy: [challenge.position],
+      },
     },
   });
 }

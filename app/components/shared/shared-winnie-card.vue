@@ -35,7 +35,9 @@ const runningCount = computed(() => props.winnie.challenges.filter(c => c.runnin
 const wonCount = computed(() => props.winnie.challenges.filter(c => c.status === "won").length);
 const totalCount = computed(() => props.winnie.challenges.length);
 const percentComplete = computed(() =>
-  totalCount.value === 0 ? 0 : Math.round((wonCount.value / totalCount.value) * 100));
+  totalCount.value === 0
+    ? 0
+    : Math.round((wonCount.value / totalCount.value) * 100));
 
 const isRunning = computed(() => props.winnie.totalRunningSince !== null);
 const totalSeconds = computed(() => elapsedSeconds(

@@ -26,6 +26,8 @@ export function api(path: string, options: { as?: SignedInOwner; method?: string
   return fetch(new URL(path, inject("serverUrl")), {
     method: options.method,
     headers,
-    body: options.json === undefined ? undefined : JSON.stringify(options.json),
+    body: options.json === undefined
+      ? undefined
+      : JSON.stringify(options.json),
   });
 }
