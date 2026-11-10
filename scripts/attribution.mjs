@@ -22,7 +22,10 @@ const TEXT_RULES = [
   // Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
   [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"],
   [/^[ \t>*-]*(?:claude-session|generated-by|assisted-by|ai-assisted-by)\s*:/im, "an agent trailer"],
-  [new RegExp(`(?:generated|written|created|authored|made)\\s+(?:with|by)\\s+[[*_]*(?:${AGENT_NAMES})`, "i"), "a \"generated with\" line"],
+  [
+    new RegExp(`(?:generated|written|created|authored|made)\\s+(?:with|by)\\s+[[*_]*(?:${AGENT_NAMES})`, "i"),
+    "a \"generated with\" line",
+  ],
   [/noreply@anthropic\.com/i, "an Anthropic no-reply address"],
   [/claude\.ai\/code|claude\.com\/claude-code/i, "a Claude Code link"],
   [/\u{1F916}/u, "the robot emoji that marks agent output"],
@@ -65,7 +68,10 @@ export function findInCommand(command) {
     return [];
   // A trailer inside `-m "…"` or a heredoc does not start its line in the command, so the line anchors go.
   const findings = TEXT_RULES
-    .map(([pattern, finding]) => [new RegExp(pattern.source.replace("^[ \\t>*-]*", ""), pattern.flags.replace("m", "")), finding])
+    .map(([pattern, finding]) => [
+      new RegExp(pattern.source.replace("^[ \\t>*-]*", ""), pattern.flags.replace("m", "")),
+      finding,
+    ])
     .filter(([pattern]) => pattern.test(command))
     .map(([, finding]) => finding);
   if (writesHistory) {
@@ -94,8 +100,12 @@ function findInCommits(selection) {
     const [sha, author, committer, message] = entry.split("\x00");
     return [
       ...findAttribution(message).map(finding => `${sha}: the message has ${finding}`),
-      ...(isAgentIdentity(author) ? [`${sha}: the author is an agent (${author})`] : []),
-      ...(isAgentIdentity(committer) ? [`${sha}: the committer is an agent (${committer})`] : []),
+      ...(isAgentIdentity(author)
+        ? [`${sha}: the author is an agent (${author})`]
+        : []),
+      ...(isAgentIdentity(committer)
+        ? [`${sha}: the committer is an agent (${committer})`]
+        : []),
     ];
   });
 }
@@ -112,7 +122,11 @@ export function pushSelections(stdin) {
     if (none.test(local))
       return [];
     // A new branch has no remote side: everything no remote branch has yet.
-    return [none.test(remote) ? [local, "--not", "--remotes"] : [`${remote}..${local}`]];
+    return [
+      none.test(remote)
+        ? [local, "--not", "--remotes"]
+        : [`${remote}..${local}`],
+    ];
   });
 }
 
@@ -133,7 +147,10 @@ function main([mode, argument]) {
   const findings = {
     message: () => findAttribution(readFileSync(argument, "utf8").split("\n").filter(line => !line.startsWith("#")).join("\n")).map(finding => `the commit message has ${finding}`),
     text: () => findAttribution(readFileSync(argument, "utf8")).map(finding => `the text has ${finding}`),
-    identity: () => ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"].map(name => [name, git("var", name).replace(/ \d+ [+-]\d+\s*$/, "")]).filter(([, identity]) => isAgentIdentity(identity)).map(([name, identity]) => `${name} is an agent (${identity})`),
+    identity: () => ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"].map(name => [
+      name,
+      git("var", name).replace(/ \d+ [+-]\d+\s*$/, ""),
+    ]).filter(([, identity]) => isAgentIdentity(identity)).map(([name, identity]) => `${name} is an agent (${identity})`),
     range: () => findInCommits([argument]),
     push: () => pushSelections(readFileSync(0, "utf8")).flatMap(findInCommits),
   }[mode]?.();

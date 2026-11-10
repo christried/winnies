@@ -9,7 +9,11 @@ const { data: shared, error } = await useFetch(`/api/share/${route.params.slug}`
   lazy: true,
 });
 
-useHead({ meta: [{ name: "robots", content: "noindex, nofollow" }] });
+useHead({
+  meta: [
+    { name: "robots", content: "noindex, nofollow" },
+  ],
+});
 
 const clock = useServerClock();
 watch(shared, (value) => {

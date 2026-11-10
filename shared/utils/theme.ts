@@ -7,7 +7,9 @@ import { DAISY_THEMES, THEME_PREFERENCE } from "../constants";
  * @returns The daisyUI theme name. "undefined" results in "system"
  */
 export function themeAttribute(preference: ThemePreference) {
-  return preference === "system" ? undefined : DAISY_THEMES[preference];
+  return preference === "system"
+    ? undefined
+    : DAISY_THEMES[preference];
 }
 
 /**

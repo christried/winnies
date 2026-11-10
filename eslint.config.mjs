@@ -10,7 +10,10 @@ const jsdocQuality = {
   // make you fill it in. `pnpm lint:fix` writes the placeholders.
   "jsdoc/require-param": "error",
   // require-param's fixer is on by default; require-returns' is not.
-  "jsdoc/require-returns": ["error", { enableFixer: true }],
+  "jsdoc/require-returns": [
+    "error",
+    { enableFixer: true },
+  ],
 
   "jsdoc/require-param-description": "error",
   "jsdoc/require-returns-description": "error",
@@ -53,12 +56,18 @@ export default withNuxt(
       markdown: "prettier",
     },
     rules: {
-      "unicorn/filename-case": ["error", { case: "kebabCase" }],
+      "unicorn/filename-case": [
+        "error",
+        { case: "kebabCase" },
+      ],
 
-      "vue/max-attributes-per-line": ["error", {
-        singleline: { max: 2 },
-        multiline: { max: 1 },
-      }],
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          singleline: { max: 2 },
+          multiline: { max: 1 },
+        },
+      ],
 
       "node/no-process-env": "error",
     },
@@ -88,6 +97,16 @@ export default withNuxt(
     },
   },
   {
+    // Test harness: it reports to the console, and tests/support/env.ts is the only place that reads the
+    // environment (the Playwright config only asks whether it runs in CI).
+    name: "tests",
+    files: ["tests/**", "playwright.config.ts"],
+    rules: {
+      "no-console": "off",
+      "node/no-process-env": "off",
+    },
+  },
+  {
     name: "better-tailwindcss",
     files: ["**/*.vue"],
     plugins: { "better-tailwindcss": betterTailwindcss },
@@ -111,16 +130,19 @@ export default withNuxt(
       "shared/**/*.ts",
     ],
     rules: {
-      "jsdoc/require-jsdoc": ["error", {
-        enableFixer: true,
-        publicOnly: true,
-        require: {
-          FunctionDeclaration: true,
-          ArrowFunctionExpression: true,
-          FunctionExpression: true,
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          enableFixer: true,
+          publicOnly: true,
+          require: {
+            FunctionDeclaration: true,
+            ArrowFunctionExpression: true,
+            FunctionExpression: true,
+          },
+          contexts: ["TSTypeAliasDeclaration", "TSInterfaceDeclaration"],
         },
-        contexts: ["TSTypeAliasDeclaration", "TSInterfaceDeclaration"],
-      }],
+      ],
       ...jsdocQuality,
     },
   },
@@ -128,10 +150,13 @@ export default withNuxt(
     name: "jsdoc-vue-props",
     files: ["**/*.vue"],
     rules: {
-      "jsdoc/require-jsdoc": ["error", {
-        enableFixer: true,
-        contexts: ["TSPropertySignature"],
-      }],
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          enableFixer: true,
+          contexts: ["TSPropertySignature"],
+        },
+      ],
       ...jsdocQuality,
       ...jsdocCorrectness,
     },

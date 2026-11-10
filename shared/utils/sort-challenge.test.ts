@@ -15,9 +15,24 @@ function mapToIds(challenges: TestChallenge[]): string[] {
 describe("sortChallenges", () => {
   it("puts pinned first, then open, then won", () => {
     const challenges: TestChallenge[] = [
-      { id: "won", pinned: false, status: "won", position: 0 },
-      { id: "open", pinned: false, status: "todo", position: 0 },
-      { id: "pinned", pinned: true, status: "todo", position: 0 },
+      {
+        id: "won",
+        pinned: false,
+        status: "won",
+        position: 0,
+      },
+      {
+        id: "open",
+        pinned: false,
+        status: "todo",
+        position: 0,
+      },
+      {
+        id: "pinned",
+        pinned: true,
+        status: "todo",
+        position: 0,
+      },
     ];
 
     expect(mapToIds(sortChallenges(challenges))).toEqual(["pinned", "open", "won"]);
@@ -25,9 +40,24 @@ describe("sortChallenges", () => {
 
   it("orders by position inside a block", () => {
     const challenges: TestChallenge[] = [
-      { id: "third", pinned: false, status: "todo", position: 3 },
-      { id: "first", pinned: false, status: "todo", position: 1 },
-      { id: "second", pinned: false, status: "todo", position: 2 },
+      {
+        id: "third",
+        pinned: false,
+        status: "todo",
+        position: 3,
+      },
+      {
+        id: "first",
+        pinned: false,
+        status: "todo",
+        position: 1,
+      },
+      {
+        id: "second",
+        pinned: false,
+        status: "todo",
+        position: 2,
+      },
     ];
 
     expect(mapToIds(sortChallenges(challenges))).toEqual(["first", "second", "third"]);
@@ -35,8 +65,18 @@ describe("sortChallenges", () => {
 
   it("treats an active challenge as open rather than won", () => {
     const challenges: TestChallenge[] = [
-      { id: "won", pinned: false, status: "won", position: 0 },
-      { id: "active", pinned: false, status: "active", position: 1 },
+      {
+        id: "won",
+        pinned: false,
+        status: "won",
+        position: 0,
+      },
+      {
+        id: "active",
+        pinned: false,
+        status: "active",
+        position: 1,
+      },
     ];
 
     expect(mapToIds(sortChallenges(challenges))).toEqual(["active", "won"]);
@@ -44,9 +84,24 @@ describe("sortChallenges", () => {
 
   it("keeps a won challenge inside the pinned block, at the bottom of it", () => {
     const challenges: TestChallenge[] = [
-      { id: "pinned-won", pinned: true, status: "won", position: 0 },
-      { id: "pinned-open", pinned: true, status: "todo", position: 1 },
-      { id: "open", pinned: false, status: "todo", position: 0 },
+      {
+        id: "pinned-won",
+        pinned: true,
+        status: "won",
+        position: 0,
+      },
+      {
+        id: "pinned-open",
+        pinned: true,
+        status: "todo",
+        position: 1,
+      },
+      {
+        id: "open",
+        pinned: false,
+        status: "todo",
+        position: 0,
+      },
     ];
 
     expect(mapToIds(sortChallenges(challenges))).toEqual([
@@ -62,8 +117,18 @@ describe("sortChallenges", () => {
 
   it("does not modify the array it was given", () => {
     const challenges: TestChallenge[] = [
-      { id: "won", pinned: false, status: "won", position: 0 },
-      { id: "open", pinned: false, status: "todo", position: 0 },
+      {
+        id: "won",
+        pinned: false,
+        status: "won",
+        position: 0,
+      },
+      {
+        id: "open",
+        pinned: false,
+        status: "todo",
+        position: 0,
+      },
     ];
 
     sortChallenges(challenges);
@@ -73,7 +138,13 @@ describe("sortChallenges", () => {
 
   it("returns the challenges it was given, fields and all", () => {
     const challenges = [
-      { id: "a", game: "Counter-Strike 2", pinned: false, status: "todo", position: 0 },
+      {
+        id: "a",
+        game: "Counter-Strike 2",
+        pinned: false,
+        status: "todo",
+        position: 0,
+      },
     ] satisfies (TestChallenge & { game: string })[];
 
     const [firstChallenge] = sortChallenges(challenges);

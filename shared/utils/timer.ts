@@ -40,7 +40,9 @@ export function formatDuration(totalSeconds: number): string {
   const seconds = (whole % 60).toString().padStart(2, "0");
   const minutes = `${(minutesTotal % 60).toString().padStart(2, "0")}:`;
 
-  return `${hours ? `${hours}:` : ""}${minutes}${seconds}`;
+  return `${hours
+    ? `${hours}:`
+    : ""}${minutes}${seconds}`;
 }
 
 /**

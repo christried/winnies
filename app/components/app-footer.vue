@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const runtimeConfig = useRuntimeConfig();
+const { appVersion } = useRuntimeConfig().public;
 </script>
 
 <template>
@@ -39,7 +39,7 @@ const runtimeConfig = useRuntimeConfig();
     </nav>
     <aside>
       <p>
-        v{{ runtimeConfig.public.appVersion }} created with <NuxtLink
+        v{{ appVersion }} created with <NuxtLink
           to="https://nuxt.com/"
           class="link link-hover hover:text-success"
           external

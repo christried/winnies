@@ -1,0 +1,53 @@
+# The test database of the API tests (`pnpm test:db:up`, `pnpm test:db:down`; README, Tests).
+#
+# Why two containers: the app talks to Postgres through the Neon serverless driver, which only speaks
+# WebSocket, so a plain Postgres is not enough. The proxy in front of it translates.
+#
+# Chosen (2026-11-10, spike on #196):
+#   postgres:17 (17.11 when tried; an assumption that production runs 17, `select version()` on the
+#     Neon project would confirm it)
+#   ghcr.io/timowilhelm/local-neon-http-proxy@sha256:cd2ae14e... (multi-arch index of tag `main`, built
+#     2026-03-27; the repository publishes no versioned tags, so it is pinned by digest)
+# Result: with the driver's defaults the Pool dials wss://<host>/v2 on 443 and fails with an empty
+# ErrorEvent. With `neonConfig.useSecureWebSocket = false` and `wsProxy` set to the proxy (127.0.0.1:4444/v1
+# here, from the `localhost` host of TEST_DATABASE_URL) it runs queries, including through Drizzle and
+# Better Auth. That configuration is test code (tests/support/neon-local.mjs), loaded into the server under
+# test and the test process only. It dials the proxy of exactly two hosts: `localhost` (this file) and
+# `neon-proxy` (the service name in the `e2e` job's container) and refuses any other.
+# Not tried, because this one passed: ghcr.io/neondatabase/wsproxy.
+#
+# Connection string: postgres://postgres:postgres@localhost:5432/winnies_test (TEST_DATABASE_URL).
+# The host and port in it are not dialled: the driver is pointed at the proxy, which is the only port
+# published, and the proxy reaches Postgres by service name. The same two images run as `services:`
+# in the `api-tests` and `e2e` jobs of .github/workflows/ci.yml; scripts/harness-sync.test.mjs fails
+# `pnpm test` when the images, their environment or the ports differ.
+#
+# No volume: every `pnpm test:api` empties the database, and `down -v` leaves nothing behind.
+
+# Named, because without `name:` the project is named after the directory: every git worktree gets its own
+# project, all of them publish port 4444, so a second `pnpm test:db:up` fails and `down -v` from one checkout
+# misses the containers of another. The run lock (tests/support/test-server.ts) assumes one shared database.
+name: winnies-test
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: winnies_test
+    healthcheck:
+      test: [CMD, pg_isready, -U, postgres, -d, winnies_test]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy@sha256:cd2ae14edf2feafbc3330492de5c80506f77274c3bd013154cdef697bdeb768a
+    environment:
+      PG_CONNECTION_STRING: postgres://postgres:postgres@postgres:5432/winnies_test
+    ports:
+      - "4444:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy

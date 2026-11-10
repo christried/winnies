@@ -17,7 +17,9 @@ const slug = route.params.slug as string;
 const { data: shared, error } = await useFetch(`/api/share/${slug}`, { lazy: true });
 
 useHead({
-  meta: [{ name: "robots", content: "noindex, nofollow" }],
+  meta: [
+    { name: "robots", content: "noindex, nofollow" },
+  ],
   htmlAttrs: {
     // Fixed look for OBS, independent of the viewer's theme (#121)
     "data-theme": DAISY_THEMES.dark,
@@ -142,8 +144,20 @@ async function startFireworks() {
   const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
   fireworks = setInterval(() => {
-    confettiBurst({ ...defaults, origin: { x: randomInRange(0.1, 0.3), y: randomInRange(0, 0.4) } });
-    confettiBurst({ ...defaults, origin: { x: randomInRange(0.7, 0.9), y: randomInRange(0, 0.4) } });
+    confettiBurst({
+      ...defaults,
+      origin: {
+        x: randomInRange(0.1, 0.3),
+        y: randomInRange(0, 0.4),
+      },
+    });
+    confettiBurst({
+      ...defaults,
+      origin: {
+        x: randomInRange(0.7, 0.9),
+        y: randomInRange(0, 0.4),
+      },
+    });
   }, FIREWORK_INTERVAL_MS);
 }
 

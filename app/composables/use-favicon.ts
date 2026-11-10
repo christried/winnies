@@ -35,11 +35,13 @@ export function faviconState({ running, complete }: FaviconInput): FaviconState 
  */
 export function useFavicon(state: MaybeRefOrGetter<FaviconInput>) {
   useHead({
-    link: [{
-      key: "favicon",
-      rel: "icon",
-      type: "image/svg+xml",
-      href: computed(() => FAVICON_HREF[faviconState(toValue(state))]),
-    }],
+    link: [
+      {
+        key: "favicon",
+        rel: "icon",
+        type: "image/svg+xml",
+        href: computed(() => FAVICON_HREF[faviconState(toValue(state))]),
+      },
+    ],
   });
 }

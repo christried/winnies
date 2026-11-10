@@ -34,7 +34,9 @@ export const useWinnieStore = defineStore("winnies", () => {
   const runningCount = computed(() => challenges.value.filter(c => c.runningSince !== null).length);
 
   const percentComplete = computed(() =>
-    totalCount.value === 0 ? 0 : Math.round((wonCount.value / totalCount.value) * 100));
+    totalCount.value === 0
+      ? 0
+      : Math.round((wonCount.value / totalCount.value) * 100));
 
   const isComplete = computed(() => isWinnieComplete(challenges.value));
 
@@ -194,7 +196,9 @@ export const useWinnieStore = defineStore("winnies", () => {
     try {
       const updatedWinnieData = await $fetch(`/api/winnies/${winnie.id}/timer`, {
         method: "POST",
-        body: { action: startingTimer ? "start" : "stop" },
+        body: {
+          action: startingTimer ? "start" : "stop",
+        },
       });
 
       if (updatedWinnieData.winnie)
@@ -305,7 +309,11 @@ export const useWinnieStore = defineStore("winnies", () => {
         method: "PATCH",
         // DB Query decides if Challenge is Active/Todo if it's un-winning and sets Counter away from maximum if needed
         // Means Frontend can just go win or un-win here :)
-        body: { status: challenge.status === "won" ? "active" : "won" },
+        body: {
+          status: challenge.status === "won"
+            ? "active"
+            : "won",
+        },
       });
 
       replaceChallenge(updatedChallenge);
@@ -355,7 +363,9 @@ export const useWinnieStore = defineStore("winnies", () => {
     try {
       const updatedWinnieData = await $fetch(`/api/challenges/${challengeId}/timer`, {
         method: "POST",
-        body: { action: starting ? "start" : "stop" },
+        body: {
+          action: starting ? "start" : "stop",
+        },
       });
 
       if ("winnie" in updatedWinnieData && updatedWinnieData.winnie)

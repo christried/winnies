@@ -33,7 +33,10 @@ describe("elapsedSeconds", () => {
   // Getting Test cases delivered by AI is really nice lol:
   it("accepts an ISO string because it arrives over JSON", () => {
     expect(elapsedSeconds(
-      { accumulatedSeconds: 0, runningSince: anyDate.toISOString() },
+      {
+        accumulatedSeconds: 0,
+        runningSince: anyDate.toISOString(),
+      },
       anyTime + 20000,
     )).toBe(20);
   });
