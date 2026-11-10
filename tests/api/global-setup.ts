@@ -33,7 +33,7 @@ function sleep(ms: number) {
 // The WebSocket behind the Neon driver reports a refused connection as an event with an empty message.
 function describeError(error: unknown): string {
   const e = error as { message?: string; error?: { message?: string; code?: string }; code?: string; type?: string };
-  return e.message || e.error?.message || e.error?.code || e.code || (e.type ? `${e.type} event` : "connection failed");
+  return e.message || e.error?.message || e.error?.code || e.code || "connection failed";
 }
 
 function describeTarget(connectionUrl: string): string {
