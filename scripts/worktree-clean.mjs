@@ -2,16 +2,21 @@
 // session improvised this step: `git worktree remove` refuses a worktree the harness has locked, the auto-mode
 // classifier blocks `remove -f -f`, and a removal that broke off left folders without a `.git` behind.
 //
-//   node scripts/worktree-clean.mjs [<agent id> …]    (run it in the background: a worktree with node_modules takes minutes)
+//   node scripts/worktree-clean.mjs [--unlocked] [--dry-run] [<agent id> …]    (run it in the background: a worktree
+//   with node_modules takes minutes; run it from the main checkout)
 //
-// Done means: named on the command line (`agent-a1b2…` or `a1b2…`, the agents of this session that have reported), or
-// locked by a Claude process that no longer runs (a session that has ended), or not locked at all. A done worktree is
-// kept, with the reason, while it has uncommitted changes, a commit no remote branch contains, or a process running
-// in it (a dev server). A folder git no longer lists as a worktree is deleted. One line per folder.
+// A worktree goes when it is named on the command line (`agent-a1b2…` or `a1b2…`, an agent that has reported and whose
+// ticket is verified), or locked by a Claude process that no longer runs (a session that has ended), or not locked and
+// `--unlocked` was given (the end of a phase). Any other worktree stays, with the reason: a locked one whose session
+// runs stays until it is named, the flag never touches it. A worktree that goes is kept all the same, with the reason,
+// while it has uncommitted changes, a commit no remote branch contains, or a process running in it (a dev server).
+// `--dry-run` prints what it would do and changes nothing. A folder git no longer lists as a worktree is deleted. One
+// line per folder. The decision is scripts/worktree-verdict.mjs; this file gathers the data and acts on it.
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import process from "node:process";
+import { agentId, decide, unmatchedNames } from "./worktree-verdict.mjs";
 
 function git(...args) {
   return execFileSync("git", args, {
@@ -24,7 +29,11 @@ const home = join(root, ".claude", "worktrees");
 /** Forward slashes, lower case: Windows writes one path several ways. */
 const same = path => resolve(path).replaceAll("\\", "/").toLowerCase();
 
-const named = new Set(process.argv.slice(2).map(arg => arg.replace(/^agent-/, "")));
+const args = process.argv.slice(2);
+const unlocked = args.includes("--unlocked");
+const dryRun = args.includes("--dry-run");
+const names = args.filter(arg => !arg.startsWith("--"));
+const named = new Set(names.map(agentId));
 
 /** Whether a process with this id runs (a signal 0 only asks). */
 function running(pid) {
@@ -61,36 +70,38 @@ function worktrees() {
   }).filter(tree => tree.path && same(tree.path).startsWith(`${same(home)}/`));
 }
 
-/** Why a done worktree stays, or null when nothing in it would be lost. */
-function keepReason(tree, all) {
-  const changes = git("-C", tree.path, "status", "--porcelain").split("\n").filter(Boolean).length;
-  if (changes > 0) {
-    return `${changes} uncommitted change${changes === 1
-      ? ""
-      : "s"}`;
-  }
-  if (git("branch", "-r", "--contains", tree.head) === "")
-    return `${tree.head.slice(0, 7)} is on no remote branch`;
-  const inside = all.filter(item => item.command.includes(`${same(tree.path)}/`));
-  if (inside.length > 0)
-    return `processes run in it (${inside.map(item => item.pid).join(", ")})`;
-  return null;
+/** One worktree described as data for decide(): read-only git and process calls, whether or not it is wanted gone. */
+function describe(tree, name, all) {
+  const pid = Number(/\(pid (\d+)\)/.exec(tree.lock ?? "")?.[1]);
+  return {
+    name,
+    named: named.has(agentId(name)),
+    // A lock without a pid was set by hand: it counts as running, so only naming removes the worktree.
+    lock: tree.lock === undefined
+      ? null
+      : { text: tree.lock, running: !(pid > 0) || running(pid) },
+    uncommitted: git("-C", tree.path, "status", "--porcelain").split("\n").filter(Boolean).length,
+    head: tree.head,
+    unpushed: git("branch", "-r", "--contains", tree.head) === "",
+    processes: all.filter(item => item.command.includes(`${same(tree.path)}/`)).map(item => item.pid),
+  };
 }
 
 git("fetch", "--quiet", "--prune", "origin");
-git("worktree", "prune");
+// A prune changes state, so a dry run leaves it.
+if (!dryRun)
+  git("worktree", "prune");
 const all = processes();
-for (const tree of worktrees()) {
+const listedTrees = worktrees();
+for (const tree of listedTrees) {
   const name = tree.path.split("/").pop();
-  const pid = Number(/\(pid (\d+)\)/.exec(tree.lock ?? "")?.[1]);
-  const done = named.has(name.replace(/^agent-/, "")) || tree.lock === undefined || (pid > 0 && !running(pid));
-  if (!done) {
-    console.log(`kept ${name}: its session runs (${tree.lock}); name it once its agent has reported`);
+  const verdict = decide(describe(tree, name, all), { unlocked });
+  if (verdict.action === "keep") {
+    console.log(`kept ${name}: ${verdict.reason}`);
     continue;
   }
-  const reason = keepReason(tree, all);
-  if (reason) {
-    console.log(`kept ${name}: ${reason}`);
+  if (dryRun) {
+    console.log(`would remove ${name} (${verdict.reason})`);
     continue;
   }
   try {
@@ -113,8 +124,12 @@ for (const tree of worktrees()) {
     ? ` and ${[
       ...new Set(branches),
     ].join(", ")}`
-    : ""}`);
+    : ""} (${verdict.reason})`);
 }
+
+// A typo in a name must not read as "nothing to do".
+for (const arg of unmatchedNames(names, listedTrees.map(tree => tree.path.split("/").pop())))
+  console.log(`no worktree named ${arg}`);
 
 // What a broken-off removal leaves: a folder without `.git`, which git no longer knows.
 const listed = new Set(worktrees().map(tree => same(tree.path)));
@@ -126,6 +141,10 @@ for (const name of existsSync(home)
     continue;
   if (existsSync(join(path, ".git"))) {
     console.log(`kept ${name}: it has a .git, but git lists no such worktree; look at it`);
+    continue;
+  }
+  if (dryRun) {
+    console.log(`would delete ${name}: no longer a worktree`);
     continue;
   }
   rmSync(path, { recursive: true, force: true, maxRetries: 3 });
