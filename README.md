@@ -44,6 +44,11 @@ dev sign-in like the staging build does. It lives only in `.env.example` (commen
 developer's `.env`, never in `env.ts`, CI or Vercel: a Vercel build goes by its branch and ignores it, so
 no dashboard variable can turn production into staging.
 
+`VERCEL_AUTOMATION_BYPASS_SECRET` is the third exception. Only [`scripts/shots.mjs`](scripts/shots.mjs) reads
+it (from the environment, else from `.env`), to get through Vercel login on staging. It is not in `env.ts`, CI
+or the hosting provider's build environment, because it is the project's Protection Bypass setting and not the
+app's. It lives in `.env.example` (commented out) and in the main checkout's `.env`.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.

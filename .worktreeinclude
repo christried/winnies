@@ -1,4 +1,5 @@
 # Gitignored files Claude Code copies into every new worktree, an agent's `isolation: "worktree"` included,
-# so `pnpm dev` and the tests run there as in the main checkout.
+# so `pnpm dev` and the tests run there as in the main checkout. `.env` also carries the browser helper's
+# bypass secret (scripts/shots.mjs), which is how it reaches a worktree.
 .env
 .env.test
