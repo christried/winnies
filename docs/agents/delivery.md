@@ -17,7 +17,7 @@ The shape comes from the compies repository, where it grew out of ten retros; ru
 
 ## Database migrations
 
-Run drizzle-kit migrations on local and test databases yourself. A merge into `redesign` migrates the staging database: the Vercel build runs `pnpm db:migrate && pnpm build` (`vercel.json`, README § Deployment). A failed migration fails the deploy and the previous deployment keeps serving, so the ticket is not verified (§ Issues). Production follows at 1.0.0, when `redesign` carries `vercel.json` into `main`; until then `main` builds without a migration. A migration that reaches production does so through a merge into `main`, which is the human's; the PR that carries one says so in its first line. An agent holds no staging or production credential: one that reaches a transcript gets rotated.
+Run drizzle-kit migrations on local and test databases yourself. A merge into `redesign` migrates the staging database: the Vercel build runs `pnpm db:migrate && pnpm build` (`vercel.json`, README § Deployment). A failed migration fails the deploy and the previous deployment keeps serving, so the ticket is not verified (§ Issues). Production follows at 1.0.0, when `redesign` carries `vercel.json` into `main`; until then `main` builds without a migration. A migration that reaches production does so through a merge into `main`, which is the human's; the PR that carries one says so in its first line. An agent holds no database credential, for staging or production: one that reaches a transcript gets rotated.
 
 ## Issues
 

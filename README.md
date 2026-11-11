@@ -56,15 +56,17 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 ## Scripts
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
-`pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` · `pnpm db:migrate` ·
-`pnpm db:studio`
+`pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
+`pnpm db:migrate` · `pnpm db:studio`
 
-CI runs lint, typecheck, test and build (the `check` job), the API tests (the `api-tests` job) and
+CI runs lint, typecheck, test, build and the build test (the `check` job), the API tests (the `api-tests` job) and
 the browser tests (the `e2e` job) on every pull request.
 
 ## Tests
 
 - `pnpm test` runs the unit tests. No database needed.
+- `pnpm build`, then `pnpm test:build`: fails if the production build carries `/api/dev/sign-in` (ADR-0005).
+  It reads `.output`, so it needs the build first; CI runs it after `pnpm build`.
 - The API tests build the app, start it, and call it over HTTP, signed in as a throwaway Owner,
   against a local Postgres that they empty on every run:
   1. Install [Podman](https://podman.io) with its compose provider (`winget install RedHat.Podman`,

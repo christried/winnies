@@ -4,7 +4,11 @@ import process from "node:process";
 // Decides at build time which builds carry the dev sign-in (ADR-0005, #235). Plain TypeScript without
 // Nuxt imports: nuxt.config.ts reads it, stage.test.ts covers it. There is no run-time variable.
 
-/** The branch whose Vercel preview build is the staging build; the one place that names it */
+/**
+ * The branch whose Vercel preview build is the staging build. This is where the build decides it;
+ * vercel.json, scripts/staging-wizard.sh and scripts/shots.mjs repeat the branch or origin, and a test
+ * keeps those copies equal.
+ */
 export const STAGING_BRANCH = "redesign";
 
 /**

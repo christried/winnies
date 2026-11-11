@@ -58,6 +58,10 @@ The signed-in user who created a Winnie. Only the Owner can change it.
 **Streamer**:
 An Owner running a Winnie in front of an audience, typically with the Overlay on stream. Same account as an Owner; the term names the context, not a role.
 
+**dev Owner**:
+An Owner made by `/api/dev/sign-in` instead of Discord, on `pnpm dev` and on staging; no production build has the route. Its email ends in `@dev.winnies.invalid`, and `?as=<name>` picks which one, each with its own Winnies and Quota. Agents check signed-in pages as one, and a dev Owner's data is the only data on staging they may change.
+_Avoid_: test user, fake account, throwaway Owner (the API and e2e tests' own sign-in, which lives in test code)
+
 **Viewer**:
 Anyone watching a Winnie through its Share Link, signed in or not. Read-only.
 _Avoid_: guest, visitor (except on the Landing page)
