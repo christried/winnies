@@ -7,8 +7,9 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 ## Before you start
 
 1. Base your worktree on the integration branch (on `origin`):
-   - `git fetch origin && git merge-base --is-ancestor origin/<integration branch> HEAD || git reset --hard origin/<integration branch>`;
+   - `git fetch origin && git merge-base --is-ancestor origin/<integration branch> HEAD || git merge --ff-only origin/<integration branch>`. If it is not a fast-forward, stop and report: your worktree started from an unexpected commit. (#219: the auto-mode classifier refused `git reset --hard` here.)
    - then create your branch: `git checkout -b <your branch>`.
+   - Before you edit a file, `git ls-files --eol <file>`; if it shows `w/crlf`, delete the file and `git checkout -- <file>`, then confirm `w/lf`. (#219: a fresh worktree held CRLF files its branch never changed, for five implementers.)
 2. `pnpm install --frozen-lockfile` (runs `nuxt prepare` and installs the git hooks). If you add a dependency, use `pnpm add` and commit the lockfile.
 3. Read, in this order:
    - your ticket, read as `docs/agents/issue-tracker.md` § Conventions says;
