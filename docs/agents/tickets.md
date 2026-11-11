@@ -1,6 +1,6 @@
 # Tickets
 
-Every ticket is written for an **agent** that implements it in one fresh session, from a brief the orchestrator checks (`subagents.md`). A ticket points at the detailed sources instead of repeating them. Work only the human can do (a Claude Design prompt to run, a walk-through, a repo setting) is its own `ready-for-human` ticket, so it never holds up a build ticket.
+Every ticket is written for an **agent** that implements it in one fresh session, from a brief (`subagents.md` § Briefs). A ticket points at the detailed sources instead of repeating them. Work only the human can do (a Claude Design prompt to run, a walk-through, a repo setting) is its own `ready-for-human` ticket, so it never holds up a build ticket.
 
 ## Rules
 
