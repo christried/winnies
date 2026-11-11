@@ -1,7 +1,7 @@
 import type { MaybeRefOrGetter } from "vue";
 
 /** Which icon the browser tab shows for a Winnie. */
-export type FaviconState = "idle" | "running" | "won";
+export type FaviconState = "idle" | "running" | "complete";
 
 /** What decides the favicon: the Winnie's total timer and whether every Challenge is won. */
 export interface FaviconInput {
@@ -9,10 +9,11 @@ export interface FaviconInput {
   complete: boolean;
 }
 
-const FAVICON_FILE: Record<FaviconState, string> = {
+/** The icon file of each state, in public/ and in public/staging/ (scripts/favicon-tint.mjs lists the same files). */
+export const FAVICON_FILE: Record<FaviconState, string> = {
   idle: "favicon.svg",
   running: "favicon-running.svg",
-  won: "favicon-won.svg",
+  complete: "favicon-complete.svg",
 };
 
 /**
@@ -20,11 +21,11 @@ const FAVICON_FILE: Record<FaviconState, string> = {
  * @param input The Winnie's state.
  * @param input.running Whether the Winnie's total timer runs.
  * @param input.complete Whether every Challenge of the Winnie is won.
- * @returns "won" beats "running", otherwise "idle".
+ * @returns "complete" beats "running", otherwise "idle".
  */
 export function faviconState({ running, complete }: FaviconInput): FaviconState {
   if (complete)
-    return "won";
+    return "complete";
 
   return running ? "running" : "idle";
 }

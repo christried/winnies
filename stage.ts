@@ -40,18 +40,8 @@ export interface StageBranding {
  * caller passes isStagingBuild(): nuxt.config.ts hands the result to the page as appConfig.brand, never
  * as runtimeConfig, whose NUXT_PUBLIC_* variables could flip production's title at run time (ADR-0005).
  *
- * The staging icons in public/staging/ are the three shipped icons (public/favicon.svg,
- * favicon-running.svg, favicon-won.svg) with every flat colour hue-rotated by +180 degrees, saturation
- * and lightness kept, written as literal hex. Shapes, viewBox and coordinates stay as they are; only
- * the colour values change:
- *
- *   #001e29 (tile)        -> #290b00
- *   #bdff00 (w, ring, hand) -> #4200ff
- *   #ffbf00 (cup)         -> #0040ff
- *
- * After a new production icon: copy it to public/staging/ under the same name, replace each of its
- * hex values by the same rule (convert to HSL, add 180 to the hue modulo 360, convert back; a colour
- * not in the table gets a new row here), and render all three at 32 px to check the tab.
+ * The staging icons in public/staging/ are generated from public/ by `pnpm favicons:stage`
+ * (scripts/favicon-stage.mjs); the colour rule is in scripts/favicon-tint.mjs (#237).
  *
  * @param staging whether this is the staging build
  * @returns the product name and icon folder of the build
