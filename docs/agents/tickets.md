@@ -1,12 +1,12 @@
 # Tickets
 
-Every ticket is written for an **agent** that implements it in one fresh session, from a brief the orchestrator checks (`subagents.md`). A ticket points at the detailed sources instead of repeating them. Work only the human can do (a Claude Design prompt to run, a walk-through, a repo setting) is its own `ready-for-human` ticket, so it never holds up a build ticket.
+Every ticket is written for an **agent** that implements it in one fresh session, from a brief (`subagents.md` § Briefs). A ticket points at the detailed sources instead of repeating them. Work only the human can do (a Claude Design prompt to run, a walk-through, a repo setting) is its own `ready-for-human` ticket, so it never holds up a build ticket.
 
 ## Rules
 
 - Use `GLOSSARY.md` terms in titles and bodies.
 - Acceptance criteria describe **behaviour a person can check**, not pixel values. Sizes, colours, easings and copy live in the handoff; link them.
-- No per-ticket mobile criteria. The standing "doesn't break on a phone" rule in `AGENTS.md` covers it.
+- No per-ticket mobile criteria. The standing "doesn't break on a phone" rule in `CODING_STANDARDS.md` § Layout covers it.
 - One ticket fits one fresh implementation session. Err on the finer side: split a ticket that spans two audiences (Owner and Viewer), two approval paths (code, and wording or a design the human approves), or a migration plus two surfaces (the human's preference, recorded in compies on 2026-11-08).
 - A piece of UI the handoff doesn't cover carries its **Design/asset needed** flag (`design-handoff.md`).
 - Tickets come in batches, one milestone per batch (a redesign phase or a feature). Don't create tickets for work that isn't scheduled: designed work lives in `docs/roadmap.md` until then, and an idea that isn't grilled yet is an Idea issue (`issue-tracker.md` § Ideas), which is not a ticket.

@@ -28,8 +28,8 @@ No agent shows up anywhere in this repository's record (the human, 2026-11-10; i
 
 The redesign ships from a long-lived branch (`docs/adr/0002-redesign-ships-from-a-long-lived-branch.md`).
 
-- `redesign` branches from `main` once the Safety net is in. Each ticket gets a branch `<type>/<issue#>-<slug>` (e.g. `feat/171-tokens`).
-- `main` is frozen except for the Safety net and hotfixes; every hotfix is merged forward into `redesign`.
+- `redesign` is the base of every ticket branch and every integration branch. Each ticket gets a branch `<type>/<issue#>-<slug>` (e.g. `feat/171-tokens`).
+- `main` is frozen except for hotfixes; every hotfix is merged forward into `redesign`.
 - `redesign` merges into `main` as **v1.0.0**. Release notes live in `content/releases/`, one file per release; the Changelog ticket moves 0.9.0 there and deletes `CHANGELOG.md`. No other release notes are written during the redesign; the 1.0.0 file is drafted at release.
 
 Who merges what, verifying and closing tickets, the review and the retro of each phase: `docs/agents/delivery.md`.
@@ -74,4 +74,4 @@ Record new standing rules in this file, `CODING_STANDARDS.md` or `docs/agents/`,
 
 ### Scripting
 
-Script with `node`. A script of more than one line goes to a file (Write tool) and runs with `node <file>`: inline `node -e` breaks on an apostrophe, and a Bash heredoc on a backtick or a backslash. An edit of a tracked file goes through the Edit tool: files here are checked out with CRLF, and an exact-text replace from a script misses them.
+Script with `node`. A script of more than one line goes to a file (Write tool) and runs with `node <file>`: inline `node -e` breaks on an apostrophe, and a Bash heredoc on a backtick or a backslash.

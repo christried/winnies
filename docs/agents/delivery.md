@@ -1,19 +1,19 @@
 # Delivery workflow
 
-What agents do on their own in Winnies, and what waits for the human. The path is ADR-0002: ticket branch → PR → `redesign`, and `redesign` → `main` once, as v1.0.0. Until `redesign` exists (the Safety net phase), the base of every PR is `main`.
+What agents do on their own in Winnies, and what waits for the human. The path is ADR-0002: ticket branch → PR → `redesign`, and `redesign` → `main` once, as v1.0.0.
 
 The shape comes from the compies repository, where it grew out of ten retros; rules marked "(compies)" are carried over with their reason, and a Winnies `/retro` replaces them as this project learns its own.
 
 ## Branches and merges
 
 - **Ticket branches**: push freely. Name them `<type>/<issue#>-<slug>`; the integration branch of a spec is `spec/<issue#>-<slug>`.
-- **Into `redesign`**: open the PR, then set auto-merge yourself, without asking, and move on: `gh pr merge <n> --auto --merge --delete-branch`. GitHub merges once `check` and `attribution` are green.
-  - Auto-merge needs the repo setting `allow_auto_merge`, which is off today (`gh api repos/christried/winnies --jq .allow_auto_merge`). The human turns it on with `gh repo edit --enable-auto-merge`; until then, wait for CI with `node scripts/ci-wait.mjs <sha> --until-done` in the background and merge on green.
+- **Into `redesign`**: open the PR, then set auto-merge yourself, without asking, and move on: `gh pr merge <n> --auto --merge`. GitHub merges once `check`, `attribution`, `api-tests` and `e2e` are green.
+  - Auto-merge is on for the repository (`allow_auto_merge`). A PR that is green, up to date with its base, and still open two minutes after its last check finished is merged by you directly, without asking: `gh pr merge <n> --merge` (spec #219, A8).
   - Before you verify a merged ticket, confirm the merge happened: `gh pr view <n> --json mergedAt,state`.
-- **Into `main`**: open the PR yourself; merging it is the human's. That covers the Safety net, every hotfix and the 1.0.0 release. Once CI is green, hand the human `! gh pr merge <n> --merge`. A hotfix is merged forward into `redesign` after it lands.
-- **Branch protection and repo settings are the human's.** `main`, and `redesign` once it exists, require the checks `check` and `attribution`, admins included. The auto-mode classifier refuses an agent's call to change branch protection (tried 2026-11-10), so hand the human the command.
+- **Into `main`**: open the PR yourself; merging it is the human's. That covers every hotfix and the 1.0.0 release. Once CI is green, hand the human `! gh pr merge <n> --merge`. A hotfix is merged forward into `redesign` after it lands.
+- **Branch protection and repo settings are the human's.** `main` and `redesign` require the checks `check`, `attribution`, `api-tests` and `e2e`, admins included. The auto-mode classifier refuses an agent's call to change branch protection (tried 2026-11-10), so hand the human the command.
 - **Subagents** hand their work back; the orchestrating session does every merge (`docs/agents/subagents.md`).
-- A PR body is written with the `pr` skill and carries no attribution (CLAUDE.md § Attribution).
+- A PR body is written with the `pr` skill and carries no attribution (CLAUDE.md § Attribution). A spec's integration PR opens as a draft after the first merge, with a stub body: one sentence and the `Closes` lines. It stays a stub until the PR is marked ready; then its body is written once, from the issues' records and against the final tip, and keeps the `Closes` lines. Per-ticket records live on the issues (Safety net: a body rewritten after each merge was still stale at the Spec review).
 
 ## Database migrations
 
@@ -39,6 +39,6 @@ The next phase is specced only after the retro (`docs/roadmap.md`).
 
 ## Branch hygiene
 
-GitHub holds `main`, `redesign` and branches in active development. Before ending a work session, run `git fetch --prune` and delete merged remote branches with `git push origin --delete <branch>`.
+GitHub holds `main`, `redesign` and branches in active development. Before ending a work session, run `git fetch --prune`. Deleting a remote branch is the human's: name the merged ones and hand over `! git push origin --delete <branch>`, as with branch protection (the auto-mode classifier refused an agent's delete on 2026-11-10).
 
-Agent worktrees go with `node scripts/worktree-clean.mjs <agent ids>`, run in the background (a worktree with `node_modules` takes minutes). Name the agents of this session that have reported; without names it removes only the worktrees of ended sessions. It keeps a worktree with uncommitted changes, an unpushed commit or a process running in it, and says why. An implementer's worktree goes only after its ticket is verified: cleaned earlier, a failed check needs a fresh implementer to rebuild the context (compies, 2026-11-09).
+Agent worktrees go with `node scripts/worktree-clean.mjs [--unlocked] [<agent ids>]`, run in the background (a worktree with `node_modules` takes minutes). It removes a worktree that is named on the command line, or that is locked by a Claude process that no longer runs, the session of an agent that has ended. A worktree that is not locked and not named stays, listed with the reason; `--unlocked` removes those too, for the end of a phase. A worktree whose session still runs stays until it is named. Whatever the rule, it keeps a worktree with uncommitted changes, an unpushed commit or a process running in it, and says why. Name an implementer's agent only once its ticket is verified: cleaned earlier, a failed check needs a fresh implementer to rebuild the context (compies, 2026-11-09). `--dry-run` prints what it would do and changes nothing.

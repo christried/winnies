@@ -8,6 +8,10 @@ What the Standards review checks in Winnies, on top of `GLOSSARY.md`, the ADRs a
 - A Safety net test that goes red without such a ticket is a regression: fix the code, not the test. A ticket that changes pinned behaviour on purpose updates its test in the same PR and names the change (#195, stories 46 and 47).
 - A flaky test is fixed or deleted, never retried until green, so a red check always means something (#195, story 15).
 
+## Tests
+
+- A helper a second test file needs moves into the shared test module in the PR that needs it twice, so a copy never merges: `tests/api/helpers.ts` for the API tests, `tests/support/` for a helper both suites need, `tests/e2e/support/` for one only the e2e suite needs (the Safety net review, #206).
+
 ## Layout
 
 - Desktop is the designed and verified target. Every surface must not break on a phone: no horizontal scroll, nothing unreachable. This is standing, so tickets carry no mobile criteria of their own (`docs/agents/tickets.md`).
