@@ -12,7 +12,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@nuxt/eslint",
-    "@nuxt/fonts",
     "@nuxt/icon",
     "@pinia/nuxt",
     "@nuxt/content",
@@ -38,12 +37,6 @@ export default defineNuxtConfig({
       // This module contributes only the Nuxt-aware parts (auto-import globals,
       // file conventions), so the two configs do not overlap.
       standalone: false,
-    },
-  },
-  fonts: {
-    defaults: {
-      weights: [400, 500, 600, 700],
-      styles: ["normal"],
     },
   },
   icon: {

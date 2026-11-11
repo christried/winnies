@@ -11,7 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="btn btn-square" :aria-label="props.label">
+  <button :aria-label="props.label">
     <UiIcon :name="icon" />
   </button>
 </template>

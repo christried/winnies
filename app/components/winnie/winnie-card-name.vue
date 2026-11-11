@@ -44,7 +44,7 @@ async function commit() {
     v-if="renaming"
     ref="input"
     v-model="renameDraft"
-    class="input mb-2 input-sm"
+    class="mb-2 border"
     @keyup.enter="commit"
     @keydown.esc="stopRename"
     @blur="stopRename"

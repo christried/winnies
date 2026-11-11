@@ -118,11 +118,7 @@ async function remove(close: () => void) {
 </script>
 
 <template>
-  <UiDropdown
-    label="Challenge actions"
-    trigger-class="btn btn-square btn-sm btn-ghost"
-    menu-class="dropdown-end"
-  >
+  <UiDropdown label="Challenge actions">
     <template #trigger>
       <UiIcon name="more" />
     </template>
@@ -153,10 +149,9 @@ async function remove(close: () => void) {
           Duplicate
         </button>
       </li>
-      <li class="border-t border-base-300">
+      <li class="border-t">
         <button
           type="button"
-          class="text-error"
           @click="remove(close)"
         >
           Delete

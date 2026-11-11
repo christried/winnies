@@ -48,8 +48,8 @@ const totalSeconds = computed(() => elapsedSeconds(
 
 <template>
   <div
-    class="card flex flex-col gap-2 bg-base-200 p-4"
-    :class="isComplete && 'border border-success bg-success/10'"
+    class="flex flex-col gap-2 p-4"
+    :class="isComplete && 'border'"
   >
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
@@ -57,13 +57,13 @@ const totalSeconds = computed(() => elapsedSeconds(
           <UiIcon
             v-if="isComplete"
             name="trophy"
-            class="shrink-0 text-success"
+            class="shrink-0"
           />
 
           <span class="truncate text-base font-semibold">{{ winnie.name }}</span>
         </div>
 
-        <p class="type-meta">
+        <p>
           {{ new Date(winnie.createdAt).toLocaleDateString(DATE_LOCALE, DATE_FORMAT) }}
           <PulseIndicator v-if="runningCount > 0" :count="runningCount" />
         </p>
@@ -77,12 +77,12 @@ const totalSeconds = computed(() => elapsedSeconds(
     </div>
 
     <div class="m-2 flex flex-col gap-1">
-      <p class="type-meta">
+      <p>
         {{ wonCount }} / {{ totalCount }} won · {{ percentComplete }}%
       </p>
-      <div class="h-2 w-full overflow-hidden rounded-full bg-base-300">
+      <div class="h-2 w-full overflow-hidden rounded-full">
         <div
-          class="h-full rounded-full bg-primary transition-all duration-300"
+          class="h-full rounded-full transition-all duration-300"
           :style="{ width: `${percentComplete}%` }"
         />
       </div>

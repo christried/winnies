@@ -24,8 +24,6 @@ const emit = defineEmits<{
 const atMinimum = computed(() => props.disabled || props.value <= 0);
 const atMaximum = computed(() => props.disabled || props.value >= props.target);
 
-const atTarget = computed(() => props.target > 0 && props.value >= props.target);
-
 const counterDraft = ref(String(props.value));
 watch(() => props.value, value => (counterDraft.value = String(value)));
 
@@ -79,10 +77,9 @@ function cancel(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="join rounded-full border border-neutral [--radius-field:9999px] ">
+  <div class="rounded-full border">
     <button
       type="button"
-      class="btn join-item btn-square bg-neutral/40 btn-ghost btn-sm"
       :disabled="atMinimum"
       :aria-label="`Decrease ${label}`"
       @click="emit('decrement')"
@@ -91,8 +88,7 @@ function cancel(event: KeyboardEvent) {
     </button>
 
     <div
-      class="join-item flex items-center border-y-0 border-neutral bg-neutral/40 px-3 font-mono text-xs whitespace-nowrap tabular-nums"
-      :class="atTarget && 'text-success'"
+      class="flex items-center border-y-0 px-3 font-mono text-xs whitespace-nowrap tabular-nums"
     >
       <input
         v-model="counterDraft"
@@ -111,7 +107,6 @@ function cancel(event: KeyboardEvent) {
 
     <button
       type="button"
-      class="btn join-item btn-square bg-neutral/40 btn-ghost btn-sm"
       :disabled="atMaximum"
       :aria-label="`Increase ${label}`"
       @click="emit('increment')"
