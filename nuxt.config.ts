@@ -1,7 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { addServerHandler, createResolver, defineNuxtModule } from "nuxt/kit";
 import pkg from "./package.json";
-import { carriesDevSignIn, isStagingBuild, stageBranding } from "./stage";
+import { carriesDevSignIn, DEV_SIGN_IN_ROUTE, isStagingBuild, stageBranding } from "./stage";
 import "./server/utils/env";
 
 // Fixed when the build starts. appConfig, not runtimeConfig: no run-time variable can change it (ADR-0005).
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
           return;
         }
         addServerHandler({
-          route: "/api/dev/sign-in",
+          route: DEV_SIGN_IN_ROUTE,
           method: "get",
           handler: createResolver(import.meta.url).resolve("./server/dev/sign-in"),
         });

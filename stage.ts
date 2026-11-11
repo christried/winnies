@@ -26,6 +26,9 @@ export function isStagingBuild(env: Record<string, string | undefined> = process
   return env.WINNIES_STAGE === "staging";
 }
 
+/** The route of the dev sign-in: nuxt.config.ts registers it, and tests/build/dev-sign-in.test.ts looks for it in the production build */
+export const DEV_SIGN_IN_ROUTE = "/api/dev/sign-in";
+
 /** What a build calls itself: the page title's product name and the folder its favicons are served from */
 export interface StageBranding {
   name: string;
