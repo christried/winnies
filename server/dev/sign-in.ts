@@ -11,8 +11,10 @@ import { auth } from "../utils/auth";
 
 const DEFAULT_NAME = "owner";
 const NAME_PATTERN = /^[a-z0-9-]{1,32}$/;
-// Only a path inside the app. `/\evil.com` counts as `//evil.com` to a browser, so a second `/` or `\` is out.
-const LANDING_PATTERN = /^\/(?![/\\])/;
+// Only a path inside the app: one `/`, not followed by `/` or `\` (`/\evil.com` counts as `//evil.com` to a
+// browser). Browsers also strip tab and newline from a URL, so `/<tab>/evil.com` would become `//evil.com`, and
+// a newline cannot sit in a header at all: no control character, whitespace or backslash anywhere.
+const LANDING_PATTERN = /^\/(?![/\\])[^\\\s\p{Cc}]*$/u;
 
 function devOwnerName(query: Record<string, unknown>): string {
   const as = query.as;
