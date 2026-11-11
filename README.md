@@ -57,7 +57,10 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
 `pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
-`pnpm db:migrate` · `pnpm db:studio`
+`pnpm db:migrate` · `pnpm db:studio` · `pnpm favicons:stage`
+
+`pnpm favicons:stage` regenerates `public/staging/` from `public/`; `scripts/favicon-tint.test.mjs` fails `pnpm test`
+when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`).
 
 CI runs lint, typecheck, test, build and the build test (the `check` job), the API tests (the `api-tests` job) and
 the browser tests (the `e2e` job) on every pull request.
