@@ -301,7 +301,7 @@ plan_preview_var() {
   esac
   printf '\n'
   say "This will run, with the real value piped in:"
-  note "<value> | vercel env add $name --environment preview --git-branch "$STAGING_BRANCH" --sensitive --yes ${FORCE[*]-} -p $VERCEL_PROJECT --scope $VERCEL_SCOPE"
+  note "<value> | vercel env add $name --environment preview --git-branch \"$STAGING_BRANCH\" --sensitive --yes ${FORCE[*]-} -p $VERCEL_PROJECT --scope $VERCEL_SCOPE"
   confirm "Write this?" || stop_here
   return 0
 }
@@ -393,36 +393,41 @@ if [[ -z "$CNAME_TARGET" ]]; then
   note "Nothing was changed."
   exit 1
 fi
-say "Point $STAGING_FQDN at Vercel with one DNS record."
-open_url "https://ap.www.namecheap.com/domains/list"
-step "Manage $DNS_ZONE > Advanced DNS > Add New Record, then enter:"
-note "    Type    CNAME"
-note "    Host    $CNAME_HOST"
-note "    Target  $CNAME_TARGET"
-note "    TTL     Automatic"
-step "Save the record (the green tick)."
-pause "Press Enter when the record is saved."
 want=$(printf '%s' "$CNAME_TARGET" | tr 'A-Z' 'a-z')
 want="${want%.}"
-while true; do
-  got=$(resolve_cname "$STAGING_FQDN")
-  if [[ "$got" == "$want" ]]; then
-    printf '  %s✓ resolves%s %s → %s\n' "$GREEN" "$RESET" "$STAGING_FQDN" "$got"
-    break
-  fi
-  if [[ -z "$got" ]]; then
-    warn "$STAGING_FQDN does not resolve to a CNAME yet (checked through 1.1.1.1). DNS can take a few minutes."
-  else
-    warn "$STAGING_FQDN resolves to $got, not $want."
-    note "Vercel's Domains page may ask for a different target: change CNAME_TARGET at the top of this file, tell issue #230, run again."
-  fi
-  dns_choice
-  case "$CHOICE" in
-    check) ;;
-    skip) SKIPPED+=("CNAME: not checked ($STAGING_FQDN did not resolve to $want)"); break ;;
-    *) note "Nothing was changed."; exit 1 ;;
-  esac
-done
+if [[ "$(resolve_cname "$STAGING_FQDN")" == "$want" ]]; then
+  # A re-run: the record is already in place, so there is nothing to do at Namecheap.
+  say "$STAGING_FQDN already resolves to $want, nothing to do at Namecheap."
+else
+  say "Point $STAGING_FQDN at Vercel with one DNS record."
+  open_url "https://ap.www.namecheap.com/domains/list"
+  step "Manage $DNS_ZONE > Advanced DNS > Add New Record, then enter:"
+  note "    Type    CNAME"
+  note "    Host    $CNAME_HOST"
+  note "    Target  $CNAME_TARGET"
+  note "    TTL     Automatic"
+  step "Save the record (the green tick)."
+  pause "Press Enter when the record is saved."
+  while true; do
+    got=$(resolve_cname "$STAGING_FQDN")
+    if [[ "$got" == "$want" ]]; then
+      printf '  %s✓ resolves%s %s → %s\n' "$GREEN" "$RESET" "$STAGING_FQDN" "$got"
+      break
+    fi
+    if [[ -z "$got" ]]; then
+      warn "$STAGING_FQDN does not resolve to a CNAME yet (checked through 1.1.1.1). DNS can take a few minutes."
+    else
+      warn "$STAGING_FQDN resolves to $got, not $want."
+      note "Vercel's Domains page may ask for a different target: change CNAME_TARGET at the top of this file, tell issue #230, run again."
+    fi
+    dns_choice
+    case "$CHOICE" in
+      check) ;;
+      skip) SKIPPED+=("CNAME: not checked ($STAGING_FQDN did not resolve to $want)"); break ;;
+      *) note "Nothing was changed."; exit 1 ;;
+    esac
+  done
+fi
 say "Asking Vercel what it thinks of the domain (read-only, best effort):"
 verify_out=$(vercel domains verify "$STAGING_FQDN" "${VC[@]}" 2>&1 || true)
 { grep -E '^  "(status|message|hint)"' <<<"$verify_out" || printf '%s\n' "$verify_out" | head -n 15; } | sed 's/^ */    /' || true
