@@ -60,6 +60,8 @@ the browser tests (the `e2e` job) on every pull request.
      then `podman machine init` and `podman machine start`). Podman is the prerequisite, Docker is not used.
   2. Create `.env.test` (git-ignored) with the `TEST_DATABASE_URL` line from `.env.example`. The
      other values the tests need are committed in `tests/support/env.ts`.
+     In an agent worktree this step does not apply: Claude Code copies `.env.test` into it from the
+     main checkout (`.worktreeinclude`). A worktree made another way gets no copy and needs one by hand.
   3. `pnpm test:db:up` starts the test database, `pnpm test:api` runs the tests,
      `pnpm test:db:down` removes the database again. The compose project is named `winnies-test`, so
      `up` and `down` act on the same database from every checkout and worktree. `test:db:down` therefore
