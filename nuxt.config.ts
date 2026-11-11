@@ -57,6 +57,14 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    // An external under <root>/shared/ that rolldown reaches first through a relative specifier is written
+    // relative to a base two levels too deep, and Nitro can't resolve it. Absolute is what every green
+    // build has (#246).
+    $server: {
+      build: {
+        rolldownOptions: { makeAbsoluteExternalsRelative: false },
+      },
+    },
   },
   app: {
     head: {
