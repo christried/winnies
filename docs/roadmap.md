@@ -65,5 +65,5 @@ Unordered. Items that turn out to be needed for the redesign move to Now.
 - **Sentry**, client and server. Was #131.
 - **Docker** for local Postgres and an app image; not a supported deploy. Was #129.
 - **CONTRIBUTING.md.** Was #140.
-- **Project structure conventions** written into `AGENTS.md` and ESLint once the rebuild settles them. Was #128.
+- **Project structure conventions** written into `CODING_STANDARDS.md` and ESLint once the rebuild settles them. Was #128.
 - **Security review** of CSRF and rate limits. Was #156.
