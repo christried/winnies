@@ -56,6 +56,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Build test
+        run: pnpm test:build
+
   api-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 15

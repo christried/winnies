@@ -1,5 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
+import { addServerHandler, createResolver, defineNuxtModule } from "nuxt/kit";
 import pkg from "./package.json";
+import { carriesDevSignIn } from "./stage";
 import "./server/utils/env";
 
 export default defineNuxtConfig({
@@ -11,6 +13,21 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@pinia/nuxt",
     "@nuxt/content",
+    // The dev sign-in (server/dev/sign-in.ts) is registered only in the builds stage.ts names: the dev
+    // server and the staging build. tests/build/dev-sign-in.test.ts checks no production build carries it.
+    defineNuxtModule({
+      meta: { name: "dev-sign-in" },
+      setup(_options, nuxt) {
+        if (!carriesDevSignIn(nuxt.options.dev)) {
+          return;
+        }
+        addServerHandler({
+          route: "/api/dev/sign-in",
+          method: "get",
+          handler: createResolver(import.meta.url).resolve("./server/dev/sign-in"),
+        });
+      },
+    }),
   ],
   eslint: {
     config: {

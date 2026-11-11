@@ -23,6 +23,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:api": "vitest run --config vitest.api.config.ts",
+    "test:build": "vitest run -c vitest.build.config.ts",
     "test:e2e": "playwright test",
     "test:db:up": "podman compose -f compose.test.yaml up -d",
     "test:db:down": "podman compose -f compose.test.yaml down -v"

@@ -38,6 +38,12 @@ that runs a suite, which are the `api-tests` and `e2e` jobs, with a different ho
 in `api-tests`, `neon-proxy` (the service's name) in `e2e`, which runs in a container. It is never set
 on the hosting provider.
 
+`WINNIES_STAGE` is the second exception. It is a build-time switch read by [`stage.ts`](stage.ts), not a
+variable the app validates or reads at run time: set to `staging` it makes a local `pnpm build` carry the
+dev sign-in like the staging build does. It lives only in `.env.example` (commented out) and in a
+developer's `.env`, never in `env.ts`, CI or Vercel: a Vercel build goes by its branch and ignores it, so
+no dashboard variable can turn production into staging.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.
