@@ -20,8 +20,8 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { parseArgs, parseEnv } from "node:util";
 import { chromium } from "@playwright/test";
+import { readPath, readTarget, Refusal, scrub as scrubSecret, slugOf } from "./shots-guards.mjs";
 
-const STAGING_ORIGIN = "https://staging.winnies.christried.me";
 const SECRET_NAME = "VERCEL_AUTOMATION_BYPASS_SECRET";
 const BYPASS_HEADER = "x-vercel-protection-bypass";
 const USAGE = "usage: node scripts/shots.mjs [path] --out <dir> [--as <name>] [--seed]";
@@ -35,15 +35,10 @@ const HYDRATION_MS = 60_000;
 const SETTLE_MS = 300;
 const ERROR_CHARS = 300;
 
-// An expected stop: its message is a sentence for the caller, printed as it is.
-class Refusal extends Error {}
-
 let secret = "";
 // Every line printed goes through here, so a secret that slipped into a message is gone before it is shown.
 function scrub(text) {
-  return secret
-    ? text.split(secret).join("***")
-    : text;
+  return scrubSecret(text, secret);
 }
 function say(line) {
   console.log(scrub(line));
@@ -89,41 +84,6 @@ function readArgs() {
   };
 }
 
-function readTarget() {
-  let url;
-  try {
-    url = new URL(process.env.BASE_URL || "http://localhost:3000");
-  }
-  catch {
-    throw new Refusal("BASE_URL is not a URL. It opens `pnpm dev` (http://localhost:<port>) or staging only.");
-  }
-  const local = url.protocol === "http:" && (url.hostname === "localhost" || url.hostname === "127.0.0.1");
-  if (!local && url.origin !== STAGING_ORIGIN) {
-    throw new Refusal(`BASE_URL ${url.origin} is refused: this opens \`pnpm dev\` (http://localhost:<port>) and ${STAGING_ORIGIN} only.`);
-  }
-  if (url.pathname !== "/" || url.search || url.hash) {
-    throw new Refusal("BASE_URL is an address without a path: the path is the script's first argument.");
-  }
-  return { origin: url.origin, host: url.host, local };
-}
-
-function readPath(raw, target) {
-  if (/^[A-Z]:[\\/]/i.test(raw)) {
-    throw new Refusal("The path looks like a Windows path: Git Bash rewrites an argument that starts with `/` (`/` becomes `C:/Program Files/Git/`). Write the path without its leading slash, or leave it out for `/`.");
-  }
-  if (raw.startsWith("//") || /^[A-Z][A-Z0-9+.-]*:/i.test(raw)) {
-    throw new Refusal("The path is a place in the app, not a URL: no scheme and no `//`.");
-  }
-  const path = raw.startsWith("/")
-    ? raw
-    : `/${raw}`;
-  // `/\evil.com` counts as `//evil.com` to a browser, so the origin is compared and not just the start of the string.
-  if (new URL(path, target.origin).origin !== target.origin) {
-    throw new Refusal("The path leaves the app's origin.");
-  }
-  return path;
-}
-
 // Only staging needs the secret, so a local run never reads `.env`. `parseEnv` reads the one key out of the file,
 // where `loadEnvFile` would put every variable into this process.
 function readSecret() {
@@ -140,11 +100,6 @@ function readSecret() {
     throw new Refusal(`Staging needs ${SECRET_NAME}, the project's Protection Bypass for Automation secret, and it is not set. It belongs in the main checkout's .env (\`bash scripts/staging-wizard.sh\` writes it; a new agent worktree gets that file copied through .worktreeinclude, one created before the secret was written has none).`);
   }
   return value;
-}
-
-function slugOf(path) {
-  const slug = path.split(/[?#]/)[0].replace(/[^A-Z0-9]+/gi, "-").replace(/^-+|-+$/g, "").slice(0, 60).replace(/-+$/, "");
-  return slug || "home";
 }
 
 function signInUrl(target, args) {
@@ -190,7 +145,7 @@ async function signIn(context, target, args, headers) {
     return;
   }
   if (status === 404) {
-    throw new Refusal(`${target.origin} does not carry the dev sign-in (404): \`pnpm dev\` and the staging build do, staging only once the Part B PR is merged into \`redesign\` and deployed.`);
+    throw new Refusal(`${target.origin} does not carry the dev sign-in (404): \`pnpm dev\` and the staging build do, a production build and a staging deployment older than the dev sign-in do not.`);
   }
   if (status === 400) {
     throw new Refusal(`The dev sign-in refused the request (400): ${response.statusText() || "no reason given"}`);
@@ -253,7 +208,7 @@ async function shoot(context, target, path, size, file, errors) {
 
 async function main() {
   const args = readArgs();
-  const target = readTarget();
+  const target = readTarget(process.env.BASE_URL);
   const path = readPath(args.path, target);
   if (!target.local) {
     secret = readSecret();
