@@ -10,17 +10,18 @@ if (user.value)
   await callOnce("winnies:init", () => winnieStore.init());
 
 const now = useTitleNow();
+const { brand } = useAppConfig();
 useHead({
   title: computed(() => {
     const winnie = currentWinnie.value;
     if (!winnie?.totalRunningSince)
-      return "Winnies";
+      return brand.name;
 
     const seconds = elapsedSeconds(
       { accumulatedSeconds: winnie.totalAccumulatedSeconds, runningSince: winnie.totalRunningSince },
       now.value,
     );
-    return `${formatDuration(seconds)} · Winnies`;
+    return `${formatDuration(seconds)} · ${brand.name}`;
   }),
 });
 

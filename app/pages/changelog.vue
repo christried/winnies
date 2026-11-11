@@ -4,8 +4,10 @@ const { data: changelog } = await useAsyncData(() => queryCollection("changelog"
 if (!changelog.value)
   throw createError({ statusCode: 404, statusMessage: "Changelog not found" });
 
+const { brand } = useAppConfig();
+
 useSeoMeta({
-  title: "Changelog · Winnies",
+  title: `Changelog · ${brand.name}`,
   description: changelog.value.description,
 });
 </script>
