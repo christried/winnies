@@ -28,7 +28,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
 
-   **WINNIES:** branch it from `redesign`, or from `main` while `redesign` doesn't exist yet, as `spec/<issue#>-<slug>`, and open its PR into that base (ADR-0002). `Closes #n` closes an issue only on a merge into `main`; on `redesign`, step 8 closes each ticket by hand (`docs/agents/delivery.md` § Issues). The draft PR's body is a stub, one sentence and the `Closes` lines, and stays one until step 8: per-ticket records live on the issues, and a body rewritten after each merge was still stale at the Safety net's Spec review.
+   **WINNIES:** branch it from `redesign` as `spec/<issue#>-<slug>`, and open its PR into `redesign` (ADR-0002). `Closes #n` closes an issue only on a merge into `main`; on `redesign`, step 8 closes each ticket by hand (`docs/agents/delivery.md` § Issues). The draft PR's body is a stub, one sentence and the `Closes` lines, and stays one until step 8: per-ticket records live on the issues, and a body rewritten after each merge was still stale at the Safety net's Spec review.
 
 4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
