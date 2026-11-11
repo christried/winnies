@@ -90,6 +90,9 @@ export default withNuxt(
       ".pnpm-store/**",
       // Vendored skills, kept byte for byte as their source ships them (.claude/skills/README.md).
       ".claude/**",
+      // Verbatim copies of the handoff, kept equal by scripts/handoff-sync.test.mjs: Prettier must not reformat them.
+      "app/assets/css/winnies-tokens.css",
+      "app/assets/fonts/fonts.css",
     ],
   }),
   {
