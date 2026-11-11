@@ -21,11 +21,11 @@ const { appVersion } = useRuntimeConfig().public;
       :rel="isFooter ? 'noopener' : undefined"
       :target="isFooter ? '_blank' : undefined"
     >
-      <span class="type-wordmark">Winnies</span>
+      <span>Winnies</span>
     </NuxtLink>
 
     <template v-if="!isFooter">
-      <div class="badge badge-outline badge-warning">
+      <div>
         v{{ appVersion }} · beta
       </div>
 
@@ -35,7 +35,7 @@ const { appVersion } = useRuntimeConfig().public;
         rel="noopener"
         external
       >
-        <div class="tooltip tooltip-bottom tooltip-warning" data-tip="Report an issue">
+        <div>
           <UiIcon name="bug" :size="24" />
         </div>
       </NuxtLink>

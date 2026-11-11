@@ -4,22 +4,15 @@ const { toasts, dismiss } = useToast();
 
 <template>
   <div
-    class="toast toast-end z-50"
+    class="fixed end-4 bottom-4 z-50 flex flex-col gap-2"
     aria-live="polite"
   >
     <div
       v-for="t in toasts"
       :key="t.id"
-      class="alert"
-      :class="{
-        'alert-error': t.kind === 'error',
-        'alert-success': t.kind === 'success',
-        'alert-info': t.kind === 'info',
-      }"
     >
       <span>{{ t.message }}</span>
       <button
-        class="btn btn-ghost btn-xs"
         aria-label="Dismiss"
         @click="dismiss(t.id)"
       >
