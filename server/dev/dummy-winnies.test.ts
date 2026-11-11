@@ -2,14 +2,16 @@ import type { DummyWinnie } from "./dummy-winnies";
 import { describe, expect, it } from "vitest";
 import { MAX_CHALLENGES_PER_WINNIE } from "../../shared/constants";
 import { winnieNameSchema } from "../../shared/schemas/winnie";
+import { isWinnieComplete } from "../../shared/utils/winnie-completion";
 import { insertChallengeSchema } from "../db/schema";
 import { DUMMY_WINNIES } from "./dummy-winnies";
 
 type WinnieState = "Complete" | "Running" | "Paused" | "Not started";
 
-// Local until R0 adds the Winnie-state derivation to the app; that one replaces this.
+// Complete is the app's own rule. Running, Paused and Not started are local until R0 adds the Winnie-state
+// derivation to the app; that one replaces them.
 function winnieState(w: DummyWinnie): WinnieState {
-  if (w.challenges.length > 0 && w.challenges.every(c => c.status === "won"))
+  if (isWinnieComplete(w.challenges))
     return "Complete";
   if (w.runningForSeconds !== null)
     return "Running";
@@ -19,6 +21,11 @@ function winnieState(w: DummyWinnie): WinnieState {
 }
 
 const allChallenges = DUMMY_WINNIES.flatMap(w => w.challenges);
+
+/** The one Winnie of a state: the first test shows there is exactly one, so none of these is undefined */
+function winnieIn(state: WinnieState): DummyWinnie {
+  return DUMMY_WINNIES.find(w => winnieState(w) === state)!;
+}
 
 describe("the dummy set", () => {
   it("holds every Winnie state exactly once", () => {
@@ -73,14 +80,21 @@ describe("the dummy set", () => {
     expect(new Set(ages).size).toBe(ages.length);
   });
 
-  describe.each(DUMMY_WINNIES.map(w => [w.name, w] as const))("%s holds only rows the app could have written", (_name, w) => {
-    it("has no timer running on a Complete Winnie", () => {
-      if (winnieState(w) !== "Complete")
-        return;
-      expect(w.runningForSeconds).toBeNull();
-      expect(w.challenges.every(c => c.runningForSeconds === null)).toBe(true);
-    });
+  it("has no timer running on the Complete Winnie", () => {
+    const complete = winnieIn("Complete");
+    expect(complete.runningForSeconds).toBeNull();
+    expect(complete.challenges.length).toBeGreaterThan(0);
+    expect(complete.challenges.every(c => c.runningForSeconds === null)).toBe(true);
+  });
 
+  it("leaves the Not started Winnie untouched by time", () => {
+    const notStarted = winnieIn("Not started");
+    expect(notStarted.totalAccumulatedSeconds).toBe(0);
+    expect(notStarted.runningForSeconds).toBeNull();
+    expect(notStarted.challenges.every(c => c.status === "todo" && c.accumulatedSeconds === 0 && c.runningForSeconds === null)).toBe(true);
+  });
+
+  describe.each(DUMMY_WINNIES.map(w => [w.name, w] as const))("%s holds only rows the app could have written", (_name, w) => {
     it("keeps Won Challenges stopped and Counters consistent", () => {
       for (const c of w.challenges) {
         const label = c.game;
@@ -106,10 +120,7 @@ describe("the dummy set", () => {
       }
     });
 
-    it("leaves a Not started Winnie, and every todo Challenge, untouched by time", () => {
-      if (winnieState(w) === "Not started") {
-        expect(w.challenges.every(c => c.status === "todo" && c.accumulatedSeconds === 0 && c.runningForSeconds === null)).toBe(true);
-      }
+    it("leaves every todo Challenge untouched by time", () => {
       for (const c of w.challenges.filter(c => c.status === "todo")) {
         expect(c.accumulatedSeconds, c.game).toBe(0);
         expect(c.runningForSeconds, c.game).toBeNull();
