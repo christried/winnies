@@ -16,7 +16,32 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import process from "node:process";
+import { parseArgs } from "node:util";
 import { agentId, decide, unmatchedNames } from "./worktree-verdict.mjs";
+
+const USAGE = "usage: node scripts/worktree-clean.mjs [--unlocked] [--dry-run] [<agent id> …]";
+
+// Before any git call: a flag this script does not know must stop it, not be read as a real run.
+let parsed;
+try {
+  parsed = parseArgs({
+    args: process.argv.slice(2),
+    allowPositionals: true,
+    strict: true,
+    options: {
+      "unlocked": { type: "boolean", default: false },
+      "dry-run": { type: "boolean", default: false },
+    },
+  });
+}
+catch (error) {
+  // Node adds a hint about `--` to the first sentence.
+  console.error(`${error.message.split(/\.\s|\n/)[0].replace(/\.$/, "")}.\n${USAGE}`);
+  process.exit(2);
+}
+const unlocked = parsed.values.unlocked;
+const dryRun = parsed.values["dry-run"];
+const names = parsed.positionals;
 
 function git(...args) {
   return execFileSync("git", args, {
@@ -29,10 +54,6 @@ const home = join(root, ".claude", "worktrees");
 /** Forward slashes, lower case: Windows writes one path several ways. */
 const same = path => resolve(path).replaceAll("\\", "/").toLowerCase();
 
-const args = process.argv.slice(2);
-const unlocked = args.includes("--unlocked");
-const dryRun = args.includes("--dry-run");
-const names = args.filter(arg => !arg.startsWith("--"));
 const named = new Set(names.map(agentId));
 
 /** Whether a process with this id runs (a signal 0 only asks). */

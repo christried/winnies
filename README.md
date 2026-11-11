@@ -38,6 +38,17 @@ that runs a suite, which are the `api-tests` and `e2e` jobs, with a different ho
 in `api-tests`, `neon-proxy` (the service's name) in `e2e`, which runs in a container. It is never set
 on the hosting provider.
 
+`WINNIES_STAGE` is the second exception. It is a build-time switch read by [`stage.ts`](stage.ts), not a
+variable the app validates or reads at run time: set to `staging` it makes a local `pnpm build` carry the
+dev sign-in like the staging build does. It lives only in `.env.example` (commented out) and in a
+developer's `.env`, never in `env.ts`, CI or Vercel: a Vercel build goes by its branch and ignores it, so
+no dashboard variable can turn production into staging.
+
+`VERCEL_AUTOMATION_BYPASS_SECRET` is the third exception. Only [`scripts/shots.mjs`](scripts/shots.mjs) reads
+it (from the environment, else from `.env`), to get through Vercel login on staging. It is not in `env.ts`, CI
+or the hosting provider's build environment, because it is the project's Protection Bypass setting and not the
+app's. It lives in `.env.example` (commented out) and in the main checkout's `.env`.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.
@@ -45,15 +56,17 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 ## Scripts
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
-`pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` · `pnpm db:migrate` ·
-`pnpm db:studio`
+`pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
+`pnpm db:migrate` · `pnpm db:studio`
 
-CI runs lint, typecheck, test and build (the `check` job), the API tests (the `api-tests` job) and
+CI runs lint, typecheck, test, build and the build test (the `check` job), the API tests (the `api-tests` job) and
 the browser tests (the `e2e` job) on every pull request.
 
 ## Tests
 
 - `pnpm test` runs the unit tests. No database needed.
+- `pnpm build`, then `pnpm test:build`: fails if the production build carries `/api/dev/sign-in` (ADR-0005).
+  It reads `.output`, so it needs the build first; CI runs it after `pnpm build`.
 - The API tests build the app, start it, and call it over HTTP, signed in as a throwaway Owner,
   against a local Postgres that they empty on every run:
   1. Install [Podman](https://podman.io) with its compose provider (`winget install RedHat.Podman`,

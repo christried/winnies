@@ -28,6 +28,7 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 - Tests check what an Owner, a Viewer or the API can observe, never internals.
 - Shell: this is Windows, and the Bash tool is Git Bash. Write every file with the Write tool, a scratch file or a script included, and run a script with `node <file>`. Keep every Bash call to plain commands inside your worktree: the worktree guard refuses a heredoc, `source`, `export` and a `cd` out of the worktree. A commit message with a body goes in a file: `git commit -F <file>`. (Safety net: 42 refused commands in 19 of 24 subagents.)
 - Scratch files go to a folder named after your ticket inside your scratchpad directory (`<scratchpad>/<ticket number>/`), never into the checkout. (Safety net: the subagents of one session share a scratchpad.)
+- The bypass secret in `.env` is a credential: never print `.env` or put its value in a command, a file, a commit, an issue, a PR or your report (`docs/agents/delivery.md` § Issues).
 - Touch only what your brief allows. If the brief and the ticket disagree, or the code makes the brief wrong, do what the ticket needs and say so in the report.
 
 ## Commits
@@ -39,6 +40,7 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 
 - `pnpm typecheck && pnpm lint`, and the test files you touched (`pnpm vitest run <file>`). They must pass before you push.
 - An API or e2e test you touched or added runs with `pnpm test:api` or `pnpm test:e2e`, set up as `README.md` § Tests says; `pnpm vitest run` skips `tests/`. Run it in the foreground with the Bash tool's `timeout` at its maximum (600000 ms); a run that hits the timeout is started again in the foreground, never moved to the background. (Safety net: a test run in the background ended in a `sleep` the harness blocks.)
+- A page is not looked at on your machine (no `pnpm dev`, no helper) unless your brief says so; it is checked on staging after the merge, with `node scripts/shots.mjs` (`docs/agents/delivery.md` § Issues). Name in your report the path to check and whether it needs the dummy set.
 - The rest of the suite and the build run in CI on every push of your branch, not on this machine: several agents share it (compies 1.4).
 
 ## Before you report

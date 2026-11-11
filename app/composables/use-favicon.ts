@@ -9,10 +9,10 @@ export interface FaviconInput {
   complete: boolean;
 }
 
-export const FAVICON_HREF: Record<FaviconState, string> = {
-  idle: "/favicon.svg",
-  running: "/favicon-running.svg",
-  won: "/favicon-won.svg",
+const FAVICON_FILE: Record<FaviconState, string> = {
+  idle: "favicon.svg",
+  running: "favicon-running.svg",
+  won: "favicon-won.svg",
 };
 
 /**
@@ -30,17 +30,18 @@ export function faviconState({ running, complete }: FaviconInput): FaviconState 
 }
 
 /**
- * Points favicon at the icon for the respective Winnie state
+ * Points favicon at the icon for the respective Winnie state, from the folder the build names (stage.ts)
  * @param state Whether the Winnie's total timer runs and whether it is complete.
  */
 export function useFavicon(state: MaybeRefOrGetter<FaviconInput>) {
+  const { brand } = useAppConfig();
   useHead({
     link: [
       {
         key: "favicon",
         rel: "icon",
         type: "image/svg+xml",
-        href: computed(() => FAVICON_HREF[faviconState(toValue(state))]),
+        href: computed(() => `${brand.iconDir}${FAVICON_FILE[faviconState(toValue(state))]}`),
       },
     ],
   });

@@ -1,4 +1,4 @@
-/* eslint-disable node/no-process-env -- only permitted place to read raw environment */
+/* eslint-disable node/no-process-env -- the one place the server reads its run-time environment; stage.ts reads the build's */
 import process from "node:process";
 import { z } from "zod";
 
