@@ -10,6 +10,8 @@ What the Standards review checks in Winnies, on top of `GLOSSARY.md`, the ADRs a
 
 ## Tests
 
+- A test asserts what an Owner, a Viewer or the API can observe, never internals. It may swap infrastructure for the test's own (the app's `server/db` for the test database, the clock), never the logic under test (the human, 2026-11-11, on #251's `vi.mock("../../server/db")`).
+- Code that keeps a credential, a destructive action or a production build in bounds lives in a pure module with its own test, written in the PR that adds the guard: the split of `scripts/worktree-verdict.mjs` from `worktree-clean.mjs`. (The Before R0 review found four such guards untested: the browser helper's origin and secret checks, the dev sign-in's query rules, the dummy set's reset, the cleanup script's flags; #251.)
 - A helper a second test file needs moves into the shared test module in the PR that needs it twice, so a copy never merges: `tests/api/helpers.ts` for the API tests, `tests/support/` for a helper both suites need, `tests/e2e/support/` for one only the e2e suite needs (the Safety net review, #206).
 
 ## Layout

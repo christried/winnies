@@ -20,6 +20,8 @@ Rate each task by the hardest thing it asks, the way `/implement-spec-max` § Mo
 
 Reviewers and brief drafters run with `isolation: "worktree"`: a reviewer told to stay read-only still checked out a detached head in the main checkout (compies 0.5.1). Merge jobs work in the main checkout.
 
+A review answers from the diff, the code and CI's logs. A question only a build or a repro can answer becomes its own ticket, worked with `diagnosing-bugs`: the reviewer names it and stops there. (Before R0: the Quality reviewer, asked for "a hypothesis you checked", rebuilt the repo in WSL for 25 minutes and installed 37 packages as root; the other two reviewers took six.)
+
 ## Briefs
 
 One brief per ticket: files to change, data shapes, migration, tests at which seam with which cases, edge cases, what not to touch and an acceptance checklist. The more precise the brief, the more of the work Haiku can take.

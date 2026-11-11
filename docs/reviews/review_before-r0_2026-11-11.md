@@ -344,4 +344,5 @@ Candidate C is the only one with a runtime consequence; A is the one that pays b
 - **#251:** S3 (the test), S4, S5, S11, Q3, Q4, Q5, Q9, Q12, Q13.
 - **#246:** Q1 (the diagnosis is posted on the issue; its own PR before R0).
 - **The PR body of #249:** Sp2 (the spec text #244 superseded).
-- **Notes, no ticket:** S6, S7, S9, S10, Sp4 to Sp9, Q6, Q7, Q8, Q10, Q11, Q14.
+- **`docs/roadmap.md` § Engineering backlog** (the retro, #253): Q6, Q7.
+- **Notes, no ticket:** S6, S7, S9, S10, Sp4 to Sp9, Q8, Q10, Q11, Q14.
