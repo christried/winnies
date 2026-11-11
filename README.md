@@ -9,7 +9,7 @@ link.
 
 ## Stack
 
-Nuxt 4 · Vue 3 · TypeScript · Tailwind 4 + daisyUI · Drizzle ORM + Neon Postgres ·
+Nuxt 4 · Vue 3 · TypeScript · Tailwind 4 · Drizzle ORM + Neon Postgres ·
 Better Auth (Discord) · Pinia · Vitest. Deployed on Vercel.
 
 ## Running locally

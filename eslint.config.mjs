@@ -122,7 +122,7 @@ export default withNuxt(
     },
     rules: {
       "better-tailwindcss/enforce-consistent-class-order": "error",
-      // Refuses a class the Tailwind entry doesn't define, so no daisyUI or old-theme class survives the removal.
+      // Refuses a class the Tailwind entry doesn't define, so no class of the removed look survives.
       // drag-grip is the exception: a JS selector hook for the drag handle (challenge-list.vue), with no CSS.
       "better-tailwindcss/no-unknown-classes": [
         "error",
