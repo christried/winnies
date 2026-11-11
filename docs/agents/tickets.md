@@ -27,7 +27,7 @@ Every ticket is written for an **agent** that implements it in one fresh session
 
 ## Manual QA
 
-1. <step to click through on the preview deploy>
+1. <step to click through on staging>
 
 ## References
 
