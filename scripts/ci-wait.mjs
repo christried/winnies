@@ -15,12 +15,35 @@
 // It prints one line while waiting, not a progress log.
 import { execFileSync } from "node:child_process";
 import process from "node:process";
+import { parseArgs } from "node:util";
 import { rerunDecision } from "./ci-verdict.mjs";
 
-const args = process.argv.slice(2);
-const untilDone = args.includes("--until-done");
+const USAGE = "usage: node scripts/ci-wait.mjs [sha] [--until-done]";
+
+// Before any git or gh call: a mistyped --until-done read as the short wait would end a background wait early (#255).
+let parsed;
+try {
+  parsed = parseArgs({
+    args: process.argv.slice(2),
+    allowPositionals: true,
+    strict: true,
+    options: {
+      "until-done": { type: "boolean", default: false },
+    },
+  });
+}
+catch (error) {
+  // Node adds a hint about `--` to the first sentence.
+  console.log(`${error.message.split(/\.\s|\n/)[0].replace(/\.$/, "")}.\n${USAGE}`);
+  process.exit(1);
+}
+if (parsed.positionals.length > 1) {
+  console.log(`One commit at most, got ${parsed.positionals.length}.\n${USAGE}`);
+  process.exit(1);
+}
+const untilDone = parsed.values["until-done"];
 // `gh run list --commit` matches the full SHA only.
-const sha = execFileSync("git", ["rev-parse", args.find(arg => !arg.startsWith("--")) ?? "HEAD"], { encoding: "utf8" }).trim();
+const sha = execFileSync("git", ["rev-parse", parsed.positionals[0] ?? "HEAD"], { encoding: "utf8" }).trim();
 const POLL_MS = 15_000;
 const APPEAR_MS = 120_000;
 const RERUN_SETTLE_MS = 30_000;
