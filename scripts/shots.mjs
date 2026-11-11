@@ -2,11 +2,14 @@
 // errors (#238). A subagent in a worktree has no browser of the human's, and from R0 on every ticket's check wants a
 // look at a signed-in page. It runs against `pnpm dev` (it does not start it) and against staging.
 //
-//   node scripts/shots.mjs [path] --out <dir> [--as <name>] [--seed]
+//   node scripts/shots.mjs [path] --out <dir> [--as <name>] [--seed] [--signed-out]
 //
 // `path` is where to go (default `/`; with or without the leading slash: Git Bash turns `/x` into `C:/Program Files/Git/x`
 // before node sees it, so write `x`). `--as` names the dev Owner (default: the server's `owner`, which every agent shares:
 // use your own, so `--seed` does not wipe another agent's Winnies). `--seed` asks for the dummy set (`seed=reset`).
+// `--signed-out` skips the sign-in: the page as a Viewer sees it (a Share Link). Each shot prints the tab's title and
+// icon, which a screenshot of the page does not show. A path that answers with something other than HTML (`api/winnies`)
+// is printed as text, cut, instead of shot (#253: a JSON list waited 60 s per width for a hydration that never comes).
 // `BASE_URL` picks the target: `http://localhost:3000` by default, or exactly https://staging.winnies.christried.me.
 // Nothing else is opened, so the bypass secret can go nowhere else.
 //
@@ -24,7 +27,7 @@ import { readPath, readTarget, Refusal, scrub as scrubSecret, slugOf } from "./s
 
 const SECRET_NAME = "VERCEL_AUTOMATION_BYPASS_SECRET";
 const BYPASS_HEADER = "x-vercel-protection-bypass";
-const USAGE = "usage: node scripts/shots.mjs [path] --out <dir> [--as <name>] [--seed]";
+const USAGE = "usage: node scripts/shots.mjs [path] --out <dir> [--as <name>] [--seed] [--signed-out]";
 const WIDTHS = [
   { width: 1440, height: 900 },
   { width: 390, height: 844 },
@@ -34,6 +37,7 @@ const NAVIGATION_MS = 120_000;
 const HYDRATION_MS = 60_000;
 const SETTLE_MS = 300;
 const ERROR_CHARS = 300;
+const TEXT_CHARS = 4000;
 
 let secret = "";
 // Every line printed goes through here, so a secret that slipped into a message is gone before it is shown.
@@ -60,9 +64,10 @@ function readArgs() {
       allowPositionals: true,
       strict: true,
       options: {
-        out: { type: "string" },
-        as: { type: "string" },
-        seed: { type: "boolean", default: false },
+        "out": { type: "string" },
+        "as": { type: "string" },
+        "seed": { type: "boolean", default: false },
+        "signed-out": { type: "boolean", default: false },
       },
     });
   }
@@ -76,11 +81,15 @@ function readArgs() {
   if (!parsed.values.out) {
     throw new Refusal(`--out <dir> is required: the folder the screenshots go to.\n${USAGE}`);
   }
+  if (parsed.values["signed-out"] && (parsed.values.as !== undefined || parsed.values.seed)) {
+    throw new Refusal(`--signed-out signs nobody in, so --as and --seed have no Owner to act for.\n${USAGE}`);
+  }
   return {
     path: parsed.positionals[0] ?? "/",
     out: parsed.values.out,
     as: parsed.values.as,
     seed: parsed.values.seed,
+    signedOut: parsed.values["signed-out"],
   };
 }
 
@@ -181,10 +190,15 @@ async function shoot(context, target, path, size, file, errors) {
     page.on("pageerror", (error) => {
       errors.push(`[${size.width}] uncaught: ${oneLine(error.message, ERROR_CHARS)}`);
     });
-    await page.goto(new URL(path, target.origin).href, { timeout: NAVIGATION_MS });
+    const response = await page.goto(new URL(path, target.origin).href, { timeout: NAVIGATION_MS });
     const landedOnTarget = () => new URL(page.url()).host === target.host;
     if (!landedOnTarget()) {
       throw new Refusal(VERCEL_LOGIN);
+    }
+    // JSON or text has no Nuxt to hydrate and nothing a screenshot shows better than its text.
+    const type = response?.headers()["content-type"] ?? "";
+    if (response && !type.includes("text/html")) {
+      return { text: `${response.status()} ${type || "no content type"}: ${oneLine(await response.text(), TEXT_CHARS)}` };
     }
     // What `waitForHydration` of @nuxt/test-utils checks (tests/e2e/fixtures.ts): a shot before it shows markup without handlers.
     try {
@@ -200,6 +214,11 @@ async function shoot(context, target, path, size, file, errors) {
     }
     // Viewport only: a Workspace of 50 Challenges is very tall.
     await page.screenshot({ path: file });
+    // The tab is outside the screenshot; the icon changes with the Winnie's state (app/composables/use-favicon.ts).
+    return await page.evaluate(() => ({
+      title: document.title,
+      icon: document.querySelector("link[rel~=\"icon\"]")?.getAttribute("href") ?? "none",
+    }));
   }
   finally {
     await page.close();
@@ -249,17 +268,26 @@ async function main() {
       }));
     }
 
-    await signIn(context, target, args, headers);
-    await confirmSession(context, target, headers);
+    if (args.signedOut) {
+      say(`target: ${target.origin}, signed out`);
+    }
+    else {
+      await signIn(context, target, args, headers);
+      await confirmSession(context, target, headers);
+      say(`target: ${target.origin} as ${args.as ?? "owner (default)"}${args.seed ? ", dummy set requested" : ""}`);
+    }
     mkdirSync(out, { recursive: true });
 
-    say(`target: ${target.origin} as ${args.as ?? "owner (default)"}${args.seed ? ", dummy set requested" : ""}`);
     const errors = [];
     const slug = slugOf(path);
     for (const size of WIDTHS) {
       const file = resolve(out, `${slug}-${size.width}.png`);
-      await shoot(context, target, path, size, file, errors);
-      say(`shot: ${file}`);
+      const shot = await shoot(context, target, path, size, file, errors);
+      if (shot.text !== undefined) {
+        say(`not a page, so no shot: ${shot.text}`);
+        break;
+      }
+      say(`shot: ${file} (title "${shot.title}", icon ${shot.icon})`);
     }
     if (errors.length === 0) {
       say("no console errors");

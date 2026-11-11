@@ -25,8 +25,8 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 - Match the surrounding code: comment density, naming, idiom. Comments say why.
 - Sizes, colours, easings and copy come from `docs/design_handoff_winnies/`, never from an estimate. Something the handoff doesn't cover goes into your report as **Design/asset needed**; don't draw it yourself (`docs/agents/design-handoff.md`).
 - A schema change or a migration only when your brief asks for one.
-- Tests check what an Owner, a Viewer or the API can observe, never internals.
-- Shell: this is Windows, and the Bash tool is Git Bash. Write every file with the Write tool, a scratch file or a script included, and run a script with `node <file>`. Keep every Bash call to plain commands inside your worktree: the worktree guard refuses a heredoc, `source`, `export` and a `cd` out of the worktree. A commit message with a body goes in a file: `git commit -F <file>`. (Safety net: 42 refused commands in 19 of 24 subagents.)
+- Tests follow `CODING_STANDARDS.md` § Tests: what a test asserts, and what it may swap.
+- Shell: this is Windows, and the Bash tool is Git Bash. Write every file with the Write tool, a scratch file or a script included, and run a script with `node <file>`. Keep every Bash call to plain commands inside your worktree, as `CLAUDE.md` § Scripting says the worktree guard wants them. A commit message with a body goes in a file: `git commit -F <file>`. (Safety net: 42 refused commands in 19 of 24 subagents.)
 - Scratch files go to a folder named after your ticket inside your scratchpad directory (`<scratchpad>/<ticket number>/`), never into the checkout. (Safety net: the subagents of one session share a scratchpad.)
 - The bypass secret in `.env` is a credential: never print `.env` or put its value in a command, a file, a commit, an issue, a PR or your report (`docs/agents/delivery.md` § Issues).
 - Touch only what your brief allows. If the brief and the ticket disagree, or the code makes the brief wrong, do what the ticket needs and say so in the report.

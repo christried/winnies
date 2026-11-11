@@ -1,6 +1,6 @@
 # Roadmap
 
-What's being built and what comes next. Ideas that aren't grilled yet are Idea issues, not lines here (§ Ideas). Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-11-10.
+What's being built and what comes next. Ideas that aren't grilled yet are Idea issues, not lines here (§ Ideas). Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-11-11.
 
 Only **Now** has tickets. Everything else lives here until its turn, then becomes a batch of tickets under one milestone. Entries link the closed issue they came from ("was #125") and the handoff frames that design them (IDs from `docs/design_handoff_winnies/01-screen-index.md`).
 
@@ -13,7 +13,7 @@ Every product question is decided in [Redesign 1.0: Core planning map](https://g
 | Phase          | Goal                                                                                                                                                                                   | Frames          | Milestone                                                       | Status      |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------- | ----------- |
 | Safety net     | On `main`, before `redesign` branches: API tests, browser e2e smoke, required CI gate, then the dependency update (was #126, #127, #146; decided in #179; spec #195)                   | –               | [Safety net](https://github.com/christried/winnies/milestone/4) | Done        |
-| Before R0      | The Safety net's retro fixes for the agents' environment, and staging: `redesign` at `staging.winnies.christried.me` with a dev sign-in (spec #219; ADR-0005)                          | –               | [Before R0](https://github.com/christried/winnies/milestone/5)  | Ticketed    |
+| Before R0      | The Safety net's retro fixes for the agents' environment, and staging: `redesign` at `staging.winnies.christried.me` with a dev sign-in (spec #219; ADR-0005)                          | –               | [Before R0](https://github.com/christried/winnies/milestone/5)  | Done        |
 | R0 Foundations | Old design and daisyUI out; tokens, fonts, Tailwind entry, theme/dialect/motion plumbing in; Storybook and component screenshots at the end (was #119; ADR-0004)                       | 02-tokens       | –                                                               | Not started |
 | R1 Engine      | Motion composable, one clock per surface, particle layer                                                                                                                               | 04-motion       | –                                                               | Not started |
 | R2 Primitives  | Button, inputs, switch, win toggle, counter, timer, state pill, menu, modal, toast, tooltip (was #134, #158)                                                                           | 03-components   | –                                                               | Not started |
@@ -66,3 +66,5 @@ Unordered. Items that turn out to be needed for the redesign move to Now.
 - **CONTRIBUTING.md.** Was #140.
 - **Project structure conventions** written into `CODING_STANDARDS.md` and ESLint once the rebuild settles them. Was #128.
 - **Security review** of CSRF and rate limits. Was #156.
+- **Generate the staging favicons** from the production ones (hue +180°) with a script and a test that the committed copies match, before the first redesign icon lands: today `public/staging/*.svg` are hand-made copies kept in step by a recipe in `stage.ts`. Review of Before R0, Q7.
+- **One stage decision**: `stage.ts`'s three one-line exports and the inline module in `nuxt.config.ts` become one `resolveStage(env, dev)`, or the `$development` handler config. Worth it once the stage logic grows. Review of Before R0, Q6.

@@ -11,6 +11,12 @@
   "enabledPlugins": {
     "mattpocock-skills@claude-plugins-official": false
   },
+  "permissions": {
+    "deny": [
+      "mcp__claude_ai_Vercel__web_fetch_vercel_url",
+      "mcp__claude_ai_Vercel__get_access_to_vercel_url"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -19,6 +25,11 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR\"/scripts/attribution.mjs tool",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/scripts/machine-guard.mjs tool",
             "timeout": 10
           }
         ]

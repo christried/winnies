@@ -5,7 +5,8 @@ Only what is written here and in the files this points to is agreed. Old issues,
 ## Roles
 
 - **Agents implement** (the human, 2026-11-10). They write the code, commit, push and open PRs, and merge into `redesign`.
-- **The human decides**: product questions (in a grilling), how things look and feel, and every merge into `main`.
+- **The human decides**: product questions (in a grilling), how things look and feel, every merge into `main`, and every change to the machine outside the repository: an install or removal, a command as root or administrator, an environment variable, the registry. `scripts/machine-guard.mjs`, a Claude Code hook in `.claude/settings.json`, puts such a command to the human before it runs.
+- **Questions to the human** go through the AskUserQuestion tool, with options, all open questions in one call (the human, 2026-11-11).
 - **The planning agent** keeps `docs/roadmap.md` and proposes priorities, scope and tickets. It proposes; the human decides.
 - **On GitHub, freely, saying what you are doing as you do it:** issues, sub-issues and dependencies, milestones, labels, projects, PRs.
 
@@ -75,3 +76,5 @@ Record new standing rules in this file, `CODING_STANDARDS.md` or `docs/agents/`,
 ### Scripting
 
 Script with `node`. A script of more than one line goes to a file (Write tool) and runs with `node <file>`: inline `node -e` breaks on an apostrophe, and a Bash heredoc on a backtick or a backslash.
+
+In an agent worktree, the worktree guard refuses a Bash call it cannot verify stays inside: any call with a heredoc, a shell function, `export`, `source` or a `cd` out of the worktree, and a call that runs git with a `$VAR`, `$?`, `$(…)`, or a `( )` or `{ }` group. Spell git's arguments out and read a result in the next call. (Before R0: 59 refused calls in 41 subagents, 36 of them a `$` expansion.)
