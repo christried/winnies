@@ -59,7 +59,7 @@ defineExpose({
       {{ totalCount }} challenges. This cannot be undone.
     </p>
 
-    <p v-if="formError" class="alert alert-error">
+    <p v-if="formError">
       {{ formError }}
     </p>
   </UiModal>

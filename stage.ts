@@ -51,8 +51,7 @@ export interface StageBranding {
  *
  * After a new production icon: copy it to public/staging/ under the same name, replace each of its
  * hex values by the same rule (convert to HSL, add 180 to the hue modulo 360, convert back; a colour
- * not in the table gets a new row here), and render all three at 32 px to check the tab. public/favicon.ico
- * is not tinted; it only shows where the browser asks for it without a link (Nuxt's default error page).
+ * not in the table gets a new row here), and render all three at 32 px to check the tab.
  *
  * @param staging whether this is the staging build
  * @returns the product name and icon folder of the build
