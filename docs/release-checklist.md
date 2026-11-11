@@ -7,8 +7,9 @@ is not repeated here.
 ## Discord sign-in and sign-out
 
 The tests sign in through a test-only helper that never talks to Discord, so the real OAuth round trip
-is only ever exercised here. Run it against the deployment being released: production, or the pull
-request's Vercel preview (sign-in must work on previews, ADR-0002).
+is only ever exercised here. Run it against the deployment being released: production, or staging,
+the Vercel deployment of `redesign` (ADR-0005). Staging sits behind Vercel login, so log in to Vercel
+first; its tab reads "Winnies Staging".
 
 1. Open the deployment signed out, at `/`.
    Expect the Workspace with the "Sign in with Discord" button and no "Create new Winnie" button.

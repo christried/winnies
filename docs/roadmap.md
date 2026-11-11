@@ -61,7 +61,6 @@ An idea that isn't grilled yet is an `Idea: …` issue, captured with `/capture-
 
 Unordered. Items that turn out to be needed for the redesign move to Now.
 
-- **Dev sign-in on staging**: a sign-in without Discord on the `redesign` deployment only, so agents can check signed-in pages there. Allowed by the maintainer on 2026-11-10; needs a database of its own for that deployment and a guard that no production build can carry it. Moves to Now when `redesign` branches.
 - **Sentry**, client and server. Was #131.
 - **Docker** for local Postgres and an app image; not a supported deploy. Was #129.
 - **CONTRIBUTING.md.** Was #140.
