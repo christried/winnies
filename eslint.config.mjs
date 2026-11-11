@@ -70,6 +70,11 @@ export default withNuxt(
       ],
 
       "node/no-process-env": "error",
+
+      // A test that branches asserts nothing on some of its rows: Before R0's review found a `describe.each` whose
+      // tests returned early for three of four Winnies (#251).
+      "test/no-conditional-in-test": "error",
+      "test/no-conditional-expect": "error",
     },
 
     ignores: [

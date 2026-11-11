@@ -96,19 +96,11 @@ describe("the dummy set", () => {
 
   describe.each(DUMMY_WINNIES.map(w => [w.name, w] as const))("%s holds only rows the app could have written", (_name, w) => {
     it("keeps Won Challenges stopped and Counters consistent", () => {
-      for (const c of w.challenges) {
-        const label = c.game;
-        if (c.status === "won") {
-          expect(c.runningForSeconds, label).toBeNull();
-          if (c.target > 0)
-            expect(c.count, label).toBe(c.target);
-        }
-        if (c.target > 0 && c.count >= c.target)
-          expect(c.status, label).toBe("won");
-        expect(c.count, label).toBeLessThanOrEqual(c.target);
-        if (c.target === 0)
-          expect(c.count, label).toBe(0);
-      }
+      const games = (keep: (c: DummyWinnie["challenges"][number]) => boolean) => w.challenges.filter(keep).map(c => c.game);
+      expect(games(c => c.status === "won" && c.runningForSeconds !== null), "Won, and its timer runs").toEqual([]);
+      expect(games(c => c.status === "won" && c.target > 0 && c.count !== c.target), "Won, and its Counter is short of the target").toEqual([]);
+      expect(games(c => c.target > 0 && c.count >= c.target && c.status !== "won"), "its Counter reached the target, and it is not Won").toEqual([]);
+      expect(games(c => c.count > c.target), "its count is past the target (or it counts without a Counter)").toEqual([]);
     });
 
     it("runs a Challenge timer only while the Total Timer runs, and not from before it", () => {
