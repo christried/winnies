@@ -86,6 +86,26 @@ the browser tests (the `e2e` job) on every pull request.
 - The one flow automation cannot cover, signing in with Discord, is checked by hand before a release:
   [`docs/release-checklist.md`](docs/release-checklist.md).
 
+## Deployment
+
+Only `main` and `redesign` build on Vercel ([`vercel.json`](vercel.json), ADR-0005). A push to any
+other branch creates no deployment, and a pull request into `redesign` gets no preview: a ticket is
+checked on staging after its merge.
+
+| Branch     | Served at                                                  | Database                                                 |
+| ---------- | ---------------------------------------------------------- | -------------------------------------------------------- |
+| `redesign` | https://staging.winnies.christried.me, behind Vercel login | Neon `staging` branch, database `winnies_staging`        |
+| `main`     | https://winnies.christried.me                              | Neon `production` branch, the project's primary database |
+
+The Vercel build command is `pnpm db:migrate && pnpm build`: each deploy first applies the committed
+migrations in `server/db/migrations/` to that environment's `DATABASE_URL`. drizzle-kit runs all pending
+migrations in one transaction. If one fails, nothing is applied, the build fails, and the previous
+deployment keeps serving. Fix forward with a new migration; never edit a migration that has already run
+on staging.
+
+`vercel.json` reaches `main` with 1.0.0 (ADR-0002). Until then `main`, and any branch cut from it for a
+hotfix, builds as before: `nuxt build`, no migration.
+
 ## License
 
 Source-available, all rights reserved — see [LICENSE.md](LICENSE.md). Contributions are
