@@ -16,4 +16,4 @@ Once done, call the Skill tool with "code-review" to review the work.
 
 Commit your work to the current branch.
 
-**WINNIES:** then deliver it as `docs/agents/delivery.md` describes: a PR into `redesign`, or into `main` while `redesign` doesn't exist yet (the human merges that one), then verify and close the issue. Commits and the PR carry no attribution (`CLAUDE.md` § Attribution).
+**WINNIES:** then deliver it as `docs/agents/delivery.md` describes: a PR into `redesign`, then verify and close the issue. Commits and the PR carry no attribution (`CLAUDE.md` § Attribution).
