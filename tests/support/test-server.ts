@@ -180,8 +180,11 @@ async function withBuildEnv<T>(env: TestEnv, run: (buildEnv: Record<string, stri
   const streams = { stdout: process.stdout.write, stderr: process.stderr.write };
   const consoleMethods = { ...console };
   const buildEnv = serverEnv(env);
-  const before = Object.fromEntries(Object.keys(buildEnv).map(key => [key, process.env[key]]));
-  Object.assign(process.env, buildEnv);
+  // WINNIES_STAGE is blanked besides: a developer's .env may hold it, the Nuxt config loader reads .env, and a
+  // variable already in the process wins, so the server under test never carries the dev sign-in (#235).
+  const buildProcessEnv = { ...buildEnv, WINNIES_STAGE: "" };
+  const before = Object.fromEntries(Object.keys(buildProcessEnv).map(key => [key, process.env[key]]));
+  Object.assign(process.env, buildProcessEnv);
 
   try {
     return await run(buildEnv);
