@@ -2,12 +2,14 @@ import { makeSignature } from "better-auth/crypto";
 import { db } from "../db";
 import { user } from "../db/schema";
 import { auth } from "../utils/auth";
+import { resetDummyWinnies } from "./reset-dummy-winnies";
 
 // Signs in as a dev Owner without Discord, so agents can check the Workspace as a signed-in Owner (#235).
 // Only the builds carriesDevSignIn names register this route (stage.ts, read by nuxt.config.ts), and
 // this folder is none Nitro scans on its own. The handler has no check of its own: the staging build
 // carries it and runs with NODE_ENV=production (ADR-0005).
 // `?as=<name>` picks the dev Owner (default `owner`), `?to=/path` where to land.
+// `?seed=reset` replaces that Owner's Winnies with the dummy set (#236).
 
 const DEFAULT_NAME = "owner";
 const NAME_PATTERN = /^[a-z0-9-]{1,32}$/;
@@ -28,6 +30,18 @@ function devOwnerName(query: Record<string, unknown>): string {
   return as.toLowerCase();
 }
 
+function wantsReset(query: Record<string, unknown>): boolean {
+  const seed = query.seed;
+  if (seed === undefined || seed === "") {
+    return false;
+  }
+  // A typo or a repeated parameter must not quietly skip the reset, nor guess at one.
+  if (seed !== "reset") {
+    throw createError({ statusCode: 400, statusMessage: "`seed` must be `reset` or absent" });
+  }
+  return true;
+}
+
 function landing(to: unknown): string {
   return typeof to === "string" && LANDING_PATTERN.test(to)
     ? to
@@ -37,6 +51,8 @@ function landing(to: unknown): string {
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const as = devOwnerName(query);
+  // Both are read before anything is written, so a bad request writes nothing.
+  const reset = wantsReset(query);
 
   const displayName = as === DEFAULT_NAME
     ? "Dev Owner"
@@ -54,6 +70,11 @@ export default defineEventHandler(async (event) => {
       set: { name: displayName },
     })
     .returning({ id: user.id });
+
+  // The Owner `as` named, never a real account (its email ends in dev.winnies.invalid).
+  if (reset) {
+    await resetDummyWinnies(owner!.id);
+  }
 
   // A Better Auth session, with the cookie signed the way Better Auth signs it. Each visit adds a session row.
   const ctx = await auth.$context;
