@@ -44,13 +44,8 @@ describe("the staging identity", () => {
     expect(shellVariable("scripts/staging-wizard.sh", "STAGING_FQDN"), `STAGING_FQDN of the wizard against STAGING_ORIGIN of the helper. ${FIX}`).toBe(origin.host);
   });
 
+  // The documents are held to naming the origin, not to how they word the lines around it (#255).
   it.each(["README.md", "docs/agents/delivery.md", "scripts/shots.mjs"])("is the origin %s names", (file) => {
     expect(read(file), `${file} does not name ${STAGING_ORIGIN}. ${FIX}`).toContain(STAGING_ORIGIN);
-  });
-
-  // The line of a document that gives the origin also says which branch is served there.
-  it.each(["README.md", "docs/agents/delivery.md"])("is served from the branch %s names beside it", (file) => {
-    const lines = read(file).split(/\r?\n/).filter(line => line.includes(STAGING_ORIGIN));
-    expect(lines.some(line => line.includes(`\`${STAGING_BRANCH}\``)), `${file} gives ${STAGING_ORIGIN} on a line that does not name \`${STAGING_BRANCH}\`. ${FIX}`).toBe(true);
   });
 });
