@@ -18,9 +18,7 @@ export default defineNuxtConfig({
     defineNuxtModule({
       meta: { name: "dev-sign-in" },
       setup(_options, nuxt) {
-        if (!carriesDevSignIn(nuxt.options.dev)) {
-          return;
-        }
+        carriesDevSignIn(nuxt.options.dev);
         addServerHandler({
           route: "/api/dev/sign-in",
           method: "get",
