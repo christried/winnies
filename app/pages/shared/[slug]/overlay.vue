@@ -24,6 +24,11 @@ useHead({
     // Fixed look for OBS, independent of the viewer's theme (#121)
     "data-theme": DAISY_THEMES.dark,
   },
+  bodyAttrs: {
+    // A transparent page for OBS (spec #257 § 4): bg-none clears the backdrop's gradients, bg-transparent the
+    // colour the base rule's `background` shorthand sets. Utilities beat the base layer.
+    class: "bg-none bg-transparent",
+  },
 });
 
 const clock = useServerClock();
