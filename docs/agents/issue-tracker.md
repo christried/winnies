@@ -4,7 +4,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 ## Conventions
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
+- **Create an issue**: `gh issue create --title "..." --body-file <file>`, the body written to a file with the Write tool (`CLAUDE.md` § Scripting).
 - **Read an issue**: `gh api repos/christried/winnies/issues/<n> --jq .body`, and `.../issues/<n>/comments --jq '[.[].body]'` for the comments. From Git Bash on Windows `gh issue view` can print nothing (compies, #242), so the `gh api` form is the one to use.
 - **Make an issue a sub-issue of a parent**: `gh issue create --parent <parent> ...`, or `gh issue edit <parent> --add-sub-issue <child>` afterwards (`gh` 2.94+).
 - **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
