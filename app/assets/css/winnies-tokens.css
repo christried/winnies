@@ -402,3 +402,28 @@
   --dur-page-x: 0ms; --dur-tick: 0ms; --dur-travel: 0ms; --dur-theme: 0ms; --dur-land: 0ms; --dur-jelly: 0ms; --dur-minute: 0ms;
   --dur-stamp: 0ms; --dur-droop: 0ms; --dur-burst: 0ms; --dur-hour: 0ms; --dur-cheer: 0ms; --dur-celebrate: 0ms; --dur-highlight: 0ms;
 }
+
+/* winnies:deviation #268 start · see docs/design-deviations.md */
+/* A composite holding var() is resolved on <html>, where its theme block declares it, so <body> inherits the finished
+   value and never sees a token that [data-dialect] redeclares on <body>. Each composite that reads such a token is
+   declared again under its dialect, with the value text of its theme block. Broadcast's own --shadow-raised is left out. */
+[data-dialect="broadcast"] {
+  --btn-text: var(--text-base);
+}
+[data-dialect="showcase"] {
+  --shadow-raised: 0 var(--lip-lg) 0 -2px var(--color-lip), 0 16px 26px -12px var(--color-drop),
+                   inset 0 5px 7px var(--color-highlight), inset 0 -5px 9px var(--color-shade);
+  --shadow-raised-lg: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 40px -16px rgba(220, 80, 140, .4),
+                      inset 0 -8px 14px rgba(220, 80, 140, .12), inset 0 8px 12px rgba(255, 255, 255, .95);
+  --shadow-raised-hover: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 34px -14px var(--color-drop-strong), inset 0 5px 8px var(--p-white);
+  --shadow-popover: var(--shadow-raised-lg);
+}
+[data-theme="dark"] [data-dialect="showcase"], [data-theme="dark"][data-dialect="showcase"] {
+  --shadow-raised: 0 var(--lip-lg) 0 -2px var(--color-lip), 0 18px 30px -12px var(--color-drop),
+                   inset 0 2px 0 var(--color-rim), inset 0 -6px 10px var(--color-shade);
+  --shadow-raised-lg: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 28px 40px -16px rgba(0, 0, 0, .7),
+                      inset 0 2px 0 rgba(255, 255, 255, .08), inset 0 -10px 16px rgba(0, 0, 0, .25);
+  --shadow-raised-hover: 0 var(--lip-xl) 0 -2px var(--color-lip), 0 26px 34px -14px var(--color-drop-strong), inset 0 2px 0 rgba(255, 255, 255, .1);
+  --shadow-popover: var(--shadow-raised-lg);
+}
+/* winnies:deviation #268 end */

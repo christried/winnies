@@ -206,3 +206,84 @@ test("both fonts load from Winnies' own origin, and no third-party font host is 
   const hosts = requests.map(request => new URL(request.url).hostname);
   expect(hosts.filter(host => host.includes("fonts.googleapis.com") || host.includes("fonts.gstatic.com"))).toEqual([]);
 });
+
+/** Appends a div that sets one property to `var(token)` under <body> and returns that property's computed value there. */
+async function resolved(page: Page, property: string, token: string) {
+  return page.evaluate(({ property, token }) => {
+    document.getElementById("probe")?.remove();
+    const probe = document.createElement("div");
+    probe.id = "probe";
+    probe.style.setProperty(property, `var(${token})`);
+    document.body.append(probe);
+    return getComputedStyle(probe).getPropertyValue(property);
+  }, { property, token });
+}
+
+/** The vertical offset of a computed box-shadow's first layer: the lip, for the clay shadows. */
+function firstLayerLip(boxShadow: string) {
+  const lip = /^rgba?\([^)]*\) -?[\d.]+px (-?[\d.]+)px/.exec(boxShadow)?.[1];
+  expect(lip, `no first layer in ${boxShadow}`).toBeDefined();
+  return `${lip}px`;
+}
+
+// A composite token holds `var()`, so it is resolved where it is declared (on <html>) and <body> only inherits the
+// finished value. A dialect that redeclares a token it reads (Showcase's lips, Broadcast's --text-base) therefore
+// needs the composite redeclared under the dialect too (#268). Each shadow case is the lip of the first layer.
+const DIALECTS = {
+  workspace: {
+    attribute: undefined,
+    lips: {
+      "--shadow-raised": "8px",
+      "--shadow-raised-lg": "12px",
+      "--shadow-raised-hover": "12px",
+      "--shadow-popover": "12px",
+    },
+    btnText: "17px",
+  },
+  showcase: {
+    attribute: "showcase",
+    lips: {
+      "--shadow-raised": "12px",
+      "--shadow-raised-lg": "16px",
+      "--shadow-raised-hover": "16px",
+      "--shadow-popover": "16px",
+    },
+    btnText: "17px",
+  },
+  broadcast: {
+    attribute: "broadcast",
+    // Broadcast's --shadow-raised is the Overlay's own shadow, checked in its own test below.
+    lips: { "--shadow-raised-lg": "12px", "--shadow-raised-hover": "12px", "--shadow-popover": "12px" },
+    btnText: "18px",
+  },
+};
+
+test.describe("the composites resolve under the dialect on <body>", () => {
+  for (const theme of ["light", "dark"]) {
+    for (const [name, expected] of Object.entries(DIALECTS)) {
+      test(`${name}, ${theme}: the shadows have their dialect's lips`, async ({ page }) => {
+        await visit(page, "/changelog");
+        await switchAttributes(page, { theme, dialect: expected.attribute });
+        const found: Record<string, string> = {};
+        for (const token of Object.keys(expected.lips)) {
+          found[token] = firstLayerLip(await resolved(page, "box-shadow", token));
+        }
+        expect(found).toEqual(expected.lips);
+      });
+
+      test(`${name}, ${theme}: --btn-text follows the dialect's --text-base`, async ({ page }) => {
+        await visit(page, "/changelog");
+        await switchAttributes(page, { theme, dialect: expected.attribute });
+        expect(await resolved(page, "font-size", "--btn-text")).toBe(expected.btnText);
+      });
+    }
+
+    test(`broadcast, ${theme}: --shadow-raised is the Overlay's shadow`, async ({ page }) => {
+      await visit(page, "/changelog");
+      await switchAttributes(page, { theme, dialect: "broadcast" });
+      const raised = await resolved(page, "box-shadow", "--shadow-raised");
+      expect(raised).not.toBe("none");
+      expect(raised).toBe(await resolved(page, "box-shadow", "--overlay-shadow"));
+    });
+  }
+});
