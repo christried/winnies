@@ -58,3 +58,7 @@ export const counterSchema = z.discriminatedUnion("op", [
 export const themeBodySchema = z.object({
   theme: themePreferenceSchema,
 });
+
+export const motionBodySchema = z.object({
+  reduceMotion: z.boolean(),
+});

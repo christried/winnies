@@ -34,3 +34,8 @@ export const DAISY_THEMES = {
 export const THEME_COOKIE = "winnies-color-theme";
 // 1 year
 export const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+// Reduce motion
+export const MOTION_COOKIE = "winnies-reduce-motion";
+// 1 year
+export const MOTION_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
