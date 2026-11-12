@@ -1,5 +1,6 @@
+import { Buffer } from "node:buffer";
 import { describe, expect, it } from "vitest";
-import { findAttribution, findInCommand, findInToolCall, isAgentIdentity, pushSelections } from "./attribution.mjs";
+import { findAttribution, findInCommand, findInFile, findInToolCall, isAgentIdentity, pushSelections } from "./attribution.mjs";
 
 // The guard behind CLAUDE.md § Attribution: the git hooks, the CI job and the Claude Code hook all call these.
 describe("findAttribution", () => {
@@ -103,6 +104,27 @@ describe("pushSelections", () => {
 
   it("selects nothing for a deleted branch", () => {
     expect(pushSelections(`(delete) ${zero} refs/heads/a bbb\n`)).toEqual([]);
+  });
+});
+
+// The files a commit or a PR changes: the pre-commit hook and the Attribution job. The walkers are tested in file-metadata.test.mjs.
+describe("findInFile", () => {
+  const svg = (inside = "") => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:c2pa="http://c2pa.org/manifest">${inside}<path d="M0 0"/></svg>`);
+
+  it("passes an image without metadata", () => {
+    expect(findInFile("public/a.svg", Buffer.from("<svg xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0 0\"/></svg>"))).toEqual([]);
+  });
+
+  it("names the file and the manifest", () => {
+    const [finding, ...rest] = findInFile("public/a.svg", svg("<metadata><c2pa:manifest>QQ==</c2pa:manifest></metadata>"));
+    expect(finding).toMatch(/^public\/a\.svg: carries a C2PA manifest/);
+    expect(rest).toEqual([]);
+  });
+
+  it("reports a file it cannot read as a finding, not an exception", () => {
+    expect(findInFile("public/a.jpg", Buffer.from("<svg/>"))).toEqual([
+      expect.stringMatching(/^public\/a\.jpg: cannot be read as jpg \(.+\)$/),
+    ]);
   });
 });
 

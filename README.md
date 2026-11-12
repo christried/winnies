@@ -72,7 +72,8 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 `pnpm test:visual:podman`
 
 `pnpm favicons:stage` regenerates `public/staging/` from `public/`; `scripts/favicon-tint.test.mjs` fails `pnpm test`
-when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`).
+when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`). After a handoff re-sync, run
+`pnpm strip:metadata`: a design export carries a C2PA manifest that `scripts/attribution.mjs` refuses.
 
 `pnpm storybook` serves Storybook on <http://localhost:6006>, for local use only; it is never deployed.
 It loads the app's own `app/assets/css/main.css`, so the stories see the real token file, the Tailwind entry and the
