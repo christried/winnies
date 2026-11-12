@@ -67,3 +67,6 @@ Unordered. Items that turn out to be needed for the redesign move to Now.
 - **Project structure conventions** written into `CODING_STANDARDS.md` and ESLint once the rebuild settles them. Was #128.
 - **Security review** of CSRF and rate limits. Was #156.
 - **One stage decision**: `stage.ts`'s three one-line exports and the inline module in `nuxt.config.ts` become one `resolveStage(env, dev)`, or the `$development` handler config. Worth it once the stage logic grows. Review of Before R0, Q6.
+- **Motion cookie seeded from the account**: on a browser's first visit `app/plugins/motion.ts` writes the account's value into the cookie, and the cookie then outranks the account for a year, so a browser can keep a stale `false`. The theme plugin seeds the same way. It must land in R3, before the Reduce motion switch; R3's grilling decides the fix. Review of R0, Quality 1.
+- **"beta" in the wordmark**: `app/components/app-wordmark.vue` shows `· beta`, and the handoff's footer and nav copy repeat it. It lands in R3 with the new wordmark, and the human decides the copy. Review of R0, Standards 5.
+- **One Preference module**: theme and motion are two copies of one cookie, account and save mechanism. Worth exploring once the Overlay preset is specced. Review of R0, Quality candidate A.
