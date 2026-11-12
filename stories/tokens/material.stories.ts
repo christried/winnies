@@ -22,11 +22,26 @@ function lipBlock(name: string) {
     + `${chip(name)}${chip(resolved(name))}</div>`;
 }
 
+// The material card draws grain, fingerprint and gloss on a surface. The fingerprint is masked as the hero card masks it;
+// the mask itself is not a picture, so it is not drawn on its own.
+const textures = declared("texture").filter(name => !name.endsWith("-mask"));
+
+function textureBlock(name: string) {
+  const mask = name === "--texture-fingerprint"
+    ? ";-webkit-mask-image:var(--texture-fingerprint-mask);mask-image:var(--texture-fingerprint-mask)"
+    : "";
+  return `<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">`
+    + `<span style="position:relative;display:block;width:150px;height:70px;background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-raised)">`
+    + `<span style="position:absolute;inset:0;border-radius:inherit;background:var(${name})${mask}"></span></span>`
+    + `${chip(name)}</div>`;
+}
+
 const meta: Meta = {
   title: "Tokens/Lips and shadows",
   render: () => htmlStory(() => storyPage("Lips and shadows", [
     group("Shadows", `<div style="padding-bottom:24px">${grid(shadows.map(shadowBlock), 180)}</div>`),
     group("Lips", `<div style="padding-bottom:16px">${grid(lips.map(lipBlock), 140)}</div>`),
+    group("Textures", `<div style="padding-bottom:16px">${grid(textures.map(textureBlock), 180)}</div>`),
   ].join(""))),
 };
 
