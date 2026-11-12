@@ -57,13 +57,21 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
 `pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
-`pnpm db:migrate` · `pnpm db:studio` · `pnpm favicons:stage`
+`pnpm db:migrate` · `pnpm db:studio` · `pnpm favicons:stage` · `pnpm storybook` · `pnpm build-storybook`
 
 `pnpm favicons:stage` regenerates `public/staging/` from `public/`; `scripts/favicon-tint.test.mjs` fails `pnpm test`
 when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`).
 
-CI runs lint, typecheck, test, build and the build test (the `check` job), the API tests (the `api-tests` job) and
-the browser tests (the `e2e` job) on every pull request.
+`pnpm storybook` serves Storybook on <http://localhost:6006>, for local use only; it is never deployed.
+It loads the app's own `app/assets/css/main.css`, so the stories see the real token file, the Tailwind entry and the
+self-hosted fonts. The toolbar sets the three switches as the app does: theme (`data-theme` on `<html>`), dialect
+(`data-dialect` on `<body>`, none for Workspace) and reduced motion (`data-motion="reduce"` on `<html>`). Stories are
+plain `.stories.ts` files in `stories/`; the config is in `.storybook/`. The addon-a11y panel runs axe on a story;
+the check that fails on a violation is the screenshot job (#265). `pnpm build-storybook` builds the static
+Storybook, which only proves every story compiles.
+
+CI runs lint, typecheck, the Storybook build, test, build and the build test (the `check` job), the API tests (the
+`api-tests` job) and the browser tests (the `e2e` job) on every pull request.
 
 ## Tests
 
