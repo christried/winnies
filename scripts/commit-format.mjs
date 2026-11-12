@@ -7,9 +7,12 @@ import { fileURLToPath } from "node:url";
 import lint from "@commitlint/lint";
 import load from "@commitlint/load";
 
-// The commits up to here predate the rule, and rewriting them is out of the scope of #290; the range skips them. A
-// constant, not a branch name: it must stay put. It is the tip of spec/290-before-r1 the #282 branch is cut from, not
-// redesign's: #285's commit 76e996b on that tip has the unlisted scope `attribution`, and it is already pushed.
+// The commits up to here predate the rule, and the range skips them (CLAUDE.md § Commits): R0's history, and #285's
+// 76e996b `ci(attribution): …`, whose scope is not listed and which is already pushed. Rewriting pushed commits is out
+// of the scope of #290. A constant, not a branch name: it must stay put. It stays for good, because a range that holds
+// those commits, such as redesign's merge into main at 1.0.0 (when main gets this check with the workflow), would fail
+// on them. It moves later only to skip another pushed commit that breaks the rule, with the reason added here; never
+// earlier.
 export const ENFORCED_AFTER = "ab052c4f45ca530e4057fdcbb9e2deb782abc5ab";
 
 /**

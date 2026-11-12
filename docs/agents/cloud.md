@@ -59,7 +59,7 @@ A check a cloud session cannot do is handed on, never dropped or replaced by a g
 - a look at `pnpm dev`: the container's `DATABASE_URL` is a placeholder, so only the test server of the two suites runs there;
 - staging, while the secret is not saved;
 - anything in the human's own browser (`claude --chrome`), and whatever only the human does anyway;
-- deleting a remote branch: the container's proxy refuses it, by `git push --delete` and by REST alike (#277). Branch hygiene (`delivery.md`) names the branches for a local session.
+- deleting a remote branch: the container's proxy refuses it, by `git push --delete` and by REST alike (#277). A cloud session doesn't run `branch-prune` (`delivery.md` § Branch hygiene) and leaves the branches to a local session.
 
 ## Handoffs and retros
 
