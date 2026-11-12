@@ -17,6 +17,27 @@ export function asksForUpdate(argv) {
 }
 
 /**
+ * What `pnpm test:visual:podman` runs inside the container for the arguments it was given, so that Vitest is handed
+ * exactly one update flag: `test:visual:update` carries its own `--update`, so with it the bare flags are dropped; a
+ * `--update=<mode>` goes through `test:visual`, which has none, and the last mode given is the one forwarded.
+ *
+ * @param {readonly string[]} args the arguments after the script's name
+ * @returns {{ update: boolean, script: string, forwarded: string[] }} whether it rewrites baselines (and so runs without `CI=true`), the package script, and the arguments for Vitest
+ */
+export function visualRun(args) {
+  const update = asksForUpdate(args);
+  const lastMode = args.findLastIndex(arg => arg.startsWith("--update="));
+  const forwarded = args.filter((arg, index) => arg !== "-u" && arg !== "--update" && (!arg.startsWith("--update=") || index === lastMode));
+  return {
+    update,
+    script: update && lastMode === -1
+      ? "test:visual:update"
+      : "test:visual",
+    forwarded,
+  };
+}
+
+/**
  * Stops a screenshot run, and above all a baseline update, outside the pinned image.
  *
  * @param {{ env: Record<string, string | undefined>, argv: readonly string[] }} run the process environment and arguments
