@@ -2,17 +2,17 @@ import { describe, expect, it } from "vitest";
 import { deploysFrom, deployVerdict, MERGE_LAG_MS, prVerdict } from "./deploy-verdict.mjs";
 
 const T = Date.parse("2026-11-11T11:32:54Z");
-function run(name, conclusion = "SUCCESS", completedAt = "2026-11-11T11:32:54Z") {
+// A check run and a PR as GitHub's REST API returns them: `commits/<sha>/check-runs` and `pulls/<n>`.
+function run(name, conclusion = "success", completed_at = "2026-11-11T11:32:54Z") {
   return {
-    __typename: "CheckRun",
     name,
     status: conclusion === null
-      ? "IN_PROGRESS"
-      : "COMPLETED",
+      ? "in_progress"
+      : "completed",
     conclusion,
-    completedAt: conclusion === null
+    completed_at: conclusion === null
       ? null
-      : completedAt,
+      : completed_at,
   };
 }
 const green = [
@@ -21,82 +21,84 @@ const green = [
   run("api-tests"),
   run("e2e"),
 ];
-function open(checks, mergeStateStatus = "CLEAN") {
+function open(mergeable_state = "clean") {
   return {
-    state: "OPEN",
-    isDraft: false,
-    mergeStateStatus,
-    statusCheckRollup: checks,
+    state: "open",
+    merged: false,
+    draft: false,
+    mergeable_state,
   };
 }
 
 describe("where a PR stands", () => {
   it("is merged or closed whatever its checks say", () => {
+    // A merged PR is `closed` too, and its `mergeable_state` is `unknown`.
     expect(prVerdict({
-      ...open([
-        run("e2e", "FAILURE"),
-      ]),
-      state: "MERGED",
-    }, T).verdict).toBe("merged");
+      ...open("unknown"),
+      state: "closed",
+      merged: true,
+    }, [
+      run("e2e", "failure"),
+    ], T).verdict).toBe("merged");
     expect(prVerdict({
-      ...open(green),
-      state: "CLOSED",
-    }, T).verdict).toBe("closed");
+      ...open(),
+      state: "closed",
+    }, green, T).verdict).toBe("closed");
   });
 
   it("is a draft, which never merges by itself", () => {
     expect(prVerdict({
-      ...open(green),
-      isDraft: true,
-    }, T + MERGE_LAG_MS).verdict).toBe("draft");
+      ...open(),
+      draft: true,
+    }, green, T + MERGE_LAG_MS).verdict).toBe("draft");
   });
 
   it("is red when a check failed, naming each failed check once", () => {
-    const pr = open([
+    const runs = [
       ...green,
-      run("e2e", "FAILURE"),
-      run("e2e", "CANCELLED"),
-      run("api-tests", "TIMED_OUT"),
-    ]);
-    expect(prVerdict(pr, T)).toEqual({
+      run("e2e", "failure"),
+      run("e2e", "cancelled"),
+      run("api-tests", "timed_out"),
+    ];
+    expect(prVerdict(open(), runs, T)).toEqual({
       verdict: "red",
       checks: ["e2e", "api-tests"],
     });
   });
 
   it("is not red for a skipped or neutral check", () => {
-    expect(prVerdict(open([
+    expect(prVerdict(open(), [
       ...green,
-      run("lint", "SKIPPED"),
-      run("x", "NEUTRAL"),
-    ]), T).verdict).toBe("wait");
+      run("lint", "skipped"),
+      run("x", "neutral"),
+    ], T).verdict).toBe("wait");
   });
 
   it("is in conflict or behind its base", () => {
-    expect(prVerdict(open(green, "DIRTY"), T).verdict).toBe("conflict");
-    expect(prVerdict(open(green, "BEHIND"), T + MERGE_LAG_MS).verdict).toBe("behind");
+    expect(prVerdict(open("dirty"), green, T).verdict).toBe("conflict");
+    expect(prVerdict(open("behind"), green, T + MERGE_LAG_MS).verdict).toBe("behind");
   });
 
   it("waits while a check runs, or for two minutes after the last one finished", () => {
-    expect(prVerdict(open([
+    expect(prVerdict(open(), [
       ...green,
       run("e2e", null),
-    ]), T + MERGE_LAG_MS).verdict).toBe("wait");
-    expect(prVerdict(open(green), T + MERGE_LAG_MS - 1).verdict).toBe("wait");
-    expect(prVerdict(open([]), T + MERGE_LAG_MS).verdict).toBe("wait");
+    ], T + MERGE_LAG_MS).verdict).toBe("wait");
+    expect(prVerdict(open(), green, T + MERGE_LAG_MS - 1).verdict).toBe("wait");
+    expect(prVerdict(open(), [], T + MERGE_LAG_MS).verdict).toBe("wait");
   });
 
   it("is the agent's to merge when it is green, up to date and still open two minutes after its last check", () => {
-    const pr = open([
-      run("check", "SUCCESS", "2026-11-11T11:30:00Z"),
+    const runs = [
+      run("check", "success", "2026-11-11T11:30:00Z"),
       ...green,
-    ]);
-    expect(prVerdict(pr, T + MERGE_LAG_MS).verdict).toBe("merge-yourself");
+    ];
+    expect(prVerdict(open(), runs, T + MERGE_LAG_MS).verdict).toBe("merge-yourself");
   });
 
-  it("ignores commit statuses such as Vercel's among the checks", () => {
-    const pending = { __typename: "StatusContext", context: "Vercel", state: "PENDING" };
-    expect(prVerdict(open([...green, pending]), T + MERGE_LAG_MS).verdict).toBe("merge-yourself");
+  it("waits while GitHub still works out whether the PR can merge", () => {
+    expect(prVerdict(open("unknown"), green, T + MERGE_LAG_MS).verdict).toBe("wait");
+    expect(prVerdict(open("blocked"), green, T + MERGE_LAG_MS).verdict).toBe("wait");
   });
 });
 
