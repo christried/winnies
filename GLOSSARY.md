@@ -74,6 +74,10 @@ _Avoid_: test user, fake account, throwaway Owner (the API and e2e tests' own si
 Anyone watching a Winnie through its Share Link, signed in or not. Read-only.
 _Avoid_: guest, visitor (except on the Landing page)
 
+**Preference**:
+A person's choice of theme and of Reduce motion. A signed-in Owner's is their account's; anyone signed out has their browser's.
+_Avoid_: setting (the 6a Settings tab), option
+
 ### Surfaces
 
 **Workspace**:
