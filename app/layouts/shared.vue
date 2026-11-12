@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// The Shared View speaks Broadcast (spec #257 § 5).
+useDialect("broadcast");
 </script>
 
 <template>
