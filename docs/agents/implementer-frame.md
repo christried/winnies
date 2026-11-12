@@ -67,4 +67,4 @@ Your final message holds the comment's link from step 6 of § Before you report,
 
 ## Fix rounds
 
-When the orchestrator sends a fix list, make the fixes, run steps 1 to 5 of § Before you report again, then post one short comment on the issue instead of a full report: the new head SHA, CI on it, and one line per fix-list item saying what changed. Return its link as in § Return. (R0 retro: a second full report would fill the orchestrator's context again.)
+When the orchestrator sends a fix list, make the fixes, run steps 1 to 5 of § Before you report again, then post one short comment on the issue instead of a full report: the new head SHA, CI on it, and one line per fix-list item saying what changed. Write it to the same `<scratchpad>/<ticket>/issue-comment.md` as step 6, check it with `node scripts/attribution.mjs text <file>` as step 6 does, and post it with `gh issue comment`. Return its link as in § Return. (R0 retro: a second full report would fill the orchestrator's context again.)
