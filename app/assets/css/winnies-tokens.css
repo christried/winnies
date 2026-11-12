@@ -165,7 +165,7 @@
 
   /* accents are mode-independent and always take cocoa ink */
   --color-on-accent: var(--p-cocoa-900);
-  --color-accent: var(--p-pink-500);      --color-accent-lip: var(--p-pink-600);
+  --color-accent: #00aa00;      --color-accent-lip: var(--p-pink-600);
   --color-won: var(--p-matcha-300);       --color-won-lip: var(--p-matcha-500);
   --color-pinned: var(--p-lilac-300);     --color-pinned-lip: var(--p-lilac-500);
   --color-complete: var(--p-butter-300);  --color-complete-lip: var(--p-butter-500);
