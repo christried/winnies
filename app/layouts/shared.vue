@@ -3,7 +3,8 @@
 useDialect("broadcast");
 
 const root = useTemplateRef<HTMLElement>("root");
-provideWinniesMotion({ root });
+const clock = provideSurfaceClock();
+provideWinniesMotion({ root, interval: clock.interval });
 </script>
 
 <template>

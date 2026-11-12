@@ -3,7 +3,8 @@ import { formatDuration } from "~~/shared/utils/timer";
 
 // First, before the await below: a provide after an await is lost.
 const root = useTemplateRef<HTMLElement>("root");
-provideWinniesMotion({ root });
+const clock = provideSurfaceClock();
+provideWinniesMotion({ root, interval: clock.interval });
 
 const winnieStore = useWinnieStore();
 const { currentWinnie } = storeToRefs(winnieStore);
