@@ -119,15 +119,14 @@ describe("un-winning a Challenge with a Counter", () => {
     await expectState(owner, winnieId, await patchStatus(owner, challenge.id, "active"), { count: 4, status: "todo" });
   });
 
-  // Un-winning does not check that the Challenge was Won: it lowers the count of an unwon one as
-  // well. Pinned as it is today; whether that is a bug is the human's to decide.
-  it("patching todo on an unwon Counter sets its count to Target minus one today", async () => {
+  // A Challenge that isn't Won has nothing to reverse, so setting it todo keeps its count (#210).
+  it("patching todo on a Counter that isn't Won leaves its count", async () => {
     const owner = await signInAsOwner();
     const { id: winnieId } = await createWinnie(owner);
     const challenge = await createChallenge(owner, winnieId, { game: "Hollow Knight", target: 5 });
     await counter(owner, challenge.id, { op: "set", count: 2 });
 
-    await expectState(owner, winnieId, await patchStatus(owner, challenge.id, "todo"), { count: 4, status: "todo" });
+    await expectState(owner, winnieId, await patchStatus(owner, challenge.id, "todo"), { count: 2, status: "todo" });
   });
 });
 
