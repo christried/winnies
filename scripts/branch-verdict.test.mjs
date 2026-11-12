@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { decide } from "./branch-verdict.mjs";
 
-const NO_OWN_COMMIT = "no commit of its own: its tip is on redesign or main itself, so another session may have just cut it";
+// Both causes of a tip on the line are named: reading only "no commit of its own" would send a human after a branch
+// that a fast-forward merge left, which is not in use (#290 review).
+const NO_OWN_COMMIT = "its tip is on redesign or main itself: it has no commit of its own (another session may have just cut it) or was merged without a merge commit (fast-forward)";
 
 /** A merged `--no-ff` branch with nothing else going on: each case states only what differs. */
 function branch(overrides = {}) {
@@ -70,7 +72,7 @@ describe("scripts/branch-verdict.mjs decide", () => {
     }))).toEqual({ action: "delete", reason: "merged into redesign and main" });
   });
 
-  it("keeps a branch whose tip is on the first-parent line: it has no commit of its own", () => {
+  it("keeps a branch whose tip is on the first-parent line: it has no commit of its own, or was fast-forwarded", () => {
     expect(decide(branch({ onFirstParentLine: true }))).toEqual({ action: "keep", reason: NO_OWN_COMMIT });
     expect(decide(branch({
       mergedInto: ["redesign", "main"],

@@ -27,6 +27,7 @@ import process from "node:process";
 import { parseArgs } from "node:util";
 import { FAILURE_MARKER } from "./attribution.mjs";
 import { conclude, expectedWorkflows, latestRuns, missingWorkflows, PASSING, redRuns, rerunDecision, WORKFLOW_FILES } from "./ci-verdict.mjs";
+import { flagError } from "./cli-helpers.mjs";
 import { headPrOf } from "./pr-state.mjs";
 
 const USAGE = "usage: node scripts/ci-wait.mjs [sha] [--until-done]";
@@ -44,8 +45,7 @@ try {
   });
 }
 catch (error) {
-  // Node adds a hint about `--` to the first sentence.
-  console.log(`${error.message.split(/\.\s|\n/)[0].replace(/\.$/, "")}.\n${USAGE}`);
+  console.log(flagError(error, USAGE));
   process.exit(1);
 }
 if (parsed.positionals.length > 1) {
