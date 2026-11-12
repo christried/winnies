@@ -37,7 +37,7 @@ The Winnie-wide stopwatch. Starting the Winnie or any Challenge Timer starts it.
 A Challenge's own stopwatch, accumulating time across starts and pauses.
 
 **Counter**:
-An optional per-Challenge tally with a **Target**; reaching the Target wins the Challenge. It never goes past its Target, and it is frozen while its Challenge is Won: un-winning is the only way to change it again.
+An optional per-Challenge tally with a **Target**; reaching the Target wins the Challenge. It never goes past its Target, and lowering it below its Target un-wins a Won Challenge.
 _Avoid_: progress, score
 
 **Pinned**:
