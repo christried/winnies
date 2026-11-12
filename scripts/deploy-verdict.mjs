@@ -1,9 +1,8 @@
 // The decisions of scripts/deploy-wait.mjs, apart from the `gh api` calls it gathers its data with, as ci-verdict.mjs is apart
 // from ci-wait.mjs: where a PR stands on its way to a merge, whether its base deploys, and where the deployment stands.
+import { PASSING } from "./ci-verdict.mjs";
 import { mergeState } from "./pr-state.mjs";
 
-/** Check-run conclusions that let a PR merge. */
-const PASSING = new Set(["success", "neutral", "skipped"]);
 /** How long auto-merge may lag behind the last check before an agent merges itself (docs/agents/delivery.md § Branches and merges). */
 export const MERGE_LAG_MS = 2 * 60_000;
 
@@ -50,13 +49,14 @@ export function prVerdict(pr, runs, now) {
       ],
     };
   }
-  if (mergeState(pr) === "conflict")
+  const state = mergeState(pr);
+  if (state === "conflict")
     return { verdict: "conflict" };
-  if (pr.mergeable_state === "behind")
+  if (state === "behind")
     return { verdict: "behind" };
   const done = runs.length > 0 && runs.every(run => run.status === "completed");
   const last = Math.max(...runs.map(run => Date.parse(run.completed_at ?? "")).filter(Number.isFinite));
-  if (done && pr.mergeable_state === "clean" && now - last >= MERGE_LAG_MS)
+  if (done && state === "clean" && now - last >= MERGE_LAG_MS)
     return { verdict: "merge-yourself" };
   return { verdict: "wait" };
 }

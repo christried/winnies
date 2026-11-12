@@ -5,8 +5,8 @@ import { headPrOf, mergeState } from "./pr-state.mjs";
 describe("scripts/pr-state.mjs mergeState", () => {
   it.each([
     ["dirty", "conflict"],
-    ["clean", "ok"],
-    ["behind", "ok"],
+    ["clean", "clean"],
+    ["behind", "behind"],
     ["blocked", "ok"],
     ["unstable", "ok"],
     ["has_hooks", "ok"],

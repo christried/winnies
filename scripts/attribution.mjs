@@ -20,6 +20,12 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { AGENT_NAMES, COVERED_FILES, findFileMetadata, IDENTITY_RULE } from "./file-metadata.mjs";
 
+/**
+ * What every finding report starts with. scripts/ci-wait.mjs finds the failing part of a red Attribution run by it, so
+ * the report takes it from here: rewording the report cannot leave ci-wait cutting the wrong lines.
+ */
+export const FAILURE_MARKER = "No commit names an agent";
+
 // Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
 const CO_AUTHOR_RULE = [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"];
 
@@ -317,7 +323,7 @@ function main([mode, argument]) {
 function report(findings) {
   if (findings.length === 0)
     return 0;
-  console.error("No commit names an agent or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).");
+  console.error(`${FAILURE_MARKER} or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).`);
   for (const finding of findings) console.error(`  ${finding}`);
   // Only the manifest is the CLI's to remove; metadata that names an agent is edited out by hand.
   if (findings.some(finding => finding.includes(": carries a C2PA manifest")))
