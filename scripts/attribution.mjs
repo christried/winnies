@@ -1,6 +1,6 @@
 // Keeps agents out of the repository's record: no commit, tag, PR or issue text may credit an agent, and no commit may
 // be authored or committed by one, and no committed image may carry a C2PA manifest or metadata naming an agent
-// (CLAUDE.md § Attribution). Four callers share the patterns below:
+// (CLAUDE.md § Attribution). These callers share the patterns below:
 //
 //   node scripts/attribution.mjs message <file>   .husky/commit-msg: the commit message about to be recorded
 //   node scripts/attribution.mjs identity         .husky/pre-commit: the author and committer git would record
@@ -9,7 +9,7 @@
 //   node scripts/attribution.mjs range <a>..<b>   CI: every commit of a PR or a push
 //   node scripts/attribution.mjs files <a>..<b>   CI: the images a PR or a push changes, read at <b>
 //   node scripts/attribution.mjs text <file>      CI: a PR's title and body
-//   node scripts/attribution.mjs tool             Claude Code PreToolUse hook: a shell command before it runs (stdin)
+//   node scripts/attribution.mjs tool             Claude Code PreToolUse hook: a shell command or a GitHub connector call before it runs (stdin)
 //
 // Exit 0: clean. Exit 1: a finding, one line each. `tool` always exits 0 and answers in JSON, as hooks do.
 import { Buffer } from "node:buffer";
@@ -103,6 +103,33 @@ export function findInFile(path, buffer) {
   }
 }
 
+/** The fields the GitHub connector's tools write to GitHub: an issue, a comment, a PR, a review, a merge commit. */
+const CONNECTOR_TEXT = [
+  "title",
+  "body",
+  "commit_title",
+  "commit_message",
+  "message",
+];
+
+/**
+ * What a tool call would do against the rule, judged before it runs.
+ *
+ * A cloud session writes to GitHub through the GitHub connector, not through `gh` (docs/agents/cloud.md), so its
+ * text never passes a shell command.
+ *
+ * @param {string} name   The tool's name: `Bash`, `PowerShell`, or a connector tool such as `mcp__github__issue_write`.
+ * @param {Record<string, unknown>} input  The tool's input.
+ * @returns {string[]} One finding per problem; empty when the call may run.
+ */
+export function findInToolCall(name, input = {}) {
+  if (typeof input.command === "string")
+    return findInCommand(input.command);
+  if (!/^mcp__.*github/i.test(name ?? ""))
+    return [];
+  return findAttribution(CONNECTOR_TEXT.map(field => input[field]).filter(text => typeof text === "string").join("\n"));
+}
+
 const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 
 /**
@@ -188,13 +215,14 @@ export function pushSelections(stdin) {
 
 function main([mode, argument]) {
   if (mode === "tool") {
-    const findings = findInCommand(JSON.parse(readFileSync(0, "utf8")).tool_input?.command ?? "");
+    const call = JSON.parse(readFileSync(0, "utf8"));
+    const findings = findInToolCall(call.tool_name, call.tool_input);
     if (findings.length > 0) {
       console.log(JSON.stringify({
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "deny",
-          permissionDecisionReason: `Winnies records no agent anywhere (CLAUDE.md § Attribution). This command has ${findings.join(", ")}. Remove it and run the command again.`,
+          permissionDecisionReason: `Winnies records no agent anywhere (CLAUDE.md § Attribution). This call has ${findings.join(", ")}. Remove it and run it again.`,
         },
       }));
     }

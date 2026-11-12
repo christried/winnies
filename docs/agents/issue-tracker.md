@@ -1,6 +1,6 @@
 # Issue tracker: GitHub
 
-Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
+Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations. A cloud session is refused most of them and takes the commands of `cloud.md` § GitHub instead.
 
 ## Conventions
 

@@ -49,6 +49,17 @@ it (from the environment, else from `.env`), to get through Vercel login on stag
 or the hosting provider's build environment, because it is the project's Protection Bypass setting and not the
 app's. It lives in `.env.example` (commented out) and in the main checkout's `.env`.
 
+`WINNIES_CHROMIUM` is the fourth exception: the path of a Chromium for the browser tests and
+[`scripts/shots.mjs`](scripts/shots.mjs) to start, for a machine that brings its own instead of the one
+`pnpm exec playwright install chromium` downloads. Unset everywhere but in a cloud session's environment
+([`docs/agents/cloud.md`](docs/agents/cloud.md)); it lives in `.env.example` (commented out) and nowhere else.
+
+`WINNIES_VISUAL` is the fifth exception. [`scripts/visual-podman.mjs`](scripts/visual-podman.mjs) and the `visual`
+job in [`ci.yml`](.github/workflows/ci.yml) set it to `container`, and only the screenshot suite's config reads it,
+through [`scripts/visual-env.mjs`](scripts/visual-env.mjs): it refuses to run, or to write a baseline, outside the
+pinned Playwright image (ADR-0004). The app never reads it, so it lives in those two places and not in
+`.env.example`, `env.ts` or the hosting provider.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.
