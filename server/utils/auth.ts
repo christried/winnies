@@ -38,6 +38,12 @@ export const auth = betterAuth(
           defaultValue: "system",
           input: false,
         },
+        reduceMotion: {
+          type: "boolean",
+          required: false,
+          defaultValue: false,
+          input: false,
+        },
       },
     },
   },
