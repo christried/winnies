@@ -3,7 +3,8 @@
 // min-height or background, and the page lands where it did before this layout existed. It exists to hold the
 // surface's motion instance and particle layer (#300).
 const root = useTemplateRef<HTMLElement>("root");
-provideWinniesMotion({ root });
+const clock = provideSurfaceClock();
+provideWinniesMotion({ root, interval: clock.interval });
 </script>
 
 <template>
