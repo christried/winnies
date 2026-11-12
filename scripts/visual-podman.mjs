@@ -38,6 +38,10 @@ const podmanArgs = [
   `winnies-visual-node-modules-${checkout}:/work/node_modules`,
   "-v",
   "winnies-visual-pnpm-store:/pnpm-store",
+  // The Windows checkout carries a generated .nuxt (`nuxt prepare` runs on install there). CI has none, because the
+  // job installs with --ignore-scripts, so the container must not see it either: an empty directory in its place.
+  "--mount",
+  "type=tmpfs,destination=/work/.nuxt,notmpcopyup",
   "-w",
   "/work",
   "-e",

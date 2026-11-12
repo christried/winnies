@@ -15,6 +15,15 @@ export default defineConfig({
   test: {
     projects: VARIANTS.map(({ name, globals }) => ({
       extends: false as const,
+      // The root tsconfig.json only references .nuxt/tsconfig.*.json, which `nuxt prepare` writes and the `visual`
+      // job (no install scripts) never runs: without this, the dependency scan fails on the missing file, nothing is
+      // pre-bundled, and the first story iframe never gets ready.
+      tsconfig: ".storybook/tsconfig.json",
+      optimizeDeps: {
+        rolldownOptions: {
+          tsconfig: path.resolve(".storybook/tsconfig.json"),
+        },
+      },
       plugins: [
         storybookTest({ configDir: ".storybook", initialGlobals: globals }),
         // The plugin derives its cache directory from the Storybook config alone, so projects started side by side
