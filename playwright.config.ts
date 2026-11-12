@@ -34,7 +34,12 @@ export default defineConfig<ConfigOptions>({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // Unset, Playwright starts the Chromium it downloaded (`pnpm exec playwright install chromium`). A cloud
+        // session's container brings its own instead, and WINNIES_CHROMIUM names it (docs/agents/cloud.md).
+        launchOptions: { executablePath: process.env.WINNIES_CHROMIUM || undefined },
+      },
     },
   ],
 });

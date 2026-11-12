@@ -16,9 +16,10 @@ No agent shows up anywhere in this repository's record (the human, 2026-11-10; i
 
 - No `Co-Authored-By`, no session trailer, no "Generated with" line, no agent link or robot emoji: not in a commit, a tag, a PR title or body, an issue or a comment.
 - Commits are authored and committed under the human's git identity, never an agent's.
+- No C2PA manifest or other file metadata that names an agent in a committed image. A design export carries one; `node scripts/strip-metadata.mjs` removes it.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
-`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, push), the `Attribution` CI job on every PR and on `main` and `redesign`, the Claude Code hook in `.claude/settings.json` that refuses such a command before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
+`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, the images staged for the commit, push), the `Attribution` CI job on every PR and on `main` and `redesign` (the commits, and the images a change touches), the Claude Code hook in `.claude/settings.json` that refuses such a command, or such a call of the GitHub connector, before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
 
 ## Commits
 
@@ -60,6 +61,10 @@ What the review checks, on top of the glossary and the ADRs: `CODING_STANDARDS.m
 ### Subagents
 
 Pass `model` and `effort: "high"` on every spawn: `sonnet` for the harder half of this repository's tasks and for reviewers, `haiku` for the easier half. See `docs/agents/subagents.md`. `/implement-spec-max` is `/implement-spec` with every subagent on `fable`, or on `opus` or `sonnet` at high effort, by how hard its task is.
+
+### Cloud sessions
+
+In a cloud container (`CLAUDE_CODE_REMOTE` is set), read `docs/agents/cloud.md` before the first command.
 
 ### Design hand-off
 

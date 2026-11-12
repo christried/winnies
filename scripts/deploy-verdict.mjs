@@ -1,37 +1,46 @@
-// The decisions of scripts/deploy-wait.mjs, apart from the gh calls it gathers its data with, as ci-verdict.mjs is apart
+// The decisions of scripts/deploy-wait.mjs, apart from the `gh api` calls it gathers its data with, as ci-verdict.mjs is apart
 // from ci-wait.mjs: where a PR stands on its way to a merge, whether its base deploys, and where the deployment stands.
 
 /** Check-run conclusions that let a PR merge. */
-const PASSING = new Set(["SUCCESS", "NEUTRAL", "SKIPPED"]);
+const PASSING = new Set(["success", "neutral", "skipped"]);
 /** How long auto-merge may lag behind the last check before an agent merges itself (docs/agents/delivery.md § Branches and merges). */
 export const MERGE_LAG_MS = 2 * 60_000;
 
+// Both shapes are GitHub's REST API, not `gh pr view --json`: that command asks GraphQL, which a cloud session is
+// refused (docs/agents/cloud.md), and REST answers on every machine.
 /**
- * @typedef {object} Pr  a PR as `gh pr view --json state,isDraft,mergeStateStatus,statusCheckRollup` prints it
- * @property {string} state             OPEN, MERGED or CLOSED
- * @property {boolean} isDraft          a draft does not merge
- * @property {string} mergeStateStatus  CLEAN, BEHIND, DIRTY, BLOCKED, UNKNOWN, …
- * @property {{ __typename: string, name?: string, status?: string, conclusion?: string, completedAt?: string }[]} statusCheckRollup
- *   the PR's checks; only the CheckRun entries (the CI jobs) count, not commit statuses such as Vercel's
+ * @typedef {object} Pr  a PR as `GET pulls/<n>` returns it
+ * @property {string} state            open or closed; a merged PR is closed too
+ * @property {boolean} merged          closed by a merge
+ * @property {boolean} draft           a draft does not merge
+ * @property {string} mergeable_state  clean, behind, dirty, blocked, unknown, …
+ */
+/**
+ * @typedef {object} CheckRun  a CI job as `GET commits/<sha>/check-runs` returns it. Commit statuses such as Vercel's
+ *   are not check runs, so they never count here.
+ * @property {string} name                 the job's name, e.g. `e2e`
+ * @property {string} status               queued, in_progress or completed
+ * @property {string | null} conclusion    success, failure, cancelled, …; null until it completed
+ * @property {string | null} completed_at  when it completed, as an ISO timestamp
  */
 
 /**
  * Where a PR stands on its way to a merge.
  *
  * @param {Pr} pr   the PR
+ * @param {CheckRun[]} runs  the check runs of its head commit
  * @param {number} now  the time to measure the lag against, in ms since the epoch
  * @returns {{ verdict: "merged" | "closed" | "draft" | "red" | "conflict" | "behind" | "merge-yourself" | "wait", checks?: string[] }}
  *   `checks` names the failed checks of a red PR
  */
-export function prVerdict(pr, now) {
-  if (pr.state === "MERGED")
+export function prVerdict(pr, runs, now) {
+  if (pr.merged)
     return { verdict: "merged" };
-  if (pr.state === "CLOSED")
+  if (pr.state === "closed")
     return { verdict: "closed" };
-  if (pr.isDraft)
+  if (pr.draft)
     return { verdict: "draft" };
-  const runs = (pr.statusCheckRollup ?? []).filter(check => check.__typename === "CheckRun");
-  const failed = runs.filter(run => run.status === "COMPLETED" && !PASSING.has(run.conclusion));
+  const failed = runs.filter(run => run.status === "completed" && !PASSING.has(run.conclusion));
   if (failed.length > 0) {
     return {
       verdict: "red",
@@ -40,13 +49,13 @@ export function prVerdict(pr, now) {
       ],
     };
   }
-  if (pr.mergeStateStatus === "DIRTY")
+  if (pr.mergeable_state === "dirty")
     return { verdict: "conflict" };
-  if (pr.mergeStateStatus === "BEHIND")
+  if (pr.mergeable_state === "behind")
     return { verdict: "behind" };
-  const done = runs.length > 0 && runs.every(run => run.status === "COMPLETED");
-  const last = Math.max(...runs.map(run => Date.parse(run.completedAt ?? "")).filter(Number.isFinite));
-  if (done && pr.mergeStateStatus === "CLEAN" && now - last >= MERGE_LAG_MS)
+  const done = runs.length > 0 && runs.every(run => run.status === "completed");
+  const last = Math.max(...runs.map(run => Date.parse(run.completed_at ?? "")).filter(Number.isFinite));
+  if (done && pr.mergeable_state === "clean" && now - last >= MERGE_LAG_MS)
     return { verdict: "merge-yourself" };
   return { verdict: "wait" };
 }

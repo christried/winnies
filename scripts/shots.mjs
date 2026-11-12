@@ -239,12 +239,13 @@ async function main() {
 
   let browser;
   try {
-    browser = await chromium.launch();
+    // Unset, the Chromium Playwright downloaded. A cloud session's container brings its own (docs/agents/cloud.md).
+    browser = await chromium.launch({ executablePath: process.env.WINNIES_CHROMIUM || undefined });
   }
   catch (error) {
     const first = error.message.split("\n")[0];
     throw new Refusal(/Executable doesn't exist|playwright install/i.test(error.message)
-      ? `${oneLine(first, 200)}\nThe e2e browser is missing: run \`pnpm exec playwright install chromium\` once per machine (README, Tests).`
+      ? `${oneLine(first, 200)}\nThe e2e browser is missing: run \`pnpm exec playwright install chromium\` once per machine (README, Tests). A cloud session sets WINNIES_CHROMIUM instead (docs/agents/cloud.md).`
       : first);
   }
   try {

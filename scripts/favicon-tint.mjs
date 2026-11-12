@@ -4,7 +4,7 @@
 // fails `pnpm test` when a committed copy differs from what it makes. Never edit a staging copy by hand.
 //
 // The rule: hue +180 degrees modulo 360, saturation and lightness kept, written as lowercase #rrggbb.
-// Shapes, viewBox, coordinates and metadata (the <title> text, the C2PA manifest) are not touched; only
+// Shapes, viewBox, coordinates and metadata (the <title> text) are not touched; only
 // colour values change. The rule covers every hex, so a colour that is not in the table below needs no
 // new row. The rows are #237's and pin the rule in the test:
 //

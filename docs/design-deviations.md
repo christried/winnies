@@ -2,6 +2,8 @@
 
 Where the app's copy of a handoff file differs from the handoff's own, on purpose. The handoff stays the design's source of truth (ADR-0001), and `scripts/handoff-sync.test.mjs` fails on any difference between the two, except inside a block in the token file's copy that starts with `/* winnies:deviation #<issue> start */` and ends with `/* winnies:deviation #<issue> end */`. One entry per deviation, newest last: the date, the issue, what changed, why, and what the handoff would need to take it in, so the block can go.
 
+The rule is `CODING_STANDARDS.md` § Design; this file is the log it points to.
+
 ## 2026-11-12 · #268 · Composites resolve under their Dialect
 
 **What changed.** A block at the very end of `app/assets/css/winnies-tokens.css` declares again, under the Dialects, the tokens that hold `var()` and read a token a Dialect changes. Showcase gets `--shadow-raised`, `--shadow-raised-lg`, `--shadow-raised-hover` and `--shadow-popover`, with the light value and, under dark, the dark value. Broadcast gets `--btn-text`. Each has the same value text as in its theme block.
