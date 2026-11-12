@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { chip, grid, group, htmlStory, storyPage } from "../support/html";
-import { registered } from "../support/tokens";
+import { declared, registered } from "../support/tokens";
 
 const names = registered("color");
+// Declared in the token file but with no utility (the semantic card shows --color-scrim): the shadow and overlay tokens.
+const unregistered = declared("color").filter(name => !names.includes(name));
 
 // Grouped as the foundation card groups them. A name no rule claims falls into "Surfaces and text".
 const isState = (name: string) => /^--color-(?:danger|running|gone|offline)(?:-|$)|^--color-(?:won|pinned|complete)-(?:surface|text)/.test(name);
@@ -44,6 +46,7 @@ const meta: Meta = {
       "ready",
     ].map(pill).join("")}</div>`),
     group("States", grid(names.filter(isState).map(swatch))),
+    group("No utility (not registered in @theme)", grid(unregistered.map(swatch))),
   ].join(""))),
 };
 
