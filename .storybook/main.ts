@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // and the theme plugin rewrites `data-theme` on <html> over the toolbar's value (#264 spike).
 const config: StorybookConfig = {
   stories: ["../stories/**/*.stories.ts"],
-  addons: ["@storybook/addon-a11y"],
+  addons: ["@storybook/addon-a11y", "@storybook/addon-vitest"],
   framework: "@storybook/vue3-vite",
   core: { disableTelemetry: true },
   viteFinal: config => ({
