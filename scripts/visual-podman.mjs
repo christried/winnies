@@ -11,7 +11,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import { CONTAINER_ENV, CONTAINER_VALUE, pinnedImage } from "./visual-env.mjs";
+import { asksForUpdate, CONTAINER_ENV, CONTAINER_VALUE, pinnedImage } from "./visual-env.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
@@ -21,8 +21,10 @@ const image = pinnedImage(pkg.devDependencies["@playwright/test"]);
 const nodeVersion = readFileSync(path.join(root, ".nvmrc"), "utf8").trim();
 const pnpmVersion = pkg.packageManager.replace(/^pnpm@/, "");
 
-const update = process.argv.includes("--update");
-const forwarded = process.argv.slice(2).filter(arg => arg !== "--update");
+// The same rule the guard in the container applies, so `-u` and `--update=<mode>` are an update here as there. The
+// script it runs has its own --update, so the bare flags are not forwarded again; `--update=<mode>` is, as the user's.
+const update = asksForUpdate(process.argv);
+const forwarded = process.argv.slice(2).filter(arg => arg !== "--update" && arg !== "-u");
 
 // A volume per checkout, so two worktrees installing at once do not fight over one node_modules; the pnpm store is shared.
 const checkout = createHash("sha256").update(root).digest("hex").slice(0, 8);
