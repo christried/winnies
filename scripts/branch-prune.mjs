@@ -7,7 +7,8 @@
 // A branch goes when its tip is in the history of origin/redesign or origin/main and is not on their first-parent line
 // (a `--no-ff` merge puts the branch's tip off that line). It stays, with the reason, when it is `main` or `redesign`,
 // when an open PR has it as head or as base, when it is not merged (a squash-merged branch is never an ancestor), or when
-// its tip is on the first-parent line: no commit of its own, so another session may have just cut it. `--dry-run` prints
+// its tip is on the first-parent line: it has no commit of its own (another session may have just cut it) or was merged
+// without a merge commit (a fast-forward), and the two look alike. `--dry-run` prints
 // what it would do and changes nothing. One line per branch. The decision is scripts/branch-verdict.mjs; this file
 // gathers the data and acts on it.
 //
@@ -17,43 +18,18 @@
 // Only `refs/heads/*` on origin is touched: no local branch, no worktree.
 import { execFileSync, spawnSync } from "node:child_process";
 import process from "node:process";
-import { parseArgs } from "node:util";
 import { decide } from "./branch-verdict.mjs";
-
-const USAGE = "usage: node scripts/branch-prune.mjs [--dry-run]";
+import { firstLine, git, parseFlags } from "./cli-helpers.mjs";
 
 // Before any git call: a flag or an argument this script does not know must stop it, not be read as a real run.
-let parsed;
-try {
-  parsed = parseArgs({
-    args: process.argv.slice(2),
-    allowPositionals: false,
-    strict: true,
-    options: {
-      "dry-run": { type: "boolean", default: false },
-    },
-  });
-}
-catch (error) {
-  // Node adds a hint about `--` to the first sentence.
-  console.error(`${error.message.split(/\.\s|\n/)[0].replace(/\.$/, "")}.\n${USAGE}`);
-  process.exit(2);
-}
+const parsed = parseFlags({
+  options: {
+    "dry-run": { type: "boolean", default: false },
+  },
+  allowPositionals: false,
+  usage: "usage: node scripts/branch-prune.mjs [--dry-run]",
+});
 const dryRun = parsed.values["dry-run"];
-
-function git(...args) {
-  return execFileSync("git", args, {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-    maxBuffer: 64 * 1024 * 1024,
-  }).trim();
-}
-
-/** The line of a failed call's stderr that says what went wrong: git prints a `To <url>` line before a refusal. */
-function firstLine(error) {
-  const lines = String(error.stderr ?? error.message).trim().split("\n").map(line => line.trim());
-  return lines.find(line => /^(?:!|error:|fatal:)/.test(line)) ?? lines[0];
-}
 
 /** Whether `tip` is in the history of `ref`: exit 0 yes, exit 1 no, anything else is a failure and not a "no". */
 function isAncestor(tip, ref) {
@@ -101,7 +77,7 @@ try {
   pulls = openPulls();
 }
 catch (error) {
-  console.log(`cannot read the open PRs: ${String(error.stderr || error.message).trim().split("\n")[0]}`);
+  console.log(`cannot read the open PRs: ${firstLine(error)}`);
   process.exit(1);
 }
 

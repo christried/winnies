@@ -7,8 +7,10 @@
 //   3. An open PR has it as its base: kept.
 //   4. Its tip is in neither `redesign` nor `main`: kept (not merged; a squash merge lands here too).
 //   5. Its tip is on the first-parent history of `redesign` or `main`: kept. A branch another session has just cut from
-//      `redesign` and not yet committed to looks merged; a `--no-ff` merged branch's tip is a merge's second parent,
-//      so it is off that line.
+//      `redesign` and not yet committed to looks merged, and so does one merged by fast-forward; a `--no-ff` merged
+//      branch's tip is a merge's second parent, so it is off that line. The two cannot be told apart from the tip, so
+//      both stay: this repository merges with `--no-ff`, so a fast-forwarded branch is the rare one, and a human may
+//      delete it.
 //   6. Otherwise deleted.
 
 /**
@@ -56,7 +58,7 @@ export function decide(branch) {
   if (branch.onFirstParentLine) {
     return {
       action: "keep",
-      reason: "no commit of its own: its tip is on redesign or main itself, so another session may have just cut it",
+      reason: "its tip is on redesign or main itself: it has no commit of its own (another session may have just cut it) or was merged without a merge commit (fast-forward)",
     };
   }
   return { action: "delete", reason: `merged into ${branch.mergedInto.join(" and ")}` };

@@ -19,39 +19,22 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import process from "node:process";
-import { parseArgs } from "node:util";
+import { firstLine, git, parseFlags } from "./cli-helpers.mjs";
 import { agentId, decide, removalFailure, unmatchedNames } from "./worktree-verdict.mjs";
 
-const USAGE = "usage: node scripts/worktree-clean.mjs [--unlocked] [--dry-run] [<agent id> …]";
-
 // Before any git call: a flag this script does not know must stop it, not be read as a real run.
-let parsed;
-try {
-  parsed = parseArgs({
-    args: process.argv.slice(2),
-    allowPositionals: true,
-    strict: true,
-    options: {
-      "unlocked": { type: "boolean", default: false },
-      "dry-run": { type: "boolean", default: false },
-    },
-  });
-}
-catch (error) {
-  // Node adds a hint about `--` to the first sentence.
-  console.error(`${error.message.split(/\.\s|\n/)[0].replace(/\.$/, "")}.\n${USAGE}`);
-  process.exit(2);
-}
+const parsed = parseFlags({
+  options: {
+    "unlocked": { type: "boolean", default: false },
+    "dry-run": { type: "boolean", default: false },
+  },
+  allowPositionals: true,
+  usage: "usage: node scripts/worktree-clean.mjs [--unlocked] [--dry-run] [<agent id> …]",
+});
 const unlocked = parsed.values.unlocked;
 const dryRun = parsed.values["dry-run"];
 const names = parsed.positionals;
 
-function git(...args) {
-  return execFileSync("git", args, {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-  }).trim();
-}
 const root = git("rev-parse", "--show-toplevel");
 const home = join(root, ".claude", "worktrees");
 /** Forward slashes, lower case: Windows writes one path several ways. */
@@ -89,21 +72,23 @@ function worktrees() {
       path: field("worktree"),
       head: field("HEAD"),
       branch: field("branch")?.replace("refs/heads/", ""),
-      lock: field("locked"),
+      // The lock's reason as git prints it, "" for a bare `locked` line, undefined when not locked; describe() turns it
+      // into the `lock` decide() takes.
+      lockReason: field("locked"),
     };
   }).filter(tree => tree.path && same(tree.path).startsWith(`${same(home)}/`));
 }
 
 /** One worktree described as data for decide(): read-only git and process calls, whether or not it is wanted gone. */
 function describe(tree, name, all) {
-  const pid = Number(/\(pid (\d+)\)/.exec(tree.lock ?? "")?.[1]);
+  const pid = Number(/\(pid (\d+)\)/.exec(tree.lockReason ?? "")?.[1]);
   return {
     name,
     named: named.has(agentId(name)),
     // A lock without a pid was set by hand: it counts as running, so only naming removes the worktree.
-    lock: tree.lock === undefined
+    lock: tree.lockReason === undefined
       ? null
-      : { text: tree.lock, running: !(pid > 0) || running(pid) },
+      : { text: tree.lockReason, running: !(pid > 0) || running(pid) },
     uncommitted: git("-C", tree.path, "status", "--porcelain").split("\n").filter(Boolean).length,
     head: tree.head,
     unpushed: git("branch", "-r", "--contains", tree.head) === "",
@@ -131,13 +116,13 @@ function lockAgain(tree, name) {
     return;
   try {
     // A bare `locked` line in the listing is a lock without a reason.
-    const reason = tree.lock === ""
+    const reason = tree.lockReason === ""
       ? []
-      : ["--reason", tree.lock];
+      : ["--reason", tree.lockReason];
     git("worktree", "lock", ...reason, tree.path);
   }
   catch (error) {
-    report(name, { action: "failed", reason: `could not lock it again: ${String(error.stderr ?? error.message).trim().split("\n")[0]}` });
+    report(name, { action: "failed", reason: `could not lock it again: ${firstLine(error)}` });
   }
 }
 
@@ -159,15 +144,18 @@ for (const tree of listedTrees) {
     continue;
   }
   try {
-    if (tree.lock !== undefined)
+    if (tree.lockReason !== undefined)
       git("worktree", "unlock", tree.path);
     git("worktree", "remove", tree.path);
   }
   catch (error) {
     // Windows refuses to delete a file a process still holds; what is left is a folder for the next run.
-    const failure = removalFailure({ code: error.code, message: String(error.stderr ?? error.message).trim().split("\n")[0] });
+    const failure = removalFailure({
+      code: error.code,
+      message: firstLine(error),
+    });
     if (failure.action === "kept") {
-      if (tree.lock !== undefined)
+      if (tree.lockReason !== undefined)
         lockAgain(tree, name);
       inUse.add(name);
     }

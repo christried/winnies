@@ -1,9 +1,12 @@
 import { Buffer } from "node:buffer";
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { findAttribution, findInCommand, findInFile, findInToolCall, isAgentIdentity, parseFilesRange, pushSelections } from "./attribution.mjs";
+import { FAILURE_MARKER, findAttribution, findInCommand, findInFile, findInToolCall, isAgentIdentity, parseFilesRange, pushSelections } from "./attribution.mjs";
 
 // The guard behind CLAUDE.md § Attribution: the git hooks, the CI job and the Claude Code hook all call these.
 describe("findAttribution", () => {
@@ -236,5 +239,26 @@ describe("files, from the command line", () => {
 
   it("reads the three-dot form, and an empty diff is clean", () => {
     expect(files("HEAD...HEAD").status).toBe(0);
+  });
+});
+
+describe("a failing report, from the command line", () => {
+  // scripts/ci-wait.mjs cuts a red Attribution run's log at this marker.
+  it("starts with the marker ci-wait looks for", () => {
+    const dir = mkdtempSync(join(tmpdir(), "attribution-"));
+    try {
+      const file = join(dir, "title.txt");
+      writeFileSync(file, "feat: x\n\nCo-Authored-By: someone\n");
+      const { status, stderr } = spawnSync(process.execPath, [
+        fileURLToPath(new URL("./attribution.mjs", import.meta.url)),
+        "text",
+        file,
+      ], { encoding: "utf8" });
+      expect(status).toBe(1);
+      expect(stderr).toContain(FAILURE_MARKER);
+    }
+    finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
