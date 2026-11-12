@@ -14,11 +14,23 @@
   "permissions": {
     "deny": [
       "mcp__claude_ai_Vercel__web_fetch_vercel_url",
-      "mcp__claude_ai_Vercel__get_access_to_vercel_url"
+      "mcp__claude_ai_Vercel__get_access_to_vercel_url",
+      "mcp__Vercel__web_fetch_vercel_url",
+      "mcp__Vercel__get_access_to_vercel_url"
     ]
   },
   "hooks": {
     "PreToolUse": [
+      {
+        "matcher": "mcp__.*[Gg]it[Hh]ub.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/scripts/attribution.mjs tool",
+            "timeout": 10
+          }
+        ]
+      },
       {
         "matcher": "Bash|PowerShell",
         "hooks": [

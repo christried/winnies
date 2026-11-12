@@ -20,6 +20,8 @@ On an `Idea: …` issue, `needs-triage` means "not grilled yet": it waits for a 
 
 `duplicate` marks an issue closed as a duplicate.
 
+`needs-local-check` marks a ticket that is merged and verified as far as a cloud session can, and waits for a check only a session on the human's machine can do (`delivery.md` § Issues). It sits beside the ticket's other labels and goes when the check is posted.
+
 ## Type
 
 Exactly one per issue, matching the Conventional Commits type of the work it produces:
