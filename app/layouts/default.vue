@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { formatDuration } from "~~/shared/utils/timer";
 
+// First, before the await below: a provide after an await is lost.
+const root = useTemplateRef<HTMLElement>("root");
+provideWinniesMotion({ root });
+
 const winnieStore = useWinnieStore();
 const { currentWinnie } = storeToRefs(winnieStore);
 const user = useCurrentUser();
@@ -32,10 +36,11 @@ useFavicon(() => ({
 </script>
 
 <template>
-  <div class="min-h-dvh">
+  <div ref="root" class="min-h-dvh">
     <div class="mx-auto flex max-w-270 flex-col gap-2 p-4">
       <slot />
       <AppFooter />
     </div>
+    <ParticleLayer />
   </div>
 </template>
