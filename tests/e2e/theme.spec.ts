@@ -2,13 +2,12 @@ import type { Page } from "@playwright/test";
 import { THEME_COOKIE } from "../../shared/constants";
 import { seedWinnie } from "../support/owner-api";
 import { expect, test, visit } from "./fixtures";
+import { openingTag } from "./support/served-html";
 
 // How the one theme preference reaches the page (#260, spec #257 § 4): `<html data-theme="light|dark">` is
 // rendered by the server for Light and Dark, an inline <head> script resolves Match system before the first
 // paint, and the Overlay is light only. Served HTML is read raw (`request.get`), which is what a browser
 // gets before any script runs.
-
-const HTML_TAG = /<html\b[^>]*>/;
 
 /** The `data-theme` on the opening <html> tag of a served page, or undefined when the server left it off. */
 async function servedTheme(page: Page, path: string) {
@@ -17,7 +16,7 @@ async function servedTheme(page: Page, path: string) {
   const html = await response.text();
   // Only <html> may carry it: the whole body holds at most one.
   expect(html.match(/\sdata-theme="/g)?.length ?? 0).toBeLessThanOrEqual(1);
-  return HTML_TAG.exec(html)![0].match(/\sdata-theme="([^"]*)"/)?.[1];
+  return openingTag(html, "html").match(/\sdata-theme="([^"]*)"/)?.[1];
 }
 
 /** Whether the app's own scripts ran: Nuxt's client entry puts `useNuxtApp` on the window (what `visit` waits on). */

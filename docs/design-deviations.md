@@ -4,6 +4,8 @@ Where the app's copy of a handoff file differs from the handoff's own, on purpos
 
 The rule is `CODING_STANDARDS.md` § Design; this file is the log it points to.
 
+An entry whose text says "the same value text as in its theme block" makes `scripts/handoff-deviations.mjs` check that every value in its block equals the theme block's, so rewording that sentence switches the check off.
+
 ## 2026-11-12 · #268 · Composites resolve under their Dialect
 
 **What changed.** A block at the very end of `app/assets/css/winnies-tokens.css` declares again, under the Dialects, the tokens that hold `var()` and read a token a Dialect changes. Showcase gets `--shadow-raised`, `--shadow-raised-lg`, `--shadow-raised-hover` and `--shadow-popover`, with the light value and, under dark, the dark value. Broadcast gets `--btn-text`. Each has the same value text as in its theme block.

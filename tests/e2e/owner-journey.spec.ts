@@ -18,7 +18,7 @@ function rowOf(page: Page, game: string) {
   return page.getByRole("listitem").filter({ hasText: game });
 }
 
-// The add row is a focus-driven collapse: its form is only fillable once the title has been clicked.
+// The add row's form is always open since #258 took the collapse out; the click on its title is harmless, no longer required.
 async function addChallengeThroughForm(page: Page, challenge: ChallengeInput) {
   await page.getByText(/Create your (first|next) Challenge/).click();
   await page.getByPlaceholder("Game").fill(challenge.game);

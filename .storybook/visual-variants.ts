@@ -54,13 +54,36 @@ export const VARIANTS: readonly Variant[] = [
   },
 ];
 
-/** Whether a story rendered in a variant is also compared with a baseline. */
+/** Whether a story rendered in this variant is also compared with a baseline. */
+export function shotIn(variant: Pick<Variant, "only" | "skip">, storyId: string) {
+  return variant.only
+    ? variant.only.includes(storyId)
+    : !variant.skip?.includes(storyId);
+}
+
+/** Whether a story rendered in the variant of that name is also compared with a baseline. */
 export function isShot(variantName: string | undefined, storyId: string) {
   const variant = VARIANTS.find(({ name }) => name === variantName);
   if (!variant) {
     throw new Error(`Unknown screenshot variant ${String(variantName)}.`);
   }
-  return variant.only
-    ? variant.only.includes(storyId)
-    : !variant.skip?.includes(storyId);
+  return shotIn(variant, storyId);
+}
+
+/**
+ * The name a story's screenshot goes by. Vitest turns any name into a file name by collapsing runs of hyphens, which
+ * makes `tokens-colours--default` the file `tokens-colours-default.png`; doing it here, before Vitest does (it is
+ * idempotent), lets the variants test list the files that come out.
+ */
+export function screenshotName(storyId: string) {
+  return storyId.replace(/-{2,}/g, "-");
+}
+
+/**
+ * Where the baseline of a story in a variant lives, relative to the repository root. The path has no platform in it:
+ * every baseline comes from the one image (ADR-0004). The screenshot config resolves its baselines with this, and the
+ * variants test lists the baselines on disk against it.
+ */
+export function baselinePath(variantName: string, storyId: string, ext = ".png") {
+  return `stories/__screenshots__/${variantName}/${screenshotName(storyId)}${ext}`;
 }

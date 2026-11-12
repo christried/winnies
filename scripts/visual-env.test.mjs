@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { asksForUpdate, assertInContainer, pinnedImage } from "./visual-env.mjs";
+import { asksForUpdate, assertInContainer, pinnedImage, visualRun } from "./visual-env.mjs";
 
 // Baselines come out of the pinned Playwright image and nowhere else (ADR-0004), so a run on the host is refused
 // before the config lets Vitest write or compare anything. The refusals are what a developer on Windows sees.
@@ -68,6 +68,42 @@ describe("scripts/visual-env.mjs asksForUpdate", () => {
 
   it("does not take a longer flag for an update", () => {
     expect(asksForUpdate(["vitest", "run", "--update-snapshots-not-a-flag"])).toBe(false);
+  });
+});
+
+describe("scripts/visual-env.mjs visualRun", () => {
+  it("a comparing run runs `test:visual` as CI, and forwards everything", () => {
+    expect(visualRun([])).toEqual({
+      update: false,
+      script: "test:visual",
+      forwarded: [],
+    });
+    expect(visualRun(["--project", "workspace-dark"])).toEqual({
+      update: false,
+      script: "test:visual",
+      forwarded: ["--project", "workspace-dark"],
+    });
+  });
+
+  it.each(["--update", "-u"])("%s runs `test:visual:update`, which carries the one update flag, so none is forwarded", (flag) => {
+    expect(visualRun([flag, "--project", "workspace-dark"])).toEqual({
+      update: true,
+      script: "test:visual:update",
+      forwarded: ["--project", "workspace-dark"],
+    });
+  });
+
+  it("--update=new hands Vitest that one flag, through `test:visual`, which has none of its own", () => {
+    expect(visualRun(["--update=new", "--project", "workspace-dark"])).toEqual({
+      update: true,
+      script: "test:visual",
+      forwarded: ["--update=new", "--project", "workspace-dark"],
+    });
+  });
+
+  it("several update flags still hand Vitest exactly one", () => {
+    expect(visualRun(["-u", "--update=new", "--update"]).forwarded).toEqual(["--update=new"]);
+    expect(visualRun(["--update=all", "--update=new"]).forwarded).toEqual(["--update=new"]);
   });
 });
 

@@ -1,7 +1,8 @@
 import type { Page } from "@playwright/test";
 import { MOTION_COOKIE } from "../../shared/constants";
-import { seedWinnie } from "../support/owner-api";
 import { expect, test, visit } from "./fixtures";
+import { openingTag } from "./support/served-html";
+import { seedSpeedrunWinnie } from "./support/winnies";
 
 // The Reduce motion preference (#262): the account's value and the cookie decide `data-motion` on <html>,
 // and the server writes it, so the first paint is already still. What each page shows is read two ways: the
@@ -12,7 +13,7 @@ import { expect, test, visit } from "./fixtures";
 // computed `transition-duration`, which the browser normalises to seconds.
 
 interface MotionOnPage {
-  servedHtmlTag: string | undefined;
+  servedHtmlTag: string;
   attribute: string | null;
   /** `--dur-base` as a transition duration: "0.24s" normally, "0s" when reduced. */
   duration: string;
@@ -33,7 +34,10 @@ async function motionOn(page: Page, path: string): Promise<MotionOnPage> {
       return duration;
     })(),
   }));
-  return { servedHtmlTag: served.match(/<html[^>]*>/)?.[0], ...shown };
+  return {
+    servedHtmlTag: openingTag(served, "html"),
+    ...shown,
+  };
 }
 
 /** Puts the preference on the Owner's account, as the switch will later. */
@@ -63,12 +67,7 @@ function expectNotReduced(surface: MotionOnPage) {
 }
 
 test("the account's preference on: a fresh browser gets it on the Workspace, the Shared View and the Overlay", async ({ ownerPage }) => {
-  const winnie = await seedWinnie(ownerPage.request, {
-    name: "Motion test Winnie",
-    challenges: [
-      { game: "Speedrun" },
-    ],
-  });
+  const winnie = await seedSpeedrunWinnie(ownerPage, "Motion test Winnie");
   await setAccountMotion(ownerPage, true);
 
   expectReduced(await motionOn(ownerPage, "/"));
@@ -77,12 +76,7 @@ test("the account's preference on: a fresh browser gets it on the Workspace, the
 });
 
 test("the preference off and no cookie: no attribute on the Workspace, the Shared View and the Overlay", async ({ page, ownerPage }) => {
-  const winnie = await seedWinnie(ownerPage.request, {
-    name: "Motion test Winnie",
-    challenges: [
-      { game: "Speedrun" },
-    ],
-  });
+  const winnie = await seedSpeedrunWinnie(ownerPage, "Motion test Winnie");
 
   expectNotReduced(await motionOn(ownerPage, "/"));
   expectNotReduced(await motionOn(page, `/shared/${winnie.shareSlug}`));
@@ -90,12 +84,7 @@ test("the preference off and no cookie: no attribute on the Workspace, the Share
 });
 
 test("the cookie alone, signed out, reduces the Shared View and the Overlay", async ({ page, ownerPage, baseURL }) => {
-  const winnie = await seedWinnie(ownerPage.request, {
-    name: "Motion test Winnie",
-    challenges: [
-      { game: "Speedrun" },
-    ],
-  });
+  const winnie = await seedSpeedrunWinnie(ownerPage, "Motion test Winnie");
   await setMotionCookie(page, "true", baseURL);
 
   expectReduced(await motionOn(page, `/shared/${winnie.shareSlug}`));
@@ -103,12 +92,7 @@ test("the cookie alone, signed out, reduces the Shared View and the Overlay", as
 });
 
 test("a cookie nobody can read is ignored: signed out it is off, signed in it follows the account", async ({ page, ownerPage, baseURL }) => {
-  const winnie = await seedWinnie(ownerPage.request, {
-    name: "Motion test Winnie",
-    challenges: [
-      { game: "Speedrun" },
-    ],
-  });
+  const winnie = await seedSpeedrunWinnie(ownerPage, "Motion test Winnie");
   await setMotionCookie(page, "banana", baseURL);
   expectNotReduced(await motionOn(page, `/shared/${winnie.shareSlug}`));
 
