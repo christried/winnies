@@ -3,11 +3,11 @@ const { appVersion } = useRuntimeConfig().public;
 </script>
 
 <template>
-  <footer class="footer flex footer-center footer-horizontal flex-col gap-3 rounded-lg bg-base-200 p-4">
+  <footer class="flex flex-col gap-3 rounded-lg p-4">
     <nav class="flex gap-2">
       <NuxtLink
         to="https://christried.me/imprint.html"
-        class="link link-hover hover:text-success"
+        class="underline"
         external
         rel="noopener"
         target="_blank"
@@ -17,7 +17,7 @@ const { appVersion } = useRuntimeConfig().public;
 
       <NuxtLink
         to="https://christried.me/privacy-winnies.html"
-        class="link link-hover hover:text-success"
+        class="underline"
         external
         rel="noopener"
         target="_blank"
@@ -27,13 +27,13 @@ const { appVersion } = useRuntimeConfig().public;
 
       <NuxtLink
         to="/changelog"
-        class="link link-hover hover:text-success"
+        class="underline"
       >
         Changelog
       </NuxtLink>
     </nav>
     <nav>
-      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="See on GitHub">
+      <div>
         <AppWordmark :is-footer="true" />
       </div>
     </nav>
@@ -41,16 +41,10 @@ const { appVersion } = useRuntimeConfig().public;
       <p>
         v{{ appVersion }} created with <NuxtLink
           to="https://nuxt.com/"
-          class="link link-hover hover:text-success"
+          class="underline"
           external
         >
           Nuxt
-        </NuxtLink> using <NuxtLink
-          to="https://daisyui.com/"
-          class="link link-hover hover:text-success"
-          external
-        >
-          daisyUI
         </NuxtLink>
       </p>
     </aside>

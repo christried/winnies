@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { addServerHandler, createResolver, defineNuxtModule } from "nuxt/kit";
 import pkg from "./package.json";
+import { MATCH_SYSTEM_SCRIPT } from "./shared/utils/theme";
 import { carriesDevSignIn, DEV_SIGN_IN_ROUTE, isStagingBuild, stageBranding } from "./stage";
 import "./server/utils/env";
 
@@ -12,7 +13,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@nuxt/eslint",
-    "@nuxt/fonts",
     "@nuxt/icon",
     "@pinia/nuxt",
     "@nuxt/content",
@@ -40,12 +40,6 @@ export default defineNuxtConfig({
       standalone: false,
     },
   },
-  fonts: {
-    defaults: {
-      weights: [400, 500, 600, 700],
-      styles: ["normal"],
-    },
-  },
   icon: {
     mode: "svg", // inline SVG required for currentColor
 
@@ -64,10 +58,22 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    // An external under <root>/shared/ that rolldown reaches first through a relative specifier is written
+    // relative to a base two levels too deep, and Nitro can't resolve it. Absolute is what every green
+    // build has (#246).
+    $server: {
+      build: {
+        rolldownOptions: { makeAbsoluteExternalsRelative: false },
+      },
+    },
   },
   app: {
     head: {
       htmlAttrs: { lang: "en" },
+      // Before the stylesheets and the module script, so Match system is resolved before the first paint.
+      script: [
+        { innerHTML: MATCH_SYSTEM_SCRIPT, tagPriority: "critical", tagPosition: "head" },
+      ],
     },
   },
 

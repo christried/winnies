@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "reduce_motion" boolean DEFAULT false NOT NULL;

@@ -32,13 +32,11 @@ async function copyUrl() {
       ref="urlInput"
       :value="url"
       readonly
-      class="input min-w-0 flex-1 font-mono text-[11px] input-sm"
+      class="min-w-0 flex-1 border font-mono text-[11px]"
     >
 
     <button
       type="button"
-      class="btn btn-sm"
-      :class="isUrlCopied && 'btn-success'"
       @click="copyUrl"
     >
       {{ isUrlCopied ? "Copied!" : "Copy link" }}

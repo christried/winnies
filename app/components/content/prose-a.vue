@@ -13,7 +13,7 @@ const isExternal = computed(() => /^https?:\/\//.test(props.href ?? ""));
 <template>
   <NuxtLink
     :to="href"
-    class="link link-primary"
+    class="underline"
     :target="isExternal ? '_blank' : undefined"
     :rel="isExternal ? 'noopener' : undefined"
   >

@@ -16,17 +16,15 @@ const props = withDefaults(defineProps<{
 const displayedTime = computed(() => formatDuration(props.seconds));
 
 const computedClasses = computed(() => {
-  const statusClass = props.status === "running"
-    ? "text-primary"
-    : props.status === "won"
-      ? "text-success"
-      : "opacity-60";
+  const statusClass = props.status === "idle"
+    ? "opacity-60"
+    : "";
 
   const sizeClasses = props.size === "total"
-    ? "type-timer-total"
+    ? ""
     : "font-mono text-sm font-medium";
 
-  return `${statusClass} ${sizeClasses}`;
+  return `${statusClass} ${sizeClasses}`.trim();
 });
 </script>
 

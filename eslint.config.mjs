@@ -86,10 +86,15 @@ export default withNuxt(
       "docs/research/**",
       ".nuxt/**",
       ".output/**",
+      // The static Storybook build (`pnpm build-storybook`): generated, never committed.
+      "storybook-static/**",
       "**/migrations/**",
       ".pnpm-store/**",
       // Vendored skills, kept byte for byte as their source ships them (.claude/skills/README.md).
       ".claude/**",
+      // Verbatim copies of the handoff, kept equal by scripts/handoff-sync.test.mjs: Prettier must not reformat them.
+      "app/assets/css/winnies-tokens.css",
+      "app/assets/fonts/fonts.css",
     ],
   }),
   {
@@ -103,9 +108,10 @@ export default withNuxt(
   },
   {
     // Test harness: it reports to the console, and tests/support/env.ts is the only place that reads the
-    // environment (the Playwright config only asks whether it runs in CI).
+    // environment (the Playwright config only asks whether it runs in CI, the screenshot config whether it runs in
+    // the container).
     name: "tests",
-    files: ["tests/**", "playwright.config.ts"],
+    files: ["tests/**", "playwright.config.ts", "vitest.storybook.config.ts"],
     rules: {
       "no-console": "off",
       "node/no-process-env": "off",
@@ -122,6 +128,14 @@ export default withNuxt(
     },
     rules: {
       "better-tailwindcss/enforce-consistent-class-order": "error",
+      // Refuses a class the Tailwind entry doesn't define, so no class of the removed look survives.
+      // drag-grip is the exception: a JS selector hook for the drag handle (challenge-list.vue), with no CSS.
+      "better-tailwindcss/no-unknown-classes": [
+        "error",
+        {
+          ignore: ["drag-grip"],
+        },
+      ],
     },
   },
   {

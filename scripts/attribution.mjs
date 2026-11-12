@@ -1,26 +1,34 @@
 // Keeps agents out of the repository's record: no commit, tag, PR or issue text may credit an agent, and no commit may
-// be authored or committed by one (CLAUDE.md § Attribution). Four callers share the patterns below:
+// be authored or committed by one, and no committed image may carry a C2PA manifest or metadata naming an agent
+// (CLAUDE.md § Attribution). These callers share the patterns below:
 //
 //   node scripts/attribution.mjs message <file>   .husky/commit-msg: the commit message about to be recorded
 //   node scripts/attribution.mjs identity         .husky/pre-commit: the author and committer git would record
+//   node scripts/attribution.mjs staged           .husky/pre-commit: the images staged for the commit, read from the index
 //   node scripts/attribution.mjs push             .husky/pre-push: every commit about to leave this machine (stdin)
 //   node scripts/attribution.mjs range <a>..<b>   CI: every commit of a PR or a push
+//   node scripts/attribution.mjs files <a>..<b>   CI: the images a PR or a push changes, read at <b>
 //   node scripts/attribution.mjs text <file>      CI: a PR's title and body
 //   node scripts/attribution.mjs tool             Claude Code PreToolUse hook: a shell command or a GitHub connector call before it runs (stdin)
 //
 // Exit 0: clean. Exit 1: a finding, one line each. `tool` always exits 0 and answers in JSON, as hooks do.
-import { execFileSync } from "node:child_process";
+import { Buffer } from "node:buffer";
+import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { AGENT_NAMES, COVERED_FILES, findFileMetadata, IDENTITY_RULE } from "./file-metadata.mjs";
 
-const AGENT_NAMES = "claude|anthropic|codex|openai|copilot|cursoragent|cursor agent|devin|gemini|aider|windsurf";
+// Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
+const CO_AUTHOR_RULE = [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"];
 
-/** What no message, PR body or comment may contain, each with the words the finding is reported in. */
+/**
+ * What no commit message, merge commit or PR title may contain, each with the words the finding is reported in.
+ * A PR body, an issue or a comment may name the agent that wrote it, so only `CO_AUTHOR_RULE` holds there (#277).
+ */
 const TEXT_RULES = [
-  // Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
-  [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"],
+  CO_AUTHOR_RULE,
   [/^[ \t>*-]*(?:claude-session|generated-by|assisted-by|ai-assisted-by)\s*:/im, "an agent trailer"],
   [
     new RegExp(`(?:generated|written|created|authored|made)\\s+(?:with|by)\\s+[[*_]*(?:${AGENT_NAMES})`, "i"),
@@ -31,8 +39,6 @@ const TEXT_RULES = [
   [/\u{1F916}/u, "the robot emoji that marks agent output"],
 ];
 
-const IDENTITY_RULE = new RegExp(`\\b(?:${AGENT_NAMES})\\b|@anthropic\\.com|@openai\\.com`, "i");
-
 /**
  * The attribution a text carries.
  *
@@ -41,6 +47,18 @@ const IDENTITY_RULE = new RegExp(`\\b(?:${AGENT_NAMES})\\b|@anthropic\\.com|@ope
  */
 export function findAttribution(text) {
   return TEXT_RULES.filter(([pattern]) => pattern.test(text)).map(([, finding]) => finding);
+}
+
+/**
+ * The co-authorship a PR body, an issue or a comment claims. Naming the agent that wrote it is allowed there (#277).
+ *
+ * @param text A PR body, an issue or a comment.
+ * @returns The finding when the text carries a co-author trailer; empty otherwise.
+ */
+function findCoAuthorship(text) {
+  return CO_AUTHOR_RULE[0].test(text)
+    ? [CO_AUTHOR_RULE[1]]
+    : [];
 }
 
 /**
@@ -67,7 +85,10 @@ export function findInCommand(command) {
   if (!writesHistory && !writesGitHub)
     return [];
   // A trailer inside `-m "…"` or a heredoc does not start its line in the command, so the line anchors go.
-  const findings = TEXT_RULES
+  // A command that only writes to GitHub writes a body or a comment, where only a co-author is refused (#277).
+  const findings = (writesHistory
+    ? TEXT_RULES
+    : [CO_AUTHOR_RULE])
     .map(([pattern, finding]) => [
       new RegExp(pattern.source.replace("^[ \\t>*-]*", ""), pattern.flags.replace("m", "")),
       finding,
@@ -86,10 +107,27 @@ export function findInCommand(command) {
   return findings;
 }
 
+/**
+ * What an image carries that the rule keeps out.
+ *
+ * @param path The file's repository path, which names the format and starts each finding.
+ * @param buffer The file's bytes.
+ * @returns One line per finding; a file that cannot be read is a finding too, since it is not known to be clean.
+ */
+export function findInFile(path, buffer) {
+  try {
+    return findFileMetadata(path, buffer).map(reason => `${path}: carries ${reason}`);
+  }
+  catch (error) {
+    return [`${path}: cannot be read as ${/\.([^./\\]+)$/.exec(path)?.[1].toLowerCase()} (${error.message})`];
+  }
+}
+
 /** The fields the GitHub connector's tools write to GitHub: an issue, a comment, a PR, a review, a merge commit. */
 const CONNECTOR_TEXT = [
+  // These end up in a commit: a merge commit, a file commit, and a PR title, which the merge commit takes as its
+  // message. A `body` (an issue, a comment, a PR, a review) is judged by `findCoAuthorship` alone (#277).
   "title",
-  "body",
   "commit_title",
   "commit_message",
   "message",
@@ -110,10 +148,53 @@ export function findInToolCall(name, input = {}) {
     return findInCommand(input.command);
   if (!/^mcp__.*github/i.test(name ?? ""))
     return [];
-  return findAttribution(CONNECTOR_TEXT.map(field => input[field]).filter(text => typeof text === "string").join("\n"));
+  const commitText = CONNECTOR_TEXT.map(field => input[field]).filter(text => typeof text === "string").join("\n");
+  const findings = findAttribution(commitText);
+  if (typeof input.body === "string")
+    findings.push(...findCoAuthorship(input.body).filter(finding => !findings.includes(finding)));
+  return findings;
 }
 
 const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+
+/**
+ * The files git lists for a diff, with their content.
+ *
+ * One `git cat-file --batch` reads them all: a process per file would take a minute for a thousand files on Windows.
+ *
+ * @param diffArguments Arguments after `git diff --name-only --diff-filter=ACMR -z`.
+ * @param revision What to read the content from: a commit, or empty for the index.
+ * @returns The covered files as `[path, buffer]`.
+ */
+function changedFiles(diffArguments, revision) {
+  const paths = git("diff", "--name-only", "--diff-filter=ACMR", "-z", ...diffArguments).split("\0").filter(path => COVERED_FILES.test(path));
+  if (paths.length === 0)
+    return [];
+  const { stdout, status, stderr } = spawnSync("git", ["cat-file", "--batch"], {
+    input: paths.map(path => `${revision}:${path}\n`).join(""),
+    maxBuffer: 1 << 30,
+  });
+  if (status !== 0)
+    throw new Error(`git cat-file failed: ${stderr}`);
+  const files = [];
+  let offset = 0;
+  for (const path of paths) {
+    const headerEnd = stdout.indexOf("\n", offset);
+    const [, type, size] = stdout.toString("latin1", offset, headerEnd).split(" ");
+    offset = headerEnd + 1;
+    // A missing object or a submodule has no content to read.
+    if (type !== "blob")
+      continue;
+    files.push([
+      path,
+      Buffer.from(stdout.subarray(offset, offset + Number(size))),
+    ]);
+    offset += Number(size) + 1;
+  }
+  return files;
+}
+
+const findInFiles = files => files.flatMap(([path, buffer]) => findInFile(path, buffer));
 
 /**
  * The findings of every commit a `git log` selection names: its message, its author and its committer.
@@ -166,7 +247,7 @@ function main([mode, argument]) {
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "deny",
-          permissionDecisionReason: `Winnies records no agent anywhere (CLAUDE.md § Attribution). This call has ${findings.join(", ")}. Remove it and run it again.`,
+          permissionDecisionReason: `No commit names an agent, and nothing claims one as co-author (CLAUDE.md § Attribution). This call has ${findings.join(", ")}. Remove it and run it again.`,
         },
       }));
     }
@@ -175,21 +256,28 @@ function main([mode, argument]) {
   const findings = {
     message: () => findAttribution(readFileSync(argument, "utf8").split("\n").filter(line => !line.startsWith("#")).join("\n")).map(finding => `the commit message has ${finding}`),
     text: () => findAttribution(readFileSync(argument, "utf8")).map(finding => `the text has ${finding}`),
+    // CI: a PR's body, which may name the agent that wrote it but not claim it as co-author (#277).
+    body: () => findCoAuthorship(readFileSync(argument, "utf8")).map(finding => `the PR body has ${finding}`),
     identity: () => ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"].map(name => [
       name,
       git("var", name).replace(/ \d+ [+-]\d+\s*$/, ""),
     ]).filter(([, identity]) => isAgentIdentity(identity)).map(([name, identity]) => `${name} is an agent (${identity})`),
     range: () => findInCommits([argument]),
     push: () => pushSelections(readFileSync(0, "utf8")).flatMap(findInCommits),
+    staged: () => findInFiles(changedFiles(["--cached"], "")),
+    files: () => findInFiles(changedFiles([argument], argument.split(/\.{2,3}/).at(-1))),
   }[mode]?.();
   if (!findings) {
-    console.error("usage: node scripts/attribution.mjs message <file> | identity | push | range <a>..<b> | text <file> | tool");
+    console.error("usage: node scripts/attribution.mjs message <file> | identity | staged | push | range <a>..<b> | files <a>..<b> | text <file> | tool");
     return 2;
   }
   if (findings.length === 0)
     return 0;
-  console.error("Winnies records no agent anywhere: no co-author, no agent trailer, no agent as author (CLAUDE.md § Attribution).");
+  console.error("No commit names an agent or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).");
   for (const finding of findings) console.error(`  ${finding}`);
+  // Only the manifest is the CLI's to remove; metadata that names an agent is edited out by hand.
+  if (findings.some(finding => finding.includes(": carries a C2PA manifest")))
+    console.error("Strip it: node scripts/strip-metadata.mjs <path> (CLAUDE.md § Attribution).");
   return 1;
 }
 
