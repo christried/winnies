@@ -38,6 +38,14 @@ The redesign ships from a long-lived branch (`docs/adr/0002-redesign-ships-from-
 
 Who merges what, verifying and closing tickets, the review and the retro of each phase: `docs/agents/delivery.md`.
 
+## Other sessions
+
+Another session may be working on this repository right now: a cloud session, a second orchestrator, the human. What you read at the start of your work can be out of date when you act on it (the human, 2026-11-12, the R0 retro). In R0, #270 landed on `redesign` from a cloud session in the middle of the phase and made the integration PR #267 conflict, and `ci-wait` printed green, since GitHub starts no `pull_request` run on a conflicting PR.
+
+- Before you act on shared state, read it again: a branch's base, a remote branch, a worktree, the main checkout, the next migration number, staging's data, a ticket. Change only what you made.
+- Two orchestrators never share an integration branch or a working directory: while one implements a spec, the other takes work outside it (the human, 2026-11-12, #281). A second session on the same machine works from its own clone or worktree, never the main checkout another session uses. Before taking a ticket, read its assignee and its branches, and assign it to yourself (`docs/agents/delivery.md` § Issues).
+- A push that is rejected is never forced. The branch moved under you: find out who moved it.
+
 ## Agent skills
 
 ### Issue tracker
