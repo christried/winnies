@@ -4,7 +4,7 @@ import { getStoryTitle } from "storybook/internal/common";
 import { loadCsf } from "storybook/internal/csf-tools";
 import { describe, expect, it } from "vitest";
 import storybookConfig from "../.storybook/main.ts";
-import { baselinePath, shotIn, VARIANTS } from "../.storybook/visual-variants.ts";
+import { baselinePath, shotIn, UNSHOT_PREFIXES, VARIANTS } from "../.storybook/visual-variants.ts";
 
 // The variant table decides which story renders are compared with a baseline (.storybook/visual-variants.ts), and the
 // baselines are PNG files in stories/__screenshots__/. Vitest fails a missing baseline in CI, and nothing else ties the
@@ -71,6 +71,24 @@ describe("the screenshot variants against the stories and the baselines on disk"
   it("finds the stories it checks against (an empty list must not make a rule pass on nothing)", () => {
     expect(ids).toContain("tokens-switches--default");
     expect(ids).toContain("tokens-spacing--default");
+    // The motion stories (#305, #306): rendered and run in every variant, never shot.
+    expect(ids).toContain("motion-particles--default");
+  });
+
+  it("a story whose id starts with an unshot prefix is shot in no variant", () => {
+    expect(UNSHOT_PREFIXES).toContain("motion-");
+    const motion = ids.filter(id => UNSHOT_PREFIXES.some(prefix => id.startsWith(prefix)));
+    expect(motion).toContain("motion-particles--default");
+    for (const variant of VARIANTS) {
+      for (const id of motion)
+        expect(shotIn(variant, id), `${id} in ${variant.name}`).toBe(false);
+    }
+    // A variant with neither `only` nor `skip` shoots every other story, and still not these.
+    expect(shotIn({}, "motion-particles--default")).toBe(false);
+    expect(shotIn({}, "motion-broadcast--default")).toBe(false);
+    for (const variant of VARIANTS)
+      expect(shotIn(variant, "motion-broadcast--default"), variant.name).toBe(false);
+    expect(shotIn({}, "tokens-colours--default")).toBe(true);
   });
 
   it("every story id in `only` and `skip` is a story", () => {
