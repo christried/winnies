@@ -1,6 +1,9 @@
 import { Buffer } from "node:buffer";
+import { spawnSync } from "node:child_process";
+import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { findAttribution, findInCommand, findInFile, findInToolCall, isAgentIdentity, pushSelections } from "./attribution.mjs";
+import { findAttribution, findInCommand, findInFile, findInToolCall, isAgentIdentity, parseFilesRange, pushSelections } from "./attribution.mjs";
 
 // The guard behind CLAUDE.md § Attribution: the git hooks, the CI job and the Claude Code hook all call these.
 describe("findAttribution", () => {
@@ -171,5 +174,67 @@ describe("findInToolCall", () => {
   it("judges a shell command as before", () => {
     expect(findInToolCall("Bash", { command: "git commit --no-verify -m \"fix: x\"" })).toContain("--no-verify, which skips the attribution hooks");
     expect(findInToolCall("Bash", { command: "grep -rn \"Co-Authored-By\" docs" })).toEqual([]);
+  });
+});
+
+// `files` takes the three-dot form only: two dots compare the two tips and list the files the base gained (#286).
+describe("parseFilesRange", () => {
+  const refused = argument => parseFilesRange(argument).error;
+
+  it("splits a three-dot range into its base and its head", () => {
+    expect(parseFilesRange("origin/redesign...HEAD")).toEqual({ base: "origin/redesign", head: "HEAD" });
+  });
+
+  it("keeps a dot inside a ref: only ... is the operator", () => {
+    expect(parseFilesRange("v1.0.0...HEAD")).toEqual({ base: "v1.0.0", head: "HEAD" });
+    expect(parseFilesRange("release/1.2.x...feat/3.1")).toEqual({ base: "release/1.2.x", head: "feat/3.1" });
+  });
+
+  it("refuses two dots, names the three-dot form and says why", () => {
+    expect(refused("origin/redesign..HEAD")).toContain("<a>...<b>");
+    expect(refused("origin/redesign..HEAD")).toContain("tips");
+  });
+
+  it("refuses a single ref, which has no base", () => {
+    expect(refused("HEAD")).toContain("<a>...<b>");
+  });
+
+  it("refuses an empty side", () => {
+    expect(refused("A...")).toEqual(expect.any(String));
+    expect(refused("...B")).toEqual(expect.any(String));
+    expect(refused("...")).toEqual(expect.any(String));
+    expect(refused("A..")).toEqual(expect.any(String));
+  });
+
+  it("refuses more than one range operator", () => {
+    expect(refused("A...B...C")).toEqual(expect.any(String));
+    expect(refused("A....B")).toEqual(expect.any(String));
+  });
+
+  it("refuses a side that looks like an option", () => {
+    expect(refused("-x...HEAD")).toEqual(expect.any(String));
+  });
+
+  it("refuses a call with no argument", () => {
+    expect(refused(undefined)).toEqual(expect.any(String));
+  });
+});
+
+describe("files, from the command line", () => {
+  const scriptPath = fileURLToPath(new URL("./attribution.mjs", import.meta.url));
+  const files = (...args) => spawnSync(process.execPath, [scriptPath, "files", ...args], { encoding: "utf8" });
+
+  it("refuses two dots before any git call, and names the three-dot form", () => {
+    const { status, stderr } = files("origin/redesign..HEAD");
+    expect(status).toBe(2);
+    expect(stderr).toContain("<a>...<b>");
+  });
+
+  it("refuses a call with no range", () => {
+    expect(files().status).toBe(2);
+  });
+
+  it("reads the three-dot form, and an empty diff is clean", () => {
+    expect(files("HEAD...HEAD").status).toBe(0);
   });
 });
