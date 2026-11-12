@@ -23,6 +23,8 @@ The container brings one Chromium, at `/opt/pw-browsers/chromium`, and `WINNIES_
 
 It is an older build than the one `@playwright/test` pins. So `pnpm test:e2e` is a check before the push, and CI's `e2e` job stays the gate; a screenshot comparison counts only from the pinned image (ADR-0004).
 
+The motion stories' play functions run there too, as a check before the push: `WINNIES_VISUAL=container CI=true pnpm vitest run -c vitest.storybook.config.ts stories/motion` (add `--project <variant>` for one variant). The token stories' screenshot comparisons fail in that container, an older Chromium than the pinned one, so keep the `stories/motion` filter. `--update` is never passed outside the pinned image, and CI's `visual` job stays the gate (ADR-0004).
+
 ## GitHub
 
 GitHub's GraphQL API is refused: `gh pr …`, `gh issue …` and `gh repo …` end in HTTP 403. REST answers, so `gh api <route>`, `gh run …`, `scripts/ci-wait.mjs` and `scripts/deploy-wait.mjs` work. Where `issue-tracker.md` or `delivery.md` name a `gh` command, take:
