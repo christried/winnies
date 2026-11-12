@@ -6,6 +6,9 @@ if (!changelog.value)
 
 const { brand } = useAppConfig();
 
+// The Changelog speaks Showcase (spec #257 § 5).
+useDialect("showcase");
+
 useSeoMeta({
   title: `Changelog · ${brand.name}`,
   description: changelog.value.description,

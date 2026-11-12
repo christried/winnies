@@ -30,6 +30,8 @@ useHead({
     class: "bg-none bg-transparent",
   },
 });
+// The Overlay speaks Broadcast like the Shared View (spec #257 § 5).
+useDialect("broadcast");
 
 const clock = useServerClock();
 watch(shared, (value) => {
