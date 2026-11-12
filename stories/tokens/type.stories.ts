@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { chip, group, htmlStory, resolved, storyPage } from "../support/html";
+import missing from "../support/missing.css?raw";
 import { declared } from "../support/tokens";
 
 // The scale, 2xs to 8xl. A name the token file adds later is picked up; component sizes (--text-*) are not declared.
@@ -36,6 +37,8 @@ function digits(face: typeof faces[number]) {
     + `<span style="font-family:${face.family};font-weight:${face.weight};font-size:var(--text-5xl);line-height:var(--leading-tight)">0123456789</span>`
     + `<span style="font-family:${face.family};font-weight:${face.weight};font-size:var(--text-5xl);line-height:var(--leading-tight)">1:23:45</span></div>`;
 }
+
+export const broken = missing;
 
 const meta: Meta = {
   title: "Tokens/Type",
