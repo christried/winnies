@@ -3,7 +3,7 @@ import process from "node:process";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
-import { VARIANTS } from "./.storybook/visual-variants.ts";
+import { baselinePath, VARIANTS } from "./.storybook/visual-variants.ts";
 import { assertInContainer } from "./scripts/visual-env.mjs";
 
 // Own config, like vitest.build.config.ts: `pnpm test` reads vitest.config.ts and never sees the stories.
@@ -51,9 +51,10 @@ export default defineConfig({
               // anti-aliased pixels pixelmatch skips by default count too.
               comparatorOptions: { threshold: 0, allowedMismatchedPixels: 0, includeAA: true },
               // A baseline per variant and story: stories/__screenshots__/<variant>/<story id>.png. The path has no
-              // platform in it: every baseline comes from the one image.
+              // platform in it: every baseline comes from the one image. visual-variants.ts names it, so the
+              // variants test and this config cannot disagree about where a baseline is.
               resolveScreenshotPath: ({ root, arg, ext }) =>
-                path.resolve(root, "stories/__screenshots__", name, `${arg}${ext}`),
+                path.resolve(root, baselinePath(name, arg, ext)),
               resolveDiffPath: ({ root, attachmentsDir, arg, ext }) =>
                 path.resolve(root, attachmentsDir, "visual", name, `${arg}${ext}`),
             },

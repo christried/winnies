@@ -3,7 +3,7 @@ import { setProjectAnnotations } from "@storybook/vue3-vite";
 import { afterEach, expect } from "vitest";
 import { page } from "vitest/browser";
 import preview from "./preview";
-import { isShot } from "./visual-variants";
+import { isShot, screenshotName } from "./visual-variants";
 
 const WIDTH = 1440;
 const MIN_HEIGHT = 900;
@@ -38,5 +38,5 @@ afterEach(async (ctx) => {
   await document.fonts.ready;
   // The tester iframe clips what lies below the viewport, so the viewport is as tall as the story.
   await page.viewport(WIDTH, Math.max(MIN_HEIGHT, document.documentElement.scrollHeight));
-  await expect.element(page.elementLocator(document.body)).toMatchScreenshot(story.id);
+  await expect.element(page.elementLocator(document.body)).toMatchScreenshot(screenshotName(story.id));
 });
