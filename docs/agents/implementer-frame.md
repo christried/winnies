@@ -47,11 +47,12 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 
 1. Every background task you started has finished or is stopped. (Safety net: one implementer's "waiting on its own background work" notice arrived five times in 50 minutes, and the human saw a finished agent listed as active.)
 2. Push your branch: `git push -u origin <your branch>`.
-3. Wait for CI on your pushed head: `node scripts/ci-wait.mjs`, in the foreground. One call waits at most 2.5 minutes; exit 2 means CI is still running, so call it again until it exits 0 or 1. Red: fix, push, and wait again. A red head you can't fix goes into the report with its output.
+3. Wait for CI and Attribution on your pushed head: `node scripts/ci-wait.mjs`, in the foreground. One call waits at most 2.5 minutes; exit 2 means a run is still going, or GitHub hasn't worked out yet whether the head's PR can merge, so call it again until it exits 0 or 1. Red: fix, push, and wait again. Exit 1 also means the head's open PR conflicts with its base: that is not a code fault, so merge the base into your branch (step 4) and push (#267: GitHub starts no run on a conflicting PR, and `ci-wait` once printed green for one). A red head you can't fix goes into the report with its output.
 4. Then `git fetch origin` and check containment: `git merge-base --is-ancestor origin/<integration branch> HEAD`. Not contained → `git merge origin/<integration branch>`, keeping both sides of a conflict and every removal the integration branch made, then rerun the checks, push, and wait for CI again. Checking only after the CI run avoids a loop of merges while the tip moves (compies 0.10).
 5. The loop ends when the reported head contains the integration tip and is green, both on the same SHA.
+6. Post the report on your ticket's issue, once step 5 holds. Write it to `<scratchpad>/<ticket>/issue-comment.md` with the Write tool, in the shape of § Report. (Not `report.md`: the Write tool refuses a subagent's file it takes for a report. It refused `report.md` for #284 and #285, and #288's implementer could not post at all.) `node scripts/attribution.mjs text <file>` must exit 0; if it doesn't, fix the text and check again. Then `gh issue comment <issue#> --body-file <file>`, with the issue number from your spawn prompt. The command prints the comment's link; keep it for § Return. (R0 retro, 2026-11-12: PR #267's body pointed to records on #272 and #274 that had never been posted.)
 
-## Report (once, short, this shape)
+## Report (the issue comment, once, short, this shape)
 
 - Branch and head SHA, and CI on it: green, or the failing output.
 - The red run: the first test you wrote, and its failing line before any production code existed. A test that pins existing behaviour is green from the start: its red run is a deliberate break in the code under test, shown failing and then reverted before you commit. (Safety net: the frame left each implementer of a pinning test to decide alone what its red run was.)
@@ -59,3 +60,11 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 - Deviations from the brief or the ticket, and why.
 - **Design/asset needed**, if anything.
 - Anything the orchestrator must decide or look at (e.g. a page to check in the browser).
+
+## Return
+
+Your final message holds the comment's link from step 6 of § Before you report, then each item the orchestrator must decide or look at, one line each, or "none". Nothing else: the orchestrator reads the report on the issue. (R0 retro, 2026-11-12: each full report landed in an orchestrator context that reached 223k tokens.)
+
+## Fix rounds
+
+When the orchestrator sends a fix list, make the fixes, run steps 1 to 5 of § Before you report again, then post one short comment on the issue instead of a full report: the new head SHA, CI on it, and one line per fix-list item saying what changed. Write it to the same `<scratchpad>/<ticket>/issue-comment.md` as step 6, check it with `node scripts/attribution.mjs text <file>` as step 6 does, and post it with `gh issue comment`. Return its link as in § Return. (R0 retro: a second full report would fill the orchestrator's context again.)

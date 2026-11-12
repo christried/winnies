@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { agentId, decide, unmatchedNames } from "./worktree-verdict.mjs";
+import { agentId, decide, removalFailure, unmatchedNames } from "./worktree-verdict.mjs";
 
+// Git's first stderr line for a worktree it cannot remove because a process holds a file in it, captured on Windows
+// (git 2.54, #292); the path is shortened.
+const GIT_IN_USE_LINE = "error: failed to delete 'C:/repo/.claude/worktrees/agent-held': Permission denied";
 const SESSION_RUNS = "its session runs (claude agent agent-a1b2 (pid 35232)); name it once its agent has reported";
 const NOT_NAMED = "not named; name it once its ticket is verified, or use --unlocked at the end of a phase";
 
@@ -123,6 +126,51 @@ describe("scripts/worktree-verdict.mjs decide, keep-reasons", () => {
 
   it("gives not-named, not a keep-reason, for a worktree nobody wants gone", () => {
     expect(decide(tree({ uncommitted: 1 }), { unlocked: false })).toEqual({ action: "keep", reason: NOT_NAMED });
+  });
+});
+
+// A removal that fails because another process holds the folder is a kept folder, not an error (#292).
+describe("scripts/worktree-verdict.mjs removalFailure", () => {
+  it("keeps a folder whose removal Node refused with EPERM, as in use", () => {
+    expect(removalFailure({ code: "EPERM", message: "EPERM, Permission denied: \\\\?\\C:\\repo\\.claude\\worktrees\\agent-a-orphan" })).toEqual({
+      action: "kept",
+      reason: "in use by another process",
+    });
+  });
+
+  it("keeps a folder whose removal Node refused with EBUSY, as in use", () => {
+    expect(removalFailure({ code: "EBUSY", message: "EBUSY: resource busy or locked, rmdir 'C:\\repo\\.claude\\worktrees\\agent-a-orphan'" })).toEqual({
+      action: "kept",
+      reason: "in use by another process",
+    });
+  });
+
+  it("keeps a worktree git could not remove because a file in it is in use", () => {
+    expect(removalFailure({ code: undefined, message: GIT_IN_USE_LINE })).toEqual({
+      action: "kept",
+      reason: "in use by another process",
+    });
+  });
+
+  it("keeps a worktree git could not remove because a file inside it is held open, as in use", () => {
+    expect(removalFailure({ code: undefined, message: "error: failed to delete 'C:/repo/.claude/worktrees/agent-n-file': Invalid argument" })).toEqual({
+      action: "kept",
+      reason: "in use by another process",
+    });
+  });
+
+  it("fails on ENOTEMPTY, with its message as the reason", () => {
+    expect(removalFailure({ code: "ENOTEMPTY", message: "ENOTEMPTY: directory not empty, rmdir 'x'" })).toEqual({
+      action: "failed",
+      reason: "ENOTEMPTY: directory not empty, rmdir 'x'",
+    });
+  });
+
+  it("fails on a git error that is not about a held file, with its line as the reason", () => {
+    expect(removalFailure({ code: undefined, message: "fatal: 'x' contains modified or untracked files, use --force to delete it" })).toEqual({
+      action: "failed",
+      reason: "fatal: 'x' contains modified or untracked files, use --force to delete it",
+    });
   });
 });
 

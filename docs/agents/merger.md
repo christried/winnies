@@ -21,7 +21,7 @@ The brief of a merge job (`docs/agents/subagents.md` § Supervision, on its tick
    - `pnpm typecheck && pnpm lint`;
    - `pnpm vitest run <every test file the ticket branch changed>` (list them with `git diff --name-only HEAD^1 HEAD`).
    - A failing test file: rerun it alone once. If it fails again, `git reset --hard origin/<integration branch>`, report the failing output, and stop without pushing. If it passes, report it as flaky: a flaky test is a finding (`CODING_STANDARDS.md` § Behaviour).
-4. All green: `git push origin <integration branch>`.
+4. All green: `git push origin <integration branch>`. A rejected push (the branch moved under you) is never forced: `git reset --hard origin/<integration branch>`, report, and stop. Two orchestrators never share an integration branch (`CLAUDE.md` § Other sessions), so a rejection means a rule broke, and a forced push would overwrite what the other session pushed (a risk, not an incident yet).
 
 ## Report (once)
 

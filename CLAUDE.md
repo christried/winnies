@@ -20,12 +20,14 @@ No agent shows up in this repository's commits, and nothing claims an agent as c
 - No C2PA manifest or other file metadata that names an agent in a committed image. A design export carries one; `node scripts/strip-metadata.mjs` removes it.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
-`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, the images staged for the commit, push), the `Attribution` CI job on every PR and on `main` and `redesign` (the commits, and the images a change touches), the Claude Code hook in `.claude/settings.json` that refuses such a command, or such a call of the GitHub connector, before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
+`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, the images staged for the commit, push), the `Attribution` CI job on every PR and on every pushed branch (the commits, and the images a change touches), the Claude Code hook in `.claude/settings.json` that refuses such a command, or such a call of the GitHub connector, before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
 
 ## Commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`. The body says why.
-- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here.
+- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here. `commitlint.config.mjs` reads this line: the commit-msg hook and CI refuse a header with no scope or one not listed here.
+- CI checks only the commits after `ENFORCED_AFTER` in `scripts/commit-format.mjs`: R0's history and #285's `76e996b ci(attribution): …`, whose scope isn't listed, come before it. `main` gets the check with 1.0.0, as it gets the workflow.
+- Merge commits (`Merge <branch> (#<n>)`, `Merge … into …`, `Merge remote-tracking branch …`, `Merge pull request …`) and `Revert "…"` commits are exempt.
 
 ## Branches and releases
 
@@ -36,6 +38,14 @@ The redesign ships from a long-lived branch (`docs/adr/0002-redesign-ships-from-
 - `redesign` merges into `main` as **v1.0.0**. Release notes live in `content/releases/`, one file per release; the Changelog ticket moves 0.9.0 there and deletes `CHANGELOG.md`. No other release notes are written during the redesign; the 1.0.0 file is drafted at release.
 
 Who merges what, verifying and closing tickets, the review and the retro of each phase: `docs/agents/delivery.md`.
+
+## Other sessions
+
+Another session may be working on this repository right now: a cloud session, a second orchestrator, the human. What you read at the start of your work can be out of date when you act on it (the human, 2026-11-12, the R0 retro). In R0, #270 landed on `redesign` from a cloud session in the middle of the phase and made the integration PR #267 conflict, and `ci-wait` printed green, since GitHub starts no `pull_request` run on a conflicting PR.
+
+- Before you act on shared state, read it again: a branch's base, a remote branch, a worktree, the main checkout, the next migration number, staging's data, a ticket. Change only what you made, except through the scripts that check whether a thing is still in use (`branch-prune`, `worktree-clean`: `docs/agents/delivery.md` § Branch hygiene).
+- Two orchestrators never share an integration branch or a working directory: while one implements a spec, the other takes work outside it (the human, 2026-11-12, #281). A second session on the same machine works from its own clone or worktree, never the main checkout another session uses. Before taking a ticket, read its assignee and its branches, and assign it to yourself (`docs/agents/delivery.md` § Issues).
+- A push that is rejected is never forced. The branch moved under you: find out who moved it. A forced push would overwrite what the other session pushed (a risk, not an incident yet).
 
 ## Agent skills
 

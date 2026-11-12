@@ -6,8 +6,12 @@ name: Attribution
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
+  # Every pushed branch, as in ci.yml: a ticket branch merges into its integration branch without a PR, so its commits
+  # are checked here before they merge, not on the integration PR after, where fixing one means rewriting the
+  # integration branch. `scripts/ci-wait.mjs` waits for this run too (docs/agents/implementer-frame.md). A branch with a
+  # PR runs twice per push; Actions minutes are free on a public repo.
   push:
-    branches: [main, redesign]
+    branches: ["**"]
 
 jobs:
   attribution:
@@ -17,28 +21,58 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Before setup-node, whose pnpm cache needs it, as in ci.yml. The commit-message step below needs the packages.
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+          cache: pnpm
+
+      # What this run checks, for the steps below: the commits and files from BASE to HEAD.
+      - name: Range
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            BASE="$PR_BASE"
+            HEAD="$PR_HEAD"
+          else
+            BASE="$BEFORE"
+            HEAD="$SHA"
+          fi
+          # A branch's first push has no "before" (all zeros), and after a force push it is a commit this checkout no
+          # longer has: check what the branch adds since its merge base with redesign, which tickets are cut from.
+          # origin/main only if redesign has no common ancestor with it. Not origin/main first: on a branch cut from
+          # redesign that would check every commit redesign has and main lacks.
+          case "$BASE" in *[!0]*) ;; *) BASE= ;; esac
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE=$(git merge-base origin/redesign "$HEAD" || git merge-base origin/main "$HEAD")
+          fi
+          echo "Checking $BASE..$HEAD"
+          echo "BASE=$BASE" >> "$GITHUB_ENV"
+          echo "HEAD=$HEAD" >> "$GITHUB_ENV"
 
       - name: Commits
-        env:
-          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: |
-          # A branch that was just created has no "before": check what main does not have.
-          case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
-          node scripts/attribution.mjs range "$BASE..$HEAD"
+        run: node scripts/attribution.mjs range "$BASE..$HEAD"
 
       - name: Files
-        env:
-          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: |
-          case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
           # Three dots: what the change adds since the merge base. Two dots would also list every path where the head
           # lacks newer base commits, e.g. a hotfix forward-merged into redesign would list main's unstripped images.
           node scripts/attribution.mjs files "$BASE...$HEAD"
+
+      # `--ignore-scripts` as in ci.yml's visual job: the postinstall `nuxt prepare` needs the app's environment.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Conventional Commits with a scope from CLAUDE.md § Commits, over the same commits as the Commits step except
+      # those up to ENFORCED_AFTER in the script. One process rather than `commitlint --from --to`, which cannot skip them.
+      - name: Commit messages
+        run: node scripts/commit-format.mjs "$BASE..$HEAD"
 
       - name: PR title and body
         if: github.event_name == 'pull_request'

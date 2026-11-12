@@ -7,7 +7,7 @@
 //   node scripts/attribution.mjs staged           .husky/pre-commit: the images staged for the commit, read from the index
 //   node scripts/attribution.mjs push             .husky/pre-push: every commit about to leave this machine (stdin)
 //   node scripts/attribution.mjs range <a>..<b>   CI: every commit of a PR or a push
-//   node scripts/attribution.mjs files <a>..<b>   CI: the images a PR or a push changes, read at <b>
+//   node scripts/attribution.mjs files <a>...<b>  CI: the images a PR or a push changes, read at <b>
 //   node scripts/attribution.mjs text <file>      CI: a PR's title and body
 //   node scripts/attribution.mjs tool             Claude Code PreToolUse hook: a shell command or a GitHub connector call before it runs (stdin)
 //
@@ -19,6 +19,12 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { AGENT_NAMES, COVERED_FILES, findFileMetadata, IDENTITY_RULE } from "./file-metadata.mjs";
+
+/**
+ * What every finding report starts with. scripts/ci-wait.mjs finds the failing part of a red Attribution run by it, so
+ * the report takes it from here: rewording the report cannot leave ci-wait cutting the wrong lines.
+ */
+export const FAILURE_MARKER = "No commit names an agent";
 
 // Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
 const CO_AUTHOR_RULE = [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"];
@@ -238,6 +244,32 @@ export function pushSelections(stdin) {
   });
 }
 
+/**
+ * The base and the head of a `files` range. `files` takes the three-dot form: `git diff A..B` compares the two tips, so
+ * it would also list the files the base gained after the branch point (#286). Only `...` splits, so a dot inside a ref
+ * (`v1.0.0`) stays part of it.
+ *
+ * @param argument The range as typed, e.g. `origin/redesign...HEAD`.
+ * @returns `{ base, head }`, or `{ error }` with one sentence for stderr. Nothing reaches git unless both sides are refs.
+ */
+export function parseFilesRange(argument) {
+  if (typeof argument !== "string")
+    return { error: "files takes a range: node scripts/attribution.mjs files <a>...<b>, e.g. files origin/redesign...HEAD" };
+  const parts = argument.split("...");
+  if (parts.length > 2 || argument.includes("...."))
+    return { error: `files takes one range operator, <a>...<b>; ${argument} has more than one` };
+  if (parts.length === 1) {
+    return argument.includes("..")
+      ? { error: `files takes <a>...<b> (three dots), not ${argument}: two dots compare the two tips, so the result also lists the files the base gained after the branch point` }
+      : { error: `files takes <a>...<b>; ${argument} is a single ref, and a single ref has no base to compare with` };
+  }
+  // A side git reads as it is written: not empty, no whitespace, not an option, and not a range of its own.
+  const isRef = side => side !== "" && !/\s/.test(side) && !side.startsWith("-") && !side.startsWith(".") && !side.includes("..");
+  if (!parts.every(isRef))
+    return { error: `files takes <a>...<b>, with a ref on each side; ${argument} has a side that is empty or is not a ref` };
+  return { base: parts[0], head: parts[1] };
+}
+
 function main([mode, argument]) {
   if (mode === "tool") {
     const call = JSON.parse(readFileSync(0, "utf8"));
@@ -253,6 +285,15 @@ function main([mode, argument]) {
     }
     return 0;
   }
+  if (mode === "files") {
+    // Refused before any git call: a range that git would read as the index or as HEAD must not reach it.
+    const range = parseFilesRange(argument);
+    if (range.error) {
+      console.error(range.error);
+      return 2;
+    }
+    return report(findInFiles(changedFiles([`${range.base}...${range.head}`], range.head)));
+  }
   const findings = {
     message: () => findAttribution(readFileSync(argument, "utf8").split("\n").filter(line => !line.startsWith("#")).join("\n")).map(finding => `the commit message has ${finding}`),
     text: () => findAttribution(readFileSync(argument, "utf8")).map(finding => `the text has ${finding}`),
@@ -265,15 +306,24 @@ function main([mode, argument]) {
     range: () => findInCommits([argument]),
     push: () => pushSelections(readFileSync(0, "utf8")).flatMap(findInCommits),
     staged: () => findInFiles(changedFiles(["--cached"], "")),
-    files: () => findInFiles(changedFiles([argument], argument.split(/\.{2,3}/).at(-1))),
   }[mode]?.();
   if (!findings) {
-    console.error("usage: node scripts/attribution.mjs message <file> | identity | staged | push | range <a>..<b> | files <a>..<b> | text <file> | tool");
+    console.error("usage: node scripts/attribution.mjs message <file> | identity | staged | push | range <a>..<b> | files <a>...<b> | text <file> | tool");
     return 2;
   }
+  return report(findings);
+}
+
+/**
+ * Prints the findings the way every mode reports them.
+ *
+ * @param findings One line per finding; empty when the checked content is clean.
+ * @returns 0 when clean, 1 with the findings printed to stderr.
+ */
+function report(findings) {
   if (findings.length === 0)
     return 0;
-  console.error("No commit names an agent or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).");
+  console.error(`${FAILURE_MARKER} or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).`);
   for (const finding of findings) console.error(`  ${finding}`);
   // Only the manifest is the CLI's to remove; metadata that names an agent is edited out by hand.
   if (findings.some(finding => finding.includes(": carries a C2PA manifest")))
