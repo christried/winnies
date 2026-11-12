@@ -10,6 +10,8 @@
 // open two minutes after its last check, so the agent merges it (docs/agents/delivery.md § Branches and merges).
 // `--until-done` is for a call that already runs in the background: it waits up to 25 minutes, as in ci-wait.mjs.
 // It only reads: it merges nothing and changes nothing on GitHub. The decisions are scripts/deploy-verdict.mjs.
+// Every read is `gh api` on a REST route, never `gh pr view`: that one asks GraphQL, which a cloud session is
+// refused (docs/agents/cloud.md).
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { parseArgs } from "node:util";
@@ -81,11 +83,13 @@ const started = Date.now();
 const timeLeft = () => Date.now() - started < CALL_MS;
 console.log(`waiting for #${pr} to merge and deploy …`);
 
-let view;
+let pull;
 for (;;) {
-  view = read(`gh pr view ${pr}`, "pr", "view", pr, "--json", "state,isDraft,baseRefName,headRefOid,mergeStateStatus,mergeCommit,statusCheckRollup");
-  const { verdict, checks } = prVerdict(view, Date.now());
-  const base = view.baseRefName;
+  pull = read(`reading #${pr}`, "api", `repos/{owner}/{repo}/pulls/${pr}`);
+  // One page: the latest run of each check, far below 100 in this repository.
+  const runs = read(`reading the checks of #${pr}`, "api", `repos/{owner}/{repo}/commits/${pull.head.sha}/check-runs?per_page=100`, "--jq", ".check_runs");
+  const { verdict, checks } = prVerdict(pull, runs, Date.now());
+  const base = pull.base.ref;
   if (verdict === "merged")
     break;
   if (verdict === "closed")
@@ -93,7 +97,7 @@ for (;;) {
   if (verdict === "draft")
     done(1, `#${pr} is a draft and never merges by itself: \`gh pr ready ${pr}\` once it is.`);
   if (verdict === "red")
-    done(1, `#${pr} is red (${checks.join(", ")}): \`node scripts/ci-wait.mjs ${view.headRefOid}\` shows the failing output.`);
+    done(1, `#${pr} is red (${checks.join(", ")}): \`node scripts/ci-wait.mjs ${pull.head.sha}\` shows the failing output.`);
   if (verdict === "conflict")
     done(1, `#${pr} conflicts with ${base}: merge ${base} into its branch.`);
   if (verdict === "behind")
@@ -108,9 +112,9 @@ for (;;) {
   await sleep(POLL_MS);
 }
 
-const sha = view.mergeCommit.oid;
+const sha = pull.merge_commit_sha;
 const short = sha.slice(0, 7);
-const base = view.baseRefName;
+const base = pull.base.ref;
 if (!deploysFrom(vercelConfig(sha), base))
   done(0, `merged into ${base} at ${short}; ${base} does not deploy (vercel.json), so there is nothing to wait for.`);
 

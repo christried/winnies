@@ -49,6 +49,11 @@ it (from the environment, else from `.env`), to get through Vercel login on stag
 or the hosting provider's build environment, because it is the project's Protection Bypass setting and not the
 app's. It lives in `.env.example` (commented out) and in the main checkout's `.env`.
 
+`WINNIES_CHROMIUM` is the fourth exception: the path of a Chromium for the browser tests and
+[`scripts/shots.mjs`](scripts/shots.mjs) to start, for a machine that brings its own instead of the one
+`pnpm exec playwright install chromium` downloads. Unset everywhere but in a cloud session's environment
+([`docs/agents/cloud.md`](docs/agents/cloud.md)); it lives in `.env.example` (commented out) and nowhere else.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.
