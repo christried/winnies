@@ -43,6 +43,14 @@ _Avoid_: progress, score
 **Pinned**:
 A Challenge the Owner keeps at the top of the list, above unpinned open Challenges. Once Won it sorts with the other Won Challenges and stays Pinned, so un-winning brings it back to the top.
 
+**Open**:
+A Challenge that is not Won.
+_Avoid_: unwon, pending, active
+
+**Group**:
+One of the three bands a Winnie's Challenges sort into, top to bottom: Pinned (Pinned and Open), Open (unpinned and Open) and Won. The Owner orders Challenges within a Group; a Challenge changes Group only by being pinned, unpinned, won or un-won, never by being moved.
+_Avoid_: section, bucket, category
+
 **Game Mode**:
 A ruleset a Winnie is created with, changing how Challenges are won, lost or reset (e.g. Confirmation, Gauntlet, Timeboxed). Planned; today every Winnie is Standard.
 
@@ -65,6 +73,10 @@ _Avoid_: test user, fake account, throwaway Owner (the API and e2e tests' own si
 **Viewer**:
 Anyone watching a Winnie through its Share Link, signed in or not. Read-only.
 _Avoid_: guest, visitor (except on the Landing page)
+
+**Preference**:
+A person's choice of theme and of Reduce motion. A signed-in Owner's is their account's; anyone signed out has their browser's.
+_Avoid_: setting (the 6a Settings tab), option
 
 ### Surfaces
 

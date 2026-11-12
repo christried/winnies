@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { elapsedSeconds, formatDuration } from "~~/shared/utils/timer";
 
-// gets rid of background color
-definePageMeta({ layout: false });
+// The layout with no wrapper, padding or background: the transparency comes from the bodyAttrs below and from that
+// layout having no background of its own.
+definePageMeta({ layout: "overlay" });
 
 // CONFIG (user can config this later, surely)
 const CHALLENGES_PER_PAGE = 5;
