@@ -16,6 +16,11 @@ gh api --method PATCH repos/christried/winnies/branches/main/protection/required
 It keeps the four checks `main` requires today, keeps `strict`, and adds `visual`. Not before the job has run there:
 the `visual` job does not exist on `main` until 1.0.0, and a required check that never runs blocks every hotfix.
 
+## No Storybook on production (1.0.0)
+
+After the 1.0.0 merge, `GET https://winnies.christried.me/storybook/` answers 404: only the non-production build
+carries Storybook (#298, ADR-0005).
+
 ## Discord sign-in and sign-out
 
 The tests sign in through a test-only helper that never talks to Discord, so the real OAuth round trip
