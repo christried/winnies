@@ -43,6 +43,14 @@ _Avoid_: progress, score
 **Pinned**:
 A Challenge the Owner keeps at the top of the list, above unpinned open Challenges. Once Won it sorts with the other Won Challenges and stays Pinned, so un-winning brings it back to the top.
 
+**Open**:
+A Challenge that is not Won.
+_Avoid_: unwon, pending, active
+
+**Group**:
+One of the three bands a Winnie's Challenges sort into, top to bottom: Pinned (Pinned and Open), Open (unpinned and Open) and Won. The Owner orders Challenges within a Group; a Challenge changes Group only by being pinned, unpinned, won or un-won, never by being moved.
+_Avoid_: section, bucket, category
+
 **Game Mode**:
 A ruleset a Winnie is created with, changing how Challenges are won, lost or reset (e.g. Confirmation, Gauntlet, Timeboxed). Planned; today every Winnie is Standard.
 
