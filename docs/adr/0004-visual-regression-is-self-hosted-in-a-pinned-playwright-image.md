@@ -14,3 +14,4 @@ The redesign's component states are screenshot-tested from Storybook stories (St
 - In the container, `node_modules` are installed separately on Linux, not mounted from Windows (native modules such as `better-sqlite3`).
 - Stories carry no service-specific parameters, so swapping the runner or adding a hosted service later doesn't touch them.
 - Baselines live in plain git; Git LFS only if the repo noticeably bloats.
+- Baselines are generated in the container and committed by an agent under the human's identity, which reads "committed by the maintainer" through `CLAUDE.md` § Roles.

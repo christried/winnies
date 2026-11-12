@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-// ADR-0004: the e2e job runs in one pinned Playwright image, and the image's browsers only match the
-// Playwright the repo installs. Bump `@playwright/test` and the e2e image together.
-const MOVE_TOGETHER = "Bump `@playwright/test` and the e2e image in .github/workflows/ci.yml together (ADR-0004).";
+// ADR-0004: the e2e job and the visual (screenshot) job run in one pinned Playwright image, and the image's browsers
+// only match the Playwright the repo installs. Bump `@playwright/test` and every image together.
+const MOVE_TOGETHER = "Bump `@playwright/test` and every Playwright image in .github/workflows/ci.yml (the e2e and visual jobs) together (ADR-0004).";
 
 const dependency = JSON.parse(readFileSync("package.json", "utf8")).devDependencies["@playwright/test"];
 const workflow = readFileSync(".github/workflows/ci.yml", "utf8");
@@ -16,14 +16,14 @@ describe("the Playwright pin", () => {
     expect(dependency, `@playwright/test must be a devDependency. ${MOVE_TOGETHER}`).toMatch(/^\d+\.\d+\.\d+$/);
   });
 
-  it("the e2e job names the pinned image", () => {
-    expect(images, `ci.yml must name exactly one image: mcr.microsoft.com/playwright:v<X.Y.Z>-noble. ${MOVE_TOGETHER}`).toHaveLength(1);
-    expect(images[0]).toMatch(/^\d+\.\d+\.\d+$/);
+  it("the e2e and visual jobs each name a pinned image", () => {
+    expect(images.length, `ci.yml must name an image in the e2e job and in the visual job: mcr.microsoft.com/playwright:v<X.Y.Z>-noble. ${MOVE_TOGETHER}`).toBeGreaterThanOrEqual(2);
+    expect(images).toEqual(images.filter(version => /^\d+\.\d+\.\d+$/.test(version)));
   });
 
-  it("package.json and the image carry the same version", () => {
-    // Both must exist: two missing versions are not "the same version".
+  it("every image the workflow names is the version package.json pins", () => {
+    // The dependency must exist: a missing version is not "the same version".
     expect(dependency).toBeDefined();
-    expect(images[0], `The e2e image is v${images[0]} but @playwright/test is ${dependency}. ${MOVE_TOGETHER}`).toBe(dependency);
+    expect(images, `@playwright/test is ${dependency} but ci.yml names v${images.join(", v")}. ${MOVE_TOGETHER}`).toEqual(images.map(() => dependency));
   });
 });
