@@ -117,8 +117,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       subscribers.delete(cb);
     };
   };
-  m.watch = () => {
-    m.refresh();
+  m.watch = (opt) => {
     const onChange = () => {
       m.refresh();
       const reduced = isReduced();
@@ -126,6 +125,12 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         m.stopLoops();
       [...subscribers].forEach(cb => cb({ reduced }));
     };
+    // A `v-loop` of the first render asks for its loop in a child's `mounted`, before the layout starts the surface, so
+    // it was built from the defaults. A surface asks for the first refresh to be announced so the loop host can fix that.
+    if (opt?.announce)
+      onChange();
+    else
+      m.refresh();
     const stopMedia = env.onMediaChange(onChange);
     const stopAttrs = env.onAttrChange(onChange);
     return () => {
@@ -133,18 +138,22 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       stopAttrs();
     };
   };
+  const recipe = (name: LoopName) => LOOPS[name]({
+    D: T.D,
+    E: T.E,
+    gain: g(),
+    calm: calm(),
+  });
+  // The keyframes and timing a loop is baked from; `playbackRate` is not in them, a refresh sets it on a running loop.
+  // The tokens' easings are written with spaces after commas and the defaults without; the same curve is the same key.
+  m.loopKey = name => JSON.stringify(recipe(name)).replace(/\s*([,()])\s*/g, "$1");
   // Replaces the reference's per-element syncLoops body: v-loop decides when to start, restart and pause.
   m.loop = (el: HTMLElement, name: LoopName, opt: LoopOptions = {}) => {
     if (!m.on(loopTier(name)))
       return null;
     if (calm() && CALM_OFF.has(name) && el.closest("[data-motion-preset=\"calm\"]"))
       return null;
-    const [kf, timing] = LOOPS[name]({
-      D: T.D,
-      E: T.E,
-      gain: g(),
-      calm: calm(),
-    });
+    const [kf, timing] = recipe(name);
     const a = el.animate(kf, { iterations: Infinity, ...timing, delay: opt.delay ?? 0 });
     a.playbackRate = T.C.rate;
     loops.add(a);
