@@ -61,10 +61,6 @@ A check a cloud session cannot do is handed on, never dropped or replaced by a g
 - anything in the human's own browser (`claude --chrome`), and whatever only the human does anyway;
 - deleting a remote branch: the container's proxy refuses it, by `git push --delete` and by REST alike (#277). Branch hygiene (`delivery.md`) names the branches for a local session.
 
-## Two sessions at once
-
-While a session on the human's machine implements a spec, a cloud session takes work outside that spec, and the other way round: two orchestrators never share an integration branch (the human, 2026-11-12). Before taking a ticket, read its assignee and the open PRs.
-
 ## Handoffs and retros
 
 A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) is posted as a comment on the spec's or the ticket's issue, briefs included, and the human is told the issue's number instead of a path. The friction worth a `/retro` goes into the same comment: a `/retro` on the human's machine cannot read a cloud session.
