@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { addServerHandler, createResolver, defineNuxtModule } from "nuxt/kit";
 import pkg from "./package.json";
+import { MATCH_SYSTEM_SCRIPT } from "./shared/utils/theme";
 import { carriesDevSignIn, DEV_SIGN_IN_ROUTE, isStagingBuild, stageBranding } from "./stage";
 import "./server/utils/env";
 
@@ -69,6 +70,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "en" },
+      // Before the stylesheets and the module script, so Match system is resolved before the first paint.
+      script: [
+        { innerHTML: MATCH_SYSTEM_SCRIPT, tagPriority: "critical", tagPosition: "head" },
+      ],
     },
   },
 
