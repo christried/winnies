@@ -61,6 +61,10 @@ What the review checks, on top of the glossary and the ADRs: `CODING_STANDARDS.m
 
 Pass `model` and `effort: "high"` on every spawn: `sonnet` for the harder half of this repository's tasks and for reviewers, `haiku` for the easier half. See `docs/agents/subagents.md`. `/implement-spec-max` is `/implement-spec` with every subagent on `fable`, or on `opus` or `sonnet` at high effort, by how hard its task is.
 
+### Cloud sessions
+
+In a cloud container (`CLAUDE_CODE_REMOTE` is set), read `docs/agents/cloud.md` before the first command: the git identity, the test database, the browser, GitHub without `gh pr` and `gh issue`, staging, and what is handed to a local session.
+
 ### Design hand-off
 
 A design or asset the handoff doesn't cover is flagged, with a suggestion: Claude Design, or derive it from what exists. See `docs/agents/design-handoff.md`.
