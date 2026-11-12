@@ -63,13 +63,13 @@ defineExpose({
         v-bind="nameAttrs"
         autofocus
         aria-label="Winnie name"
-        class="input w-full input-sm"
+        class="w-full border"
         placeholder="e.g. Kitty vs. the world"
       >
-      <p v-if="errors.name" class="text-sm text-error">
+      <p v-if="errors.name" class="text-sm">
         {{ errors.name }}
       </p>
-      <p v-if="formError" class="alert alert-error">
+      <p v-if="formError">
         {{ formError }}
       </p>
     </form>

@@ -1,4 +1,5 @@
-const PULSE_MS = 1500; // !IMPORTANT: Keep in sync with main.css
+// The CSS keyframes this phase once synchronised are gone; R1's motion engine replaces this composable.
+const PULSE_MS = 1500;
 
 const origin = Date.now();
 

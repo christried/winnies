@@ -10,7 +10,7 @@ const [parent, items] = useDragAndDrop(challenges.value, {
   // assigned in challenge-row component
   dragHandle: ".drag-grip",
   draggingClass: "opacity-80",
-  dropZoneClass: "border-2 border-primary",
+  dropZoneClass: "border-2",
   onDragend,
 });
 
@@ -53,12 +53,11 @@ async function onDragend() {
   <ul
     v-show="totalCount > 0"
     ref="parent"
-    class="card bg-base-200"
   >
     <li
       v-for="challenge in items"
       :key="challenge.id"
-      class="border-b border-base-300 transition-all duration-150 last:border-0"
+      class="border-b transition-all duration-150 last:border-0"
     >
       <ChallengeRow :challenge="challenge" />
     </li>

@@ -1,3 +1,4 @@
 node scripts/attribution.mjs identity
+node scripts/attribution.mjs staged
 pnpm lint-staged --max-arg-length 4000
 pnpm typecheck

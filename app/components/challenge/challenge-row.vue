@@ -34,15 +34,15 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
     <UiIcon
       v-if="challenge.pinned"
       name="pin"
-      class="size-6 text-primary"
+      class="size-6"
     />
 
     <ChallengeNameEditor v-if="isEditing" :challenge="challenge" />
     <div v-else class="min-w-0 flex-1">
-      <div class="truncate text-sm font-semibold" :class="isWon && 'text-success line-through'">
+      <div class="truncate text-sm font-semibold" :class="isWon && 'line-through'">
         {{ challenge.game }}
       </div>
-      <div class="type-meta truncate">
+      <div class="truncate">
         {{ challenge.spec }}
       </div>
     </div>
@@ -61,7 +61,7 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       <UiIconButton
         :label="isRunning ? 'Pause timer' : 'Start timer'"
         :icon="isRunning ? 'pause' : 'play'"
-        class="btn btn-square size-11 btn-ghost btn-sm"
+        class="size-11"
         :disabled="isWon || isComplete || isTogglingTimer"
         @click="winnieStore.toggleChallengeTimer(challenge.id)"
       />
@@ -69,8 +69,7 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       <UiIconButton
         :label="isWon ? 'Mark as not won' : 'Mark as won'"
         icon="trophy"
-        class="btn btn-square size-11 btn-ghost btn-sm"
-        :class="isWon && 'text-success'"
+        class="size-11"
         @click="winnieStore.toggleWin(challenge.id)"
       />
       <ChallengeOverflowMenu :challenge="challenge" />

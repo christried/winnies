@@ -36,10 +36,10 @@ const seconds = computed(() => elapsedSeconds(props.challenge, props.now));
     <StatusDot :status="challenge.status === 'won' ? 'won' : challenge.runningSince ? 'running' : 'idle'" />
 
     <div class="min-w-0 flex-1">
-      <div class="truncate text-[13px] font-semibold" :class="challenge.status === 'won' && 'text-success line-through'">
+      <div class="truncate text-[13px] font-semibold" :class="challenge.status === 'won' && 'line-through'">
         {{ challenge.game }}
       </div>
-      <div class="type-meta truncate">
+      <div class="truncate">
         {{ challenge.spec }}
       </div>
     </div>

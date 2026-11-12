@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-disc ps-5 marker:text-base-content/50">
+  <ul class="list-disc ps-5">
     <slot />
   </ul>
 </template>

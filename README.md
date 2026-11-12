@@ -9,7 +9,7 @@ link.
 
 ## Stack
 
-Nuxt 4 · Vue 3 · TypeScript · Tailwind 4 + daisyUI · Drizzle ORM + Neon Postgres ·
+Nuxt 4 · Vue 3 · TypeScript · Tailwind 4 · Drizzle ORM + Neon Postgres ·
 Better Auth (Discord) · Pinia · Vitest. Deployed on Vercel.
 
 ## Running locally
@@ -54,6 +54,12 @@ app's. It lives in `.env.example` (commented out) and in the main checkout's `.e
 `pnpm exec playwright install chromium` downloads. Unset everywhere but in a cloud session's environment
 ([`docs/agents/cloud.md`](docs/agents/cloud.md)); it lives in `.env.example` (commented out) and nowhere else.
 
+`WINNIES_VISUAL` is the fifth exception. [`scripts/visual-podman.mjs`](scripts/visual-podman.mjs) and the `visual`
+job in [`ci.yml`](.github/workflows/ci.yml) set it to `container`, and only the screenshot suite's config reads it,
+through [`scripts/visual-env.mjs`](scripts/visual-env.mjs): it refuses to run, or to write a baseline, outside the
+pinned Playwright image (ADR-0004). The app never reads it, so it lives in those two places and not in
+`.env.example`, `env.ts` or the hosting provider.
+
 The other values the tests need (`HARNESS_ENV` in `tests/support/env.ts`) are repeated in those two jobs,
 and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the service images or
 `compose.test.yaml` disagree.
@@ -62,10 +68,24 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
 `pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
-`pnpm db:migrate` · `pnpm db:studio`
+`pnpm db:migrate` · `pnpm db:studio` · `pnpm favicons:stage` · `pnpm storybook` · `pnpm build-storybook` ·
+`pnpm test:visual:podman`
 
-CI runs lint, typecheck, test, build and the build test (the `check` job), the API tests (the `api-tests` job) and
-the browser tests (the `e2e` job) on every pull request.
+`pnpm favicons:stage` regenerates `public/staging/` from `public/`; `scripts/favicon-tint.test.mjs` fails `pnpm test`
+when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`). After a handoff re-sync, run
+`pnpm strip:metadata`: a design export carries a C2PA manifest that `scripts/attribution.mjs` refuses.
+
+`pnpm storybook` serves Storybook on <http://localhost:6006>, for local use only; it is never deployed.
+It loads the app's own `app/assets/css/main.css`, so the stories see the real token file, the Tailwind entry and the
+self-hosted fonts. The toolbar sets the three switches as the app does: theme (`data-theme` on `<html>`), dialect
+(`data-dialect` on `<body>`, none for Workspace) and reduced motion (`data-motion="reduce"` on `<html>`). Stories are
+plain `.stories.ts` files in `stories/`; the config is in `.storybook/`. The addon-a11y panel runs axe on a story;
+the check that fails on a violation is the `visual` job (`pnpm test:visual`, see § Tests): it runs axe on every story
+and fails on one (`a11y.test` is `"error"`). `pnpm build-storybook` builds the static Storybook, which only proves every
+story compiles.
+
+CI runs lint, typecheck, the Storybook build, test, build and the build test (the `check` job), the API tests (the
+`api-tests` job), the browser tests (the `e2e` job) and the screenshot tests (the `visual` job) on every pull request.
 
 ## Tests
 
@@ -99,8 +119,26 @@ the browser tests (the `e2e` job) on every pull request.
   - A failed test leaves its trace in `test-results/`: `pnpm exec playwright show-trace <trace.zip>`.
     In CI the `e2e` job uploads `playwright-report/` and `test-results/` as the `playwright-report` artifact.
   - CI runs the e2e tests in the `mcr.microsoft.com/playwright:v<X.Y.Z>-noble` image
-    (ADR-0004). The image tag and `@playwright/test` in `package.json` move together:
-    `scripts/playwright-pin.test.mjs` fails `pnpm test` when they differ.
+    (ADR-0004), and the screenshot tests run in the same image (the `visual` job). The image tags and
+    `@playwright/test` in `package.json` move together: `scripts/playwright-pin.test.mjs` fails `pnpm test` when one differs.
+- The screenshot tests render every token story in Storybook, run axe on it and compare it with a committed baseline,
+  pixel for pixel. They run inside the pinned Playwright image only: Windows rasterizes fonts differently, so a baseline
+  made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:podman` runs them there under Podman.
+  - Prerequisite: Podman, as for the API tests (`podman machine start`). The first run pulls the image
+    (`mcr.microsoft.com/playwright:v<X.Y.Z>-noble`, about 2 GB) and installs the dependencies inside the container,
+    which takes minutes; later runs reuse them.
+  - The repo is mounted into the container. The Linux `node_modules` live in a named Podman volume
+    (`winnies-visual-node-modules-<hash of the checkout path>`) and the pnpm store in `winnies-visual-pnpm-store`; the
+    Windows `node_modules` are never visible there. `podman volume rm` frees them.
+  - `pnpm test:visual:podman --update` regenerates the baselines in `stories/__screenshots__/<variant>/`. Commit them
+    with the change that moved them: the PR shows each as an image diff, and that is the review. Arguments after the
+    flags go to Vitest (`--project workspace-dark`).
+  - `pnpm test:visual` and `pnpm test:visual:update` are what runs inside the image; run on the host they refuse
+    to start (`scripts/visual-env.mjs`), so a baseline can only come from the container.
+  - A story with no baseline fails the run (`CI=true`, which the Podman script and the `visual` job set); it does not
+    write one. Tolerance is zero.
+  - A failed comparison leaves the new picture and a diff image in `.vitest/attachments/`. In CI the `visual` job
+    uploads that directory as the `visual-diffs` artifact.
 - The one flow automation cannot cover, signing in with Discord, is checked by hand before a release:
   [`docs/release-checklist.md`](docs/release-checklist.md).
 

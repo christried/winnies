@@ -72,23 +72,18 @@ async function copyOverlayLink(close: () => void) {
         class="md:ms-auto"
         @update:current-winnie="winnie => selectWinnie(winnie.id)"
       />
-      <div class="tooltip tooltip-bottom tooltip-primary" data-tip="Create new Winnie">
+      <div>
         <UiIconButton
           icon="plus"
           label="Create new Winnie"
-          class="btn-primary"
           @click="newWinnie?.open()"
         />
 
         <WinnieNewWinnieModal ref="newWinnie" @created="newWinnie?.close()" />
       </div>
 
-      <div
-        v-if="currentWinnie"
-        class="tooltip-neutral tooltip tooltip-bottom"
-        data-tip="Copy share links"
-      >
-        <UiDropdown label="Copy share links" trigger-class="btn btn-square btn-neutral">
+      <div v-if="currentWinnie">
+        <UiDropdown label="Copy share links">
           <template #trigger>
             <UiIcon name="share" />
           </template>

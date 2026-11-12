@@ -4,13 +4,13 @@ const { wonCount, totalCount, percentComplete } = storeToRefs(useWinnieStore());
 
 <template>
   <div class="m-2 flex flex-col gap-1">
-    <p class="type-meta">
+    <p>
       {{ wonCount }} / {{ totalCount }} won · {{ percentComplete }}%
     </p>
 
-    <div class="h-1.5 w-full overflow-hidden rounded-full bg-base-300">
+    <div class="h-1.5 w-full overflow-hidden rounded-full">
       <div
-        class="h-full rounded-full bg-primary transition-all duration-300"
+        class="h-full rounded-full transition-all duration-300"
         :style="{ width: `${percentComplete}%` }"
       />
     </div>

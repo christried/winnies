@@ -19,8 +19,8 @@ const totalSeconds = computed(() => elapsedSeconds(
 <template>
   <div
     v-if="currentWinnie"
-    class="card flex flex-col gap-2 bg-base-200 p-4"
-    :class="isComplete && 'border border-success bg-success/10'"
+    class="flex flex-col gap-2 p-4"
+    :class="isComplete && 'border'"
   >
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
@@ -28,12 +28,12 @@ const totalSeconds = computed(() => elapsedSeconds(
           <UiIcon
             v-if="isComplete"
             name="trophy"
-            class="shrink-0 text-success"
+            class="shrink-0"
           />
           <WinnieCardName class="truncate text-base font-semibold" />
         </div>
 
-        <p class="type-meta">
+        <p>
           {{ new Date(currentWinnie.createdAt).toLocaleDateString(DATE_LOCALE, DATE_FORMAT) }}
           <PulseIndicator v-if="runningCount > 0" :count="runningCount" />
         </p>
@@ -47,7 +47,6 @@ const totalSeconds = computed(() => elapsedSeconds(
         />
         <button
           type="button"
-          class="btn btn-circle btn-lg"
           :aria-label="isRunning ? 'Pause Winnie' : 'Start Winnie'"
           :disabled="timerInFlight || isComplete || totalCount === 0"
           @click="winnieStore.toggleTotalTimer"
