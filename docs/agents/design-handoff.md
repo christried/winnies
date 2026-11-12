@@ -13,3 +13,4 @@ While grilling or speccing, flag each piece of UI one way or the other. For each
 2. Publish it as its own ticket titled `Claude Design: <what>`, labelled `ready-for-human`.
 3. Make it block the build ticket, which waits for the design.
 4. Tell the human which files to copy from the export: the new frames and the hand-off note, nothing else. An export carries the whole reference folder again (compies, 0.9: nine duplicated files).
+   - After copying, run `node scripts/strip-metadata.mjs`: an export carries a C2PA manifest in its images, and `scripts/attribution.mjs` refuses it (`CLAUDE.md` § Attribution).
