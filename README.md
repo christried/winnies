@@ -123,7 +123,9 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
     `@playwright/test` in `package.json` move together: `scripts/playwright-pin.test.mjs` fails `pnpm test` when one differs.
 - The screenshot tests render every token story in Storybook, run axe on it and compare it with a committed baseline,
   pixel for pixel. They run inside the pinned Playwright image only: Windows rasterizes fonts differently, so a baseline
-  made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:podman` runs them there under Podman.
+  made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:podman` runs them there under Podman. The motion
+  stories (`stories/motion/`, ids starting with `motion-`) are rendered, checked by axe and run through their play
+  functions in every variant, but never shot: a still of motion shows its end state only.
   - Prerequisite: Podman, as for the API tests (`podman machine start`). The first run pulls the image
     (`mcr.microsoft.com/playwright:v<X.Y.Z>-noble`, about 2 GB) and installs the dependencies inside the container,
     which takes minutes; later runs reuse them.

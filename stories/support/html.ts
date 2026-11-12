@@ -25,7 +25,8 @@ export function htmlStory(html: string | (() => string)) {
 const chipCss = "display:inline-block;max-width:100%;background:var(--color-surface);color:var(--color-text);"
   + "font:800 var(--text-xs)/1.3 ui-monospace,Menlo,monospace;padding:2px 8px;border-radius:var(--radius-xs)";
 
-const headingCss = "display:inline-block;align-self:flex-start;background:var(--color-surface);color:var(--color-text);"
+/** The inline style of a heading on a chip-like surface; the motion kit's section titles use it too. */
+export const headingCss = "display:inline-block;align-self:flex-start;background:var(--color-surface);color:var(--color-text);"
   + "font-family:var(--font-display);font-weight:var(--font-weight-display);line-height:var(--leading-label);"
   + "margin:0;padding:4px 16px;border-radius:var(--radius-md)";
 

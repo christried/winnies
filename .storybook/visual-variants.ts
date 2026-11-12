@@ -7,7 +7,8 @@
  * The rule is the one for reduced motion: a variant is shot only where its picture differs from the Workspace shot of
  * the same theme, and the shots were compared byte for byte to decide it (#265). Light and dark under Workspace are the
  * reference and are shot for every story. A story added later is shot in every variant that shoots all stories, and its
- * baselines are regenerated with `pnpm test:visual:podman --update`.
+ * baselines are regenerated with `pnpm test:visual:podman --update`. The motion stories (`UNSHOT_PREFIXES`) are the
+ * exception: they are rendered and run in every variant, and shot in none.
  */
 export interface Variant {
   name: string;
@@ -54,8 +55,17 @@ export const VARIANTS: readonly Variant[] = [
   },
 ];
 
+/**
+ * Story ids starting with one of these are rendered and checked by axe and play functions, never shot: a still of
+ * motion shows its end state only (ADR-0004).
+ */
+export const UNSHOT_PREFIXES = ["motion-"] as const;
+
 /** Whether a story rendered in this variant is also compared with a baseline. */
 export function shotIn(variant: Pick<Variant, "only" | "skip">, storyId: string) {
+  if (UNSHOT_PREFIXES.some(prefix => storyId.startsWith(prefix))) {
+    return false;
+  }
   return variant.only
     ? variant.only.includes(storyId)
     : !variant.skip?.includes(storyId);
