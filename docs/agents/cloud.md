@@ -62,9 +62,22 @@ A check a cloud session cannot do is handed on, never dropped or replaced by a g
 
 While a session on the human's machine implements a spec, a cloud session takes work outside that spec, and the other way round: two orchestrators never share an integration branch (the human, 2026-11-12). Before taking a ticket, read its assignee and the open PRs.
 
+## Delivery
+
+A cloud session opens no PR and posts no comment (the human, 2026-11-12, after #270). The container's platform appends a footer naming the agent to every PR body, also after a REST edit, and `attribution` refuses it; `create_pull_request` gives no sign of the change, only the `attribution` job shows it.
+
+So a cloud session builds the ticket on its branch as `delivery.md` says, lets CI go green on the pushed head (CI runs on every pushed branch), and then:
+
+1. writes `.handoff/<issue#>.md` on the ticket branch: the PR title and body, the comments to post on the issue, the local checks, and what comes next for a cloud session;
+2. pushes the branch and sets `needs-local-check` on the issue (`issue_write`, the issue's whole list of `labels`).
+
+A session on the human's machine picks it up: it removes `.handoff/` in a commit of its own, opens the PR, posts the comments and does the local checks.
+
+Whatever has to happen on the human's machine reaches the human as commands to run, or as a handoff for a local agent, whichever is easier (the human, 2026-11-12).
+
 ## Handoffs and retros
 
-A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) is posted as a comment on the spec's or the ticket's issue, briefs included, and the human is told the issue's number instead of a path. The friction worth a `/retro` goes into the same comment: a `/retro` on the human's machine cannot read a cloud session.
+A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) goes into `.handoff/<issue#>.md` on the branch (§ Delivery), briefs included, and the human is told the branch and the path. The friction worth a `/retro` goes into the same file: a `/retro` on the human's machine cannot read a cloud session.
 
 ## The container is not the human's machine
 
