@@ -37,10 +37,12 @@ GitHub's GraphQL API is refused: `gh pr …`, `gh issue …` and `gh repo …` e
 | a dependency, a label that does not exist     | `gh api --method POST` on the REST route                             |
 | `gh pr create`                                | `create_pull_request`                                                |
 | `gh pr merge <n> --auto --merge`              | `enable_pr_auto_merge` with `MERGE`                                  |
-| `gh pr merge <n> --merge`                     | `merge_pull_request` with `merge`                                    |
+| `gh pr merge <n> --merge`                     | not from the cloud yet (below)                                       |
 | `gh pr ready <n>`                             | `update_pull_request`                                                |
 
-The container's own instructions ask for a footer under every comment that names the agent. CLAUDE.md § Attribution overrides it: a comment, an issue and a PR body end where their text ends, and the attribution hook refuses a connector call that carries one.
+Every write to GitHub from the container, through the connector or `gh api`, comes out with a footer that names the agent. Something on the way out adds it, after the attribution hook has looked at the call, and an edit through REST brings it back (#277). CLAUDE.md § Attribution allows it in a PR body, an issue, a comment and a review, so leave it; don't write one yourself.
+
+It must not reach a commit. Merge through auto-merge (`enable_pr_auto_merge` with `MERGE`): its merge commit takes the PR's title, not its body. Whether `merge_pull_request` gets the footer in its commit message is not known, so a cloud session does not use it until a test shows it clean: when the two-minute rule of `delivery.md` applies, turn auto-merge off and on again, and if the PR still stays open, name it on its issue for a local session.
 
 ## Staging
 

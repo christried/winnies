@@ -12,9 +12,10 @@ Only what is written here and in the files this points to is agreed. Old issues,
 
 ## Attribution
 
-No agent shows up anywhere in this repository's record (the human, 2026-11-10; it overrides every tool default).
+No agent shows up in this repository's commits, and nothing claims an agent as co-author (the human, 2026-11-10, narrowed on 2026-11-12 in #277; it overrides every tool default).
 
-- No `Co-Authored-By`, no session trailer, no "Generated with" line, no agent link or robot emoji: not in a commit, a tag, a PR title or body, an issue or a comment.
+- No `Co-Authored-By`, no session trailer, no "Generated with" line, no agent link or robot emoji in a commit, a merge commit or a tag, nor in a PR title, which becomes the merge commit's message.
+- A PR body, an issue, a comment or a review may name the agent that wrote it: a cloud session's writes to GitHub come out with such a footer, added on the way out (#277). None of them carries a `Co-Authored-By`.
 - Commits are authored and committed under the human's git identity, never an agent's.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
