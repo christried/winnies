@@ -35,11 +35,18 @@ export default defineConfig({
       ],
       test: {
         name,
+        // Vitest's browser default is 15 s. A motion story's rain waits up to about 5.3 s, on top of the render, the play
+        // function and axe, with seven variants running side by side.
+        testTimeout: 30_000,
         setupFiles: [".storybook/vitest.setup.ts"],
         env: { WINNIES_VISUAL_VARIANT: name },
         browser: {
           enabled: true,
-          provider: playwright(),
+          // Unset, Playwright starts the Chromium it downloaded. A cloud session's container brings its own instead, and
+          // WINNIES_CHROMIUM names it (docs/agents/cloud.md); the pinned image sets none.
+          provider: playwright({
+            launchOptions: { executablePath: process.env.WINNIES_CHROMIUM || undefined },
+          }),
           headless: true,
           instances: [
             { browser: "chromium" as const },
