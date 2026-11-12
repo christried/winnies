@@ -32,7 +32,7 @@ useFavicon(() => ({
 </script>
 
 <template>
-  <div class="min-h-dvh bg-base-100 text-base-content">
+  <div class="min-h-dvh">
     <div class="mx-auto flex max-w-270 flex-col gap-2 p-4">
       <slot />
       <AppFooter />

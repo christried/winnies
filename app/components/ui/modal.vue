@@ -27,33 +27,31 @@ defineExpose({
 </script>
 
 <template>
-  <dialog ref="dialog" class="modal">
-    <div class=" modal-box rounded-2xl border border-neutral bg-base-200">
+  <dialog ref="dialog" class="m-auto p-4">
+    <div class="rounded-2xl border">
       <div class="flex flex-col gap-4">
         <h3 class="text-lg font-bold">
           {{ props.title }}
         </h3>
         <slot />
       </div>
-      <div class="modal-action">
+      <div class="flex justify-end gap-2">
         <form method="dialog">
-          <button class="btn rounded-lg border border-neutral">
+          <button class="rounded-lg border">
             Cancel
           </button>
         </form>
         <button
           :disabled="pending"
-          class="btn rounded-lg border border-neutral text-neutral"
-          :class="destructive ? 'btn-error' : 'btn-primary'"
+          class="rounded-lg border"
           @click="$emit('action')"
         >
-          <span v-if="pending" class="loading loading-spinner" />
           {{ actionLabel }}
         </button>
       </div>
     </div>
 
-    <form method="dialog" class="modal-backdrop">
+    <form method="dialog">
       <button>close</button>
     </form>
   </dialog>

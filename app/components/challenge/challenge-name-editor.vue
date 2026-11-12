@@ -58,25 +58,23 @@ function cancel() {
 
 <template>
   <div class="flex min-w-0 flex-1 items-center gap-2" @keydown.escape="cancel">
-    <input v-model="draft.game" class="input min-w-0 flex-1 input-sm">
-    <input v-model="draft.spec" class="input min-w-0 flex-1 input-sm">
+    <input v-model="draft.game" class="min-w-0 flex-1 border">
+    <input v-model="draft.spec" class="min-w-0 flex-1 border">
     <input
       v-model.number="draft.target"
       type="number"
       min="0"
-      class="input w-20 input-sm"
+      class="w-20 border"
     >
 
     <UiIconButton
       label="Save"
       icon="check"
-      class="btn btn-square btn-sm"
       @click="saveChellengeEdit"
     />
     <UiIconButton
       label="Cancel"
       icon="close"
-      class="btn btn-square btn-ghost btn-sm"
       @click="cancel"
     />
   </div>

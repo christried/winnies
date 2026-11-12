@@ -33,10 +33,9 @@ async function cycle() {
 </script>
 
 <template>
-  <div class="tooltip tooltip-bottom" :data-tip="`Theme: ${OPTIONS[preference].label}`">
+  <div>
     <button
       type="button"
-      class="swap swap-active swap-rotate"
       :aria-label="`Theme: ${OPTIONS[preference].label}. Change theme`"
       @click="cycle()"
     >
@@ -45,7 +44,7 @@ async function cycle() {
         :key="value"
         :name="option.icon"
         :size="40"
-        :class="value === preference ? 'swap-on' : 'swap-off'"
+        :class="value !== preference && 'hidden'"
       />
     </button>
     <span class="sr-only" aria-live="polite">{{ announcement }}</span>

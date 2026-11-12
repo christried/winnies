@@ -85,6 +85,10 @@ _Avoid_: widget, stream view
 **Landing**:
 What a signed-out visitor sees at `/`, and the only place to sign in. A signed-in Owner never sees it: `/` is their Workspace. Planned (#124).
 
+**Dialect**:
+The look a surface speaks: Broadcast (the Shared View and the Overlay, built to be read at a distance on stream) or Showcase (the Landing and the Changelog, the poster-like look). The Workspace speaks none.
+_Avoid_: theme (the light or dark preference), skin, mode (Game Mode), variant
+
 ### Character
 
 **Winniebert**:

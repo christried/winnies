@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { DAISY_THEMES } from "~~/shared/constants";
 import { elapsedSeconds, formatDuration } from "~~/shared/utils/timer";
 
 // gets rid of background color
@@ -21,12 +20,17 @@ useHead({
     { name: "robots", content: "noindex, nofollow" },
   ],
   htmlAttrs: {
-    // Fixed look for OBS, independent of the viewer's theme (#121)
-    "data-theme": DAISY_THEMES.dark,
-    // daisyUI paints the root element in theme colors otherwise
-    "style": "--root-bg: transparent; --page-scroll-bg: transparent",
+    // Light only (#171, spec #257 § 4): OBS has no colour scheme, and the Overlay ignores the preference and the cookie.
+    "data-theme": "light",
+  },
+  bodyAttrs: {
+    // A transparent page for OBS (spec #257 § 4): bg-none clears the backdrop's gradients, bg-transparent the
+    // colour the base rule's `background` shorthand sets. Utilities beat the base layer.
+    class: "bg-none bg-transparent",
   },
 });
+// The Overlay speaks Broadcast like the Shared View (spec #257 § 5).
+useDialect("broadcast");
 
 const clock = useServerClock();
 watch(shared, (value) => {
@@ -184,7 +188,7 @@ onUnmounted(stopFireworks);
 <template>
   <div
     v-if="error || gone"
-    class="w-90 rounded-lg bg-base-300/90 p-4 text-center font-bold"
+    class="w-90 rounded-lg p-4 text-center font-bold"
   >
     This Winnie doesn't exist (anymore).
     <br>
@@ -193,7 +197,7 @@ onUnmounted(stopFireworks);
 
   <div
     v-else-if="shared"
-    class="relative z-0 w-90 overflow-hidden rounded-lg bg-base-200/90 pb-2"
+    class="relative z-0 w-90 overflow-hidden rounded-lg pb-2"
   >
     <!-- used to only render canvas confetti here and not on the empty rest of the page -->
     <canvas
@@ -202,14 +206,11 @@ onUnmounted(stopFireworks);
     />
 
     <div class="border-b p-2 text-center">
-      <p class="text-md text-xl font-bold opacity-90">
+      <p class="text-xl font-bold opacity-90">
         {{ shared.winnie.name }}
       </p>
 
-      <p
-        class="font-mono text-2xl font-bold"
-        :class="isComplete ? 'text-success' : totalIsRunning ? 'text-primary' : ''"
-      >
+      <p class="font-mono text-2xl font-bold">
         {{ formatDuration(totalSeconds) }}
       </p>
     </div>
@@ -225,21 +226,17 @@ onUnmounted(stopFireworks);
           <UiIcon
             v-if="row.won"
             name="trophy"
-            class="text-success"
           />
         </span>
 
-        <span
-          class="flex-1 font-medium wrap-break-word"
-          :class="{ 'text-success': row.won }"
-        >
+        <span class="flex-1 font-medium wrap-break-word">
           {{ row.game }}
         </span>
 
         <span
           v-if="row.target > 0"
           class="font-mono tabular-nums"
-          :class="row.won ? 'text-success' : 'opacity-90'"
+          :class="!row.won && 'opacity-90'"
         >
           {{ row.count }}/{{ row.target }}
         </span>
@@ -247,7 +244,6 @@ onUnmounted(stopFireworks);
         <span
           v-if="row.showTime"
           class="font-mono tabular-nums"
-          :class="row.won ? 'text-success' : row.running ? 'text-primary' : ''"
         >
 
           {{ row.time }}
@@ -263,7 +259,7 @@ onUnmounted(stopFireworks);
         v-for="page in pages.length"
         :key="page"
         class="size-2.5 rounded-full transition-colors"
-        :class="page - 1 === pageIndex ? 'bg-base-content' : 'bg-base-content/40'"
+        :class="page - 1 === pageIndex ? 'bg-current' : 'bg-current/40'"
       />
     </div>
   </div>

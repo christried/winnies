@@ -61,7 +61,7 @@ const freshness = computed(() => {
     <p class="font-semibold">
       This Winnie doesn't exist. Does it? Did it?
     </p>
-    <p class="type-meta">
+    <p>
       The link may have been deleted by its owner.
     </p>
   </div>
@@ -69,32 +69,32 @@ const freshness = computed(() => {
   <div v-else-if="shared" class="flex flex-col gap-3">
     <header class="flex flex-wrap items-center justify-center gap-2">
       <AppWordmark />
-      <div class="ms-auto badge gap-1">
+      <div class="ms-auto flex items-center gap-1">
         <UiIcon name="eye" />
-        <span class="type-label">View only</span>
+        <span>View only</span>
       </div>
       <ThemeController />
     </header>
 
     <SharedWinnieCard :winnie="shared.winnie" :now="now" />
 
-    <div v-if="isComplete" class="alert border-success bg-success/10">
-      <UiIcon name="trophy" class="text-success" />
+    <div v-if="isComplete" class="flex items-center gap-2">
+      <UiIcon name="trophy" />
       Win-challenge complete
     </div>
 
-    <ul class="card bg-base-200">
+    <ul>
       <li
         v-for="challenge in challenges"
         :key="challenge.id"
-        class="border-b border-base-300 last:border-0"
+        class="border-b last:border-0"
       >
         <SharedChallengeRow :challenge="challenge" :now="now" />
       </li>
     </ul>
     <footer class="flex items-center gap-2">
       <SharedCopyLink :url="shareUrl" class="flex-1" />
-      <span class="type-meta">{{ freshness }}</span>
+      <span>{{ freshness }}</span>
     </footer>
   </div>
 </template>

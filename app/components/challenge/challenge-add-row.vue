@@ -74,19 +74,18 @@ const showSkeleton = useDelayed(pending);
 </script>
 
 <template>
-  <div v-if="showSkeleton" class="h-24 w-full skeleton" />
+  <div v-if="showSkeleton" class="h-24 w-full" />
   <div
     v-else
     tabindex="0"
-    class="collapse bg-base-200"
   >
-    <div v-if="totalCount > 0" class="collapse-title text-center font-semibold">
+    <div v-if="totalCount > 0" class="text-center font-semibold">
       Create your next Challenge
     </div>
-    <div v-else class="collapse-title text-center text-2xl font-bold text-secondary">
+    <div v-else class="text-center text-2xl font-bold">
       Create your first Challenge
     </div>
-    <div class="collapse-content">
+    <div>
       <form
         class="flex flex-col items-center gap-2 md:flex-row md:items-start"
         @submit="onSubmit"
@@ -98,8 +97,7 @@ const showSkeleton = useDelayed(pending);
             v-model="game"
             type="text"
             v-bind="gameAttrs"
-            class="input w-full"
-            :class="{ 'input-error': errors.game }"
+            class="w-full border"
             placeholder="Game"
             :disabled="atCap"
             :aria-invalid="Boolean(errors.game)"
@@ -108,7 +106,7 @@ const showSkeleton = useDelayed(pending);
           <p
             v-if="errors.game"
             :id="`${gameId}-hint`"
-            class="mt-1 text-sm text-error"
+            class="mt-1 text-sm"
           >
             {{ errors.game }}
           </p>
@@ -119,8 +117,7 @@ const showSkeleton = useDelayed(pending);
             v-model="spec"
             type="text"
             v-bind="specAttrs"
-            class="input w-full"
-            :class="{ 'input-error': errors.spec }"
+            class="w-full border"
             placeholder="Win Condition"
             :disabled="atCap"
             :aria-invalid="Boolean(errors.spec)"
@@ -129,7 +126,7 @@ const showSkeleton = useDelayed(pending);
           <p
             v-if="errors.spec"
             :id="`${specId}-hint`"
-            class="mt-1 text-sm text-error"
+            class="mt-1 text-sm"
           >
             {{ errors.spec }}
           </p>
@@ -141,8 +138,7 @@ const showSkeleton = useDelayed(pending);
               v-model="target"
               type="number"
               v-bind="targetAttrs"
-              class="input min-w-20"
-              :class="{ 'input-error': errors.target }"
+              class="min-w-20 border"
               placeholder="Target"
               :disabled="atCap"
               :aria-invalid="Boolean(errors.target)"
@@ -151,35 +147,33 @@ const showSkeleton = useDelayed(pending);
             <p
               v-if="errors.target"
               :id="`${targetId}-hint`"
-              class="mt-1 text-sm text-error"
+              class="mt-1 text-sm"
             >
               {{ errors.target }}
             </p>
           </div>
-          <div class="tooltip-neutral tooltip tooltip-top" :data-tip="counterChecked ? 'Remove counter' : 'Add counter'">
+          <div>
             <UiIconButton
               type="button"
               label="Counter target"
               :aria-pressed="counterChecked"
               :icon="counterChecked ? 'countOn' : 'countOff'"
-              :class="counterChecked ? 'btn btn-circle btn-ghost text-primary' : 'btn btn-circle btn-ghost'"
               :disabled="atCap || isSubmitting"
               @click="onCounterToggle"
             />
           </div>
 
-          <div class="tooltip tooltip-top tooltip-primary" data-tip="Add Challenge">
+          <div>
             <UiIconButton
               type="submit"
               label="Add challenge"
               icon="plus"
-              class="btn hover:btn-primary"
               :disabled="atCap || isSubmitting"
             />
           </div>
         </div>
       </form>
-      <p v-if="atCap" class="mt-4 text-center text-error">
+      <p v-if="atCap" class="mt-4 text-center">
         Limit reached ({{ MAX_CHALLENGES_PER_WINNIE }} challenges per Winnie)
       </p>
     </div>

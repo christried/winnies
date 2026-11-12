@@ -6,6 +6,9 @@ if (!changelog.value)
 
 const { brand } = useAppConfig();
 
+// The Changelog speaks Showcase (spec #257 § 5).
+useDialect("showcase");
+
 useSeoMeta({
   title: `Changelog · ${brand.name}`,
   description: changelog.value.description,
@@ -18,7 +21,7 @@ useSeoMeta({
       <AppWordmark :need-reload="true" />
     </header>
 
-    <main class="card bg-base-200 p-4 md:p-8">
+    <main class="p-4 md:p-8">
       <ContentRenderer
         v-if="changelog"
         :value="changelog"

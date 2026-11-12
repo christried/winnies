@@ -39,7 +39,7 @@ defineExpose({ close });
       :id="id"
       ref="menu"
       popover
-      class="menu dropdown w-max rounded-box border border-neutral bg-base-100 shadow-sm"
+      class="m-auto w-max border p-2 shadow-sm"
       :class="menuClass"
       :style="`position-anchor: --${id}`"
     >
