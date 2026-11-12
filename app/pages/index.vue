@@ -1,5 +1,6 @@
 <script setup lang="ts">
 useCompletion();
+useRefreshOnReturn();
 
 // Same route, two surfaces: a signed-in Owner's Workspace speaks none, a visitor's Landing speaks Showcase.
 // The server knows the user, so the served HTML already carries the right one.
