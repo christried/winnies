@@ -1,7 +1,7 @@
 name: Attribution
 
-# No commit, PR title or PR body may credit an agent, and no commit may be authored or committed by one
-# (CLAUDE.md § Attribution). The git hooks in .husky/ say so first; this job is the check `--no-verify` cannot skip.
+# No commit, PR title or PR body may credit an agent, no commit may be authored or committed by one, and no image a
+# change touches may carry a C2PA manifest or metadata naming one (CLAUDE.md § Attribution). The git hooks in .husky/ say so first; this job is the check `--no-verify` cannot skip.
 # `edited` is listed so a changed PR title or body is checked again.
 on:
   pull_request:
@@ -29,6 +29,14 @@ jobs:
           # A branch that was just created has no "before": check what main does not have.
           case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
           node scripts/attribution.mjs range "$BASE..$HEAD"
+
+      - name: Files
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
+          node scripts/attribution.mjs files "$BASE..$HEAD"
 
       - name: PR title and body
         if: github.event_name == 'pull_request'
