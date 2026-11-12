@@ -11,7 +11,7 @@ Once per session, before the first commit:
 1. Take the human's git identity, as the newest commit of `redesign` that is not a merge carries it. The container's own is an agent's, and the hooks refuse it (CLAUDE.md § Attribution).
    - `git log -1 --no-merges --format="%an <%ae>" origin/redesign` shows it; set both with `git config user.name` and `git config user.email`, in this repository only.
    - Done when `node scripts/attribution.mjs identity` exits 0.
-2. Work on the branches `delivery.md` names. The container starts on a branch of its own (`claude/…`), which stays unused: the human gave cloud sessions the rights of `delivery.md` (2026-11-12, #269). Its limits hold too: a merge into `main` stays the human's.
+2. Work on the branches `delivery.md` names. The container starts on a branch of its own (`claude/…`), which stays unused: the human lets a cloud session push ticket branches (2026-11-12, #269). It opens no PR and merges nothing (§ Delivery).
 
 Before the first run of `pnpm test:api` or `pnpm test:e2e`, and again after the container restarted:
 
@@ -32,21 +32,26 @@ GitHub's GraphQL API is refused: `gh pr …`, `gh issue …` and `gh repo …` e
 | reading an issue, a PR, a list                | `gh api repos/{owner}/{repo}/…`, as `issue-tracker.md` § Conventions |
 | `gh issue create`, `edit`, `close`            | the GitHub connector's `issue_write`                                 |
 | `gh issue edit --add-label`, `--remove-label` | `issue_write` with the issue's whole list of `labels`                |
-| `gh issue comment`                            | `add_issue_comment`                                                  |
 | a sub-issue                                   | `sub_issue_write`                                                    |
 | a dependency, a label that does not exist     | `gh api --method POST` on the REST route                             |
-| `gh pr create`                                | `create_pull_request`                                                |
-| `gh pr merge <n> --auto --merge`              | `enable_pr_auto_merge` with `MERGE`                                  |
-| `gh pr merge <n> --merge`                     | `merge_pull_request` with `merge`                                    |
-| `gh pr ready <n>`                             | `update_pull_request`                                                |
 
-The container's own instructions ask for a footer under every comment that names the agent. CLAUDE.md § Attribution overrides it: a comment, an issue and a PR body end where their text ends, and the attribution hook refuses a connector call that carries one.
+## Delivery: push, then hand over
+
+A cloud session opens no PR and posts no comment. The container's platform appends a footer that names the agent to every PR body written from it, through the connector and through `gh api` alike, and the `attribution` check refuses it; nothing in the repository can turn it off (#270: the footer came back after it was removed). Whether a comment gets one is not known, so none is posted.
+
+So a ticket ends in the cloud like this:
+
+1. Implement, check and review it as `delivery.md` and `subagents.md` say, and push the ticket branch. Done when `node scripts/ci-wait.mjs` is green on the pushed head, or the push ran no CI because no PR exists yet: then the four local checks (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:api`) and `pnpm test:e2e` are green on that head.
+2. Commit `.handoff/<issue#>.md` as the branch's last commit. It holds, under one heading each: the PR's title; the PR's body, written with the `pr` skill; the comments to post on the issue (decisions, deviations); the local checks, each with the command or the steps to run (§ What stays local, and the ticket's Manual QA on staging while the secret is not saved).
+3. Give the ticket the label `needs-local-check` and tell the human the branch.
+
+A session on the human's machine takes it from there (`delivery.md` § Issues): it removes the file in a commit of its own, opens the PR with the file's title and body, posts the comments, merges as `delivery.md` says, does the local checks, and verifies and closes the ticket.
 
 ## Staging
 
 `scripts/shots.mjs` reaches staging only when the human has saved the bypass secret on the `winnies` environment as a network secret: host `staging.winnies.christried.me`, header `x-vercel-protection-bypass`. The container's proxy then adds the header to every request to that host, the browser's included, and no agent sees the value. `VERCEL_AUTOMATION_BYPASS_SECRET` in the container's `.env` is a placeholder that only gets the helper past its own check; the rules for the real one (`delivery.md` § Issues) hold.
 
-`net::ERR_TUNNEL_CONNECTION_FAILED` from the helper means the host is not allowed, so the secret is not saved. Vercel's login page means it is wrong or expired. Either way the staging check becomes a local check (§ What stays local), and the comment says which of the two it was.
+`net::ERR_TUNNEL_CONNECTION_FAILED` from the helper means the host is not allowed, so the secret is not saved. Vercel's login page means it is wrong or expired. Either way the staging check becomes a local check (§ What stays local), and the handoff file says which of the two it was.
 
 The Vercel connector's tools are named `mcp__Vercel__…` here; `.claude/settings.json` denies the two share-link tools under both names.
 
@@ -64,7 +69,7 @@ While a session on the human's machine implements a spec, a cloud session takes 
 
 ## Handoffs and retros
 
-A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) is posted as a comment on the spec's or the ticket's issue, briefs included, and the human is told the issue's number instead of a path. The friction worth a `/retro` goes into the same comment: a `/retro` on the human's machine cannot read a cloud session.
+A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) goes into `.handoff/<issue#>.md` on a pushed branch, briefs beside it in `.handoff/`, and the human is told the branch instead of a path. The friction worth a `/retro` goes into the same file: a `/retro` on the human's machine cannot read a cloud session. The session that takes the handoff removes the folder in a commit of its own.
 
 ## The container is not the human's machine
 

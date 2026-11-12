@@ -61,4 +61,4 @@ A ticket that changes a page isn't done on tests alone: look at it at 390 and 14
 - every decision the human made in chat, first posted on its issue, then pointed to;
 - the friction worth a `/retro`.
 
-End by telling the human the handoff's path, to start the next session with `/implement-spec` and that path. A handoff from or to a cloud session goes on the issue instead (`cloud.md` § Handoffs and retros). Run `/clear` between a `/retro` and an `/implement-spec`.
+End by telling the human the handoff's path, to start the next session with `/implement-spec` and that path. A handoff from or to a cloud session goes onto a pushed branch instead (`cloud.md` § Handoffs and retros). Run `/clear` between a `/retro` and an `/implement-spec`.
