@@ -11,13 +11,15 @@
 // runs stays until it is named, the flag never touches it. A worktree that goes is kept all the same, with the reason,
 // while it has uncommitted changes, a commit no remote branch contains, or a process running in it (a dev server).
 // `--dry-run` prints what it would do and changes nothing. A folder git no longer lists as a worktree is deleted. One
-// line per folder. The decision is scripts/worktree-verdict.mjs; this file gathers the data and acts on it.
+// line per folder. Exit 0 when every folder that could not be deleted was kept as in use by another process; 1 when a
+// removal failed for any other reason; 2 on a usage error. The decision is scripts/worktree-verdict.mjs; this file
+// gathers the data and acts on it.
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import process from "node:process";
 import { parseArgs } from "node:util";
-import { agentId, decide, unmatchedNames } from "./worktree-verdict.mjs";
+import { agentId, decide, removalFailure, unmatchedNames } from "./worktree-verdict.mjs";
 
 const USAGE = "usage: node scripts/worktree-clean.mjs [--unlocked] [--dry-run] [<agent id> …]";
 
@@ -108,6 +110,36 @@ function describe(tree, name, all) {
   };
 }
 
+/** Folders a removal found in use, so the leftover-folder pass at the end does not print them a second time. */
+const inUse = new Set();
+let failed = 0;
+
+/** Prints how a removal that threw ended: kept as in use, or failed (which turns the exit code to 1). */
+function report(name, failure) {
+  if (failure.action === "failed")
+    failed++;
+  console.log(`${failure.action} ${name}: ${failure.reason}`);
+}
+
+/**
+ * Locks an in-use worktree again, as the harness had it, once the unlock before the removal is done. Git has often
+ * dropped the worktree by then, leaving an empty folder (the leftover-folder pass at the end handles it); nothing is left to lock.
+ */
+function lockAgain(tree, name) {
+  if (!worktrees().some(item => same(item.path) === same(tree.path)))
+    return;
+  try {
+    // A bare `locked` line in the listing is a lock without a reason.
+    const reason = tree.lock === ""
+      ? []
+      : ["--reason", tree.lock];
+    git("worktree", "lock", ...reason, tree.path);
+  }
+  catch (error) {
+    report(name, { action: "failed", reason: `could not lock it again: ${String(error.stderr ?? error.message).trim().split("\n")[0]}` });
+  }
+}
+
 git("fetch", "--quiet", "--prune", "origin");
 // A prune changes state, so a dry run leaves it.
 if (!dryRun)
@@ -132,7 +164,13 @@ for (const tree of listedTrees) {
   }
   catch (error) {
     // Windows refuses to delete a file a process still holds; what is left is a folder for the next run.
-    console.log(`failed ${name}: ${String(error.stderr ?? error.message).trim().split("\n")[0]}`);
+    const failure = removalFailure({ code: error.code, message: String(error.stderr ?? error.message).trim().split("\n")[0] });
+    if (failure.action === "kept") {
+      if (tree.lock !== undefined)
+        lockAgain(tree, name);
+      inUse.add(name);
+    }
+    report(name, failure);
     continue;
   }
   // The harness's own branch and the agent's, once their tips are safe on origin (checked above for the worktree's HEAD).
@@ -158,7 +196,7 @@ for (const name of existsSync(home)
   ? readdirSync(home)
   : []) {
   const path = join(home, name);
-  if (listed.has(same(path)))
+  if (listed.has(same(path)) || inUse.has(name))
     continue;
   if (existsSync(join(path, ".git"))) {
     console.log(`kept ${name}: it has a .git, but git lists no such worktree; look at it`);
@@ -168,6 +206,16 @@ for (const name of existsSync(home)
     console.log(`would delete ${name}: no longer a worktree`);
     continue;
   }
-  rmSync(path, { recursive: true, force: true, maxRetries: 3 });
+  try {
+    rmSync(path, { recursive: true, force: true, maxRetries: 3 });
+  }
+  catch (error) {
+    // A process still holds the empty folder (a shell that was started in it): the next run tries again.
+    report(name, removalFailure({ code: error.code, message: error.message.split("\n")[0] }));
+    continue;
+  }
   console.log(`deleted ${name}: no longer a worktree`);
 }
+
+if (failed > 0)
+  process.exitCode = 1;
