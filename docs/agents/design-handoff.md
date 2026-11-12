@@ -2,6 +2,8 @@
 
 The redesign's look comes from Claude Design (ADR-0001). The human decides case by case when a gap goes back there, so an agent never quietly improvises visuals (the human, 2026-10-15).
 
+The app's copy of a handoff file equals the handoff's, and a deliberate difference is recorded as `CODING_STANDARDS.md` § Design says (`docs/design-deviations.md`).
+
 Whenever a decision, a spec or a ticket needs a design or an asset that `docs/design_handoff_winnies/` doesn't cover (a screen, a state, a component variant, an illustration, an icon, a Winniebert pose), flag it:
 
 - a short **Design/asset needed** note that names the gap;
