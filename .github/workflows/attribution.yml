@@ -46,5 +46,9 @@ jobs:
           TITLE: ${{ github.event.pull_request.title }}
           BODY: ${{ github.event.pull_request.body }}
         run: |
-          printf '%s\n\n%s\n' "$TITLE" "$BODY" > "$RUNNER_TEMP/pr.txt"
-          node scripts/attribution.mjs text "$RUNNER_TEMP/pr.txt"
+          # The title becomes the merge commit's message, so it is held to a commit's rule. The body may name the agent
+          # that wrote it, as a cloud session's writes to GitHub all do, but claims no co-author (#277).
+          printf '%s\n' "$TITLE" > "$RUNNER_TEMP/title.txt"
+          printf '%s\n' "$BODY" > "$RUNNER_TEMP/body.txt"
+          node scripts/attribution.mjs text "$RUNNER_TEMP/title.txt"
+          node scripts/attribution.mjs body "$RUNNER_TEMP/body.txt"

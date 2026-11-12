@@ -20,10 +20,15 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { AGENT_NAMES, COVERED_FILES, findFileMetadata, IDENTITY_RULE } from "./file-metadata.mjs";
 
-/** What no message, PR body or comment may contain, each with the words the finding is reported in. */
+// Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
+const CO_AUTHOR_RULE = [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"];
+
+/**
+ * What no commit message, merge commit or PR title may contain, each with the words the finding is reported in.
+ * A PR body, an issue or a comment may name the agent that wrote it, so only `CO_AUTHOR_RULE` holds there (#277).
+ */
 const TEXT_RULES = [
-  // Any co-author trailer: an allowlist of people would be one more thing an agent's name could slip into.
-  [/^[ \t>*-]*co-authored-by\s*:/im, "a Co-Authored-By trailer"],
+  CO_AUTHOR_RULE,
   [/^[ \t>*-]*(?:claude-session|generated-by|assisted-by|ai-assisted-by)\s*:/im, "an agent trailer"],
   [
     new RegExp(`(?:generated|written|created|authored|made)\\s+(?:with|by)\\s+[[*_]*(?:${AGENT_NAMES})`, "i"),
@@ -42,6 +47,18 @@ const TEXT_RULES = [
  */
 export function findAttribution(text) {
   return TEXT_RULES.filter(([pattern]) => pattern.test(text)).map(([, finding]) => finding);
+}
+
+/**
+ * The co-authorship a PR body, an issue or a comment claims. Naming the agent that wrote it is allowed there (#277).
+ *
+ * @param text A PR body, an issue or a comment.
+ * @returns The finding when the text carries a co-author trailer; empty otherwise.
+ */
+function findCoAuthorship(text) {
+  return CO_AUTHOR_RULE[0].test(text)
+    ? [CO_AUTHOR_RULE[1]]
+    : [];
 }
 
 /**
@@ -68,7 +85,10 @@ export function findInCommand(command) {
   if (!writesHistory && !writesGitHub)
     return [];
   // A trailer inside `-m "…"` or a heredoc does not start its line in the command, so the line anchors go.
-  const findings = TEXT_RULES
+  // A command that only writes to GitHub writes a body or a comment, where only a co-author is refused (#277).
+  const findings = (writesHistory
+    ? TEXT_RULES
+    : [CO_AUTHOR_RULE])
     .map(([pattern, finding]) => [
       new RegExp(pattern.source.replace("^[ \\t>*-]*", ""), pattern.flags.replace("m", "")),
       finding,
@@ -105,8 +125,9 @@ export function findInFile(path, buffer) {
 
 /** The fields the GitHub connector's tools write to GitHub: an issue, a comment, a PR, a review, a merge commit. */
 const CONNECTOR_TEXT = [
+  // These end up in a commit: a merge commit, a file commit, and a PR title, which the merge commit takes as its
+  // message. A `body` (an issue, a comment, a PR, a review) is judged by `findCoAuthorship` alone (#277).
   "title",
-  "body",
   "commit_title",
   "commit_message",
   "message",
@@ -127,7 +148,11 @@ export function findInToolCall(name, input = {}) {
     return findInCommand(input.command);
   if (!/^mcp__.*github/i.test(name ?? ""))
     return [];
-  return findAttribution(CONNECTOR_TEXT.map(field => input[field]).filter(text => typeof text === "string").join("\n"));
+  const commitText = CONNECTOR_TEXT.map(field => input[field]).filter(text => typeof text === "string").join("\n");
+  const findings = findAttribution(commitText);
+  if (typeof input.body === "string")
+    findings.push(...findCoAuthorship(input.body).filter(finding => !findings.includes(finding)));
+  return findings;
 }
 
 const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
@@ -222,7 +247,7 @@ function main([mode, argument]) {
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "deny",
-          permissionDecisionReason: `Winnies records no agent anywhere (CLAUDE.md § Attribution). This call has ${findings.join(", ")}. Remove it and run it again.`,
+          permissionDecisionReason: `No commit names an agent, and nothing claims one as co-author (CLAUDE.md § Attribution). This call has ${findings.join(", ")}. Remove it and run it again.`,
         },
       }));
     }
@@ -231,6 +256,8 @@ function main([mode, argument]) {
   const findings = {
     message: () => findAttribution(readFileSync(argument, "utf8").split("\n").filter(line => !line.startsWith("#")).join("\n")).map(finding => `the commit message has ${finding}`),
     text: () => findAttribution(readFileSync(argument, "utf8")).map(finding => `the text has ${finding}`),
+    // CI: a PR's body, which may name the agent that wrote it but not claim it as co-author (#277).
+    body: () => findCoAuthorship(readFileSync(argument, "utf8")).map(finding => `the PR body has ${finding}`),
     identity: () => ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"].map(name => [
       name,
       git("var", name).replace(/ \d+ [+-]\d+\s*$/, ""),
@@ -246,7 +273,7 @@ function main([mode, argument]) {
   }
   if (findings.length === 0)
     return 0;
-  console.error("Winnies records no agent anywhere: no co-author, no agent trailer, no agent as author (CLAUDE.md § Attribution).");
+  console.error("No commit names an agent or has one as author or committer, and nothing claims one as co-author (CLAUDE.md § Attribution).");
   for (const finding of findings) console.error(`  ${finding}`);
   // Only the manifest is the CLI's to remove; metadata that names an agent is edited out by hand.
   if (findings.some(finding => finding.includes(": carries a C2PA manifest")))
