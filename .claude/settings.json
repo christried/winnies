@@ -12,6 +12,10 @@
     "mattpocock-skills@claude-plugins-official": false
   },
   "permissions": {
+    "allow": [
+      "Bash(node scripts/branch-prune.mjs)",
+      "Bash(node scripts/branch-prune.mjs --dry-run)"
+    ],
     "deny": [
       "mcp__claude_ai_Vercel__web_fetch_vercel_url",
       "mcp__claude_ai_Vercel__get_access_to_vercel_url",
