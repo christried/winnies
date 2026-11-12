@@ -215,14 +215,20 @@ function buildElement(init: FakeElementInit): FakeElement {
       doc.log.push(call);
       return animation;
     },
-    // What the browser lists: running or paused animations, and finished ones that still hold their end state.
-    getAnimations: () => animations.filter((a) => {
-      if (a.playState === "idle")
-        return false;
-      if (a.playState === "finished")
-        return a.options.fill === "forwards" || a.options.fill === "both";
-      return true;
-    }),
+    // What the browser lists: running or paused animations, and finished ones that still hold their end state. With
+    // `subtree`, those of every descendant too.
+    getAnimations: (opts?: { subtree?: boolean }): FakeAnimation[] => [
+      ...animations.filter((a) => {
+        if (a.playState === "idle")
+          return false;
+        if (a.playState === "finished")
+          return a.options.fill === "forwards" || a.options.fill === "both";
+        return true;
+      }),
+      ...(opts?.subtree
+        ? children.flatMap(c => (c as unknown as { getAnimations: (o: { subtree: boolean }) => FakeAnimation[] }).getAnimations({ subtree: true }))
+        : []),
+    ],
     getBoundingClientRect: () => fakeRect(rect.left, rect.top, rect.width, rect.height),
     closest: (selector: string) => (init.calmPreset && selector === CALM_SELECTOR
       ? el
