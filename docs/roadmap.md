@@ -1,6 +1,6 @@
 # Roadmap
 
-What's being built and what comes next. Ideas that aren't grilled yet are Idea issues, not lines here (§ Ideas). Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-11-11.
+What's being built and what comes next. Ideas that aren't grilled yet are Idea issues, not lines here (§ Ideas). Maintained by the planning agent as product manager; every change is approved by the maintainer. Last updated 2026-11-12.
 
 Only **Now** has tickets. Everything else lives here until its turn, then becomes a batch of tickets under one milestone. Entries link the closed issue they came from ("was #125") and the handoff frames that design them (IDs from `docs/design_handoff_winnies/01-screen-index.md`).
 
@@ -9,6 +9,8 @@ Only **Now** has tickets. Everything else lives here until its turn, then become
 The whole visual layer rebuilt from `docs/design_handoff_winnies/` (Kawaii Clay). Behaviour stays as is unless a ticket says otherwise (ADR-0001). Built on the `redesign` branch, released as v1.0.0 (ADR-0002).
 
 Every product question is decided in [Redesign 1.0: Core planning map](https://github.com/christried/winnies/issues/166) (closed); its Decisions so far list is the index specs and tickets link back to. Phases run one at a time, in table order, each through the same loop: `/to-spec` writes the phase's spec, `/to-tickets` cuts it into a batch under the phase's milestone, the batch is implemented (`/implement-spec`), reviewed, walked through and looked back on in a `/retro` (`docs/agents/delivery.md`), and only then does the next phase get its spec. No phase is specced or ticketed ahead of its turn.
+
+One exception, decided by the human on 2026-11-12 (#281): R1 Engine and R2 Primitives are grilled, specced and ticketed while R0's walk-through and retro run. R2 is grilled alongside R1 only where it makes sense before R1 is finished. Two orchestrators then implement the two phases in parallel, each on its own integration branch (`docs/agents/cloud.md` § Two sessions at once). The exception covers R1 and R2 only: R3 and later follow the loop above.
 
 | Phase          | Goal                                                                                                                                                                                                                  | Frames          | Milestone                                                           | Status      |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------- | ----------- |
