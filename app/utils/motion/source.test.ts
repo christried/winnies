@@ -14,10 +14,11 @@ function specifiers(file: string) {
 
 // Guards the ticket's "no hex left" criterion and the module's independence from Nuxt, not any internals.
 describe("the motion sources", () => {
-  it("are the six modules of the engine", () => {
+  it("are the seven modules of the engine", () => {
     expect(SOURCES.sort()).toEqual([
       "engine.ts",
       "env.ts",
+      "loop-sync.ts",
       "loops.ts",
       "surface.ts",
       "tokens.ts",
