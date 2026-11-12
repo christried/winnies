@@ -25,7 +25,8 @@ No agent shows up in this repository's commits, and nothing claims an agent as c
 ## Commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`. The body says why.
-- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here.
+- Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here. `commitlint.config.mjs` reads this line: the commit-msg hook and CI refuse a header with no scope or one not listed here.
+- Merge commits (`Merge <branch> (#<n>)`, `Merge … into …`, `Merge remote-tracking branch …`, `Merge pull request …`) and `Revert "…"` commits are exempt.
 
 ## Branches and releases
 
