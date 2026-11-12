@@ -40,7 +40,7 @@ Every phase of the roadmap (one spec, one milestone) ends with these steps, in t
 3. **Walk-through.** Open a `ready-for-human` issue "Walk-through <phase>" with a checklist built from the spec's acceptance criteria. It is a joint session: the agent presents one surface at a time on staging, the human judges it, and each finding becomes a ticket. How things look and how motion feels are the human's call; agents measure numbers.
 4. **Retro.** Ask the human to run `/retro` on the phase's sessions: what the review and the walk-through caught that a check, a standard or a brief should have caught earlier. A mechanical mistake becomes a lint rule, a test or a hook; a judgement call becomes a line in `CODING_STANDARDS.md` or `docs/agents/`, with the incident that caused it.
 
-The next phase is specced only after the retro (`docs/roadmap.md`).
+The next phase is specced only after the retro (`docs/roadmap.md`). One exception (the human, 2026-11-12, #281): R1 and R2 are grilled, specced and ticketed during R0's walk-through and retro, and implemented in parallel. R3 and later wait for the retro again.
 
 ## Branch hygiene
 
