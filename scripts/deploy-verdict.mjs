@@ -1,5 +1,6 @@
 // The decisions of scripts/deploy-wait.mjs, apart from the `gh api` calls it gathers its data with, as ci-verdict.mjs is apart
 // from ci-wait.mjs: where a PR stands on its way to a merge, whether its base deploys, and where the deployment stands.
+import { mergeState } from "./pr-state.mjs";
 
 /** Check-run conclusions that let a PR merge. */
 const PASSING = new Set(["success", "neutral", "skipped"]);
@@ -49,7 +50,7 @@ export function prVerdict(pr, runs, now) {
       ],
     };
   }
-  if (pr.mergeable_state === "dirty")
+  if (mergeState(pr) === "conflict")
     return { verdict: "conflict" };
   if (pr.mergeable_state === "behind")
     return { verdict: "behind" };

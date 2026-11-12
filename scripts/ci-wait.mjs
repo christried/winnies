@@ -1,11 +1,14 @@
-// Waits for the CI runs of one commit and says whether `check` passed (from compies, its retro 0.7; the retros and issue numbers below are that project's). CI runs on every pushed branch, so
-// an implementer's head gets the full suite and the build without loading this machine (docs/agents/implementer-frame.md).
+// Waits for the CI and Attribution runs of one commit and says whether they passed (from compies, its retro 0.7; the retros and issue numbers below are that project's). CI and Attribution run on every pushed branch, so
+// an implementer's head gets the full suite, the build and the commit check without loading this machine (docs/agents/implementer-frame.md).
 //
 //   node scripts/ci-wait.mjs [sha] [--until-done]    (default: HEAD, which must be pushed)
 //
-// Exit 0: every CI run of the commit passed. Exit 1: one failed or was cancelled (the failing step's output follows,
-// cut to its failures), or no run appeared within two minutes. Exit 2: CI is still running after 2.5 minutes, so run it
-// again. One call stays under the 3 minutes after which Claude Code moves a command to the background: that ends the
+// Exit 0: every run of the commit passed, and when the commit is the head of an open PR, that PR does not conflict.
+// Exit 1: a run failed or was cancelled (the failing step's output follows, cut to its failures), or a workflow has no
+// run after two minutes, or the commit is the head of an open PR that conflicts with its base. GitHub starts no
+// pull_request run on a conflicting PR, so the push runs alone would look green (#267): the conflict is reported at once,
+// whatever the runs say. Exit 2: a run is still going after 2.5 minutes, or GitHub has not yet worked out whether the
+// PR can merge (it does so on the first read after a push), so run it again. One call stays under the 3 minutes after which Claude Code moves a command to the background: that ends the
 // agent's turn and wakes the orchestrator with an interim notice (three times in session 7 of 0.8, retro 0.8).
 // `--until-done` is for a call that already runs in the background (the orchestrator's): it waits up to 20 minutes, so a
 // 6-minute run ends in one notification instead of a failed one every 2.5 minutes (retro 0.10).
@@ -16,7 +19,8 @@
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { parseArgs } from "node:util";
-import { rerunDecision } from "./ci-verdict.mjs";
+import { conclude, expectedWorkflows, latestRuns, missingWorkflows, rerunDecision } from "./ci-verdict.mjs";
+import { headPrOf } from "./pr-state.mjs";
 
 const USAGE = "usage: node scripts/ci-wait.mjs [sha] [--until-done]";
 
@@ -66,7 +70,44 @@ function jobCountOf(run) {
     return fail(`jobs count failed for ${run.url}`, error);
   }
 }
-const runsOf = () => JSON.parse(gh("run", "list", "--workflow", "ci.yml", "--commit", sha, "--json", "databaseId,status,conclusion,event,url,attempt"));
+// The workflow files by name, not "every workflow": a third workflow of the repository is none of this commit's gate.
+const WORKFLOW_FILES = { CI: "ci.yml", Attribution: "attribution.yml" };
+// Only if the SHA is in this repository can its attribution.yml be read; a guess would call a missing object "no trigger".
+try {
+  execFileSync("git", ["cat-file", "-e", `${sha}^{commit}`], { stdio: "ignore" });
+}
+catch {
+  console.log(`${sha.slice(0, 7)} is not in this repository: run git fetch origin first.`);
+  process.exit(1);
+}
+// The Attribution run exists only where the commit's own workflow file triggers on every push; a branch cut earlier, and
+// main until 1.0.0, has none to wait for.
+function attributionYmlAt(commit) {
+  try {
+    return execFileSync("git", ["show", `${commit}:.github/workflows/attribution.yml`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  }
+  catch {
+    return null;
+  }
+}
+const expected = expectedWorkflows(attributionYmlAt(sha));
+const runsOf = () => latestRuns(Object.values(WORKFLOW_FILES).flatMap(file => JSON.parse(gh("run", "list", "--workflow", file, "--commit", sha, "--json", "databaseId,status,conclusion,event,url,attempt,workflowName"))));
+// The PR whose head this commit is, with its merge state: the list route does not carry `mergeable_state`, the single route does.
+function headPr() {
+  try {
+    const found = headPrOf(JSON.parse(gh("api", `repos/{owner}/{repo}/commits/${sha}/pulls`)), sha);
+    return found === null
+      ? null
+      : JSON.parse(gh("api", `repos/{owner}/{repo}/pulls/${found.number}`));
+  }
+  catch (error) {
+    return fail(`reading the pull request of ${sha.slice(0, 7)} failed`, error);
+  }
+}
+const label = run => `${run.workflowName} (${run.event})`;
 
 /** The failing step's log from its first failure marker on, without the job/step/timestamp prefix and colour codes. */
 function failures(id) {
@@ -74,7 +115,7 @@ function failures(id) {
     .split("\n")
     // The log writes colour codes either as escapes or as a literal caret „^[“.
     .map(line => line.replace(/^[^\t]*\t[^\t]*\t\S+ ?/, "").replace(new RegExp(`(?:${String.fromCharCode(27)}|\\^\\[)\\[[0-9;]*m`, "g"), ""));
-  const start = lines.findIndex(line => /Failed Tests|Unhandled Error|error TS\d+|ERR_PNPM|✖ \d+ problems?|Unused (?:files|exports|dependencies)/.test(line));
+  const start = lines.findIndex(line => /Failed Tests|Unhandled Error|error TS\d+|ERR_PNPM|✖ \d+ problems?|Unused (?:files|exports|dependencies)|No commit names an agent/.test(line));
   return (start === -1
     ? lines.slice(-60)
     : lines.slice(start, start + 80)).join("\n");
@@ -82,6 +123,7 @@ function failures(id) {
 
 const started = Date.now();
 let runs = [];
+let pr = null;
 // Run id → the time of its re-run after a start failure. A re-run keeps the run id; for a moment the list may still
 // show the old completed state, which does not count as done.
 const rerunAt = new Map();
@@ -92,19 +134,35 @@ function decisionOf(run) {
     : jobCountOf(run), rerunAt.has(run.databaseId));
 }
 const done = run => run.status === "completed" && !(Date.now() - (rerunAt.get(run.databaseId) ?? -Infinity) < RERUN_SETTLE_MS);
-console.log(`waiting for CI on ${sha.slice(0, 7)} …`);
+function stateNow() {
+  return conclude({
+    runs: runs.map(run => done(run)
+      ? run
+      : { ...run, status: "in_progress" }),
+    pr,
+    expected,
+  });
+}
+console.log(`waiting for ${expected.join(" and ")} on ${sha.slice(0, 7)} …`);
 while (Date.now() - started < CALL_MS) {
   runs = runsOf();
-  if (runs.length === 0 && Date.now() - started > APPEAR_MS) {
-    console.log("No CI run appeared for this commit. Is it pushed?");
+  pr = headPr();
+  const verdictNow = stateNow();
+  if (verdictNow === "conflict")
+    break;
+  const missing = missingWorkflows(runs, expected);
+  if (missing.length > 0 && Date.now() - started > APPEAR_MS) {
+    console.log(missing[0] === "CI"
+      ? "No CI run appeared for this commit. Is it pushed?"
+      : `No ${missing[0]} run appeared for this commit. Is it pushed, and does its ${WORKFLOW_FILES[missing[0]]} trigger on every push?`);
     process.exit(1);
   }
   if (runs.length > 0 && runs.every(done)) {
     const fresh = runs.filter(run => decisionOf(run) === "rerun");
-    if (fresh.length === 0)
+    if (fresh.length === 0 && verdictNow !== "waiting")
       break;
     for (const run of fresh) {
-      console.log(`start failure (zero jobs): ${run.event} ${run.url} – re-running once`);
+      console.log(`start failure (zero jobs): ${label(run)} ${run.url} – re-running once`);
       try {
         gh("run", "rerun", String(run.databaseId));
       }
@@ -117,26 +175,31 @@ while (Date.now() - started < CALL_MS) {
   await sleep(POLL_MS);
 }
 
-if (runs.length === 0) {
-  console.log("No CI run appeared for this commit. Is it pushed?");
+// Again, as a re-run issued in the last poll counts as running now.
+const state = stateNow();
+if (state === "conflict") {
+  console.log(`PR #${pr.number} conflicts with ${pr.base.ref}: merge ${pr.base.ref} into its branch and push. GitHub starts no pull_request run on a conflicting PR, so the push runs alone would look green.`);
   process.exit(1);
 }
-if (!runs.every(done)) {
-  console.log(`CI is still running on ${sha.slice(0, 7)}: run this again.`);
+if (state === "waiting") {
+  console.log(runs.length > 0 && missingWorkflows(runs, expected).length === 0 && runs.every(done)
+    ? `GitHub has not yet worked out whether PR #${pr.number} can merge: run this again.`
+    : `${expected.join(" and ")} still running on ${sha.slice(0, 7)}: run this again.`);
   process.exit(2);
 }
-const red = runs.filter(run => run.conclusion !== "success");
-if (red.length === 0) {
-  console.log(`green: ${runs.map(run => run.event).join(", ")}`);
+if (state === "green") {
+  console.log(`green: ${runs.map(label).join(", ")}; ${pr === null
+    ? "no open PR for this commit, so merge state was not checked"
+    : `PR #${pr.number} merges cleanly into ${pr.base.ref}`}`);
   process.exit(0);
 }
-for (const run of red) {
+for (const run of runs.filter(run => run.conclusion !== "success")) {
   // Re-run once already (by this call or an earlier one): there is no job log to show.
   if (decisionOf(run) === "twice") {
-    console.log(`start failure (zero jobs) twice: ${run.event} ${run.url}`);
+    console.log(`start failure (zero jobs) twice: ${label(run)} ${run.url}`);
     continue;
   }
-  console.log(`${run.conclusion}: ${run.event} ${run.url}`);
+  console.log(`${run.conclusion}: ${run.workflowName} ${run.event} ${run.url}`);
   if (run.conclusion === "failure")
     console.log(failures(run.databaseId));
 }
