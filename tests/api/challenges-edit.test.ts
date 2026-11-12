@@ -229,9 +229,7 @@ describe("duplicating a Challenge", () => {
     expect((await readChallenges(owner, winnieId)).map(c => c.pinned)).toEqual([true, false]);
   });
 
-  // Only adding checks the limit of 50 (challenges.test.ts); duplicating does not. Pinned as it
-  // is today; whether that is wanted is the human's to decide.
-  it("duplicate of the 50th Challenge is not refused today", async () => {
+  it("duplicating a Challenge on a Winnie with 50 Challenges is refused", async () => {
     const owner = await signInAsOwner();
     const { id: winnieId } = await createWinnie(owner);
     let last: ChallengeRow | undefined;
@@ -241,8 +239,23 @@ describe("duplicating a Challenge", () => {
 
     const duplicated = await duplicateChallenge(owner, last!.id);
 
+    expect(duplicated.status).toBe(429);
+    expect(await duplicated.text()).toContain("A Winnie can hold 50 Challenges.");
+    expect(await readChallenges(owner, winnieId)).toHaveLength(50);
+  }, 60_000);
+
+  it("duplicating a Challenge on a Winnie with 49 Challenges gives the 50th", async () => {
+    const owner = await signInAsOwner();
+    const { id: winnieId } = await createWinnie(owner);
+    let last: ChallengeRow | undefined;
+    for (let position = 0; position < 49; position++) {
+      last = await createChallenge(owner, winnieId, { game: `Game ${position}` });
+    }
+
+    const duplicated = await duplicateChallenge(owner, last!.id);
+
     expect(duplicated.status).toBe(200);
-    expect(await readChallenges(owner, winnieId)).toHaveLength(51);
+    expect(await readChallenges(owner, winnieId)).toHaveLength(50);
   }, 60_000);
 });
 
