@@ -56,6 +56,18 @@ export function bodyDialect(): MotionDialect {
 }
 
 /**
+ * Whether an animation is a plain Web Animation, which is what the engine's recipes create, and not a CSS animation or
+ * transition, which belong to the stylesheet. Shared by quieting and by the transition hooks (#302).
+ *
+ * @param a any animation of the document
+ * @returns true for an animation made by `el.animate()`
+ */
+export function isPlainAnimation(a: Animation): boolean {
+  return !(typeof CSSAnimation !== "undefined" && a instanceof CSSAnimation)
+    && !(typeof CSSTransition !== "undefined" && a instanceof CSSTransition);
+}
+
+/**
  * Every plain Web Animation in the document: what the engine's recipes create. CSS animations and transitions are the
  * stylesheet's, and the reduced-motion block already stills them. The whole document and not the surface's root,
  * because modals and toasts are teleported out of the root. That is safe because every animation is an engine recipe
@@ -66,9 +78,7 @@ export function bodyDialect(): MotionDialect {
 export function browserAnimations(): Animation[] {
   if (typeof document === "undefined")
     return [];
-  return document.getAnimations().filter(a =>
-    !(typeof CSSAnimation !== "undefined" && a instanceof CSSAnimation)
-    && !(typeof CSSTransition !== "undefined" && a instanceof CSSTransition));
+  return document.getAnimations().filter(isPlainAnimation);
 }
 
 /**
