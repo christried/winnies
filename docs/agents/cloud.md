@@ -27,22 +27,22 @@ It is an older build than the one `@playwright/test` pins. So `pnpm test:e2e` is
 
 GitHub's GraphQL API is refused: `gh pr …`, `gh issue …` and `gh repo …` end in HTTP 403. REST answers, so `gh api <route>`, `gh run …`, `scripts/ci-wait.mjs` and `scripts/deploy-wait.mjs` work. Where `issue-tracker.md` or `delivery.md` name a `gh` command, take:
 
-| For                                           | In a cloud session                                                   |
-| --------------------------------------------- | -------------------------------------------------------------------- |
-| reading an issue, a PR, a list                | `gh api repos/{owner}/{repo}/…`, as `issue-tracker.md` § Conventions |
-| `gh issue create`, `edit`, `close`            | the GitHub connector's `issue_write`                                 |
-| `gh issue edit --add-label`, `--remove-label` | `issue_write` with the issue's whole list of `labels`                |
-| `gh issue comment`                            | `add_issue_comment`                                                  |
-| a sub-issue                                   | `sub_issue_write`                                                    |
-| a dependency, a label that does not exist     | `gh api --method POST` on the REST route                             |
-| `gh pr create`                                | `create_pull_request`                                                |
-| `gh pr merge <n> --auto --merge`              | `enable_pr_auto_merge` with `MERGE`                                  |
-| `gh pr merge <n> --merge`                     | not from the cloud yet (below)                                       |
-| `gh pr ready <n>`                             | `update_pull_request`                                                |
+| For                                           | In a cloud session                                                    |
+| --------------------------------------------- | --------------------------------------------------------------------- |
+| reading an issue, a PR, a list                | `gh api repos/{owner}/{repo}/…`, as `issue-tracker.md` § Conventions  |
+| `gh issue create`, `edit`, `close`            | the GitHub connector's `issue_write`                                  |
+| `gh issue edit --add-label`, `--remove-label` | `issue_write` with the issue's whole list of `labels`                 |
+| `gh issue comment`                            | `add_issue_comment`                                                   |
+| a sub-issue                                   | `sub_issue_write`                                                     |
+| a dependency, a label that does not exist     | `gh api --method POST` on the REST route                              |
+| `gh pr create`                                | `create_pull_request`                                                 |
+| `gh pr merge <n> --auto --merge`              | `enable_pr_auto_merge` with `MERGE`                                   |
+| `gh pr merge <n> --merge`                     | `merge_pull_request` with `merge`, no commit title or message (below) |
+| `gh pr ready <n>`                             | `update_pull_request`                                                 |
 
 Every write to GitHub from the container, through the connector or `gh api`, comes out with a footer that names the agent. Something on the way out adds it, after the attribution hook has looked at the call, and an edit through REST brings it back (#277). CLAUDE.md § Attribution allows it in a PR body, an issue, a comment and a review, so leave it; don't write one yourself.
 
-It must not reach a commit. Merge through auto-merge (`enable_pr_auto_merge` with `MERGE`): its merge commit takes the PR's title, not its body. Whether `merge_pull_request` gets the footer in its commit message is not known, so a cloud session does not use it until a test shows it clean: when the two-minute rule of `delivery.md` applies, turn auto-merge off and on again, and if the PR still stays open, name it on its issue for a local session.
+It must not reach a commit. A merge commit takes the PR's title, not its body, whether auto-merge makes it or `merge_pull_request` does: tried on 2026-11-12 (#279), a merge through the connector without `commit_title` or `commit_message` came out clean. So leave both out. Auto-merge cannot be set on a PR whose checks are already green; the two-minute rule of `delivery.md` merges it then.
 
 ## Staging
 
@@ -58,7 +58,8 @@ A check a cloud session cannot do is handed on, never dropped or replaced by a g
 
 - a look at `pnpm dev`: the container's `DATABASE_URL` is a placeholder, so only the test server of the two suites runs there;
 - staging, while the secret is not saved;
-- anything in the human's own browser (`claude --chrome`), and whatever only the human does anyway.
+- anything in the human's own browser (`claude --chrome`), and whatever only the human does anyway;
+- deleting a remote branch: the container's proxy refuses it, by `git push --delete` and by REST alike (#277). Branch hygiene (`delivery.md`) names the branches for a local session.
 
 ## Two sessions at once
 
