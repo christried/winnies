@@ -21,9 +21,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Before setup-node, whose pnpm cache needs it, as in ci.yml. The commit-message step below needs the packages.
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+          cache: pnpm
 
       # What this run checks, for the steps below: the commits and files from BASE to HEAD.
       - name: Range
@@ -61,6 +65,14 @@ jobs:
           # Three dots: what the change adds since the merge base. Two dots would also list every path where the head
           # lacks newer base commits, e.g. a hotfix forward-merged into redesign would list main's unstripped images.
           node scripts/attribution.mjs files "$BASE...$HEAD"
+
+      # `--ignore-scripts` as in ci.yml's visual job: the postinstall `nuxt prepare` needs the app's environment.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Conventional Commits with a scope from CLAUDE.md § Commits, over the same commits as the Commits step except
+      # those up to ENFORCED_AFTER in the script. One process rather than `commitlint --from --to`, which cannot skip them.
+      - name: Commit messages
+        run: node scripts/commit-format.mjs "$BASE..$HEAD"
 
       - name: PR title and body
         if: github.event_name == 'pull_request'
