@@ -17,6 +17,9 @@ node_modules
 storybook-static
 debug-storybook.log
 
+# Screenshot tests: the new picture and the diff of a failed comparison (the baselines are committed)
+.vitest
+
 # Logs
 logs
 *.log
