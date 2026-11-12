@@ -14,9 +14,24 @@ export default defineNuxtPlugin(() => {
   if (preference.value !== undefined && !themePreferenceSchema.safeParse(preference.value).success)
     preference.value = user.value?.theme ?? undefined;
 
+  // Browser only. While the preference is system the head value follows the OS instead of being undefined:
+  // unhead removes an attribute whose value goes to undefined, and the attribute is never removed after
+  // hydration. The server renders nothing for system; the inline script in <head> resolves it first.
+  const systemTheme = ref<"light" | "dark">("light");
+  if (import.meta.client) {
+    const query = matchMedia("(prefers-color-scheme: dark)");
+    const read = () => systemTheme.value = query.matches ? "dark" : "light";
+    read();
+    query.addEventListener("change", read);
+  }
+
   useHead({
     htmlAttrs: {
-      "data-theme": computed(() => themeAttribute(preference.value ?? "system")),
+      "data-theme": computed(() =>
+        themeAttribute(preference.value ?? "system") ?? (import.meta.client
+          ? systemTheme.value
+          : undefined),
+      ),
     },
   });
 

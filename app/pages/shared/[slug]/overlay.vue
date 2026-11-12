@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { DAISY_THEMES } from "~~/shared/constants";
 import { elapsedSeconds, formatDuration } from "~~/shared/utils/timer";
 
 // gets rid of background color
@@ -21,8 +20,8 @@ useHead({
     { name: "robots", content: "noindex, nofollow" },
   ],
   htmlAttrs: {
-    // Fixed look for OBS, independent of the viewer's theme (#121)
-    "data-theme": DAISY_THEMES.dark,
+    // Light only (#171, spec #257 § 4): OBS has no colour scheme, and the Overlay ignores the preference and the cookie.
+    "data-theme": "light",
   },
   bodyAttrs: {
     // A transparent page for OBS (spec #257 § 4): bg-none clears the backdrop's gradients, bg-transparent the

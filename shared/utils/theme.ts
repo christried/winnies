@@ -1,16 +1,23 @@
 import type { ThemePreference } from "../constants";
-import { DAISY_THEMES, THEME_PREFERENCE } from "../constants";
+import { THEME_PREFERENCE } from "../constants";
 
 /**
- * Dynamically set the "data-theme" value for the user's preference.
+ * The "data-theme" value of <html> for the user's preference.
  * @param preference The user's theme choice.
- * @returns The daisyUI theme name. "undefined" results in "system"
+ * @returns "light" or "dark" as chosen; undefined for system, which the inline script resolves.
  */
-export function themeAttribute(preference: ThemePreference) {
+export function themeAttribute(preference: ThemePreference): Exclude<ThemePreference, "system"> | undefined {
   return preference === "system"
     ? undefined
-    : DAISY_THEMES[preference];
+    : preference;
 }
+
+/**
+ * Resolves Match system before the first paint: it runs inline in <head>, only where the server left
+ * "data-theme" off, so a Light or Dark rendered for a cookie, an account or the Overlay is never touched.
+ * Inline on purpose, there is no CSP today; one added later needs a nonce or hash for this script.
+ */
+export const MATCH_SYSTEM_SCRIPT = `(function(){var r=document.documentElement;if(!r.hasAttribute("data-theme"))r.setAttribute("data-theme",matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")})()`;
 
 /**
  * The preference after this one, wrapping around: system → light → dark → system.
