@@ -22,6 +22,16 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "mcp__.*[Gg]it[Hh]ub.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/scripts/attribution.mjs tool",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash|PowerShell",
         "hooks": [
           {

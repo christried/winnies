@@ -18,7 +18,7 @@ No agent shows up anywhere in this repository's record (the human, 2026-11-10; i
 - Commits are authored and committed under the human's git identity, never an agent's.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
-`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, push), the `Attribution` CI job on every PR and on `main` and `redesign`, the Claude Code hook in `.claude/settings.json` that refuses such a command before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
+`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, push), the `Attribution` CI job on every PR and on `main` and `redesign`, the Claude Code hook in `.claude/settings.json` that refuses such a command, or such a call of the GitHub connector, before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
 
 ## Commits
 
@@ -63,7 +63,7 @@ Pass `model` and `effort: "high"` on every spawn: `sonnet` for the harder half o
 
 ### Cloud sessions
 
-In a cloud container (`CLAUDE_CODE_REMOTE` is set), read `docs/agents/cloud.md` before the first command: the git identity, the test database, the browser, GitHub without `gh pr` and `gh issue`, staging, and what is handed to a local session.
+In a cloud container (`CLAUDE_CODE_REMOTE` is set), read `docs/agents/cloud.md` before the first command.
 
 ### Design hand-off
 
