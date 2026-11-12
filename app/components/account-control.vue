@@ -29,33 +29,30 @@ async function onSignOut(close: () => void) {
   <button
     v-if="!user"
     type="button"
-    class="btn btn-neutral"
     :disabled="signingIn"
     @click="onSignIn()"
   >
-    <span v-if="signingIn" class="loading loading-spinner text-primary" />
     Sign in with Discord
   </button>
 
   <UiDropdown
     v-else
     label="Account Menu"
-    menu-class="dropdown-end"
   >
     <template #trigger>
-      <div v-if="user.image" class="avatar cursor-pointer">
+      <div v-if="user.image" class="cursor-pointer">
         <div class="w-12 rounded-full">
           <img alt="" :src="user.image">
         </div>
       </div>
-      <div v-else class="avatar avatar-placeholder">
-        <div class="w-12 rounded-full bg-neutral text-neutral-content">
+      <div v-else>
+        <div class="w-12 rounded-full">
           <span> {{ userShorthand }}</span>
         </div>
       </div>
     </template>
     <template #default=" { close }">
-      <li class="menu-title">
+      <li>
         Logged in as {{ user.name }}
       </li>
       <li>

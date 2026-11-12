@@ -22,11 +22,7 @@ function onDelete(close: () => void) {
 </script>
 
 <template>
-  <UiDropdown
-    label="More actions"
-    trigger-class="btn btn-square btn-ghost"
-    menu-class="dropdown-end"
-  >
+  <UiDropdown label="More actions">
     <template #trigger>
       <UiIcon name="more" />
     </template>
@@ -37,10 +33,9 @@ function onDelete(close: () => void) {
           <UiIcon name="edit" /> Rename
         </button>
       </li>
-      <li class="border-t border-base-300">
+      <li class="border-t">
         <button
           type="button"
-          class="text-error"
           @click="onDelete(close)"
         >
           <UiIcon name="trash" /> Delete

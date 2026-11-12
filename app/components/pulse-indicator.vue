@@ -23,7 +23,7 @@ const pulseDelay = usePulseDelay(isActive);
   <span
     v-if="label"
     class="font-mono text-xs whitespace-nowrap tabular-nums"
-    :class="isActive ? 'animate-pulse-run text-primary' : 'opacity-60'"
+    :class="!isActive && 'opacity-60'"
     :style="{ animationDelay: pulseDelay }"
   >
     {{ label }}

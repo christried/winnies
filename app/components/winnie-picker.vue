@@ -41,10 +41,10 @@ function shortDate(value: string) {
 </script>
 
 <template>
-  <span v-if="otherWinnies.length < 1" class="btn pointer-events-none btn-neutral">
+  <span v-if="otherWinnies.length < 1" class="pointer-events-none">
     {{ currentWinnie.name }}
   </span>
-  <UiDropdown v-else trigger-class="btn btn-neutral">
+  <UiDropdown v-else>
     <template #trigger>
       <span class="max-w-56 truncate">{{ currentWinnie.name }} </span>
       <UiIcon name="chevron" />
@@ -54,7 +54,7 @@ function shortDate(value: string) {
       <li v-for="winnie in otherWinnies" :key="winnie.id">
         <button @click="selectWinnie(winnie, close)">
           <span class="max-w-56 truncate">{{ winnie.name }}</span>
-          <span class="type-meta"> {{ shortDate(winnie.createdAt) }} </span>
+          <span> {{ shortDate(winnie.createdAt) }} </span>
         </button>
       </li>
     </template>

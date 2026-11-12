@@ -22,6 +22,8 @@ What the Standards review checks in Winnies, on top of `GLOSSARY.md`, the ADRs a
 
 - The look comes from `docs/design_handoff_winnies/` (ADR-0001). Sizes, colours, easings and copy are taken from it, not estimated.
 - A screen, state, component variant, illustration, icon or Winniebert pose the handoff doesn't cover is a finding when the diff improvised it without the flag `docs/agents/design-handoff.md` asks for. The human decides case by case what goes back to Claude Design (the human, 2026-10-15).
+- A surface speaks its dialect through `useDialect` where its layout or page is defined (`null` for none). A surface with no call is a finding in review; the e2e file pins each surface that exists (`tests/e2e/dialect.spec.ts`).
+- The app's copy of a handoff file equals the handoff's (`scripts/handoff-sync.test.mjs`). A deliberate difference goes in a `winnies:deviation #<issue>` block in the copy, with an entry in `docs/design-deviations.md` that names the issue and says what the handoff needs to take it in, so the block can go (the first case is #268). (`docs/reviews/review_r0_2026-11-12.md`, Standards 3.)
 
 ## Motion
 

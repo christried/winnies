@@ -4,6 +4,18 @@ Steps a release or a dependency update runs by hand, because no test can: only t
 with Discord. Everything automation can check (lint, typecheck, unit, API and e2e tests) is in CI and
 is not repeated here.
 
+## Required checks on `main` (1.0.0)
+
+Run after the 1.0.0 merge of `redesign` into `main`, once the `visual` job has run green on `main`. Branch protection
+is the human's (`docs/agents/delivery.md`): an agent hands over this line with a `!` in front of it and does not run it.
+
+```
+gh api --method PATCH repos/christried/winnies/branches/main/protection/required_status_checks -F strict=true -f 'contexts[]=check' -f 'contexts[]=attribution' -f 'contexts[]=api-tests' -f 'contexts[]=e2e' -f 'contexts[]=visual'
+```
+
+It keeps the four checks `main` requires today, keeps `strict`, and adds `visual`. Not before the job has run there:
+the `visual` job does not exist on `main` until 1.0.0, and a required check that never runs blocks every hotfix.
+
 ## Discord sign-in and sign-out
 
 The tests sign in through a test-only helper that never talks to Discord, so the real OAuth round trip

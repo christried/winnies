@@ -22,3 +22,23 @@ export async function updateUserTheme(userId: string, theme: ThemePreference) {
 
   return updatedThemePreference;
 }
+
+/**
+ * Stores a user's reduce-motion preference.
+ * @param userId The signed in user.
+ * @param reduceMotion Whether the user wants motion reduced.
+ * @returns The successfully stored preference.
+ */
+export async function updateUserReduceMotion(userId: string, reduceMotion: boolean) {
+  const [updatedMotionPreference] = await db
+    .update(user)
+    .set({ reduceMotion })
+    .where(eq(user.id, userId))
+    .returning({ reduceMotion: user.reduceMotion });
+
+  // The account was deleted while its session was still alive
+  if (!updatedMotionPreference)
+    throw createError({ statusCode: 404, statusMessage: "That account no longer exists." });
+
+  return updatedMotionPreference;
+}

@@ -1,7 +1,7 @@
 name: Attribution
 
-# No commit, PR title or PR body may credit an agent, and no commit may be authored or committed by one
-# (CLAUDE.md § Attribution). The git hooks in .husky/ say so first; this job is the check `--no-verify` cannot skip.
+# No commit, PR title or PR body may credit an agent, no commit may be authored or committed by one, and no image a
+# change touches may carry a C2PA manifest or metadata naming one (CLAUDE.md § Attribution). The git hooks in .husky/ say so first; this job is the check `--no-verify` cannot skip.
 # `edited` is listed so a changed PR title or body is checked again.
 on:
   pull_request:
@@ -30,11 +30,25 @@ jobs:
           case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
           node scripts/attribution.mjs range "$BASE..$HEAD"
 
+      - name: Files
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
+          # Three dots: what the change adds since the merge base. Two dots would also list every path where the head
+          # lacks newer base commits, e.g. a hotfix forward-merged into redesign would list main's unstripped images.
+          node scripts/attribution.mjs files "$BASE...$HEAD"
+
       - name: PR title and body
         if: github.event_name == 'pull_request'
         env:
           TITLE: ${{ github.event.pull_request.title }}
           BODY: ${{ github.event.pull_request.body }}
         run: |
-          printf '%s\n\n%s\n' "$TITLE" "$BODY" > "$RUNNER_TEMP/pr.txt"
-          node scripts/attribution.mjs text "$RUNNER_TEMP/pr.txt"
+          # The title becomes the merge commit's message, so it is held to a commit's rule. The body may name the agent
+          # that wrote it, as a cloud session's writes to GitHub all do, but claims no co-author (#277).
+          printf '%s\n' "$TITLE" > "$RUNNER_TEMP/title.txt"
+          printf '%s\n' "$BODY" > "$RUNNER_TEMP/body.txt"
+          node scripts/attribution.mjs text "$RUNNER_TEMP/title.txt"
+          node scripts/attribution.mjs body "$RUNNER_TEMP/body.txt"

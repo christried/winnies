@@ -50,6 +50,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Build Storybook
+        run: pnpm build-storybook
+
       - name: Test
         run: pnpm test
 
@@ -188,5 +191,56 @@ jobs:
           path: |
             playwright-report/
             test-results/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Read-only on purpose: this job compares against the committed baselines and never writes or pushes one. Baselines
+    # come out of `pnpm test:visual:podman --update` on the maintainer's machine, in this same image (ADR-0004).
+    permissions:
+      contents: read
+
+    # The same pinned image as `e2e`, so a pass under Podman is a pass here: font rasterization is the whole point.
+    # scripts/playwright-pin.test.mjs fails the `check` job when either image and `@playwright/test` differ.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --ipc=host --init
+
+    env:
+      # Set by Actions already; explicit because a missing baseline must fail here, never be written (Vitest writes the
+      # reference it did not find unless CI is set).
+      CI: "true"
+      # What scripts/visual-env.mjs reads: the suite and its baselines belong to the pinned image.
+      WINNIES_VISUAL: container
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Storybook and Vitest build nothing, so there is no compiler step, and `nuxt prepare` (the postinstall hook) needs
+      # the app's environment, which this job does not have. The same install scripts/visual-container.sh runs.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Story render, axe and the screenshots in one run, against the baselines in stories/__screenshots__.
+      - name: Screenshot tests
+        run: pnpm test:visual
+
+      # The new picture and a diff image of each failed comparison.
+      - name: Upload diff images
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: .vitest/attachments/
           retention-days: 14
           if-no-files-found: ignore

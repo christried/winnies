@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <!-- VERSION HEADER -->
-  <h2 :id class="mt-6 border-t-2 border-secondary/50 pt-6 text-xl font-bold">
+  <h2 :id class="mt-6 border-t-2 pt-6 text-xl font-bold">
     <slot />
   </h2>
 </template>

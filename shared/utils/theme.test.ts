@@ -3,13 +3,13 @@ import { themePreferenceSchema } from "../schemas/user";
 import { nextThemePreference, themeAttribute } from "./theme";
 
 describe("themeAttribute", () => {
-  it("leaves the attribute off for system so the media query decides", () => {
+  it("leaves the attribute off for system so the inline script decides", () => {
     expect(themeAttribute("system")).toBeUndefined();
   });
 
-  it("maps light and dark to their daisyUI themes", () => {
-    expect(themeAttribute("light")).toBe("winter");
-    expect(themeAttribute("dark")).toBe("abyss");
+  it("renders light and dark as themselves", () => {
+    expect(themeAttribute("light")).toBe("light");
+    expect(themeAttribute("dark")).toBe("dark");
   });
 });
 
