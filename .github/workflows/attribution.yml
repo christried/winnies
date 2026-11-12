@@ -36,7 +36,9 @@ jobs:
           HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: |
           case "$BASE" in *[!0]*) ;; *) BASE=origin/main ;; esac
-          node scripts/attribution.mjs files "$BASE..$HEAD"
+          # Three dots: what the change adds since the merge base. Two dots would also list every path where the head
+          # lacks newer base commits, e.g. a hotfix forward-merged into redesign would list main's unstripped images.
+          node scripts/attribution.mjs files "$BASE...$HEAD"
 
       - name: PR title and body
         if: github.event_name == 'pull_request'
