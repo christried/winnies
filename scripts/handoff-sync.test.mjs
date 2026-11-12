@@ -3,7 +3,8 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 // The token file and the fonts are copied from the design handoff into the app, verbatim: the handoff is the
-// design's source of truth and the copy is what Winnies ships (ADR-0001). ESLint ignores the copies, so
+// design's source of truth and the copy is what Winnies ships (ADR-0001), apart from the deviation blocks the
+// token file's copy may carry (docs/design-deviations.md). ESLint ignores the copies, so
 // nothing reformats them; this test fails `pnpm test` (the `check` job) the moment one differs, with a message
 // that names both files, the first line that differs and the fix.
 //
@@ -12,11 +13,17 @@ import { describe, expect, it } from "vitest";
 
 const HANDOFF = "docs/design_handoff_winnies";
 const APP_FONTS = "app/assets/fonts";
-const FIX = "Edit the copy and this expectation in the same PR, and add a line to docs/design-deviations.md (#178).";
+const FIX = "Copy the handoff's file again. A deliberate change to the token file goes in a winnies:deviation block at the end of the copy, with an entry in docs/design-deviations.md (#178).";
+const TOKENS_COPY = "app/assets/css/winnies-tokens.css";
+
+// A deviation block in the token file's copy: compared against nothing, so the fix the handoff cannot have lives there.
+// Everything outside a block is still compared verbatim.
+const DEVIATION_START = /^\/\* winnies:deviation #\d+ start\b/;
+const DEVIATION_END = /^\/\* winnies:deviation #\d+ end \*\/$/;
 
 // Each pair is [the handoff's file, the app's copy], both relative to the repository root.
 const TEXT_PAIRS = [
-  [`${HANDOFF}/tokens/winnies-tokens.css`, "app/assets/css/winnies-tokens.css"],
+  [`${HANDOFF}/tokens/winnies-tokens.css`, TOKENS_COPY],
   [`${HANDOFF}/assets/fonts/fonts.css`, `${APP_FONTS}/fonts.css`],
   [`${HANDOFF}/assets/fonts/licences/MochiyPopOne-OFL.txt`, `${APP_FONTS}/licences/MochiyPopOne-OFL.txt`],
   [`${HANDOFF}/assets/fonts/licences/MPLUSRounded1c-OFL.txt`, `${APP_FONTS}/licences/MPLUSRounded1c-OFL.txt`],
@@ -40,12 +47,63 @@ const lf = text => text.replace(/\r\n/g, "\n");
 const readText = path => lf(readFileSync(path, "utf8"));
 
 /**
+ * The copy without its deviation blocks, each from its `start` marker line through its `end` marker line (and the
+ * blank line before it, so the text around a block reads as the handoff's did). A marker
+ * without its partner is a problem, never a block that runs to the end of the file.
+ * @param {string} text the app's copy, LF
+ * @param {string} path the app path, for the message
+ * @returns {{ text: string, problems: string[] }} the text without the blocks, and what is wrong with the markers
+ */
+function withoutDeviations(text, path) {
+  const kept = [];
+  const problems = [];
+  let openAt = -1;
+  text.split("\n").forEach((line, index) => {
+    if (DEVIATION_START.test(line)) {
+      if (openAt !== -1) {
+        problems.push(`${path}: the deviation start marker at line ${index + 1} opens inside the block started at line ${openAt + 1}.`);
+      }
+      openAt = index;
+      // The one blank line that sets the block apart from the handoff's text goes with it.
+      if (kept.at(-1) === "") {
+        kept.pop();
+      }
+    }
+    else if (DEVIATION_END.test(line)) {
+      if (openAt === -1) {
+        problems.push(`${path}: the deviation end marker at line ${index + 1} has no start marker.`);
+      }
+      openAt = -1;
+    }
+    else if (openAt === -1) {
+      kept.push(line);
+    }
+  });
+  if (openAt !== -1) {
+    problems.push(`${path}: the deviation start marker at line ${openAt + 1} has no end marker.`);
+  }
+  return {
+    text: kept.join("\n"),
+    problems,
+  };
+}
+
+/**
  * The first line that differs between the handoff's text and the app's copy, as one problem; none when equal.
+ * The token file's copy is compared without its deviation blocks (see FIX); no other file may have any.
  * @param {string} handoffText the handoff's file, LF
- * @param {string} appText the app's copy, LF
+ * @param {string} appCopy the app's copy, LF
  * @param {[string, string]} paths the handoff path and the app path, for the message
  */
-function differences(handoffText, appText, [handoffPath, appPath]) {
+function differences(handoffText, appCopy, [handoffPath, appPath]) {
+  let appText = appCopy;
+  if (appPath === TOKENS_COPY) {
+    const stripped = withoutDeviations(appCopy, appPath);
+    if (stripped.problems.length > 0) {
+      return stripped.problems;
+    }
+    appText = stripped.text;
+  }
   if (handoffText === appText) {
     return [];
   }
@@ -188,6 +246,40 @@ describe("catches drift", () => {
     expect(problems[0]).toContain("#FFF8FC");
     expect(problems[0]).toMatch(/at line \d+/);
     expect(problems[0]).toContain("docs/design-deviations.md");
+  });
+
+  it("a change inside a deviation block is not drift", () => {
+    const sources = real();
+    sources.text[TOKENS[1]] = plant(sources.text[TOKENS[1]], text => text.replace(
+      /(winnies:deviation #268 start[^\n]*\n)/,
+      "$1.not-in-the-handoff { color: red; }\n",
+    ));
+    expect(allDifferences(sources)).toEqual([]);
+  });
+
+  it("a start marker with no end marker", () => {
+    const sources = real();
+    sources.text[TOKENS[1]] = plant(sources.text[TOKENS[1]], text => text.replace(/^\/\* winnies:deviation #268 end \*\/\n?/m, ""));
+    const problems = allDifferences(sources);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain(TOKENS[1]);
+    expect(problems[0]).toMatch(/start marker at line \d+ has no end marker/);
+  });
+
+  it("an end marker with no start marker", () => {
+    const sources = real();
+    sources.text[TOKENS[1]] = plant(sources.text[TOKENS[1]], text => text.replace(/^\/\* winnies:deviation #268 start[^\n]*\n/m, ""));
+    const problems = allDifferences(sources);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toMatch(/end marker at line \d+ has no start marker/);
+  });
+
+  it("a deviation block in a file other than the token file is still drift", () => {
+    const sources = real();
+    sources.text[FONTS[1]] = `${sources.text[FONTS[1]]}/* winnies:deviation #1 start */\n.x {}\n/* winnies:deviation #1 end */\n`;
+    const problems = allDifferences(sources);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain(FONTS[1]);
   });
 
   it("one line dropped from fonts.css", () => {
