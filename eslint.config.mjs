@@ -86,6 +86,8 @@ export default withNuxt(
       "docs/research/**",
       ".nuxt/**",
       ".output/**",
+      // The static Storybook build (`pnpm build-storybook`): generated, never committed.
+      "storybook-static/**",
       "**/migrations/**",
       ".pnpm-store/**",
       // Vendored skills, kept byte for byte as their source ships them (.claude/skills/README.md).

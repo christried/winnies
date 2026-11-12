@@ -13,6 +13,10 @@ node_modules
 /test-results/
 /playwright-report/
 
+# Storybook: the static build and its debug log
+storybook-static
+debug-storybook.log
+
 # Logs
 logs
 *.log
