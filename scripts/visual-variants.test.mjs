@@ -73,6 +73,9 @@ describe("the screenshot variants against the stories and the baselines on disk"
     expect(ids).toContain("tokens-spacing--default");
     // The motion stories (#305, #306): rendered and run in every variant, never shot.
     expect(ids).toContain("motion-particles--default");
+    expect(ids).toContain("motion-broadcast--default");
+    expect(ids).toContain("motion-celebratory--default");
+    expect(ids).toContain("motion-loops--default");
   });
 
   it("a story whose id starts with an unshot prefix is shot in no variant", () => {
