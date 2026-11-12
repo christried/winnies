@@ -75,6 +75,29 @@ function keepReason(tree) {
   return null;
 }
 
+/**
+ * The ends of git's first stderr line for a worktree it cannot remove because a process holds it, on Windows: the folder
+ * as a process's working directory ("Permission denied"), a file inside it held open ("Invalid argument"). Both captured
+ * on git 2.54 (#292).
+ */
+export const GIT_IN_USE = ["Permission denied", "Invalid argument"];
+
+/**
+ * Whether a removal that threw is a folder another process holds (kept, the next run tries again) or a real failure.
+ * Only EPERM and EBUSY from Node's fs, and git's own in-use line, count as held; any other code is a failure.
+ *
+ * @param {object} error
+ * @param {string | undefined} error.code  Node's errno on a thrown fs error ("EPERM"); undefined for git's failure (it exits 128 and sets none)
+ * @param {string} error.message           the first line of git's stderr, or of the Node error's message
+ * @returns {{ action: "kept" | "failed", reason: string }}  failed: reason is the message
+ */
+export function removalFailure({ code, message }) {
+  const heldByGit = message.includes("failed to delete") && GIT_IN_USE.some(ending => message.endsWith(ending));
+  return code === "EPERM" || code === "EBUSY" || heldByGit
+    ? { action: "kept", reason: "in use by another process" }
+    : { action: "failed", reason: message };
+}
+
 /** "agent-a1b2" -> "a1b2"; "a1b2" -> "a1b2". */
 export function agentId(nameOrArg) {
   return nameOrArg.replace(/^agent-/, "");
