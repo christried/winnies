@@ -24,6 +24,7 @@ export const user = pgTable("user", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   theme: text("theme", { enum: THEME_PREFERENCE }).default("system").notNull(),
+  reduceMotion: boolean("reduce_motion").default(false).notNull(),
 });
 
 export const session = pgTable(
