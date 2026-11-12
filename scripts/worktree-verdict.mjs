@@ -75,8 +75,12 @@ function keepReason(tree) {
   return null;
 }
 
-/** The end of git's first stderr line for a worktree it cannot remove because a process holds a file in it, on Windows. */
-export const GIT_IN_USE = "Permission denied";
+/**
+ * The ends of git's first stderr line for a worktree it cannot remove because a process holds it, on Windows: the folder
+ * as a process's working directory ("Permission denied"), a file inside it held open ("Invalid argument"). Both captured
+ * on git 2.54 (#292).
+ */
+export const GIT_IN_USE = ["Permission denied", "Invalid argument"];
 
 /**
  * Whether a removal that threw is a folder another process holds (kept, the next run tries again) or a real failure.
@@ -88,7 +92,7 @@ export const GIT_IN_USE = "Permission denied";
  * @returns {{ action: "kept" | "failed", reason: string }}  failed: reason is the message
  */
 export function removalFailure({ code, message }) {
-  const heldByGit = message.includes("failed to delete") && message.endsWith(GIT_IN_USE);
+  const heldByGit = message.includes("failed to delete") && GIT_IN_USE.some(ending => message.endsWith(ending));
   return code === "EPERM" || code === "EBUSY" || heldByGit
     ? { action: "kept", reason: "in use by another process" }
     : { action: "failed", reason: message };

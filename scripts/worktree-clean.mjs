@@ -12,8 +12,9 @@
 // while it has uncommitted changes, a commit no remote branch contains, or a process running in it (a dev server).
 // `--dry-run` prints what it would do and changes nothing. A folder git no longer lists as a worktree is deleted. One
 // line per folder. Exit 0 when every folder that could not be deleted was kept as in use by another process; 1 when a
-// removal failed for any other reason; 2 on a usage error. The decision is scripts/worktree-verdict.mjs; this file
-// gathers the data and acts on it.
+// removal failed for any other reason; 2 on a usage error. In use means EPERM or EBUSY from Node, or git's
+// "failed to delete" line ending in "Permission denied" (the folder held) or "Invalid argument" (a file in it held).
+// The decision is scripts/worktree-verdict.mjs; this file gathers the data and acts on it.
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";

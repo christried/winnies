@@ -152,6 +152,13 @@ describe("scripts/worktree-verdict.mjs removalFailure", () => {
     });
   });
 
+  it("keeps a worktree git could not remove because a file inside it is held open, as in use", () => {
+    expect(removalFailure({ code: undefined, message: "error: failed to delete 'C:/repo/.claude/worktrees/agent-n-file': Invalid argument" })).toEqual({
+      action: "kept",
+      reason: "in use by another process",
+    });
+  });
+
   it("fails on ENOTEMPTY, with its message as the reason", () => {
     expect(removalFailure({ code: "ENOTEMPTY", message: "ENOTEMPTY: directory not empty, rmdir 'x'" })).toEqual({
       action: "failed",
