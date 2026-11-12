@@ -40,7 +40,10 @@ export function winChallenge(challengeId: string) {
 }
 
 /**
- * Reopens a won Challenge without restarting its timer.
+ * Reopens a Challenge without restarting its timer. Only a Won Challenge's Counter moves: un-winning
+ * puts it one below its Target, so a Counter at its Target always means Won. A Challenge that isn't
+ * Won has nothing to reverse and keeps its count (#210). In a Postgres UPDATE the SET expressions
+ * read the row's old values, so `challenge.status` here is the status before this update.
  * @param challengeId The Challenge being un-won.
  * @returns The updated row, or undefined when no row matched.
  */
@@ -48,7 +51,7 @@ export async function unwinChallenge(challengeId: string) {
   const [reopenedChallenge] = await db.update(challenge)
     .set({
       status: sql`(case when ${challenge.accumulatedSeconds} > 0 then 'active' else 'todo' end)::challenge_status`,
-      count: sql`case when ${challenge.target} > 0 then greatest(${challenge.target} - 1, 0) else ${challenge.count} end`,
+      count: sql`case when ${challenge.status} = 'won' and ${challenge.target} > 0 then greatest(${challenge.target} - 1, 0) else ${challenge.count} end`,
     })
     .where(eq(challenge.id, challengeId))
     .returning();
