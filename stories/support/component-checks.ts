@@ -24,3 +24,38 @@ export function expectQuietAfter(interact: () => Promise<void> | void): Promise<
       expect(layer.children).toHaveLength(0);
   });
 }
+
+/** Waits for every animation that ends (a CSS transition, a release jelly), so a picture or a read never catches one halfway. */
+export async function settled() {
+  await frames();
+  const ending = animations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity);
+  await Promise.all(ending.map(a => a.finished.catch(() => undefined)));
+  await frames();
+}
+
+/**
+ * Stops every spinner at its first frame. The spin loop never ends, so a picture of a busy button would catch it at a
+ * different angle each run: the pictures show the icon, the plays check that it turns.
+ */
+export function freezeSpinners(canvasElement: HTMLElement) {
+  for (const svg of canvasElement.querySelectorAll("button[aria-busy='true'] svg, a[aria-busy='true'] svg")) {
+    for (const a of svg.getAnimations()) {
+      a.pause();
+      a.currentTime = 0;
+    }
+  }
+}
+
+/**
+ * Leaves the page as its picture should find it: nothing focused, every spinner still, no animation half-run, and the
+ * page painted from scratch, not on top of what the interaction left (the shot compares at the pixel).
+ */
+export async function finish(canvasElement: HTMLElement) {
+  (document.activeElement as HTMLElement | null)?.blur();
+  freezeSpinners(canvasElement);
+  await settled();
+  document.body.style.visibility = "hidden";
+  await frames();
+  document.body.style.visibility = "";
+  await frames();
+}
