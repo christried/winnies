@@ -174,7 +174,7 @@ test("renames a Winnie and sees the new name", async ({ ownerPage }) => {
   await visit(ownerPage, "/");
 
   await ownerPage.getByRole("button", { name: "More actions" }).click();
-  await ownerPage.getByRole("button", { name: "Rename" }).click();
+  await ownerPage.getByRole("menuitem", { name: "Rename" }).click();
 
   // The editor has no accessible name; it is the focused input, with the old name selected.
   const editor = ownerPage.locator("input:focus");
@@ -205,7 +205,7 @@ test("deletes a Winnie and it is gone from the Workspace", async ({ ownerPage })
   await expect(winnie).toBeVisible();
 
   await ownerPage.getByRole("button", { name: "More actions" }).click();
-  await ownerPage.getByRole("button", { name: "Delete" }).click();
+  await ownerPage.getByRole("menuitem", { name: "Delete" }).click();
 
   const dialog = ownerPage.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Delete Winnie" })).toBeVisible();

@@ -35,8 +35,7 @@ test("a Winnie being deleted ignores Esc, a scrim click and Cancel, then closes 
   await expect(winnie).toBeVisible();
 
   await ownerPage.getByRole("button", { name: "More actions" }).click();
-  // A menu item or a button, whichever the menu draws: the dialog's own Delete is not there before it opens.
-  await ownerPage.getByRole("menuitem", { name: "Delete" }).or(ownerPage.getByRole("button", { name: "Delete" })).click();
+  await ownerPage.getByRole("menuitem", { name: "Delete" }).click();
 
   const dialog = ownerPage.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Delete Winnie" })).toBeVisible();
