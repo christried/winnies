@@ -16,7 +16,6 @@ const Broadcast = defineComponent({
   name: "BroadcastStory",
   setup() {
     const { m } = useMotionStory();
-    const { D } = m;
 
     const ring = elementRef();
     const banner = elementRef();
@@ -36,7 +35,7 @@ const Broadcast = defineComponent({
       banner: async () => {
         reset(banner.value);
         m.bannerIn(banner.value);
-        await m.wait(D.toast + 600);
+        await m.wait(m.T().D.toast + 600);
         await m.bannerOut(banner.value);
       },
       mute: async () => {
@@ -57,7 +56,7 @@ const Broadcast = defineComponent({
       stamp: async () => {
         reset(stamp.value);
         m.stampIn(stamp.value);
-        await m.wait(D.cheer);
+        await m.wait(m.T().D.cheer);
         await m.stampOut(stamp.value);
       },
       hop: () => {

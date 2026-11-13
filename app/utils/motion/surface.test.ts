@@ -1,7 +1,7 @@
 import type { AnimateCall } from "../../../tests/support/fake-motion";
 import type { MotionDialect } from "./types";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { BROADCAST, fakeElement, fakeEnv, fakeLayer, WORKSPACE } from "../../../tests/support/fake-motion";
+import { BROADCAST, fakeElement, fakeEnv, fakeLayer, jellyKf, WORKSPACE } from "../../../tests/support/fake-motion";
 import { bodyDialect, browserAnimations, createSurfaceMotion, parseDialect } from "./surface";
 
 beforeEach(() => {
@@ -56,7 +56,7 @@ describe("start", () => {
     expect(env.attrObservers).toBe(1);
   });
 
-  it("tells a subscriber of the tokens it read, once, and not again on a second call (#335)", () => {
+  it("tells a subscriber of nothing at the first read, and of a later change", () => {
     const { surface, m, env } = setup();
     const seen = vi.fn();
     m.subscribe(seen);
@@ -66,6 +66,9 @@ describe("start", () => {
     surface.start();
 
     expect(m.T().C.gain).toBe(1.25);
+    expect(seen).not.toHaveBeenCalled();
+
+    env.setAttr("data-dialect", "broadcast");
     expect(seen).toHaveBeenCalledOnce();
     expect(seen).toHaveBeenCalledWith({ reduced: false });
   });
@@ -226,6 +229,85 @@ describe("tokens", () => {
     env.setAttr(name, "x");
 
     expect(m.T().C.gain).toBe(1.25);
+  });
+});
+
+// A recipe asked for before the surface has started (a child's `mounted` runs before its layout's, #335) must run on
+// what the surface's root says, as one asked for after the start does.
+describe("tokens on the first call", () => {
+  it("are the surface's own for a one-shot called before start()", () => {
+    const { m, env, el, layer } = setup();
+    env.styleOf(BROADCAST);
+    const jelly = el();
+
+    m.burst("resp", el());
+    m.jelly("resp", jelly);
+
+    expect(layer.children).toHaveLength(28);
+    expect(jelly.calls[0]?.keyframes).toEqual(jellyKf(1.25));
+  });
+
+  it("are the surface's own for a loop made before start()", () => {
+    const { m, env, el } = setup();
+    env.styleOf(BROADCAST);
+    const a = el();
+
+    m.loop(a, "breathe");
+
+    // `breathe` bakes the gain into its amplitude: 0.04 at gain 1.
+    expect(a.calls[0]?.keyframes?.[1]).toEqual({ transform: `scale(${1 + 0.04 * 1.25},${1 - 0.04 * 1.25})` });
+  });
+
+  it("are read from the root once, not on every call, and again by refresh()", () => {
+    const { m, env } = setup();
+    env.styleOf(BROADCAST);
+    expect(m.T().C.gain).toBe(1.25);
+
+    env.styleOf(WORKSPACE);
+    expect(m.T().C.gain).toBe(1.25);
+
+    m.refresh();
+    expect(m.T().C.gain).toBe(1);
+  });
+
+  it("are the defaults while the surface has no root, and the root's once it has one", () => {
+    let root: ReturnType<typeof fakeElement> | null = null;
+    const env = fakeEnv({ styles: BROADCAST });
+    const { m } = createSurfaceMotion({
+      root: () => root,
+      layer: () => null,
+      dialect: () => null,
+      env,
+    });
+
+    expect(m.T().C.gain).toBe(1);
+    expect(m.T().D.burst).toBe(1300);
+
+    root = fakeElement();
+    expect(m.T().C.gain).toBe(1.25);
+    expect(m.T().D.burst).toBe(1000);
+  });
+});
+
+describe("shared defaults", () => {
+  it("are not on the engine: a duration is read from the current tokens, m.T().D", () => {
+    const { m, env } = setup();
+    env.styleOf(BROADCAST);
+
+    expect(m).not.toHaveProperty("D");
+    expect(m).not.toHaveProperty("E");
+    expect(m.T().D.burst).toBe(1000);
+  });
+
+  it("are not touched by editing the tokens the engine hands out", () => {
+    const { m } = setup();
+
+    m.T().D.tick = 1;
+    m.T().E.out = "x";
+
+    const other = setup();
+    expect(other.m.T().D.tick).toBe(480);
+    expect(other.m.T().E.out).toBe("cubic-bezier(.15, .7, .3, 1)");
   });
 });
 

@@ -178,10 +178,10 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
     entries.forEach(applyPause);
   }
 
-  // The engine changed: reduced motion, a tier, or the tokens (also the surface's first read of them). Whatever it
-  // cancelled comes back when it may, and a loop built from knobs that changed is rebuilt (a dialect flips the gain,
-  // and a loop of the first render was built from the defaults). The rebuild starts from the shared origin, so it does
-  // not jump; a paused loop is rebuilt paused.
+  // The engine changed: reduced motion, a tier, or the tokens. Whatever it cancelled comes back when it may, and a loop
+  // built from knobs that changed is rebuilt (a dialect flips the gain). A loop of the first render needs no rebuild: the
+  // engine read the tokens when it was made (#335). The rebuild starts from the shared origin, so it does not jump; a
+  // paused loop is rebuilt paused.
   function onEngine() {
     entries.forEach((entry, el) => {
       if (!m.on(loopTier(entry.name))) {

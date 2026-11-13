@@ -528,9 +528,9 @@ describe("edges", () => {
   });
 });
 
-// A surface as a layout builds it: the engine holds the handoff's defaults until `start()`, and the tokens the page
-// really has (`tokens`) are only read then. A `v-loop` of the first render sets its loop in a child's `mounted`, which
-// runs before the layout's `onMounted` starts the surface (#335).
+// A surface as a layout builds it: a `v-loop` of the first render sets its loop in a child's `mounted`, which runs before
+// the layout's `onMounted` starts the surface (#335). The engine reads the tokens the page really has (`tokens`) on that
+// first call, so the loop is right from the start and `start()` has nothing to repair.
 function firstRender(tokens: TokenMap, init: { reduced?: boolean } = {}) {
   const log: AnimateCall[] = [];
   const env = fakeEnv({ styles: tokens, reduced: init.reduced });
@@ -578,14 +578,19 @@ function breatheAt(gain: number): Keyframe[] {
 }
 
 describe("a loop of the first render", () => {
-  it("runs at the surface's own gain and rate once the surface has started", () => {
+  it("runs at the surface's own gain and rate before the surface has started, and still after", () => {
     const s = firstRender(SHOWCASE);
     const el = s.el();
     s.host.set(el, "breathe");
 
+    const before = live(el);
+    expect(before.keyframes).toEqual(breatheAt(1.6));
+    expect(before.anim?.playbackRate).toBe(1.4);
+
     s.surface.start();
 
     const l = live(el);
+    expect(l.anim).toBe(before.anim);
     expect(l.count).toBe(1);
     expect(l.keyframes).toEqual(breatheAt(1.6));
     expect(l.anim?.playbackRate).toBe(1.4);
@@ -600,7 +605,8 @@ describe("a loop of the first render", () => {
     ];
     s.host.set(amb, "breathe");
     s.host.set(spin, "spin");
-    expect(live(amb).count).toBe(1); // the engine does not know yet
+    expect(live(amb).count).toBe(0);
+    expect(live(spin).count).toBe(1);
 
     s.surface.start();
 
