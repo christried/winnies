@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import type { ThemePreference } from "~~/shared/constants";
-import type { IconName } from "~/utils/icons";
+import type { MaterialIconName } from "~/utils/material-icons";
 
 /** How one preference is presented. */
 interface ThemeOption {
   /** Tooltip, accessible name and screen-reader announcement */
   label: string;
   /** Shown while this preference is active */
-  icon: IconName;
+  icon: MaterialIconName;
 }
 
 const OPTIONS: Record<ThemePreference, ThemeOption> = {
-  system: { label: "System", icon: "themeSystem" },
-  light: { label: "Light", icon: "themeLight" },
-  dark: { label: "Dark", icon: "themeDark" },
+  system: { label: "System", icon: "contrast" },
+  light: { label: "Light", icon: "light_mode" },
+  dark: { label: "Dark", icon: "dark_mode" },
 };
 
 const { preference, setPreference } = useTheme();
@@ -34,19 +34,12 @@ async function cycle() {
 
 <template>
   <div>
-    <button
-      type="button"
-      :aria-label="`Theme: ${OPTIONS[preference].label}. Change theme`"
+    <UiIconButton
+      variant="ghost"
+      :icon="OPTIONS[preference].icon"
+      :label="`Theme: ${OPTIONS[preference].label}. Change theme`"
       @click="cycle()"
-    >
-      <UiTablerIcon
-        v-for="(option, value) in OPTIONS"
-        :key="value"
-        :name="option.icon"
-        :size="40"
-        :class="value !== preference && 'hidden'"
-      />
-    </button>
+    />
     <span class="sr-only" aria-live="polite">{{ announcement }}</span>
   </div>
 </template>

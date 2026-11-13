@@ -118,9 +118,14 @@ async function remove(close: () => void) {
 </script>
 
 <template>
-  <UiDropdown label="Challenge actions">
-    <template #trigger>
-      <UiTablerIcon name="more" />
+  <UiDropdown>
+    <template #trigger="{ trigger }">
+      <UiIconButton
+        v-bind="trigger"
+        icon="more_vert"
+        label="Challenge actions"
+        variant="ghost"
+      />
     </template>
 
     <template #default="{ close }">

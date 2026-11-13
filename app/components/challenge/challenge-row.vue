@@ -60,16 +60,15 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
 
       <UiIconButton
         :label="isRunning ? 'Pause timer' : 'Start timer'"
-        :icon="isRunning ? 'pause' : 'play'"
-        class="size-11"
+        :icon="isRunning ? 'pause' : 'play_arrow'"
+        :variant="isRunning ? 'primary' : 'default'"
         :disabled="isWon || isComplete || isTogglingTimer"
         @click="winnieStore.toggleChallengeTimer(challenge.id)"
       />
 
       <UiIconButton
         :label="isWon ? 'Mark as not won' : 'Mark as won'"
-        icon="trophy"
-        class="size-11"
+        icon="emoji_events"
         @click="winnieStore.toggleWin(challenge.id)"
       />
       <ChallengeOverflowMenu :challenge="challenge" />
