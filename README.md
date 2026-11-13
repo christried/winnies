@@ -82,7 +82,11 @@ self-hosted fonts. The toolbar sets the three switches as the app does: theme (`
 plain `.stories.ts` files in `stories/`; the config is in `.storybook/`. The addon-a11y panel runs axe on a story;
 the check that fails on a violation is the `visual` job (`pnpm test:visual`, see § Tests): it runs axe on every story
 and fails on one (`a11y.test` is `"error"`). `pnpm build-storybook` builds the static Storybook, which only proves every
-story compiles.
+story compiles. A story can import a `.vue` file of `app/` and it renders without the Nuxt app: `.storybook/nuxt/`
+resolves its auto-imports as Nuxt does (composables, utils, Vue APIs, components in templates, `~/`, `#shared/`,
+`#components`, `import.meta.dev`), with a stub for `Icon` and for `useState` and nothing else. A component that reaches
+another Nuxt-only name (`useRoute`, `NuxtLink`, `$fetch`, ...) fails its own story, in the browser and in the `visual`
+job; the fix is a stub beside `useState` or a prop instead of the global.
 
 CI runs lint, typecheck, the Storybook build, test, build and the build test (the `check` job), the API tests (the
 `api-tests` job), the browser tests (the `e2e` job) and the screenshot tests (the `visual` job) on every pull request.
