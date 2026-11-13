@@ -69,4 +69,4 @@ A scratchpad and a transcript stay on the machine that wrote them. So a handoff 
 
 ## The container is not the human's machine
 
-It is thrown away after the session, so starting `dockerd` there needs no question. What a later session should find installed belongs in the environment's setup script, which the human approves on a card; `scripts/machine-guard.mjs` still asks before an install.
+It is thrown away after the session, so starting `dockerd` there needs no question. Its disk is small: a ticket's Docker volume for the pinned image (`winnies-visual-node-modules-<n>`) is removed as soon as the ticket is merged into the integration branch, with `docker volume rm` (the human, 2026-11-13, #295: the disk stood at 98% with eleven such volumes, and a compare run died with `ENOSPC`). The shared `winnies-visual-pnpm-store` stays. What a later session should find installed belongs in the environment's setup script, which the human approves on a card; `scripts/machine-guard.mjs` still asks before an install.
