@@ -1,8 +1,8 @@
 import type { WinniesMotion } from "../utils/motion/types";
 import { describe, expect, it, vi } from "vitest";
-import { createSSRApp, defineComponent, h, ref } from "vue";
-import { renderToString } from "vue/server-renderer";
+import { defineComponent, h, ref } from "vue";
 import { fakeElement, motionHarness } from "../../tests/support/fake-motion";
+import { render } from "../../tests/support/ssr-render";
 import { createTransitionHooks, useMotionTransition } from "./use-motion-transition";
 import { provideWinniesMotion } from "./use-winnies-motion";
 
@@ -280,9 +280,9 @@ describe("transition hooks", () => {
       },
     });
 
-    await renderToString(createSSRApp(defineComponent({
+    await render(defineComponent({
       render: () => h(layout, () => h(child)),
-    })));
+    }));
     hooks.current!.onEnter(fakeElement(), vi.fn());
 
     expect(seen).toBeDefined();

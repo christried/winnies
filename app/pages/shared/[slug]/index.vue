@@ -21,7 +21,8 @@ watch(shared, (value) => {
     clock.sync(new Date(value.serverNow).getTime());
 }, { immediate: true });
 
-const now = useNow();
+const { now } = useSurfaceClock();
+useRefreshOnReturn();
 
 const challenges = computed(() => sortChallenges(shared.value?.winnie.challenges ?? []));
 const isComplete = computed(() => isWinnieComplete(challenges.value));

@@ -55,6 +55,20 @@ describe("start", () => {
     expect(env.mediaListeners).toBe(1);
     expect(env.attrObservers).toBe(1);
   });
+
+  it("tells a subscriber of the tokens it read, once, and not again on a second call (#335)", () => {
+    const { surface, m, env } = setup();
+    const seen = vi.fn();
+    m.subscribe(seen);
+    env.styleOf(BROADCAST);
+
+    surface.start();
+    surface.start();
+
+    expect(m.T().C.gain).toBe(1.25);
+    expect(seen).toHaveBeenCalledOnce();
+    expect(seen).toHaveBeenCalledWith({ reduced: false });
+  });
 });
 
 describe("config", () => {

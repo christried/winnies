@@ -178,9 +178,16 @@ export interface WinniesMotion {
   cue: (name: string, id: string, at?: number) => void;
 
   // listening and loops
-  watch: () => () => void;
+  /**
+   * Refreshes the tokens, then refreshes again on every media or attribute change and tells the subscribers. The first
+   * refresh is silent, as in the reference, unless `announce` is set: a surface sets it, so whatever was built from the
+   * defaults before its start is checked against the tokens it just read (#335).
+   */
+  watch: (opt?: { announce?: boolean }) => () => void;
   subscribe: (cb: (s: MotionState) => void) => () => void;
   loop: (el: HTMLElement, name: LoopName, opt?: LoopOptions) => Animation | null;
+  /** What a loop of this name is built from right now, as a string: equal strings mean a running loop is current. */
+  loopKey: (name: LoopName) => string;
   stopLoop: (a: Animation) => void;
   stopLoops: () => void;
 

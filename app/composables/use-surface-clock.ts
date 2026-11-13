@@ -1,8 +1,8 @@
 import type { InjectionKey, Ref } from "vue";
 // A surface's one clock (#303, ADR-0003): a `setTimeout` chain aligned to the second of the server-corrected source,
-// which keeps running in a hidden tab. Nothing reads it yet; #304 swaps `useNow`/`useTitleNow` for it. The core,
-// `createSurfaceClock`, has no Nuxt in it, so the node tests drive it; `provideSurfaceClock` is the Nuxt-bound adapter
-// the layouts call. Vue is imported explicitly, and nothing at module level holds state or touches a browser global:
+// which keeps running in a hidden tab. Every timer and the tab title of the Workspace, the Shared View and the Overlay
+// read it (#304). The core, `createSurfaceClock`, has no Nuxt in it, so the node tests drive it; `provideSurfaceClock`
+// is the Nuxt-bound adapter the layouts call. Vue is imported explicitly, and nothing at module level holds state or touches a browser global:
 // a module-level clock would be shared between server requests.
 import { inject, onBeforeUnmount, onMounted, provide, readonly, ref } from "vue";
 

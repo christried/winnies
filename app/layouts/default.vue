@@ -14,7 +14,8 @@ const user = useCurrentUser();
 if (user.value)
   await callOnce("winnies:init", () => winnieStore.init());
 
-const now = useTitleNow();
+// A layout cannot inject the clock it provides, so it reads its own.
+const { now } = clock;
 const { brand } = useAppConfig();
 useHead({
   title: computed(() => {

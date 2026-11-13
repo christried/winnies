@@ -120,6 +120,8 @@ interface Entry extends NormalSpec {
   visible: boolean;
   /** Whether the host paused `anim`. */
   paused: boolean;
+  /** What `anim` was built from (`m.loopKey`); a different key now means the loop is stale and is rebuilt. */
+  key: string;
   stopObserving: () => void;
 }
 
@@ -155,6 +157,8 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
   }
 
   function start(el: HTMLElement, entry: Entry) {
+    // The key first: it is what the engine's tokens say at this moment, the same moment `m.loop` reads them.
+    entry.key = m.loopKey(entry.name);
     entry.anim = m.loop(el, entry.name, { delay: entry.delay });
     entry.paused = false;
     if (!entry.anim)
@@ -174,7 +178,10 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
     entries.forEach(applyPause);
   }
 
-  // The engine changed: reduced motion, a tier, or the tokens. Whatever it cancelled comes back when it may.
+  // The engine changed: reduced motion, a tier, or the tokens (also the surface's first read of them). Whatever it
+  // cancelled comes back when it may, and a loop built from knobs that changed is rebuilt (a dialect flips the gain,
+  // and a loop of the first render was built from the defaults). The rebuild starts from the shared origin, so it does
+  // not jump; a paused loop is rebuilt paused.
   function onEngine() {
     entries.forEach((entry, el) => {
       if (!m.on(loopTier(entry.name))) {
@@ -182,6 +189,11 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
         return;
       }
       if (!entry.anim || entry.anim.playState === "idle") {
+        start(el, entry);
+        return;
+      }
+      if (entry.key !== m.loopKey(entry.name)) {
+        cancel(entry);
         start(el, entry);
         return;
       }
@@ -236,6 +248,7 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
       anim: null,
       visible: true,
       paused: false,
+      key: "",
       stopObserving: noop,
     };
     entries.set(el, added);

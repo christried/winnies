@@ -1,6 +1,7 @@
 import type { LoopName } from "./types";
 import { describe, expect, it } from "vitest";
-import { EASE, motionHarness, SHOWCASE } from "../../../tests/support/fake-motion";
+import { EASE, motionHarness, SHOWCASE, withTokens, WORKSPACE } from "../../../tests/support/fake-motion";
+import { createMotionEngine } from "./engine";
 import { CALM_OFF, LOOPS, loopTier, RESPONSIVE_LOOPS } from "./loops";
 import { DURATIONS, EASINGS } from "./tokens";
 
@@ -207,6 +208,38 @@ const ROWS: [LoopName, Keyframe[], KeyframeAnimationOptions][] = [
     { duration: 2400, easing: IO },
   ],
 ];
+
+describe("the key of a loop (#335)", () => {
+  it("is the same for the default tokens and the CSS tokens' spelling of the same curves", () => {
+    const css = motionHarness(); // refreshed from Workspace tokens, which spell the curves with spaces
+    const fresh = createMotionEngine({
+      root: () => null,
+      fx: () => null,
+      cfg: () => ({ reduced: false, dialect: null, interval: 1000 }),
+    });
+
+    expect(fresh.loopKey("breathe")).toBe(css.m.loopKey("breathe"));
+    expect(fresh.loopKey("glow")).toBe(css.m.loopKey("glow"));
+  });
+
+  it("changes with the gain for a loop that bakes it in, and not for one that does not", () => {
+    const workspace = motionHarness();
+    const showcase = motionHarness({ tokens: SHOWCASE });
+
+    expect(showcase.m.loopKey("breathe")).not.toBe(workspace.m.loopKey("breathe"));
+    expect(showcase.m.loopKey("hop")).not.toBe(workspace.m.loopKey("hop"));
+    expect(showcase.m.loopKey("ring")).toBe(workspace.m.loopKey("ring"));
+  });
+
+  it("changes with a duration token", () => {
+    const a = motionHarness();
+    const b = motionHarness({
+      tokens: withTokens(WORKSPACE, { "--dur-breathe": "3000ms" }),
+    });
+
+    expect(b.m.loopKey("ring")).not.toBe(a.m.loopKey("ring"));
+  });
+});
 
 describe("lOOPS", () => {
   it("has the 22 loops of the reference", () => {
