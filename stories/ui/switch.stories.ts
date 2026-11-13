@@ -76,6 +76,9 @@ export const Off: Story = {
     expect(spy).toHaveBeenCalledTimes(2);
     expect(spy).toHaveBeenLastCalledWith(true);
     expect(el).toHaveAttribute("aria-checked", "false");
+
+    // The picture shows the state, not the ring the interaction left: only `Focus` shows the ring.
+    el.blur();
   },
 };
 
@@ -94,6 +97,8 @@ export const On: Story = {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenLastCalledWith(false);
     expect(el).toHaveAttribute("aria-checked", "true");
+
+    el.blur();
   },
 };
 
@@ -191,5 +196,8 @@ export const Toggling: Story = {
       expect(el).toHaveAttribute("aria-checked", "false");
       expect(Math.abs(knobLeft(el) - REST)).toBeLessThan(0.5);
     }));
+
+    // Ends as `Off` does, ring included, so the two pictures match.
+    el.blur();
   },
 };
