@@ -249,7 +249,12 @@ async function main() {
       : first);
   }
   try {
-    const context = await browser.newContext({ reducedMotion: "reduce" });
+    // `context.request` runs in Node and, unlike the browser, does not read HTTPS_PROXY by itself. In a cloud session
+    // the proxy is the only way out, and it is what adds the real bypass header (docs/agents/cloud.md § Staging).
+    const proxy = process.env.HTTPS_PROXY
+      ? { server: process.env.HTTPS_PROXY }
+      : undefined;
+    const context = await browser.newContext({ reducedMotion: "reduce", proxy });
     // The devtools pill of `pnpm dev` would sit in every screenshot.
     await context.addInitScript(() => {
       document.addEventListener("DOMContentLoaded", () => {
