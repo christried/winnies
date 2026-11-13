@@ -136,9 +136,10 @@ watch(() => props.value, (now, before) => {
 </script>
 
 <template>
-  <!-- Dimmed once, here: the buttons and the count dim themselves when disabled (`!`, as their own single-class opacity is out-specified by a state variant). `aria-disabled` is what lets axe see that the dimmed `/ target`, which is no control, is part of a disabled widget. -->
+  <!-- Dimmed once, here: the buttons and the count dim themselves when disabled (`!`, as their own single-class opacity is out-specified by a state variant). `role="group"` makes the widget one thing for a screen reader and lets `aria-disabled` stand (a role-less `div` may not carry it); that is what lets axe see that the dimmed `/ target`, which is no control, is part of a disabled widget. -->
   <div
     data-counter
+    role="group"
     :aria-disabled="disabled || undefined"
     class="inline-flex items-center gap-2"
     :class="disabled && 'cursor-not-allowed opacity-45 [&_button]:opacity-100! [&_input]:opacity-100!'"

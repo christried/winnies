@@ -84,6 +84,10 @@ export const Normal: Story = {
     const decrease = await findButton(canvasElement, "Decrease");
     const increase = await findButton(canvasElement, "Increase");
     expect(input).toHaveValue(87);
+    // The two buttons and the count are one widget, and a screen reader hears them as a group, not three loose controls.
+    const group = within(canvasElement).getByRole("group");
+    expect(group).toBe(canvasElement.querySelector("[data-counter]"));
+    expect(group).not.toHaveAttribute("aria-disabled");
 
     await expectQuietAfter(async () => {
       await userEvent.click(increase);
@@ -229,6 +233,9 @@ export const Disabled: Story = {
     expect(document.activeElement).toBe(document.body);
     expect(onStep).not.toHaveBeenCalled();
     expect(onSet).not.toHaveBeenCalled();
+
+    // The group says it is disabled, which a role-less `div` may not (ARIA 1.2); the dimmed `/ target` is part of it.
+    expect(within(canvasElement).getByRole("group")).toHaveAttribute("aria-disabled", "true");
 
     // The whole counter is dimmed once: the buttons and the count do not dim themselves on top of it.
     expect(getComputedStyle(canvasElement.querySelector("[data-counter]")!).opacity).toBe("0.45");
