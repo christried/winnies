@@ -63,6 +63,7 @@ defineExpose({
         v-model="name"
         v-bind="nameAttrs"
         autofocus
+        :readonly="isSubmitting"
         label="Winnie name"
         hide-label
         placeholder="e.g. Kitty vs. the world"
