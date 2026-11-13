@@ -3,7 +3,7 @@ import type { VNode } from "vue";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiProgressBar from "../../app/components/ui/progress-bar.vue";
-import { expectQuietAfter } from "../support/component-checks";
+import { expectQuietAfter, finish } from "../support/component-checks";
 import { chip, headingCss, resolved } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
@@ -142,6 +142,17 @@ function expectOffset(bar: HTMLElement, percent: number) {
   const { clip } = partsOf(bar);
   const want = (percent - 100) / 100 * clip.getBoundingClientRect().width;
   expect(Math.abs(offsetPixels(bar) - want)).toBeLessThan(0.5);
+}
+
+// Stops every stripes loop at its first frame, `translateX(0)`: the layer's own resting place. Local to this file, as
+// `freezeSpinners` is for a spinner (the shared helper is not widened for it).
+function freezeStripes(canvasElement: HTMLElement) {
+  for (const stripes of canvasElement.querySelectorAll<HTMLElement>("[data-stripes]")) {
+    for (const a of stripes.getAnimations()) {
+      a.pause();
+      a.currentTime = 0;
+    }
+  }
 }
 
 const seconds = (token: string) => Number.parseFloat(resolved(token));
@@ -283,8 +294,12 @@ export const Running: Story = {
       for (const bar of bars)
         await waitFor(() => expect(partsOf(bar).stripes.getAnimations()).toHaveLength(1), { timeout: 4000 });
 
-      toggle.blur();
+      // The loop runs for the plays above; the picture needs it still. Playwright's screenshot is meant to cancel an
+      // infinite animation, but CI caught the stripes a pixel off in some runs, so the loop is paused at its first frame.
+      freezeStripes(canvasElement);
     }));
+
+    await finish(canvasElement);
   },
 };
 

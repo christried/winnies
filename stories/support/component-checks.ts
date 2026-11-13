@@ -35,10 +35,11 @@ export async function settled() {
 
 /**
  * Stops every spinner at its first frame. The spin loop never ends, so a picture of a busy button would catch it at a
- * different angle each run: the pictures show the icon, the plays check that it turns.
+ * different angle each run: the pictures show the icon, the plays check that it turns. A spinner is the icon of
+ * anything that says `aria-busy`: a busy button or link, the loading state pill (#321).
  */
 export function freezeSpinners(canvasElement: HTMLElement) {
-  for (const svg of canvasElement.querySelectorAll("button[aria-busy='true'] svg, a[aria-busy='true'] svg")) {
+  for (const svg of canvasElement.querySelectorAll("[aria-busy='true'] svg")) {
     for (const a of svg.getAnimations()) {
       a.pause();
       a.currentTime = 0;
