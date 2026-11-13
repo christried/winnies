@@ -4,7 +4,7 @@ import { DATE_FORMAT, DATE_LOCALE } from "~~/shared/constants";
 const winnieStore = useWinnieStore();
 const { currentWinnie, runningCount, isComplete, totalCount, timerInFlight } = storeToRefs(winnieStore);
 
-const now = useNow();
+const { now } = useSurfaceClock();
 const isRunning = computed(() => currentWinnie.value?.totalRunningSince !== null);
 
 const totalSeconds = computed(() => elapsedSeconds(

@@ -1,6 +1,6 @@
 import type { FakeElement, MotionHarness } from "../../../tests/support/fake-motion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EASE, motionHarness, SHOWCASE } from "../../../tests/support/fake-motion";
+import { EASE, motionHarness, NONE, SHOWCASE } from "../../../tests/support/fake-motion";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -11,7 +11,6 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const NONE = { transform: "none" };
 const FADE_IN: Keyframe[] = [
   { opacity: 0 },
   { opacity: 1 },
