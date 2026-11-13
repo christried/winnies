@@ -234,6 +234,8 @@ export interface WinniesMotion {
   pageOut: (el: MaybeEl, dir: number) => Promise<unknown>;
   pageIn: (el: MaybeEl, dir: number) => void;
   progress: (fill: MaybeEl, fromX: number, toX: number) => Animation | null;
+  /** The switch knob's slide, as a share of the knob's own width. No moment ID in the handoff (#316). */
+  switchSlide: (knob: MaybeEl, fromX: number, toX: number) => Animation | null;
   pop: (el: MaybeEl, s?: number) => Animation | null;
   themeWipe: (layer: MaybeEl, x: number, y: number, color: string, swap: () => void) => void;
 
