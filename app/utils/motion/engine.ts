@@ -19,7 +19,7 @@ import type {
 // of truth. Nothing here touches a browser global at import: the server imports this module too.
 import { browserEnv } from "./env";
 import { CALM_OFF, LOOPS, loopTier } from "./loops";
-import { defaultTokens, DURATIONS, EASINGS, readTokens } from "./tokens";
+import { defaultTokens, readTokens } from "./tokens";
 
 export { browserEnv } from "./env";
 
@@ -47,41 +47,55 @@ function cycle<T>(list: readonly T[], i: number): T {
 
 /**
  * Builds the motion engine for one surface. It reads no token at construction (the root does not exist yet on the
- * server): `T()` gives the handoff's defaults until the first `refresh()`, which `watch()` calls once the surface is
- * mounted.
+ * server): `T()` reads them from the root on the first call that has one, and gives the handoff's defaults until then.
+ * `refresh()` reads them again, which `watch()` does whenever the page's theme, dialect or motion preference changes.
  *
  * @param o the surface: the element tokens are read from, the particle layer, the live config and an optional sound
  * cue hook
- * @returns the engine, every recipe ready, its tokens the defaults until the first refresh
+ * @returns the engine, every recipe ready, its tokens the surface's own from the first call, the defaults where it has no root
  */
 export function createMotionEngine(o: MotionOptions): WinniesMotion {
   const env: MotionEnv = {
     ...browserEnv(),
     ...o.env,
   };
-  let T: Tokens = defaultTokens();
-  const m = { D: DURATIONS, E: EASINGS } as WinniesMotion;
+  // Null until the tokens are read. They are read on the first call that needs them if the surface has a root by then,
+  // so a recipe of a first render (a child's `mounted`, before its layout starts the surface) runs on the surface's
+  // own tokens (#335). Where there is no root (the server) they stay the handoff's defaults, and a call that finds a root
+  // later reads it then. `refresh()` is the re-read.
+  let read: Tokens | null = null;
+  const defaults = defaultTokens();
+  const tk = (): Tokens => {
+    if (!read) {
+      const root = o.root();
+      if (!root)
+        return defaults;
+      read = readTokens(root, env);
+    }
+    return read;
+  };
+  const m = {} as WinniesMotion;
   const loops = new Set<Animation>();
   const subscribers = new Set<(s: MotionState) => void>();
 
   // Reduced motion is read live on every call: the config, the media query and <html data-motion>. So gating holds
   // before watch() starts and while a token is stale.
   const isReduced = () => o.cfg().reduced || env.mediaReduced() || env.htmlMotion() === "reduce";
-  const g = () => T.C.gain;
+  const g = () => tk().C.gain;
   const dia = () => o.cfg().dialect;
   const calm = () => !!o.cfg().calm;
 
-  m.T = () => T;
+  m.T = tk;
   m.refresh = (el) => {
     const from = el ?? o.root();
     if (!from)
       return;
-    T = readTokens(from, env);
+    read = readTokens(from, env);
     loops.forEach((a) => {
-      a.playbackRate = T.C.rate;
+      a.playbackRate = read!.C.rate;
     });
   };
-  m.on = tier => !isReduced() && o.cfg()[tier] !== false && !(tier === "amb" && T.C.ambientPaused);
+  m.on = tier => !isReduced() && o.cfg()[tier] !== false && !(tier === "amb" && tk().C.ambientPaused);
   m.play = (tier, el, kf, opt) => (el && m.on(tier)
     ? el.animate(kf, opt)
     : null);
@@ -117,7 +131,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       subscribers.delete(cb);
     };
   };
-  m.watch = (opt) => {
+  m.watch = () => {
     const onChange = () => {
       m.refresh();
       const reduced = isReduced();
@@ -125,12 +139,9 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         m.stopLoops();
       [...subscribers].forEach(cb => cb({ reduced }));
     };
-    // A `v-loop` of the first render asks for its loop in a child's `mounted`, before the layout starts the surface, so
-    // it was built from the defaults. A surface asks for the first refresh to be announced so the loop host can fix that.
-    if (opt?.announce)
-      onChange();
-    else
-      m.refresh();
+    // Silent: whatever a first render asked for was built from the tokens the root already had (`tk()` reads them on the
+    // first call), so there is nothing to tell the subscribers.
+    m.refresh();
     const stopMedia = env.onMediaChange(onChange);
     const stopAttrs = env.onAttrChange(onChange);
     return () => {
@@ -139,14 +150,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     };
   };
   const recipe = (name: LoopName) => LOOPS[name]({
-    D: T.D,
-    E: T.E,
+    D: tk().D,
+    E: tk().E,
     gain: g(),
     calm: calm(),
   });
   // The keyframes and timing a loop is baked from; `playbackRate` is not in them, a refresh sets it on a running loop.
-  // The tokens' easings are written with spaces after commas and the defaults without; the same curve is the same key.
-  m.loopKey = name => JSON.stringify(recipe(name)).replace(/\s*([,()])\s*/g, "$1");
+  m.loopKey = name => JSON.stringify(recipe(name));
   // Replaces the reference's per-element syncLoops body: v-loop decides when to start, restart and pause.
   m.loop = (el: HTMLElement, name: LoopName, opt: LoopOptions = {}) => {
     if (!m.on(loopTier(name)))
@@ -155,7 +165,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       return null;
     const [kf, timing] = recipe(name);
     const a = el.animate(kf, { iterations: Infinity, ...timing, delay: opt.delay ?? 0 });
-    a.playbackRate = T.C.rate;
+    a.playbackRate = tk().C.rate;
     loops.add(a);
     return a;
   };
@@ -208,7 +218,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
   m.burst = (tier, el, opt = {}) => {
     if (!m.on(tier))
       return;
-    const n = Math.round((opt.n ?? T.C.particles) * (opt.k ?? 1));
+    const n = Math.round((opt.n ?? tk().C.particles) * (opt.k ?? 1));
     if (n <= 0)
       return;
     const at = origin(el, opt.ox, opt.oy);
@@ -230,7 +240,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         { transform: "translate(-50%,-50%) scale(.2) rotate(0deg)", opacity: 1 },
         { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${r}deg)`, opacity: 1, offset: 0.55 },
         { transform: `translate(calc(-50% + ${dx * 1.15}px), calc(-50% + ${dy + (opt.gravity ?? 80)}px)) scale(.7) rotate(${r * 1.4}deg)`, opacity: 0 },
-      ], { duration: (opt.dur || T.D.burst) * (0.75 + Math.random() * 0.5), easing: T.E.out, delay: Math.random() * (opt.stagger || 60) }).onfinish = () => p.remove();
+      ], { duration: (opt.dur || tk().D.burst) * (0.75 + Math.random() * 0.5), easing: tk().E.out, delay: Math.random() * (opt.stagger || 60) }).onfinish = () => p.remove();
     }
   };
   m.rain = (tier, opt: RainOptions = {}) => {
@@ -241,7 +251,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       return;
     const W = L.offsetWidth;
     const H = L.offsetHeight;
-    const n = Math.round((opt.n ?? T.C.particles * 2) * (opt.k ?? 1));
+    const n = Math.round((opt.n ?? tk().C.particles * 2) * (opt.k ?? 1));
     for (let i = 0; i < n; i++) {
       const sz = (opt.size || 26) * (0.6 + Math.random() * 0.8);
       const x = Math.random() * W;
@@ -252,7 +262,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         { transform: "translate(-50%,0) rotate(0deg)", opacity: 1 },
         { transform: `translate(calc(-50% + ${sway}px), ${H * 0.55}px) rotate(${r * 0.5}deg)`, opacity: 1, offset: 0.6 },
         { transform: `translate(calc(-50% + ${-sway * 0.4}px), ${H + 60}px) rotate(${r}deg)`, opacity: 0.2 },
-      ], { duration: (opt.dur || T.D.celebrate * 1.4) * (0.7 + Math.random() * 0.6), easing: "cubic-bezier(.3,.2,.6,1)", delay: Math.random() * (opt.spread || 900) }).onfinish = () => p.remove();
+      ], { duration: (opt.dur || tk().D.celebrate * 1.4) * (0.7 + Math.random() * 0.6), easing: "cubic-bezier(.3,.2,.6,1)", delay: Math.random() * (opt.spread || 900) }).onfinish = () => p.remove();
     }
   };
 
@@ -268,8 +278,8 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     const bc = ov || dia() === "broadcast";
     if (ov && kind === "ov-row" && calm())
       return;
-    const hop = T.C.hop;
-    const sq = T.C.squash;
+    const hop = tk().C.hop;
+    const sq = tk().C.squash;
     const tilt = bc
       ? 0
       : 5 * g();
@@ -286,8 +296,8 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
             { transform: `translateY(0) scale(${1 + sq},${1 - sq})`, offset: 0.7 },
             { transform: "none" },
           ], {
-            duration: clamp(T.D.tick),
-            easing: T.E.out,
+            duration: clamp(tk().D.tick),
+            easing: tk().E.out,
           });
         }
         else {
@@ -296,8 +306,8 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
             { transform: `translateY(${hop * 0.6}px) rotate(${-tilt}deg)`, offset: 0.4 },
             { transform: "none" },
           ], {
-            duration: clamp(T.D.flick),
-            easing: T.E.spring,
+            duration: clamp(tk().D.flick),
+            easing: tk().E.spring,
           });
         }
       });
@@ -305,7 +315,9 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     }
     const big = beat === "hour";
     const k = big ? 2.2 : 1.6;
-    const dur = clamp(big ? T.D.hour : T.D.minute) || 1;
+    const dur = clamp(big
+      ? tk().D.hour
+      : tk().D.minute) || 1;
     const ordered = [...digits].sort((a, b) => Number(a.dataset.pos) - Number(b.dataset.pos));
     // The reference clamps the duration alone, so a late slot could still be moving when the next beat ticks it
     // (#337). Counting the stagger delay into the 95% keeps every slot's rollover inside its beat.
@@ -319,7 +331,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       ], {
         duration: Math.max(1, Math.min(dur, iv * 0.95 - delay)),
         delay,
-        easing: T.E.bouncy,
+        easing: tk().E.bouncy,
         fill: "backwards",
       });
     });
@@ -336,7 +348,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
               { transform: "scale(1)" },
               { transform: "scale(1.03)", offset: 0.3 },
               { transform: "scale(1)" },
-            ], { duration: dur, easing: T.E["in-out"] });
+            ], { duration: dur, easing: tk().E["in-out"] });
       }
       if (big) {
         m.burst("resp", well, {
@@ -403,7 +415,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         { transform: "translateY(3px) scale(1.07,.88)", offset: 0.7 },
         { transform: "none" },
       ],
-      { duration: T.D.droop, easing: "ease-in-out" },
+      { duration: tk().D.droop, easing: "ease-in-out" },
     ],
     4: () => [
       [
@@ -425,7 +437,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         { transform: "translateX(3px) scale(1.04)" },
         { transform: "none" },
       ],
-      { duration: 460, easing: T.E.stepped },
+      { duration: 460, easing: tk().E.stepped },
     ],
   };
   m.beat = (el, stage, minuteOnly) => {
@@ -448,7 +460,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "scale(1.25,.8)", offset: 0.2 },
       { transform: "scale(.9,1.12)", offset: 0.5 },
       { transform: "scale(1)" },
-    ], { duration: T.D.jelly, easing: T.E.out });
+    ], { duration: tk().D.jelly, easing: tk().E.out });
     if (!calm()) {
       m.burst("resp", el, {
         n: 6,
@@ -471,13 +483,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: `scale(${1 + 0.03 * a},${1 - 0.03 * a})`, offset: 0.68 },
     { transform: "scale(1,1)" },
   ];
-  m.jelly = (tier, el, a = 1, dur) => m.play(tier, el, jellyKf(a * g()), { duration: dur || T.D.jelly, easing: T.E.out });
+  m.jelly = (tier, el, a = 1, dur) => m.play(tier, el, jellyKf(a * g()), { duration: dur || tk().D.jelly, easing: tk().E.out });
   m.release = el => m.play("resp", el, [
     { transform: "scale(1,1)" },
     { transform: `scale(${1 + 0.06 * g()},${1 - 0.06 * g()})`, offset: 0.3 },
     { transform: `scale(${1 - 0.03 * g()},${1 + 0.03 * g()})`, offset: 0.65 },
     { transform: "scale(1,1)" },
-  ], { duration: T.D.jelly * 0.6, easing: T.E.spring });
+  ], { duration: tk().D.jelly * 0.6, easing: tk().E.spring });
   m.menuIn = (el) => {
     if (!el)
       return;
@@ -485,14 +497,14 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "scale(.6) translateY(-8px)", opacity: 0 },
       { transform: "none", opacity: 1, offset: 0.4 },
       { transform: "none", opacity: 1 },
-    ], { duration: T.D.toast, easing: T.E.bouncy });
+    ], { duration: tk().D.toast, easing: tk().E.bouncy });
     [...el.children].forEach((c, i) => m.play("resp", c, [
       { transform: "translateY(6px)", opacity: 0 },
       { transform: "none", opacity: 1 },
     ], {
-      duration: T.D.base,
+      duration: tk().D.base,
       delay: 40 + i * 30,
-      easing: T.E.out,
+      easing: tk().E.out,
       fill: "backwards",
     }));
     m.cue("menu.open", "R04");
@@ -502,13 +514,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     return m.done(m.play("resp", el, [
       { transform: "none", opacity: 1 },
       { transform: "scale(.9) translateY(-4px)", opacity: 0 },
-    ], { duration: T.D.fast, easing: T.E.in, fill: "forwards" }));
+    ], { duration: tk().D.fast, easing: tk().E.in, fill: "forwards" }));
   };
   m.modalIn = (scrim, card) => {
     m.play("resp", scrim, [
       { opacity: 0 },
       { opacity: 1 },
-    ], { duration: T.D.base, easing: T.E.out });
+    ], { duration: tk().D.base, easing: tk().E.out });
     const s = dia() === "showcase"
       ? 0.7
       : 0.85;
@@ -516,50 +528,50 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: `translateY(40px) scale(${s})`, opacity: 0 },
       { transform: "none", opacity: 1, offset: 0.3 },
       { transform: "none", opacity: 1 },
-    ], { duration: T.D.modal, easing: T.E.bouncy });
-    m.cue("modal.in", "R06", T.D.modal * 0.25);
+    ], { duration: tk().D.modal, easing: tk().E.bouncy });
+    m.cue("modal.in", "R06", tk().D.modal * 0.25);
   };
   m.modalOut = (scrim, card) => {
     m.cue("modal.out", "R07");
     m.play("resp", scrim, [
       { opacity: 1 },
       { opacity: 0 },
-    ], { duration: T.D.base, easing: T.E.in, fill: "forwards" });
+    ], { duration: tk().D.base, easing: tk().E.in, fill: "forwards" });
     return m.done(m.play("resp", card, [
       { transform: "none", opacity: 1 },
       { transform: "translateY(24px) scale(.92)", opacity: 0 },
-    ], { duration: T.D.base, easing: T.E.in, fill: "forwards" }));
+    ], { duration: tk().D.base, easing: tk().E.in, fill: "forwards" }));
   };
   m.toastIn = (el, error) => {
     const a = m.play("resp", el, [
       { transform: "translateY(120%) scale(.9)", opacity: 0 },
       { transform: "none", opacity: 1, offset: 0.35 },
       { transform: "none", opacity: 1 },
-    ], { duration: T.D.toast, easing: T.E.bouncy });
+    ], { duration: tk().D.toast, easing: tk().E.bouncy });
     if (a) {
       a.finished.then(() => (error
         ? m.shake(el)
-        : m.jelly("resp", el, 0.5, T.D.jelly * 0.7))).catch(() => {});
+        : m.jelly("resp", el, 0.5, tk().D.jelly * 0.7))).catch(() => {});
     }
-    m.cue(error ? "toast.error" : "toast.in", "R08", T.D.toast * 0.6);
+    m.cue(error ? "toast.error" : "toast.in", "R08", tk().D.toast * 0.6);
   };
   m.toastOut = el => m.done(m.play("resp", el, [
     { transform: "none", opacity: 1 },
     { transform: "translateX(30px)", opacity: 0 },
-  ], { duration: T.D.fast, easing: T.E.in, fill: "forwards" }));
+  ], { duration: tk().D.fast, easing: tk().E.in, fill: "forwards" }));
   m.tipIn = el => m.play("resp", el, [
     { transform: "translate(-50%,-100%) translateY(4px) scale(.7)", opacity: 0 },
     { transform: "translate(-50%,-100%)", opacity: 1 },
-  ], { duration: T.D.fast, easing: T.E.spring });
+  ], { duration: tk().D.fast, easing: tk().E.spring });
   m.editIn = el => m.play("resp", el, [
     { transform: "scale(.96)" },
     { transform: "scale(1)" },
-  ], { duration: T.D.base, easing: T.E.snappy });
+  ], { duration: tk().D.base, easing: tk().E.snappy });
   m.hopText = el => m.play("resp", el, [
     { transform: "none" },
     { transform: `translateY(${-5 * g()}px)`, offset: 0.4 },
     { transform: "none" },
-  ], { duration: T.D.flick, easing: T.E.spring });
+  ], { duration: tk().D.flick, easing: tk().E.spring });
   m.shake = el => m.play("resp", el, [
     { transform: "translateX(0)" },
     { transform: "translateX(-6px)" },
@@ -567,14 +579,14 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: "translateX(-4px)" },
     { transform: "translateX(3px)" },
     { transform: "translateX(0)" },
-  ], { duration: T.D.flick, easing: "linear" });
+  ], { duration: tk().D.flick, easing: "linear" });
   m.enterRow = (el) => {
     m.play("resp", el, [
       { transform: "translateY(-48px) scale(.9,1.1)", opacity: 0 },
       { transform: "translateY(0) scale(1.06,.92)", opacity: 1, offset: 0.55 },
       { transform: "scale(.98,1.02)", offset: 0.78 },
       { transform: "none" },
-    ], { duration: T.D.land, easing: T.E.out });
+    ], { duration: tk().D.land, easing: tk().E.out });
     if (dia() === "showcase") {
       setTimeout(() => m.burst("resp", el, {
         n: 8,
@@ -583,9 +595,9 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         colors: [P_PINK_150, C4],
         size: 12,
         spread: 90,
-      }), T.D.land * 0.5);
+      }), tk().D.land * 0.5);
     }
-    m.cue("add.plop", "R13", T.D.land * 0.55);
+    m.cue("add.plop", "R13", tk().D.land * 0.55);
   };
   m.exitRow = (el) => {
     // Scheduled even when reduced; burst() then gates itself.
@@ -598,13 +610,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       spread: 120,
       up: false,
       gravity: -20,
-    }), T.D.toast * 0.3);
-    m.cue("delete.poof", "R14", T.D.toast * 0.3);
+    }), tk().D.toast * 0.3);
+    m.cue("delete.poof", "R14", tk().D.toast * 0.3);
     return m.done(m.play("resp", el, [
       { transform: "none", opacity: 1 },
       { transform: "scale(1.04,.86)", opacity: 1, offset: 0.3 },
       { transform: "scale(.6)", opacity: 0 },
-    ], { duration: T.D.toast, easing: T.E.in, fill: "forwards" }));
+    ], { duration: tk().D.toast, easing: tk().E.in, fill: "forwards" }));
   };
   // FLIP: prev = Map(key → DOMRect) captured before the state change. special(key, el, dy) may return true if it animated.
   m.capture = (els) => {
@@ -626,7 +638,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       m.play("resp", el, [
         { transform: `translateY(${dy}px)` },
         { transform: "none" },
-      ], { duration: T.D.travel, easing: T.E.snappy });
+      ], { duration: tk().D.travel, easing: tk().E.snappy });
     });
   };
   m.arc = (el, dy, after) => {
@@ -638,7 +650,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: `translateY(${dy}px)` },
       { transform: `translateY(${dy * 0.5}px) scale(1.04) rotate(${tilt}deg)`, offset: 0.5 },
       { transform: "none" },
-    ], { duration: T.D.travel * 1.3, easing: T.E["in-out"] });
+    ], { duration: tk().D.travel * 1.3, easing: tk().E["in-out"] });
     m.done(a).then(() => {
       el.style.zIndex = "";
       after?.();
@@ -649,13 +661,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: "scale(1.08,.9)" },
     { transform: "scale(.97,1.04)", offset: 0.5 },
     { transform: "none" },
-  ], { duration: T.D.land, easing: T.E.out });
+  ], { duration: tk().D.land, easing: tk().E.out });
   m.clone = (el, pitch) => {
     m.play("resp", el, [
       { transform: `translateY(${-pitch}px) scale(.96)`, opacity: 0.4 },
       { transform: "translateY(0) scale(1.03,.97)", opacity: 1, offset: 0.7 },
       { transform: "none", opacity: 1 },
-    ], { duration: T.D.travel, easing: T.E.bouncy });
+    ], { duration: tk().D.travel, easing: tk().E.bouncy });
     m.cue("dup.clone", "R15");
   };
   m.tape = (el) => {
@@ -663,19 +675,19 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "rotate(-30deg) scale(1.6)", opacity: 0 },
       { transform: "rotate(-10deg) scale(1)", opacity: 0.92 },
     ], {
-      duration: T.D.land,
-      easing: T.E.bouncy,
+      duration: tk().D.land,
+      easing: tk().E.bouncy,
       fill: "backwards",
-      delay: T.D.travel,
+      delay: tk().D.travel,
     });
-    m.cue("pin.tape", "R16", T.D.travel + T.D.land * 0.6);
+    m.cue("pin.tape", "R16", tk().D.travel + tk().D.land * 0.6);
   };
   m.sticker = (el, delay = 0) => m.play("cel", el, [
     { transform: "rotate(40deg) scale(2.2)", opacity: 0 },
     { transform: "rotate(12deg) scale(1)", opacity: 1 },
   ], {
-    duration: T.D.land,
-    easing: T.E.bouncy,
+    duration: tk().D.land,
+    easing: tk().E.bouncy,
     delay,
     fill: "backwards",
   });
@@ -684,33 +696,33 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: `scale(1.04) rotate(${dia() === "showcase"
       ? -2
       : -1.2}deg)` },
-  ], { duration: T.D.base, easing: T.E.snappy, fill: "forwards" });
+  ], { duration: tk().D.base, easing: tk().E.snappy, fill: "forwards" });
   m.drop = el => m.play("resp", el, [
     { transform: `scale(1.04) rotate(${dia() === "showcase"
       ? -2
       : -1.2}deg)` },
     { transform: "scale(.97,1.03)", offset: 0.45 },
     { transform: "none" },
-  ], { duration: T.D.jelly * 0.6, easing: T.E.snappy });
+  ], { duration: tk().D.jelly * 0.6, easing: tk().E.snappy });
   m.revert = (outer, mid, dy) => {
     const a = m.play("resp", outer, [
       { transform: `translateY(${dy}px)` },
       { transform: "none" },
-    ], { duration: T.D.travel, easing: T.E.bouncy });
+    ], { duration: tk().D.travel, easing: tk().E.bouncy });
     m.done(a).then(() => m.play("resp", mid, [
       { transform: "rotate(0)" },
       { transform: "rotate(-3deg)" },
       { transform: "rotate(3deg)" },
       { transform: "rotate(-2deg)" },
       { transform: "rotate(0)" },
-    ], { duration: T.D.flick, easing: "linear" }));
-    m.cue("drag.revert", "R22", T.D.travel * 0.8);
+    ], { duration: tk().D.flick, easing: "linear" }));
+    m.cue("drag.revert", "R22", tk().D.travel * 0.8);
   };
   m.roll = (el, dir) => m.play("resp", el, [
     { transform: `translateY(${dir * 70}%)`, opacity: 0.15 },
     { transform: `translateY(${-dir * 8}%)`, opacity: 1, offset: 0.6 },
     { transform: "none", opacity: 1 },
-  ], { duration: T.D.flick, easing: T.E.snappy });
+  ], { duration: tk().D.flick, easing: tk().E.snappy });
   m.full = (well, ov) => {
     m.jelly("resp", well, ov || calm()
       ? 0.5
@@ -724,40 +736,40 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         spread: 110,
       });
     }
-    m.cue("counter.full", "R24", T.D.jelly * 0.2);
+    m.cue("counter.full", "R24", tk().D.jelly * 0.2);
   };
   m.morph = el => m.play("resp", el, [
     { transform: "scale(.3) rotate(-120deg)", opacity: 0 },
     { transform: "scale(1.15) rotate(10deg)", opacity: 1, offset: 0.6 },
     { transform: "none", opacity: 1 },
-  ], { duration: T.D.flick, easing: T.E.bouncy });
+  ], { duration: tk().D.flick, easing: tk().E.bouncy });
   m.ringIn = el => m.play("resp", el, [
     { transform: "scale(.94)", opacity: 0 },
     { transform: "scale(1.02)", opacity: 1, offset: 0.6 },
     { transform: "none", opacity: 1 },
-  ], { duration: T.D.land, easing: T.E.out });
+  ], { duration: tk().D.land, easing: tk().E.out });
   m.wave = (digits, k = 1) => [...digits].forEach((el, i) => m.play("resp", el, [
     { transform: "none" },
     { transform: `translateY(${-10 * g() * k}px)`, offset: 0.4 },
     { transform: "none" },
   ], {
-    duration: T.D.land,
+    duration: tk().D.land,
     delay: i * 40,
-    easing: T.E.bouncy,
+    easing: tk().E.bouncy,
     fill: "backwards",
   }));
   m.droop = digits => [...digits].forEach((el, i) => m.play("resp", el, [
     { transform: "none" },
     { transform: "translateY(4px) scale(1.02,.96)", offset: 0.5 },
     { transform: "none" },
-  ], { duration: T.D.droop, delay: i * 20, easing: T.E["in-out"] }));
+  ], { duration: tk().D.droop, delay: i * 20, easing: tk().E["in-out"] }));
   m.stagOut = els => Promise.all([...els].map((el, i) => m.done(m.play("resp", el, [
     { transform: "none", opacity: 1 },
     { transform: "translateY(12px)", opacity: 0 },
   ], {
-    duration: T.D.fast,
+    duration: tk().D.fast,
     delay: i * 20,
-    easing: T.E.in,
+    easing: tk().E.in,
     fill: "forwards",
   }))));
   m.stagIn = els => [...els].forEach((el, i) => {
@@ -770,16 +782,16 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "none", opacity: 1, offset: 0.4 },
       { transform: "none", opacity: 1 },
     ], {
-      duration: T.D.land,
+      duration: tk().D.land,
       delay: i * 40,
-      easing: T.E.bouncy,
+      easing: tk().E.bouncy,
       fill: "backwards",
     });
   });
   m.pageOut = (el, dir) => m.done(m.play("resp", el, [
     { transform: "none", opacity: 1 },
     { transform: `translateX(${-dir * 60}px) scale(.97)`, opacity: 0 },
-  ], { duration: T.D.fast, easing: T.E.in, fill: "forwards" }));
+  ], { duration: tk().D.fast, easing: tk().E.in, fill: "forwards" }));
   m.pageIn = (el, dir) => {
     if (!el)
       return;
@@ -787,23 +799,23 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     m.play("resp", el, [
       { transform: `translateX(${dir * 80}px) scale(.97)`, opacity: 0 },
       { transform: "none", opacity: 1 },
-    ], { duration: T.D["page-x"], easing: T.E.snappy });
+    ], { duration: tk().D["page-x"], easing: tk().E.snappy });
   };
   m.progress = (fill, fromX, toX) => m.play("resp", fill, [
     { transform: `translateX(${fromX}%)` },
     { transform: `translateX(${toX}%)` },
-  ], { duration: T.D.land, easing: T.E.bouncy });
+  ], { duration: tk().D.land, easing: tk().E.bouncy });
   // The switch knob's slide (#316). The reference's `.w-switch::after` transitions `left` over --dur-fast with
   // --ease-spring; rule 2 allows only transform, so it is `translateX` with the same timing (the human, 2026-11-13).
   // The moment has no ID in 04-motion-and-sound.md, which is the handoff's copy and stays as it is.
   m.switchSlide = (knob, fromX, toX) => m.play("resp", knob, [
     { transform: `translateX(${fromX}%)` },
     { transform: `translateX(${toX}%)` },
-  ], { duration: T.D.fast, easing: T.E.spring });
+  ], { duration: tk().D.fast, easing: tk().E.spring });
   m.pop = (el, s = 1.3) => m.play("resp", el, [
     { transform: `scale(${1 + (s - 1) * g()})` },
     { transform: "none" },
-  ], { duration: T.D.flick, easing: T.E.spring });
+  ], { duration: tk().D.flick, easing: tk().E.spring });
   // theme wipe: circle in the next page colour grows from (x,y), swap at the end, fade out
   m.themeWipe = (layer, x, y, color, swap) => {
     const view = layer?.ownerDocument.defaultView;
@@ -832,13 +844,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     c.animate([
       { transform: "scale(0)" },
       { transform: "scale(1)" },
-    ], { duration: T.D.theme, easing: T.E["in-out"], fill: "forwards" }).onfinish = () => {
+    ], { duration: tk().D.theme, easing: tk().E["in-out"], fill: "forwards" }).onfinish = () => {
       swap();
       view.requestAnimationFrame(() => {
         c.animate([
           { opacity: 1 },
           { opacity: 0 },
-        ], { duration: T.D.base, easing: T.E.out, fill: "forwards" }).onfinish = () => c.remove();
+        ], { duration: tk().D.base, easing: tk().E.out, fill: "forwards" }).onfinish = () => c.remove();
       });
     };
   };
@@ -849,20 +861,20 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       return null;
     el.getAnimations().forEach(a => a.cancel());
     return m.play("resp", el, [
-      { opacity: 0, transform: "scale(1.04)", easing: T.E.out },
+      { opacity: 0, transform: "scale(1.04)", easing: tk().E.out },
       { opacity: 1, transform: "scale(1)", offset: 0.1 },
-      { opacity: 1, offset: 0.6, easing: T.E["in-out"] },
+      { opacity: 1, offset: 0.6, easing: tk().E["in-out"] },
       { opacity: 0 },
-    ], { duration: T.D.highlight, easing: "linear", fill: "forwards" });
+    ], { duration: tk().D.highlight, easing: "linear", fill: "forwards" });
   };
   m.bannerIn = el => m.play("resp", el, [
     { transform: "translateY(-120%)" },
     { transform: "none" },
-  ], { duration: T.D.toast, easing: T.E.snappy });
+  ], { duration: tk().D.toast, easing: tk().E.snappy });
   m.bannerOut = el => m.done(m.play("resp", el, [
     { transform: "none" },
     { transform: "translateY(-140%)" },
-  ], { duration: T.D.base, easing: T.E.in, fill: "forwards" }));
+  ], { duration: tk().D.base, easing: tk().E.in, fill: "forwards" }));
   // The one place the port leaves the reference (line 278): under reduced motion no animation is created, so the
   // muted look is landed as inline styles with the reference's own values. Every call clears both first, so un-muting
   // works whichever way the look was landed.
@@ -882,7 +894,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     el.animate([
       { filter: "saturate(1)", opacity: 1 },
       { filter: "saturate(.55)", opacity: 0.85 },
-    ], { duration: T.D.base, easing: T.E.standard, fill: "forwards" });
+    ], { duration: tk().D.base, easing: tk().E.standard, fill: "forwards" });
   };
   // Tier amb, as in the reference: --ambient-motion: paused also stops page flips.
   m.pageFlipOut = (rows) => {
@@ -890,15 +902,15 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       return Promise.all([...rows].map(el => m.done(m.play("amb", el, [
         { opacity: 1 },
         { opacity: 0 },
-      ], { duration: T.D.base, fill: "forwards" }))));
+      ], { duration: tk().D.base, fill: "forwards" }))));
     }
     return Promise.all([...rows].map((el, i) => m.done(m.play("amb", el, [
       { transform: "none", opacity: 1 },
       { transform: "translateY(-14px) rotateX(70deg)", opacity: 0 },
     ], {
-      duration: T.D.base,
+      duration: tk().D.base,
       delay: i * 70,
-      easing: T.E.in,
+      easing: tk().E.in,
       fill: "forwards",
     }))));
   };
@@ -908,7 +920,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       m.play("amb", el, [
         { opacity: 0 },
         { opacity: 1 },
-      ], { duration: T.D.base });
+      ], { duration: tk().D.base });
       return;
     }
     m.play("amb", el, [
@@ -916,9 +928,9 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "none", opacity: 1, offset: 0.45 },
       { transform: "none", opacity: 1 },
     ], {
-      duration: T.D.land,
+      duration: tk().D.land,
       delay: i * 70,
-      easing: T.E.bouncy,
+      easing: tk().E.bouncy,
       fill: "backwards",
     });
   });
@@ -926,31 +938,31 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     ? m.play("resp", el, [
         { opacity: 0 },
         { opacity: 1 },
-      ], { duration: T.D.base })
+      ], { duration: tk().D.base })
     : m.play("resp", el, [
         { transform: "translateY(140%) rotate(4deg)" },
         { transform: "translateY(-4%) rotate(-1deg)", offset: 0.7 },
         { transform: "none" },
-      ], { duration: T.D.land * 1.3, easing: T.E.bouncy });
+      ], { duration: tk().D.land * 1.3, easing: tk().E.bouncy });
   m.stampIn = (el) => {
-    m.cue("overlay.won", "B05", T.D.stamp * 0.55);
+    m.cue("overlay.won", "B05", tk().D.stamp * 0.55);
     if (calm()) {
       return m.play("cel", el, [
         { opacity: 0 },
         { opacity: 1 },
-      ], { duration: T.D.base, fill: "backwards" });
+      ], { duration: tk().D.base, fill: "backwards" });
     }
     return m.play("cel", el, [
       { transform: "translate(-50%,-50%) scale(2.4) rotate(-20deg)", opacity: 0 },
       { transform: "translate(-50%,-50%) scale(.9) rotate(-8deg)", opacity: 1, offset: 0.55 },
       { transform: "translate(-50%,-50%) scale(1.05) rotate(-8deg)", offset: 0.75 },
       { transform: "translate(-50%,-50%) rotate(-8deg)" },
-    ], { duration: T.D.stamp, easing: T.E.out });
+    ], { duration: tk().D.stamp, easing: tk().E.out });
   };
   m.stampOut = el => m.done(m.play("cel", el, [
     { transform: "translate(-50%,-50%) rotate(-8deg)", opacity: 1 },
     { transform: "translate(-50%,-50%) scale(1.2) rotate(-8deg)", opacity: 0 },
-  ], { duration: T.D.base, easing: T.E.in, fill: "forwards" }));
+  ], { duration: tk().D.base, easing: tk().E.in, fill: "forwards" }));
   m.cardHop = (el) => {
     if (!calm()) {
       m.play("cel", el, [
@@ -958,7 +970,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         { transform: `translateY(${-10 * g()}px) scale(1.02)`, offset: 0.35 },
         { transform: "scale(.99,1.01)", offset: 0.7 },
         { transform: "none" },
-      ], { duration: T.D.jelly, easing: T.E.out });
+      ], { duration: tk().D.jelly, easing: tk().E.out });
     }
   };
 
@@ -969,7 +981,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
       { transform: "scale(1)" },
       { transform: "scale(1.3)", offset: 0.3 },
       { transform: "scale(1)" },
-    ], { duration: T.D.jelly, easing: T.E.spring });
+    ], { duration: tk().D.jelly, easing: tk().E.spring });
     m.burst("cel", face || mid, {
       ox: 0.5,
       size: 24,
@@ -979,7 +991,7 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
         ? 0
         : 1,
     });
-    m.cue("won.yay", "C01", T.D.jelly * 0.18);
+    m.cue("won.yay", "C01", tk().D.jelly * 0.18);
   };
   // Winniebert's celebratory jump; the recipe keeps its handoff name.
   m.niniJump = (el, n = 2) => m.play("cel", el, [
@@ -988,33 +1000,33 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: `translateY(${-90 * g()}px) scale(.9,1.15) rotate(-10deg)`, offset: 0.45 },
     { transform: "translateY(0) scale(1.15,.85)", offset: 0.75 },
     { transform: "none" },
-  ], { duration: 1100, easing: T.E["in-out"], iterations: n });
+  ], { duration: 1100, easing: tk().E["in-out"], iterations: n });
   m.niniHop = el => m.play("cel", el, [
     { transform: "none" },
     { transform: `translateY(${-24 * g()}px) scale(.95,1.06)`, offset: 0.4 },
     { transform: "scale(1.06,.94)", offset: 0.75 },
     { transform: "none" },
-  ], { duration: T.D.jelly, easing: T.E.out });
+  ], { duration: tk().D.jelly, easing: tk().E.out });
   m.unfurl = el => m.play("cel", el, [
     { transform: "scaleY(0)", opacity: 0 },
     { transform: "scaleY(1)", opacity: 1, offset: 0.35 },
     { transform: "scaleY(1)", opacity: 1 },
-  ], { duration: T.D.land * 1.2, easing: T.E.bouncy });
+  ], { duration: tk().D.land * 1.2, easing: tk().E.bouncy });
   m.flash = el => m.play("cel", el, [
     { filter: "brightness(1.35)" },
     { filter: "brightness(1)" },
-  ], { duration: T.D.celebrate * 0.5, easing: T.E.out });
+  ], { duration: tk().D.celebrate * 0.5, easing: tk().E.out });
   m.bannerDrop = el => calm()
     ? m.play("cel", el, [
         { opacity: 0 },
         { opacity: 1 },
-      ], { duration: T.D.base })
+      ], { duration: tk().D.base })
     : m.play("cel", el, [
         { transform: "translateY(-220px) rotate(-12deg)", opacity: 0 },
         { transform: "translateY(0) rotate(3deg)", opacity: 1, offset: 0.45 },
         { transform: "translateY(-14px) rotate(-1deg)", offset: 0.65 },
         { transform: "none" },
-      ], { duration: T.D.land * 1.5, easing: T.E.out });
+      ], { duration: tk().D.land * 1.5, easing: tk().E.out });
 
   return m;
 }

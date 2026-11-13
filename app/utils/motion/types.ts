@@ -167,8 +167,7 @@ export interface MotionState {
 /** The motion engine: plumbing, particles, ticks and beats, and every recipe under its handoff name. */
 export interface WinniesMotion {
   // plumbing
-  D: Record<DurationName, number>;
-  E: Record<EaseName, string>;
+  /** The current tokens: read from the surface's root on the first call that has one, and again by `refresh()`. */
   T: () => Tokens;
   refresh: (el?: HTMLElement | null) => void;
   on: (tier: Tier) => boolean;
@@ -180,10 +179,9 @@ export interface WinniesMotion {
   // listening and loops
   /**
    * Refreshes the tokens, then refreshes again on every media or attribute change and tells the subscribers. The first
-   * refresh is silent, as in the reference, unless `announce` is set: a surface sets it, so whatever was built from the
-   * defaults before its start is checked against the tokens it just read (#335).
+   * refresh is silent, as in the reference.
    */
-  watch: (opt?: { announce?: boolean }) => () => void;
+  watch: () => () => void;
   subscribe: (cb: (s: MotionState) => void) => () => void;
   loop: (el: HTMLElement, name: LoopName, opt?: LoopOptions) => Animation | null;
   /** What a loop of this name is built from right now, as a string: equal strings mean a running loop is current. */
