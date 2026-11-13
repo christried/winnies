@@ -119,8 +119,9 @@ export const Default: Story = {
     const spied = args as unknown as Spied;
     return () => page(
       "Text input default",
+      card("empty, placeholder, hidden label", 360, h(Stateful, { label: "Spec", hideLabel: true, placeholder: "Win Condition" })),
       card(
-        "empty, placeholder, hidden label",
+        "typed into by the play",
         360,
         h(Stateful, {
           label: "Game",
@@ -441,6 +442,8 @@ export const Disabled: Story = {
     expect(readonly).toHaveFocus();
     expect(ringOf(readonly)).toContain(colourOf("--color-focus"));
     readonly.blur();
+    // The selection Tab made would stay in the picture.
+    readonly.setSelectionRange(0, 0);
 
     // A disabled well has no hover ring; a readonly one keeps it.
     const pointer = await realPointer();

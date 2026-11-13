@@ -197,7 +197,7 @@ defineExpose({
       class="box-border block w-full min-w-0 appearance-none rounded-pill border-0 bg-surface-sunken text-text caret-focus shadow-well outline-none placeholder:text-text-muted focus-visible:shadow-[var(--shadow-well),0_0_0_var(--focus-width)_var(--color-focus)] focus-visible:outline-[length:var(--focus-width)] focus-visible:outline-transparent focus-visible:outline-solid enabled:not-aria-invalid:not-focus-visible:hover:shadow-[var(--shadow-well),0_0_0_var(--border-thin)_var(--color-border)] disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:shadow-[var(--shadow-well),0_0_0_var(--focus-width)_var(--color-danger)] aria-invalid:focus-visible:shadow-[var(--shadow-well),0_0_0_var(--focus-width)_var(--color-danger)]"
       :class="{
         'h-(--input-h) px-(--input-pad-x) text-base leading-none [font-weight:var(--font-weight-strong)]': variant === 'default',
-        'h-(--input-h) [appearance:textfield] px-(--input-pad-x) text-center [font-family:var(--font-display)] text-base leading-none [font-weight:var(--font-weight-display)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none': variant === 'number',
+        'h-(--input-h) [appearance:textfield] px-4 text-center [font-family:var(--font-display)] text-base leading-none [font-weight:var(--font-weight-display)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none': variant === 'number',
         'h-(--btn-h) px-[18px] text-md leading-none [font-weight:var(--font-weight-strong)]': variant === 'inline',
       }"
       v-bind="inputBindings()"
