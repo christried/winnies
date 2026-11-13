@@ -307,17 +307,22 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     const k = big ? 2.2 : 1.6;
     const dur = clamp(big ? T.D.hour : T.D.minute) || 1;
     const ordered = [...digits].sort((a, b) => Number(a.dataset.pos) - Number(b.dataset.pos));
-    ordered.forEach((el, i) => el.animate([
-      { transform: "none" },
-      { transform: `translateY(${hop * k * (total ? 1 : 0.6)}px) scale(.94,1.08)`, offset: 0.35 },
-      { transform: "scale(1.06,.95)", offset: 0.65 },
-      { transform: "none" },
-    ], {
-      duration: dur,
-      delay: Math.min(i * 50, iv * 0.3),
-      easing: T.E.bouncy,
-      fill: "backwards",
-    }));
+    // The reference clamps the duration alone, so a late slot could still be moving when the next beat ticks it
+    // (#337). Counting the stagger delay into the 95% keeps every slot's rollover inside its beat.
+    ordered.forEach((el, i) => {
+      const delay = Math.min(i * 50, iv * 0.3);
+      el.animate([
+        { transform: "none" },
+        { transform: `translateY(${hop * k * (total ? 1 : 0.6)}px) scale(.94,1.08)`, offset: 0.35 },
+        { transform: "scale(1.06,.95)", offset: 0.65 },
+        { transform: "none" },
+      ], {
+        duration: Math.max(1, Math.min(dur, iv * 0.95 - delay)),
+        delay,
+        easing: T.E.bouncy,
+        fill: "backwards",
+      });
+    });
     if (well && total) {
       if (!(calm() && ov)) {
         well.animate(big

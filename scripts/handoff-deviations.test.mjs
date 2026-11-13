@@ -121,6 +121,11 @@ describe("deviationProblems: a marker and its entry", () => {
     expect(problems[0]).toMatch(/Remove the entry from docs\/design-deviations\.md/);
   });
 
+  it("an entry that says it is an engine change, not a token block, needs no block", () => {
+    expect(check(".a {}\n", docOf(entry(337, "This is an engine change, not a token block, so no block carries it.")))).toEqual([]);
+    expect(check(".a {}\n", docOf(entry(337, "What changed.")))).toHaveLength(1);
+  });
+
   it("an entry heading in another format does not count as the block's entry", () => {
     const problems = check(`.a {}\n${block(9999, ".x { top: 0; }")}\n`, docOf("## #9999 Composites\n\nBody.\n"));
     expect(problems.some(problem => problem.includes("deviation block for #9999"))).toBe(true);

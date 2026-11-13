@@ -436,6 +436,121 @@ describe("tick, rollovers at interval 1000", () => {
   });
 });
 
+describe("tick, a rollover ends before its beat does", () => {
+  // The next beat ticks the last slot again, so its delay and duration together must fit the 95% clamp.
+  const SIX = 6;
+  const ends = (digits: FakeElement[]) => digits.map((d) => {
+    const o = d.calls[0]?.options;
+    return Number(o?.delay) + Number(o?.duration);
+  });
+
+  it.each([
+    [250, "min"],
+    [250, "hour"],
+    [1000, "min"],
+    [1000, "hour"],
+    [400, "hour"],
+    [120, "min"],
+  ] as const)("at %d ms a %s rollover has no slot ending after 0.95 of the interval", (interval, beat) => {
+    const { h, digits } = setup({
+      cfg: { interval },
+    }, SIX);
+    h.m.tick(digits, "total", beat);
+    for (const end of ends(digits))
+      expect(end).toBeLessThanOrEqual(interval * 0.95 + 1e-9);
+  });
+
+  it("holds for a timer with fewer slots", () => {
+    const { h, digits } = setup({
+      cfg: { interval: 250 },
+    }, 2);
+    h.m.tick(digits, "row", "hour");
+    for (const end of ends(digits))
+      expect(end).toBeLessThanOrEqual(250 * 0.95 + 1e-9);
+  });
+
+  it("at 1000 ms the hour rollover's slots shorten by their delay: 950 down to 700", () => {
+    const { h, digits } = setup({}, SIX);
+    h.m.tick(digits, "total", "hour");
+    expect(digits.map(d => d.calls[0]?.options.duration)).toEqual([950, 900, 850, 800, 750, 700]);
+    expect(digits.map(d => d.calls[0]?.options.delay)).toEqual([0, 50, 100, 150, 200, 250]);
+  });
+
+  it("at 250 ms the clamp binds and the stagger stays 50 ms up to 30% of the interval", () => {
+    const { h, digits } = setup({
+      cfg: { interval: 250 },
+    }, SIX);
+    h.m.tick(digits, "total", "min");
+    expect(digits.map(d => d.calls[0]?.options.delay)).toEqual([0, 50, 75, 75, 75, 75]);
+    expect(digits.map(d => d.calls[0]?.options.duration)).toEqual([
+      237.5,
+      187.5,
+      162.5,
+      162.5,
+      162.5,
+      162.5,
+    ]);
+  });
+
+  it("at 120 ms, the shortest real rollover, the delay is 36 ms and the durations shorten to match", () => {
+    const { h, digits } = setup({
+      cfg: { interval: 120 },
+    }, SIX);
+    h.m.tick(digits, "total", "hour");
+    expect(digits.map(d => d.calls[0]?.options.delay)).toEqual([0, 36, 36, 36, 36, 36]);
+    expect(digits.map(d => d.calls[0]?.options.duration)).toEqual([114, 78, 78, 78, 78, 78]);
+  });
+
+  // What must not change at the product's interval: a second tick and a minute rollover play as before.
+  it("at 1000 ms a minute rollover keeps its 720 ms, its 50 ms stagger and one set of keyframes", () => {
+    const { h, digits } = setup({}, SIX);
+    h.m.tick(digits, "total", "min");
+    expect(digits.slice(0, 5).map(d => d.calls[0]?.options.duration)).toEqual([720, 720, 720, 720, 720]);
+    expect(digits.map(d => d.calls[0]?.options.delay)).toEqual([0, 50, 100, 150, 200, 250]);
+    const first = digits[0]?.calls[0]?.keyframes;
+    expect(first).toEqual([
+      NONE,
+      { transform: `translateY(${-6 * 1.6 * 1}px) scale(.94,1.08)`, offset: 0.35 },
+      { transform: "scale(1.06,.95)", offset: 0.65 },
+      NONE,
+    ]);
+    for (const d of digits)
+      expect(d.calls[0]?.keyframes).toEqual(first);
+  });
+
+  // 250 + 720 ends at 970, past 0.95 of 1000: the one slot of a minute rollover the rule touches, by 20 ms.
+  it("at 1000 ms a minute rollover's last slot gives up 20 ms to end at 0.95 of the interval", () => {
+    const { h, digits } = setup({}, SIX);
+    h.m.tick(digits, "total", "min");
+    expect(digits[5]?.calls[0]?.options.duration).toBe(700);
+  });
+
+  it("at 1000 ms a second tick keeps its 480 ms, with no delay", () => {
+    const { h, digits } = setup({}, SIX);
+    h.m.tick(digits, "total", "sec");
+    expect(digits.map(d => d.calls[0]?.options.duration)).toEqual([480, 480, 480, 480, 480, 480]);
+    expect(digits.map(d => d.calls[0]?.options.delay)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("at 1000 ms an hour rollover keeps its keyframes and its backwards fill on every slot", () => {
+    const { h, digits } = setup({}, SIX);
+    h.m.tick(digits, "total", "hour");
+    const first = digits[0]?.calls[0]?.keyframes;
+    expect(first?.[1]).toEqual({ transform: `translateY(${-6 * 2.2 * 1}px) scale(.94,1.08)`, offset: 0.35 });
+    for (const d of digits) {
+      expect(d.calls[0]?.keyframes).toEqual(first);
+      expect(d.calls[0]?.options.fill).toBe("backwards");
+    }
+  });
+});
+
 describe("tick, intervals that change what a beat does", () => {
   // Reference quirk: from 60 to 119 ms every beat takes the per-second shape; below 60 ms a second is skipped
   // and a rollover still takes the plain shape.
