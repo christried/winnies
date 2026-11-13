@@ -2,7 +2,7 @@ import type { DurationName, EaseName, MotionEnv, Tokens } from "./types";
 import { browserEnv } from "./env";
 
 /** The `--dur-*` defaults in milliseconds, mirrored 1:1 from `winnies-tokens.css` (the reference's `D`). */
-export const DURATIONS: Record<DurationName, number> = {
+export const DURATIONS: Readonly<Record<DurationName, number>> = Object.freeze({
   "instant": 90,
   "fast": 160,
   "base": 240,
@@ -30,10 +30,10 @@ export const DURATIONS: Record<DurationName, number> = {
   "shimmer": 9000,
   "page": 10000,
   "drift": 60000,
-};
+});
 
 /** The easing defaults, used until the tokens are read and wherever a token is missing (the reference's `E`). */
-export const EASINGS: Record<EaseName, string> = {
+export const EASINGS: Readonly<Record<EaseName, string>> = Object.freeze({
   "spring": "cubic-bezier(.3,1.7,.5,1)",
   "hover": "cubic-bezier(.3,1.8,.5,1)",
   "out": "cubic-bezier(.15,.7,.3,1)",
@@ -44,7 +44,7 @@ export const EASINGS: Record<EaseName, string> = {
   "snappy": "linear(0, .2 4%, .6 10%, .88 16%, 1.02 22%, 1.06 28%, 1.04 36%, 1 46%, .995 60%, 1)",
   "bouncy": "linear(0, .3 6%, .8 13%, 1.1 20%, 1.15 25%, 1.1 30%, .97 40%, .95 46%, 1 56%, 1.02 64%, 1 78%, 1)",
   "soft": "linear(0, .12 5%, .4 14%, .7 24%, .92 34%, 1.02 44%, 1.03 52%, 1.01 66%, 1)",
-};
+});
 
 const DURATION_NAMES = Object.keys(DURATIONS) as DurationName[];
 const PLAIN_EASES = [

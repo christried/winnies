@@ -125,8 +125,7 @@ export function createSurfaceMotion(o: SurfaceMotionOptions): SurfaceMotion {
     start() {
       if (stopWatch)
         return;
-      // Announced: a loop host that subscribed before the start (a `v-loop` of the first render) hears of the tokens.
-      stopWatch = m.watch({ announce: true });
+      stopWatch = m.watch();
       unsubscribe = m.subscribe(({ reduced }) => {
         if (reduced)
           quiet();

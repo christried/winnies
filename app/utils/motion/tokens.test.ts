@@ -126,6 +126,16 @@ describe("defaults (the handoff's D and E tables)", () => {
     });
   });
 
+  it("cannot be edited by a caller, so no surface or server request can change what another one starts from", () => {
+    const edit = (table: Record<string, unknown>, name: string) => () => {
+      table[name] = 1;
+    };
+    expect(edit(DURATIONS, "tick")).toThrow(TypeError);
+    expect(edit(DURATIONS, "extra")).toThrow(TypeError);
+    expect(edit(EASINGS, "out")).toThrow(TypeError);
+    expect(DURATIONS.tick).toBe(480);
+  });
+
   it("hands out a copy each time, so a refresh never edits the defaults", () => {
     const t = defaultTokens();
     t.D.tick = 1;
