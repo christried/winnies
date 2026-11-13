@@ -15,7 +15,8 @@ import { withMotionSurface } from "../support/motion-surface";
 //
 // The picture of a running bar: Playwright's screenshot cancels an infinite animation, so the stripes sit at their
 // first keyframe, `translateX(0)`, which is the layer's own resting place (as the timer's gloss does). A finite
-// animation must have finished before the shot, so every play that starts one ends after `anim.finished`.
+// animation must have finished before the shot, so every play that starts one ends after `anim.finished`. `Running`
+// ends with the loop on and holds; `RunningChanging` ends with it cleared, as a shot with it on did not.
 
 const LABEL = "Won Challenges";
 
@@ -291,9 +292,18 @@ export const Running: Story = {
 function changingPage(title: string, state: { won: number; total: number; running: boolean }, withTotal: boolean) {
   const won = ref(state.won);
   const total = ref(state.total);
+  const running = ref(state.running);
   return () => page(
     title,
     h("div", { style: "display:flex;flex-wrap:wrap;gap:8px" }, [
+      // Only where the loop runs: the play clears it last, so the shot has no animation in flight (see the header).
+      ...state.running
+        ? [
+            control("Toggle running", () => {
+              running.value = !running.value;
+            }, "toggle"),
+          ]
+        : [],
       control("Win one", () => {
         won.value = Math.min(won.value + 1, total.value);
       }, "win"),
@@ -315,7 +325,7 @@ function changingPage(title: string, state: { won: number; total: number; runnin
       won: won.value,
       total: total.value,
       label: LABEL,
-      running: state.running,
+      running: running.value,
     })),
   );
 }
@@ -425,9 +435,16 @@ export const RunningChanging: Story = {
       expect(loop.playState).toBe("running");
       expect(fill.getAnimations()).toHaveLength(0);
       expectOffset(bar, 50);
+
+      // The loop is cleared last: two green compares of a shot with the loop still running did not hold (a few pixels
+      // at the buttons' corners differ, as the compositor rasters with an animation in flight).
+      await userEvent.click(control$(canvasElement, "toggle"));
+      await waitFor(() => expect(stripes.getAnimations()).toHaveLength(0));
+      await frames();
     });
 
-    control$(canvasElement, "win").blur();
+    for (const id of ["win", "toggle"])
+      control$(canvasElement, id).blur();
   },
 };
 
