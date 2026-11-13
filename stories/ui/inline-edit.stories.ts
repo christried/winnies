@@ -3,7 +3,7 @@ import type { PropType } from "vue";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiInlineEdit from "../../app/components/ui/inline-edit.vue";
-import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/component-checks";
+import { expectQuietAfter, finish, freezeSpinners, parkPointer, repaint, settled } from "../support/component-checks";
 import { chip, headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
@@ -268,6 +268,7 @@ export const Resting: Story = {
 
     expect(canvas.getByText("K")).toBeVisible();
     expect(canvas.getByText("Ki")).toBeVisible();
+    await parkPointer();
   },
 };
 
@@ -293,7 +294,7 @@ export const Hover: Story = {
     const hoverText = textRect(el);
     expect(hoverText.left).toBe(restText.left);
     expect(hoverText.top).toBe(restText.top);
-    await pointer.unhover(el);
+    await parkPointer();
   },
 };
 
@@ -335,7 +336,9 @@ export const Editing: Story = {
     // R11 runs when the edit starts, not when a story starts in it, and focus is never animated.
     await frames(3);
     expect(animations()).toHaveLength(0);
+    await parkPointer();
     await settled();
+    await repaint(canvasElement);
   },
 };
 
@@ -390,6 +393,7 @@ export const Saving: Story = {
     expect(spy).not.toHaveBeenCalled();
     // The text was selected when the edit began: the picture shows the still input, not a highlight.
     el.setSelectionRange(0, 0);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -450,7 +454,9 @@ export const ErrorState: Story = {
     const cardEl = long.closest<HTMLElement>("[data-card]")!;
     expect(cardEl.scrollWidth).toBeLessThanOrEqual(cardEl.clientWidth);
     // Not `finish`: it blurs, and a blur on the blank draft gives the edit up. The picture is the focused field in error.
+    await parkPointer();
     await settled();
+    await repaint(canvasElement);
   },
 };
 
@@ -482,7 +488,9 @@ export const AtLimit: Story = {
     el.setSelectionRange(30, 30);
     await userEvent.keyboard("x");
     expect(el).toHaveValue(LIMIT_NAME);
+    await parkPointer();
     await settled();
+    await repaint(canvasElement);
   },
 };
 
@@ -559,6 +567,7 @@ export const Flow: Story = {
       await animations()[0]!.finished;
     }));
 
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -597,6 +606,7 @@ export const EnterSavesOnce: Story = {
     ctl!.close("Pixel");
     await waitFor(() => expect(within(canvasElement).queryByRole("textbox")).toBeNull());
     input.dispatchEvent(new FocusEvent("blur"));
+    await parkPointer();
     await finish(canvasElement);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(within(canvasElement).getByText("Pixel")).toBeVisible();
@@ -623,6 +633,7 @@ export const BlurSavesOnce: Story = {
 
     // The removal of the input blurs it a second time in some browsers: no second save.
     input.dispatchEvent(new FocusEvent("blur"));
+    await parkPointer();
     await finish(canvasElement);
     expect(spy).toHaveBeenCalledTimes(1);
   },
@@ -672,6 +683,7 @@ export const EscCancels: Story = {
     const again = await openByClick(canvasElement);
     expect(again).toHaveValue(NAME);
     await userEvent.keyboard("{Escape}");
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -694,6 +706,7 @@ export const BlankBlurCancels: Story = {
     // No save, and the old text is back: a blur on a blank draft gives the edit up.
     expect(within(canvasElement).getByText(NAME)).toBeVisible();
     expect(spy).not.toHaveBeenCalled();
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -746,7 +759,9 @@ export const BlankEnterEmits: Story = {
     }));
 
     // Not `finish`: it blurs, and a blur on the blank draft gives the edit up. The picture is the field in error.
+    await parkPointer();
     await settled();
+    await repaint(canvasElement);
   },
 };
 
@@ -796,6 +811,7 @@ export const SavingBlocks: Story = {
     ctl!.succeed();
     await waitFor(() => expect(within(canvasElement).queryByRole("textbox")).toBeNull());
     expect(spy).toHaveBeenCalledTimes(2);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -820,6 +836,7 @@ export const ImeEnter: Story = {
 
     await userEvent.keyboard("{Enter}");
     expect(spy).toHaveBeenCalledTimes(1);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
