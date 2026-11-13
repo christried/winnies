@@ -172,7 +172,7 @@ watch(() => props.value, (now, before) => {
           :label="countLabel"
           :model-value="draft"
           :disabled="disabled"
-          class="w-auto! [&_input]:[field-sizing:content] [&_input]:h-auto [&_input]:w-[4.5ch] [&_input]:min-w-[1.6em] [&_input]:rounded-[6px] [&_input]:bg-transparent [&_input]:p-0 [&_input]:text-right [&_input]:text-inherit [&_input]:[box-shadow:none]! [&_input:focus-visible]:[outline:var(--border-thin)_solid_var(--color-focus)]! [&_input:focus-visible]:outline-offset-2"
+          class="w-auto! [&_input]:h-auto [&_input]:w-[4.5ch] [&_input]:rounded-[6px] [&_input]:bg-transparent [&_input]:p-0 [&_input]:text-right [&_input]:text-inherit [&_input]:[box-shadow:none]! [&_input:focus-visible]:[outline:var(--border-thin)_solid_var(--color-focus)]! [&_input:focus-visible]:outline-offset-2"
           @update:model-value="onDraft"
           @focus="selectAll"
           @keydown.enter.prevent="onEnter"
