@@ -224,7 +224,7 @@ onUnmounted(stopFireworks);
       >
         <span class="flex w-5 items-center justify-center">
           <StatusDot v-if="row.running" status="running" />
-          <UiIcon
+          <UiTablerIcon
             v-if="row.won"
             name="trophy"
           />

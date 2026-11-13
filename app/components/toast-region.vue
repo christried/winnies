@@ -16,7 +16,7 @@ const { toasts, dismiss } = useToast();
         aria-label="Dismiss"
         @click="dismiss(t.id)"
       >
-        <UiIcon name="close" />
+        <UiTablerIcon name="close" />
       </button>
     </div>
   </div>

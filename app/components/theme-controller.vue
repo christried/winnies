@@ -39,7 +39,7 @@ async function cycle() {
       :aria-label="`Theme: ${OPTIONS[preference].label}. Change theme`"
       @click="cycle()"
     >
-      <UiIcon
+      <UiTablerIcon
         v-for="(option, value) in OPTIONS"
         :key="value"
         :name="option.icon"

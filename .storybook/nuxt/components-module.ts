@@ -1,6 +1,6 @@
 // What `#components` is in Storybook. In the app it exports every component, `Icon` of `@nuxt/icon` among them; that one
 // cannot render without the Nuxt app (`useNuxtApp`, `#build/nuxt-icon-svg`). This stub draws the same `<svg>` from the
-// tabler set on disk. It goes when `UiIcon` stops using `@nuxt/icon` (#308).
+// tabler set on disk. It goes when `UiTablerIcon` is deleted (R3), when it stops using `@nuxt/icon`.
 import { defineComponent, h } from "vue";
 import { iconBody } from "./icons.ts";
 

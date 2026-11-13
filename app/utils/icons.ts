@@ -1,4 +1,7 @@
-/** Every icon the app is allowed to render. */
+/**
+ * The tabler icons `UiTablerIcon` may render, until R3 deletes it. A new icon is a Material one: its name goes in
+ * `MATERIAL_ICON_NAMES` (`app/utils/material-icons.ts`) and `UiIcon` draws it.
+ */
 export const ICONS = {
   plus: "tabler:plus",
   play: "tabler:player-play",

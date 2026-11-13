@@ -54,7 +54,7 @@ const totalSeconds = computed(() => elapsedSeconds(
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
         <div class="flex min-w-0 items-center gap-2">
-          <UiIcon
+          <UiTablerIcon
             v-if="isComplete"
             name="trophy"
             class="shrink-0"

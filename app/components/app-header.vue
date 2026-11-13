@@ -85,17 +85,17 @@ async function copyOverlayLink(close: () => void) {
       <div v-if="currentWinnie">
         <UiDropdown label="Copy share links">
           <template #trigger>
-            <UiIcon name="share" />
+            <UiTablerIcon name="share" />
           </template>
           <template #default="{ close }">
             <li>
               <button @click="copyShareLink(close)">
-                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="screenShare" />Shared view</span>
+                <span class="flex max-w-56 items-center gap-2 truncate"><UiTablerIcon name="screenShare" />Shared view</span>
               </button>
             </li>
             <li>
               <button @click="copyOverlayLink(close)">
-                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="cast" />Stream overlay</span>
+                <span class="flex max-w-56 items-center gap-2 truncate"><UiTablerIcon name="cast" />Stream overlay</span>
               </button>
             </li>
           </template>

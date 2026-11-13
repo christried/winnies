@@ -24,13 +24,13 @@ function onDelete(close: () => void) {
 <template>
   <UiDropdown label="More actions">
     <template #trigger>
-      <UiIcon name="more" />
+      <UiTablerIcon name="more" />
     </template>
 
     <template #default="{ close }">
       <li>
         <button type="button" @click="onRename(close)">
-          <UiIcon name="edit" /> Rename
+          <UiTablerIcon name="edit" /> Rename
         </button>
       </li>
       <li class="border-t">
@@ -38,7 +38,7 @@ function onDelete(close: () => void) {
           type="button"
           @click="onDelete(close)"
         >
-          <UiIcon name="trash" /> Delete
+          <UiTablerIcon name="trash" /> Delete
         </button>
       </li>
     </template>

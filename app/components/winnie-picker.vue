@@ -47,7 +47,7 @@ function shortDate(value: string) {
   <UiDropdown v-else>
     <template #trigger>
       <span class="max-w-56 truncate">{{ currentWinnie.name }} </span>
-      <UiIcon name="chevron" />
+      <UiTablerIcon name="chevron" />
     </template>
 
     <template #default="{ close }">
