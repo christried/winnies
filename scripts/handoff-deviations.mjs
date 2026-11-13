@@ -116,6 +116,10 @@ export function docEntries(docText, docPath) {
 // the promise. A block that gives a token a value of its own (a Dialect, say) does not say it and is not compared.
 const SAME_VALUES = /same value text as in its theme block/i;
 
+// An entry about the engine or another file that is not a token block (#337) says so in this sentence and needs no
+// block in the copy; rewording it puts the entry back under the rule that every entry has its block.
+const NO_BLOCK = /an engine change, not a token block/i;
+
 const withoutComments = css => css.replace(/\/\*[\s\S]*?\*\//g, "");
 const squash = text => text.replace(/\s+/g, " ").trim();
 
@@ -201,7 +205,7 @@ export function deviationProblems(parsed, docText, paths) {
       .filter(block => !entryIssues.includes(block.issue))
       .map(block => `${copyPath}: the deviation block for #${block.issue} (line ${block.startLine}) has no entry in ${docPath}. Add the entry to ${docPath}, headed "${FORMAT}", or remove the block from ${copyPath}.`),
     ...doc.entries
-      .filter(entry => !blockIssues.includes(entry.issue))
+      .filter(entry => !blockIssues.includes(entry.issue) && !NO_BLOCK.test(entry.body))
       .map(entry => `${docPath}: the entry for #${entry.issue} has no winnies:deviation #${entry.issue} block in ${copyPath}. Remove the entry from ${docPath} if the handoff took the deviation in, or restore the block in ${copyPath}.`),
     ...parsed.blocks
       .filter(block => doc.entries.some(entry => entry.issue === block.issue && SAME_VALUES.test(entry.body)))
