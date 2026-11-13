@@ -36,7 +36,7 @@ const { appVersion } = useRuntimeConfig().public;
         external
       >
         <div>
-          <UiIcon name="bug" :size="24" />
+          <UiTablerIcon name="bug" :size="24" />
         </div>
       </NuxtLink>
     </template>

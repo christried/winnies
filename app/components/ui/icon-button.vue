@@ -12,6 +12,6 @@ const props = defineProps<{
 
 <template>
   <button :aria-label="props.label">
-    <UiIcon :name="icon" />
+    <UiTablerIcon :name="icon" />
   </button>
 </template>

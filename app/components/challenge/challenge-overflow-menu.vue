@@ -120,7 +120,7 @@ async function remove(close: () => void) {
 <template>
   <UiDropdown label="Challenge actions">
     <template #trigger>
-      <UiIcon name="more" />
+      <UiTablerIcon name="more" />
     </template>
 
     <template #default="{ close }">

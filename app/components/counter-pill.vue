@@ -84,7 +84,7 @@ function cancel(event: KeyboardEvent) {
       :aria-label="`Decrease ${label}`"
       @click="emit('decrement')"
     >
-      <UiIcon name="minus" />
+      <UiTablerIcon name="minus" />
     </button>
 
     <div
@@ -111,7 +111,7 @@ function cancel(event: KeyboardEvent) {
       :aria-label="`Increase ${label}`"
       @click="emit('increment')"
     >
-      <UiIcon name="plus" />
+      <UiTablerIcon name="plus" />
     </button>
   </div>
 </template>
