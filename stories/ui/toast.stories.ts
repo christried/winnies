@@ -5,25 +5,15 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiToast from "../../app/components/ui/toast.vue";
-import { materialCut, materialIconBody } from "../../app/utils/material-icons";
+import { materialCut } from "../../app/utils/material-icons";
 import { expectQuietAfter, finish, parkPointer } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
 import { withMotionSurface } from "../support/motion-surface";
+import { cutMarkup, page, sleep } from "../support/ui-kit";
 
 // The app's own UiToast (#315): the handoff's toast card (03-components.md, `toast`; the prototype's card where the reference CSS
 // differs). It animates nothing itself: the stack plays R08 and R09. What it owns is the countdown, which hover and focus
 // pause. Every string below is story copy, not product copy. No toast has a second line: an error shows its message only.
-
-// Text sits on a surface panel, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 /** A 420px panel, the width of a toast in the stack, with the story's label under it. */
 function labelled(story: string, ...body: ReturnType<typeof h>[]) {
@@ -59,12 +49,8 @@ const MESSAGES: Record<ToastKind, string> = {
 };
 const ICONS: Record<ToastKind, MaterialIconName> = { success: "check", info: "info", error: "error" };
 
-/** The markup of the disc's glyph as the browser serialises it: the shipped cut is read back through a probe the same way. */
-function iconMarkup(name: MaterialIconName) {
-  const probe = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  probe.innerHTML = materialIconBody(name, materialCut(600, true));
-  return probe.innerHTML;
-}
+/** The markup of the disc's glyph: the cut a toast wears, read back the way the browser serialises it. */
+const iconMarkup = (name: MaterialIconName) => cutMarkup(name, materialCut(600, true));
 
 const dismissOf = (toast: HTMLElement) => within(toast).getByRole("button", { name: "Dismiss" });
 
@@ -187,8 +173,6 @@ const timerSpies = {
   second: fn(),
   third: fn(),
 };
-
-const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
 
 /** Puts the keyboard focus on the button with Tab, from the top of the page. */
 async function tabTo(button: HTMLElement) {

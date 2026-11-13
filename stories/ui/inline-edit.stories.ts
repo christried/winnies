@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import type { PropType } from "vue";
+import type { PropType, VNode } from "vue";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiInlineEdit from "../../app/components/ui/inline-edit.vue";
 import { expectQuietAfter, finish, freezeSpinners, parkPointer, repaint, settled } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
+import { colourOf, pageWithCss, ringOf } from "../support/ui-kit";
 
 // The app's own UiInlineEdit (#323): text that becomes an input on the caller's say-so (03-components.md,
 // `inline-edit`; R11 on the input, R12 on the label). Every string below is story copy, not product copy.
@@ -15,18 +16,6 @@ import { realPointer } from "../support/real-pointer";
 // A focused field draws a blinking caret, which differs between two shots. The rule is the story page's, never the
 // component's: the caret is part of the product.
 const NO_CARET = "input{caret-color:transparent !important}";
-
-// Text sits on a chip or a surface card, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("style", NO_CARET),
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
   return h("div", {
@@ -147,27 +136,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const page = (title: string, ...body: VNode[]) => pageWithCss(NO_CARET, title, ...body);
+
 interface Spied { onSave: ReturnType<typeof fn> }
 
 const spied = (args: unknown) => (args as Spied).onSave;
 
 function findBox(canvasElement: HTMLElement, name = LABEL) {
   return within(canvasElement).findByRole("textbox", { name }) as Promise<HTMLInputElement>;
-}
-
-/**
- * What a token resolves to as a computed colour, which is how `getComputedStyle` writes a ring's colour.
- * @param token the custom property, `--color-focus`
- * @param property the property to resolve it through: `color` for a ring, `backgroundColor` for a fill
- * @returns the colour as the browser computes it
- */
-function colourOf(token: string, property: "color" | "backgroundColor" = "color"): string {
-  const probe = document.createElement("span");
-  document.body.append(probe);
-  probe.style[property] = `var(${token})`;
-  const colour = getComputedStyle(probe)[property];
-  probe.remove();
-  return colour;
 }
 
 /** The size a token resolves to, as `getComputedStyle` writes a `font-size`. */
@@ -179,8 +155,6 @@ function sizeOf(token: string): string {
   probe.remove();
   return size;
 }
-
-const ringOf = (el: Element) => getComputedStyle(el).boxShadow;
 
 /** Where the text itself sits, whatever the box around it does. */
 function textRect(el: Element): DOMRect {

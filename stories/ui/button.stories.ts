@@ -4,10 +4,11 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
-import { expectHoverOnlyWhereTheDeviceHovers } from "../support/touch";
+import { expectHoverGuarded } from "../support/touch";
+import { findButton, labelled, page } from "../support/ui-kit";
 
 // The app's own UiButton (#309): the handoff's clay button (03-components.md, `button`; `.w-btn*` in the reference CSS and
 // the buttons card, where the prototypes win). Today's screens use it for their five text buttons; the labels here are
@@ -50,31 +51,6 @@ const VARIANTS: readonly (readonly [Variant, string, MaterialIconName | undefine
   ],
 ];
 
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-// Every button on a surface panel with its story chip beside it: the colours of all six variants, ghost included, are
-// judged by axe against the panel.
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
-
 function row(...body: ReturnType<typeof h>[]) {
   return h("div", { style: "display:flex;flex-wrap:wrap;gap:16px" }, body);
 }
@@ -111,8 +87,6 @@ interface Spied {
   onSubmit: ReturnType<typeof fn>;
 }
 const spied = (args: unknown) => args as Spied;
-
-const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
 
 /** The first icon of a button (the spinner while it is busy), or null when it has none. */
 const iconOf = (button: HTMLElement) => button.querySelector("svg");
@@ -431,7 +405,7 @@ export const Pressing: Story = {
     const save = await findButton(canvasElement, "Save");
 
     // A hover lifts it where the device hovers, and a tap on a phone leaves no lift.
-    await step("a hover lifts it only on a device that can hover", () => expectHoverOnlyWhereTheDeviceHovers(press));
+    await step("a hover lifts it only on a device that can hover", () => expectHoverGuarded(press));
 
     // The animations that act on one button or its icon, whatever the rest of the page runs.
     const on = (el: HTMLElement) => animations().filter(a => el.contains((a.effect as KeyframeEffect | null)?.target ?? null));

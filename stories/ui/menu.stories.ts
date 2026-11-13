@@ -11,6 +11,7 @@ import { headingCss } from "../support/html";
 import { frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
+import { colourOf } from "../support/ui-kit";
 
 // The app's own UiMenu and UiMenuItem (#313): the handoff's raised popover (03-components.md, `menu` and `menu-item`;
 // the prototype where the reference CSS differs) that plays R04 on open and R05 on close, moves the focus with the
@@ -133,16 +134,6 @@ async function expectClosed(canvasElement: HTMLElement, wrapper = wrapperOf(canv
 
 const item = (menuEl: HTMLElement, name: string | RegExp) => within(menuEl).getByRole("menuitem", { name });
 
-/** A token as the browser resolves it: a probe wears it, so a state is read as a colour and never as a class. */
-function tokenColor(property: "color" | "backgroundColor", token: string) {
-  const probe = document.createElement("span");
-  probe.style[property] = `var(${token})`;
-  document.body.append(probe);
-  const value = getComputedStyle(probe)[property];
-  probe.remove();
-  return value;
-}
-
 export const Closed: Story = {
   render: () => () => page("Menu closed", menu({}, plainItems())),
   async play({ canvasElement }) {
@@ -190,11 +181,11 @@ export const Open: Story = {
     expect(box.width).toBeCloseTo(260, 0);
 
     // The danger item is Cherry.
-    expect(getComputedStyle(item(panel, "Delete")).color).toBe(tokenColor("color", "--color-danger-text"));
-    expect(getComputedStyle(item(panel, "Edit")).color).not.toBe(tokenColor("color", "--color-danger-text"));
+    expect(getComputedStyle(item(panel, "Delete")).color).toBe(colourOf("--color-danger-text"));
+    expect(getComputedStyle(item(panel, "Edit")).color).not.toBe(colourOf("--color-danger-text"));
 
     // A real hover fills the item with the sunken colour: `userEvent` of "storybook/test" cannot drive `:hover`.
-    const sunken = tokenColor("backgroundColor", "--color-surface-sunken");
+    const sunken = colourOf("--color-surface-sunken", "backgroundColor");
     const edit = item(panel, "Edit");
     expect(getComputedStyle(edit).backgroundColor).not.toBe(sunken);
     const pointer = await realPointer();

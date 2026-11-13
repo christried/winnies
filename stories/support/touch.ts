@@ -1,67 +1,62 @@
 // What a phone does with a hover (#349, the R2 review's P5). A tap puts `:hover` on a button and leaves it there until the
-// next tap, so a hover look that is not guarded by `@media (hover: hover)` sticks. Chromium's touch emulation is what
-// turns `(hover: hover)` off, as a phone's browser does; the real mouse then still sets `:hover`, which is the point.
-import { expect, waitFor } from "storybook/test";
-import { settled } from "./component-checks";
-import { withDialect, withMotion } from "./motion-play";
-import { realPointer } from "./real-pointer";
+// next tap, so a hover look that is not inside `@media (hover: hover)` sticks. The check reads the stylesheets, not a device:
+// Chromium's touch emulation would turn the media query off, but it is page-wide, and the runner mounts several story files
+// in one page at once, so it would take the hover from a story that is running beside this one.
+import { expect } from "storybook/test";
 
-/** The look a hover changes on the controls of the kit: the lift, the lip, the colours. */
-function lookOf(el: HTMLElement) {
-  const style = getComputedStyle(el);
-  return [
-    style.translate,
-    style.boxShadow,
-    style.color,
-    style.backgroundColor,
-  ].join(" | ");
+// The pseudo-class, not a class that has the letters in its name: `.showcase\:hovering` is escaped with a backslash.
+// Not global, so `test` keeps no position between calls.
+const HOVER = /(?<!\\):hover(?![\w-])/;
+
+/** A rule that a hover starts, and whether it sits in a media query for devices that can hover. */
+interface HoverRule {
+  selector: string;
+  guarded: boolean;
 }
 
 /**
- * Expects a hover to change an element on a device that can hover, and to change nothing where it cannot. Under the
- * Workspace dialect and full motion, so the lift exists to be seen. Runs only in the Vitest runner, which has a real
- * mouse and the browser's protocol: Storybook's own UI can drive neither.
+ * Every rule of the page's stylesheets that has `:hover` in its selector and would otherwise match the element.
  *
- * @param el an idle, enabled control, not forced into its hover look with `is-hover`
+ * @param el the element
+ * @returns the rules, each with whether a `(hover: hover)` media query contains it
  */
-export async function expectHoverOnlyWhereTheDeviceHovers(el: HTMLElement) {
-  const pointer = await realPointer();
-  if (!pointer)
-    return;
-  const { cdp } = await import("vitest/browser");
-  const hover = async () => {
-    await pointer.hover(el);
-    await waitFor(() => expect(el.matches(":hover")).toBe(true));
-    await settled();
+function hoverRulesOf(el: HTMLElement): HoverRule[] {
+  const found: HoverRule[] = [];
+  // Layers, media and supports blocks hold rules; so does a style rule, with native nesting.
+  const walk = (rules: CSSRuleList, guarded: boolean) => {
+    for (const rule of rules) {
+      const here = guarded || (rule instanceof CSSMediaRule && /\(hover:\s*hover\)/.test(rule.conditionText));
+      if (rule instanceof CSSStyleRule && HOVER.test(rule.selectorText)) {
+        // The same selector with the hover always true: whether the element is one the rule is for.
+        if (el.matches(rule.selectorText.replace(new RegExp(HOVER, "g"), ":is(*)")))
+          found.push({ selector: rule.selectorText, guarded: here });
+      }
+      if ("cssRules" in rule)
+        walk(rule.cssRules as CSSRuleList, here);
+    }
   };
-  const leave = async () => {
-    await pointer.unhover(el);
-    await waitFor(() => expect(el.matches(":hover")).toBe(false));
-    await settled();
-  };
-
-  await withMotion("full", () => withDialect(null, async () => {
-    await settled();
-    const rest = lookOf(el);
-
-    // A device that can hover: the look changes, so the check below is about the media query and not about a dead hover.
-    await hover();
-    expect(lookOf(el)).not.toBe(rest);
-    await leave();
-    expect(lookOf(el)).toBe(rest);
-
-    // A phone: `(hover: hover)` is false, the mouse is still over the element, and nothing changes.
-    // The provider types that name `send` are not loaded in the stories' tsconfig.
-    const session = cdp() as unknown as { send: (method: string, params: object) => Promise<unknown> };
-    await session.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+  for (const sheet of document.styleSheets) {
     try {
-      expect(matchMedia("(hover: hover)").matches).toBe(false);
-      await hover();
-      expect(lookOf(el)).toBe(rest);
+      walk(sheet.cssRules, false);
     }
-    finally {
-      await session.send("Emulation.setTouchEmulationEnabled", { enabled: false });
-      await leave();
+    catch {
+      // A sheet from another origin cannot be read, and holds no rule of the kit's.
     }
-  }));
+  }
+  return found;
+}
+
+/**
+ * Expects every hover look of an element to be for a device that can hover: each rule a `:hover` starts sits inside
+ * `@media (hover: hover)`, so a tap on a phone leaves no lift. The forced `.is-hover` look of the stories is a class, not a
+ * `:hover`, and is not in question here.
+ *
+ * @param el an idle, enabled control with a hover look
+ */
+export function expectHoverGuarded(el: HTMLElement) {
+  const rules = hoverRulesOf(el);
+  // Not vacuous: an element without a hover look would pass for nothing.
+  expect(rules.length, "the rules a hover starts on the element").toBeGreaterThan(0);
+  for (const rule of rules)
+    expect(rule.guarded, rule.selector).toBe(true);
 }

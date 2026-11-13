@@ -3,9 +3,9 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiSwitch from "../../app/components/ui/switch.vue";
 import { expectQuietAfter } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { page, panel } from "../support/ui-kit";
 
 // The app's own UiSwitch (#316): the handoff's 50 x 30 pill switch (03-components.md, `switch`). No screen uses it
 // yet; R3 places it in the add row's counter toggle. The label is a story string: the real copy is R3's.
@@ -17,29 +17,6 @@ const LABEL = "Counter";
 const REST = 4;
 const TRAVEL = 20;
 
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
-
 const meta = {
   title: "UI/Switch",
   decorators: [withMotionSurface],
@@ -50,6 +27,8 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const labelled = panel({ wrap: false });
 
 interface Spied { "onUpdate:modelValue": ReturnType<typeof fn> }
 

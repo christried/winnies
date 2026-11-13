@@ -4,37 +4,14 @@ import { h, ref } from "vue";
 import UiCounter from "../../app/components/ui/counter.vue";
 import { isWonByCounter, nextCount } from "../../shared/utils/counter";
 import { expectQuietAfter, finish, parkPointer, repaint, settled } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
 import { animations, frames, particleCount, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { colourOf, findButton, labelled, page } from "../support/ui-kit";
 
 // The app's own UiCounter (#319): the handoff's counter (03-components.md, `counter`; `.w-counter` in the reference CSS and
 // the counter card, where the prototype wins). No screen uses it yet; R3 swaps it for today's pill. The names of the
 // games and the headings are story strings. The rules (clamp, win, un-win) are the caller's: `Wired` applies the app's own
 // `nextCount` and `isWonByCounter`, never a copy of them.
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 const meta = {
   title: "UI/Counter",
@@ -60,17 +37,6 @@ function counter(args: Spied, props: Record<string, unknown>) {
 }
 
 const findInput = (scope: HTMLElement, name = "Counter") => within(scope).findByRole("spinbutton", { name });
-const findButton = (scope: HTMLElement, name: string) => within(scope).findByRole("button", { name });
-
-/** What a token resolves to as a background, read through a probe: the token's own value, not a copy of it. */
-function colourOf(token: string, canvasElement: HTMLElement) {
-  const probe = document.createElement("span");
-  probe.style.backgroundColor = `var(${token})`;
-  canvasElement.append(probe);
-  const colour = getComputedStyle(probe).backgroundColor;
-  probe.remove();
-  return colour;
-}
 
 const wellOf = (scope: HTMLElement) => scope.querySelector<HTMLElement>("[data-well]")!;
 const countOf = (scope: HTMLElement) => scope.querySelector<HTMLElement>("[data-count]")!;
@@ -124,7 +90,7 @@ export const AtTarget: Story = {
     expect(animations()).toHaveLength(0);
     const increase = await findButton(canvasElement, "Increase");
     const decrease = await findButton(canvasElement, "Decrease");
-    expect(getComputedStyle(wellOf(canvasElement)).backgroundColor).toBe(colourOf("--color-won", canvasElement));
+    expect(getComputedStyle(wellOf(canvasElement)).backgroundColor).toBe(colourOf("--color-won", "backgroundColor"));
     expect(increase).toBeDisabled();
 
     await userEvent.click(increase);
@@ -206,7 +172,7 @@ export const Editing: Story = {
     expect(ring.outlineStyle).toBe("solid");
     expect(ring.outlineWidth).toBe("2px");
     expect(ring.outlineOffset).toBe("2px");
-    expect(ring.outlineColor).toBe(colourOf("--color-focus", canvasElement));
+    expect(ring.outlineColor).toBe(colourOf("--color-focus", "backgroundColor"));
     expect(ring.boxShadow).toBe("none");
     expect(animations()).toHaveLength(0);
     await repaint(canvasElement);
@@ -298,10 +264,10 @@ export const Edges: Story = {
       const box = caseOf(canvasElement, id);
       expect(await findButton(box, "Increase")).toBeDisabled();
       expect(await findButton(box, "Decrease")).toBeEnabled();
-      expect(getComputedStyle(wellOf(box)).backgroundColor).toBe(colourOf("--color-won", canvasElement));
+      expect(getComputedStyle(wellOf(box)).backgroundColor).toBe(colourOf("--color-won", "backgroundColor"));
     }
     expect(await findInput(caseOf(canvasElement, "7 of 5"))).toHaveValue(7);
-    expect(getComputedStyle(wellOf(zero)).backgroundColor).not.toBe(colourOf("--color-won", canvasElement));
+    expect(getComputedStyle(wellOf(zero)).backgroundColor).not.toBe(colourOf("--color-won", "backgroundColor"));
 
     // The longest count: the well grows past its minimum and nothing clips, scrolls or runs past the page.
     const longest = caseOf(canvasElement, "9999 of 9999");
@@ -347,7 +313,7 @@ export const Wired: Story = {
     const decrease = await findButton(canvasElement, "Decrease");
     const increase = await findButton(canvasElement, "Increase");
     const well = wellOf(canvasElement);
-    const matcha = colourOf("--color-won", canvasElement);
+    const matcha = colourOf("--color-won", "backgroundColor");
     const status = () => canvasElement.querySelector("[data-status]")!;
     const firstKeyframe = (a: Animation) => (a.effect as KeyframeEffect).getKeyframes()[0]!.transform;
     const rolling = () => animations().find(a => (a.effect as KeyframeEffect).target === countOf(canvasElement));

@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
+import type { VNode } from "vue";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiTextInput from "../../app/components/ui/text-input.vue";
 import { expectQuietAfter } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
+import { colourOf, pageWithCss, ringOf } from "../support/ui-kit";
 
 // The app's own UiTextInput (#312): the handoff's pill well with its hover, focus and error rings (03-components.md,
 // `text-input`). Every string below is story copy, not product copy.
@@ -14,18 +16,6 @@ import { realPointer } from "../support/real-pointer";
 // A focused field draws a blinking caret, which differs between two shots. The rule is the story page's, never the
 // component's: the caret is part of the product.
 const NO_CARET = "input{caret-color:transparent !important}";
-
-// Text sits on a chip or a surface card, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("style", NO_CARET),
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
   return h("div", {
@@ -87,6 +77,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const page = (title: string, ...body: VNode[]) => pageWithCss(NO_CARET, title, ...body);
+
 interface Spied {
   "onUpdate:modelValue": ReturnType<typeof fn>;
   "onBlur": ReturnType<typeof fn>;
@@ -96,23 +88,6 @@ interface Spied {
 function findBox(canvasElement: HTMLElement, name: string, role: "textbox" | "spinbutton" = "textbox") {
   return within(canvasElement).findByRole(role, { name }) as Promise<HTMLInputElement>;
 }
-
-/**
- * What a token resolves to as a computed colour, which is how `getComputedStyle` writes a ring's colour.
- * @param token the custom property, `--color-focus`
- * @returns the colour as the browser computes it
- */
-function colourOf(token: string): string {
-  const probe = document.createElement("span");
-  document.body.append(probe);
-  probe.style.color = `var(${token})`;
-  const colour = getComputedStyle(probe).color;
-  probe.remove();
-  return colour;
-}
-
-/** The well's resting look is the same in every story: sunken, no ring but the well's own shadow. */
-const ringOf = (el: Element) => getComputedStyle(el).boxShadow;
 
 export const Default: Story = {
   render: (args) => {

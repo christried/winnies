@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import type { MaterialIconName } from "../../app/utils/material-icons";
-import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiIconButton from "../../app/components/ui/icon-button.vue";
 import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
-import { expectHoverOnlyWhereTheDeviceHovers } from "../support/touch";
+import { expectHoverGuarded } from "../support/touch";
+import { findButton, labelled, page } from "../support/ui-kit";
 
 // The app's own UiIconButton (#310): the handoff's round icon button (03-components.md, `icon-button`; `.w-btn--icon` in the
 // reference CSS and the buttons card, where the prototypes win). It is `UiButton`'s icon-only form, so its hover, press,
@@ -62,31 +62,6 @@ const ITEMS: readonly (readonly [Variant, Size, MaterialIconName, string])[] = [
 const SLOT_LABEL = "Counter target";
 const SLOT_GLYPH_WIDTH = 36;
 
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-// Every button on a surface panel with its story chip beside it: the colours of all three variants, ghost included, are
-// judged by axe against the panel.
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
-
 type Props = Record<string, unknown>;
 
 interface Spied {
@@ -139,8 +114,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
 
 /** The button of each ITEMS row, in order. */
 const findItems = (canvasElement: HTMLElement) => Promise.all(ITEMS.map(([, , , label]) => findButton(canvasElement, label)));
@@ -250,7 +223,7 @@ export const Hover: Story = {
     });
 
     // A tap on a phone leaves no lift: the hover look is for a device that can hover.
-    await expectHoverOnlyWhereTheDeviceHovers(await findButton(canvasElement, "Real hover"));
+    expectHoverGuarded(await findButton(canvasElement, "Real hover"));
     await finish(canvasElement);
   },
 };

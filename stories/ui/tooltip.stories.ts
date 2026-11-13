@@ -11,6 +11,7 @@ import { chip, headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
+import { findButton, labelled, page, sleep } from "../support/ui-kit";
 
 // The app's own UiTooltip (#311): the handoff's cocoa bubble (03-components.md `tooltip`, R10 in 04-motion-and-sound.md;
 // the screen prototype's bubble where the reference CSS differs) that a resting mouse or the keyboard's focus brings up
@@ -19,32 +20,6 @@ import { realPointer } from "../support/real-pointer";
 
 const LONG_TEXT = "This is story copy: a tooltip with a long text that has to wrap, so its bubble stops at 440 pixels wide and "
   + "grows taller instead of running off the page, as the handoff asks.";
-
-const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-// Every trigger on a surface panel with its story chip beside it.
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 /** The trigger of the hand-wrapped `UiTooltip`: a text button with a long bubble. */
 const LONG_LABEL = "Long tip";
@@ -87,8 +62,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
 
 /** P, the popover: the bubble is the trigger's next sibling, whether or not the trigger is described by it. */
 const popoverOf = (trigger: HTMLElement) => trigger.nextElementSibling as HTMLElement;

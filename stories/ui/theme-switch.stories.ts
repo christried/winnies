@@ -4,9 +4,10 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiThemeSwitch from "../../app/components/ui/theme-switch.vue";
 import { expectQuietAfter, repaint } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
 import { animations, frames, layerEl, particleCount, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { page, panel } from "../support/ui-kit";
 
 // The app's own UiThemeSwitch (#324): the handoff's three-way radiogroup, Light, Dark and Match system
 // (03-components.md, `theme-switch`). No screen uses it yet; R3 places it in the account popover. The component never
@@ -14,29 +15,6 @@ import { withMotionSurface } from "../support/motion-surface";
 
 // Match system always resolves to this, so the pictures and the emitted values do not depend on the toolbar.
 const SYSTEM = "dark";
-
-// Text sits on a chip or a surface card, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 const meta = {
   title: "UI/Theme switch",
@@ -49,6 +27,8 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const labelled = panel({ wrap: false });
 
 type Spy = ReturnType<typeof fn>;
 interface Spied { "onUpdate:modelValue": Spy; "swap": Spy }

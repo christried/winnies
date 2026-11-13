@@ -5,9 +5,9 @@ import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiToastStack from "../../app/components/ui/toast-stack.vue";
 import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
-import { headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { page } from "../support/ui-kit";
 
 // The app's own UiToastStack (#315): the handoff's bottom-right stack (03-components.md, `toast-stack`). It plays R08 on a toast it
 // adds and R09 plus the engine's FLIP on the rest when one leaves; the parent owns the list. The stack is `position: fixed`, so
@@ -27,17 +27,6 @@ const FRAME_H = 460;
 // `--space-4` and `--space-2-5`, in pixels, as the stack lays them out.
 const INSET = 16;
 const GAP = 10;
-
-// Text sits on a surface panel, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 function frame(...children: ReturnType<typeof h>[]) {
   return h("div", {

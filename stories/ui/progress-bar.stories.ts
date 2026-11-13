@@ -4,9 +4,10 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiProgressBar from "../../app/components/ui/progress-bar.vue";
 import { expectQuietAfter, finish } from "../support/component-checks";
-import { chip, headingCss, resolved } from "../support/html";
+import { chip, resolved } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { page } from "../support/ui-kit";
 
 // The app's own UiProgressBar (#322): the handoff's `progress-bar` (03-components.md), the track of a Winnie's summary
 // and of a shared card. R29 (the fill's spring) and A07 (the stripes' loop) run on two elements, so the stories prove
@@ -73,17 +74,6 @@ const ROWS: Row[] = [
     percent: 100,
   },
 ];
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: VNode[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 // One bar on a card, with a chip that names what it shows. The card's width is the bar's: the parent sizes the bar.
 function card(id: string, text: string, width: number, bar: VNode) {
