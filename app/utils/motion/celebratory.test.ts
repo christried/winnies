@@ -1,6 +1,6 @@
 import type { FakeElement } from "../../../tests/support/fake-motion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EASE, motionHarness, SHOWCASE } from "../../../tests/support/fake-motion";
+import { EASE, jellyKf, motionHarness, NONE, SHOWCASE } from "../../../tests/support/fake-motion";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -10,18 +10,6 @@ afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
 });
-
-const NONE = { transform: "none" };
-
-function jellyKf(a: number): Keyframe[] {
-  return [
-    { transform: "scale(1,1)" },
-    { transform: `scale(${1 + 0.07 * a},${1 - 0.12 * a})`, offset: 0.18 },
-    { transform: `scale(${1 - 0.06 * a},${1 + 0.08 * a})`, offset: 0.42 },
-    { transform: `scale(${1 + 0.03 * a},${1 - 0.03 * a})`, offset: 0.68 },
-    { transform: "scale(1,1)" },
-  ];
-}
 
 describe("won", () => {
   it("jellies the middle, pops the face, and bursts 24 pieces from the face", () => {
