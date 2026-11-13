@@ -377,6 +377,20 @@ export const EASE = {
   "soft": "linear(0, .12 5%, .4 14%, .7 24%, .92 34%, 1.02 44%, 1.03 52%, 1.01 66%, 1)",
 } as const;
 
+/** The resting keyframe the recipes start and end a hop on: the reference writes the transform as a bare `none`. */
+export const NONE = { transform: "none" };
+
+/** Jelly's keyframes as the reference writes them, for amplitude `a` (already multiplied by the gain). */
+export function jellyKf(a: number): Keyframe[] {
+  return [
+    { transform: "scale(1,1)" },
+    { transform: `scale(${1 + 0.07 * a},${1 - 0.12 * a})`, offset: 0.18 },
+    { transform: `scale(${1 - 0.06 * a},${1 + 0.08 * a})`, offset: 0.42 },
+    { transform: `scale(${1 + 0.03 * a},${1 - 0.03 * a})`, offset: 0.68 },
+    { transform: "scale(1,1)" },
+  ];
+}
+
 /** Workspace tokens, as `winnies-tokens.css` declares them on `:root`. */
 export const WORKSPACE: TokenMap = {
   ...dur({

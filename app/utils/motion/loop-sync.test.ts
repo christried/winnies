@@ -1,9 +1,10 @@
-import type { FakeAnimation, FakeElement, MotionHarness } from "../../../tests/support/fake-motion";
+import type { AnimateCall, FakeAnimation, FakeElement, MotionHarness, TokenMap } from "../../../tests/support/fake-motion";
 import type { LoopSpec } from "./loop-sync";
 import { afterEach, describe, expect, it } from "vitest";
 import { fakeLoopEnv } from "../../../tests/support/fake-loop-env";
-import { motionHarness, SHOWCASE, WORKSPACE } from "../../../tests/support/fake-motion";
+import { fakeElement, fakeEnv, fakeLayer, motionHarness, SHOWCASE, WORKSPACE } from "../../../tests/support/fake-motion";
 import { createLoopHost, LOOP_ORIGIN } from "./loop-sync";
+import { createSurfaceMotion } from "./surface";
 
 // The engine runs over the recorder here: jsdom has no Web Animations, so these tests see what the host asks of the
 // engine and of its animations (start, pause, play, startTime, cancel). That a browser aligns the phase and resumes
@@ -524,5 +525,265 @@ describe("edges", () => {
 
     expect(el.calls).toHaveLength(0);
     expect(s.host.size).toBe(0);
+  });
+});
+
+// A surface as a layout builds it: the engine holds the handoff's defaults until `start()`, and the tokens the page
+// really has (`tokens`) are only read then. A `v-loop` of the first render sets its loop in a child's `mounted`, which
+// runs before the layout's `onMounted` starts the surface (#335).
+function firstRender(tokens: TokenMap, init: { reduced?: boolean } = {}) {
+  const log: AnimateCall[] = [];
+  const env = fakeEnv({ styles: tokens, reduced: init.reduced });
+  const root = fakeElement({ log });
+  const surface = createSurfaceMotion({
+    root: () => root,
+    layer: () => fakeLayer({ width: 1000, height: 800, log }),
+    dialect: () => null,
+    env,
+    animations: () => log.map(c => c.animation) as unknown as Animation[],
+  });
+  stops.push(surface.dispose);
+  const loopEnv = fakeLoopEnv();
+  const host = createLoopHost(surface.m, loopEnv);
+  return {
+    surface,
+    m: surface.m,
+    env,
+    loopEnv,
+    host,
+    el: () => fakeElement({ log }),
+  };
+}
+
+// The animation an element is left running, and the keyframes it was built from.
+function live(el: FakeElement) {
+  const a = el.animations.filter(x => !x.cancelled);
+  const i = el.animations.indexOf(a[0] as FakeAnimation);
+  return {
+    count: a.length,
+    anim: a[0],
+    keyframes: el.calls[i]?.keyframes,
+  };
+}
+
+// `breathe` at a gain: the one recipe here whose keyframes carry the amplitude.
+function breatheAt(gain: number): Keyframe[] {
+  const a = 0.04 * gain;
+  return [
+    { transform: "scale(1,1)" },
+    { transform: `scale(${1 + a},${1 - a})` },
+    { transform: `scale(${1 - a / 2},${1 + a * 0.75})` },
+    { transform: "scale(1,1)" },
+  ];
+}
+
+describe("a loop of the first render", () => {
+  it("runs at the surface's own gain and rate once the surface has started", () => {
+    const s = firstRender(SHOWCASE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+
+    s.surface.start();
+
+    const l = live(el);
+    expect(l.count).toBe(1);
+    expect(l.keyframes).toEqual(breatheAt(1.6));
+    expect(l.anim?.playbackRate).toBe(1.4);
+    expect(l.anim?.startTime).toBe(LOOP_ORIGIN);
+  });
+
+  it("leaves no Ambient loop running under --ambient-motion: paused, and keeps a Responsive one", () => {
+    const s = firstRender({ ...WORKSPACE, "--ambient-motion": "paused" });
+    const [amb, spin] = [
+      s.el(),
+      s.el(),
+    ];
+    s.host.set(amb, "breathe");
+    s.host.set(spin, "spin");
+    expect(live(amb).count).toBe(1); // the engine does not know yet
+
+    s.surface.start();
+
+    expect(live(amb).count).toBe(0);
+    expect(live(spin).count).toBe(1);
+  });
+
+  it("brings the Ambient loop back when --ambient-motion runs again", () => {
+    const s = firstRender({ ...WORKSPACE, "--ambient-motion": "paused" });
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.surface.start();
+
+    s.env.styleOf(WORKSPACE);
+    s.env.setAttr("data-dialect", "broadcast");
+
+    expect(live(el).count).toBe(1);
+  });
+
+  it("creates no loop at all under reduced motion", () => {
+    const s = firstRender(SHOWCASE, {
+      reduced: true,
+    });
+    const [amb, spin] = [
+      s.el(),
+      s.el(),
+    ];
+
+    s.host.set(amb, "breathe");
+    s.host.set(spin, "spin");
+    s.surface.start();
+
+    expect(amb.calls).toHaveLength(0);
+    expect(spin.calls).toHaveLength(0);
+  });
+
+  it("keeps the same animation when the first refresh changes nothing the loop was built from", () => {
+    const s = firstRender(WORKSPACE);
+    const [gain, still] = [
+      s.el(),
+      s.el(),
+    ];
+    s.host.set(gain, "breathe");
+    s.host.set(still, "ring");
+    const before = [gain.animations[0], still.animations[0]];
+
+    s.surface.start();
+
+    expect(gain.animations).toEqual([before[0]]);
+    expect(still.animations).toEqual([before[1]]);
+    expect(live(gain).anim).toBe(before[0]);
+    expect(live(still).anim).toBe(before[1]);
+  });
+
+  it("keeps the same animation through a later refresh that changes nothing", () => {
+    const s = firstRender(WORKSPACE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.surface.start();
+    const a = live(el).anim;
+
+    s.env.setAttr("data-theme", "dark");
+
+    expect(el.animations).toHaveLength(1);
+    expect(live(el).anim).toBe(a);
+  });
+
+  it("shares one startTime with a same-named loop that starts after the surface", () => {
+    const s = firstRender(SHOWCASE);
+    const [early, late] = [
+      s.el(),
+      s.el(),
+    ];
+    s.host.set(early, "breathe");
+    s.surface.start();
+
+    s.host.set(late, "breathe");
+
+    expect(live(early).anim?.startTime).toBe(LOOP_ORIGIN);
+    expect(live(late).anim?.startTime).toBe(live(early).anim?.startTime);
+    expect(live(late).keyframes).toEqual(live(early).keyframes);
+    expect(live(late).anim?.playbackRate).toBe(live(early).anim?.playbackRate);
+  });
+
+  it("stays paused through the surface's start while the tab is hidden, and resumes aligned", () => {
+    const s = firstRender(SHOWCASE);
+    s.loopEnv.setHidden(true);
+    const el = s.el();
+    s.host.set(el, "breathe");
+
+    s.surface.start();
+    expect(live(el).count).toBe(1);
+    expect(live(el).anim?.playState).toBe("paused");
+    expect(live(el).keyframes).toEqual(breatheAt(1.6));
+
+    (live(el).anim as FakeAnimation).startTime = 4000;
+    s.loopEnv.setHidden(false);
+    expect(live(el).anim?.playState).toBe("running");
+    expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
+  });
+
+  it("stays paused through the surface's start while the element is off-screen, and resumes aligned", () => {
+    const s = firstRender(SHOWCASE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.loopEnv.setVisible(el, false);
+
+    s.surface.start();
+    expect(live(el).anim?.playState).toBe("paused");
+
+    (live(el).anim as FakeAnimation).startTime = 4000;
+    s.loopEnv.setVisible(el, true);
+    expect(live(el).anim?.playState).toBe("running");
+    expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
+  });
+
+  it("holds no extra listener or subscription once the first-render loop is removed", () => {
+    const s = firstRender(SHOWCASE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.surface.start();
+
+    s.host.remove(el);
+
+    expect(s.loopEnv.visibilityListeners).toBe(0);
+    expect(s.loopEnv.observed).toBe(0);
+    expect(s.env.mediaListeners).toBe(1); // the surface's own, until it is disposed
+  });
+});
+
+describe("a dialect change under a running loop", () => {
+  it("rebuilds the loop at the new gain, in phase, and again on the way back", () => {
+    const s = firstRender(WORKSPACE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.surface.start();
+    expect(live(el).keyframes).toEqual(breatheAt(1));
+
+    s.env.styleOf(SHOWCASE);
+    s.env.setAttr("data-dialect", "showcase");
+
+    expect(el.animations).toHaveLength(2);
+    expect(el.animations[0]?.cancelled).toBe(true);
+    expect(live(el).keyframes).toEqual(breatheAt(1.6));
+    expect(live(el).anim?.playbackRate).toBe(1.4);
+    expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
+
+    s.env.styleOf(WORKSPACE);
+    s.env.setAttr("data-dialect", null);
+
+    expect(live(el).keyframes).toEqual(breatheAt(1));
+    expect(live(el).anim?.playbackRate).toBe(1);
+  });
+
+  it("keeps a paused loop paused through the rebuild, and resumes it aligned", () => {
+    const s = firstRender(WORKSPACE);
+    const el = s.el();
+    s.host.set(el, "breathe");
+    s.surface.start();
+    s.loopEnv.setVisible(el, false);
+
+    s.env.styleOf(SHOWCASE);
+    s.env.setAttr("data-dialect", "showcase");
+    expect(live(el).keyframes).toEqual(breatheAt(1.6));
+    expect(live(el).anim?.playState).toBe("paused");
+
+    s.loopEnv.setVisible(el, true);
+    expect(live(el).anim?.playState).toBe("running");
+    expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
+  });
+
+  it("leaves a loop whose keyframes do not depend on the dialect running as it is", () => {
+    const s = firstRender(WORKSPACE);
+    const el = s.el();
+    s.host.set(el, "ring");
+    s.surface.start();
+    const a = live(el).anim;
+
+    s.env.styleOf(SHOWCASE);
+    s.env.setAttr("data-dialect", "showcase");
+
+    expect(el.animations).toHaveLength(1);
+    expect(live(el).anim).toBe(a);
+    expect(a?.playbackRate).toBe(1.4);
   });
 });

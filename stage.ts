@@ -29,6 +29,25 @@ export function isStagingBuild(env: Record<string, string | undefined> = process
 /** The route of the dev sign-in: nuxt.config.ts registers it, and tests/build/dev-sign-in.test.ts looks for it in the production build */
 export const DEV_SIGN_IN_ROUTE = "/api/dev/sign-in";
 
+/** Where staging serves Storybook; nuxt.config.ts mounts it there and tests/build/storybook.test.ts looks for it in the production build */
+export const STORYBOOK_ROUTE = "/storybook";
+
+/**
+ * Whether this build also builds Storybook and serves it at STORYBOOK_ROUTE (#298): every non-production
+ * Vercel build, so the human can judge motion on staging. A production build never does. On Vercel only
+ * what Vercel says counts, and a missing or unknown VERCEL_ENV is false: a build that cannot say what it is
+ * does not get Storybook. Off Vercel, WINNIES_STAGE=staging in .env simulates it locally, as for isStagingBuild.
+ *
+ * @param env the environment of the build
+ * @returns true when the build carries Storybook
+ */
+export function buildsStorybook(env: Record<string, string | undefined> = process.env): boolean {
+  if (env.VERCEL) {
+    return env.VERCEL_ENV === "preview" || env.VERCEL_ENV === "development";
+  }
+  return env.WINNIES_STAGE === "staging";
+}
+
 /** What a build calls itself: the page title's product name and the folder its favicons are served from */
 export interface StageBranding {
   name: string;

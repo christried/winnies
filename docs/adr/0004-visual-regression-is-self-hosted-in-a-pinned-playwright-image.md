@@ -4,7 +4,7 @@ The redesign's component states are screenshot-tested from Storybook stories (St
 
 ## Considered options
 
-- **Chromatic free tier.** Rejected: 5,000 snapshots a month and no TurboSnap on the free tier, against roughly 400 snapshots per full run (about 50 components, a few states each, light and dark), so a busy redesign month runs out. Its review screen and hosted Storybook are the real loss; GitHub's image diff view stands in for the first, and Storybook stays local.
+- **Chromatic free tier.** Rejected: 5,000 snapshots a month and no TurboSnap on the free tier, against roughly 400 snapshots per full run (about 50 components, a few states each, light and dark), so a busy redesign month runs out. Its review screen and hosted Storybook are the real loss; GitHub's image diff view stands in for the first, and Storybook is not hosted by a third party: the visual tests run locally in the pinned image, and staging serves Storybook itself at `/storybook/` (ADR-0005).
 - **Argos Hobby.** Rejected for the same quota, and its Storybook integration is less proven.
 - **Baselines updated by a CI workflow.** Rejected as the main path: CI would push commits, and the maintainer commits (`CLAUDE.md` § Attribution). It stays the fallback if Podman doesn't hold up on Windows.
 

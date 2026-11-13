@@ -13,7 +13,7 @@ const isWon = computed(() => props.challenge.status === "won");
 const isRunning = computed(() => props.challenge.runningSince !== null);
 const isEditing = computed(() => editingChallengeId.value === props.challenge.id);
 
-const now = useNow();
+const { now } = useSurfaceClock();
 const seconds = computed(() =>
   elapsedSeconds(props.challenge, now.value),
 );

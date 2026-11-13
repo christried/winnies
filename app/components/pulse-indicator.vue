@@ -15,8 +15,6 @@ const label = computed(() =>
     ? `· ${props.count} running`
     : props.emptyLabel,
 );
-
-const pulseDelay = usePulseDelay(isActive);
 </script>
 
 <template>
@@ -24,7 +22,6 @@ const pulseDelay = usePulseDelay(isActive);
     v-if="label"
     class="font-mono text-xs whitespace-nowrap tabular-nums"
     :class="!isActive && 'opacity-60'"
-    :style="{ animationDelay: pulseDelay }"
   >
     {{ label }}
   </span>

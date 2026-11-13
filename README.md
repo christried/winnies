@@ -40,7 +40,7 @@ on the hosting provider.
 
 `WINNIES_STAGE` is the second exception. It is a build-time switch read by [`stage.ts`](stage.ts), not a
 variable the app validates or reads at run time: set to `staging` it makes a local `pnpm build` carry the
-dev sign-in like the staging build does. It lives only in `.env.example` (commented out) and in a
+dev sign-in like the staging build does, and build Storybook and serve it at `/storybook/` (a few seconds longer). It lives only in `.env.example` (commented out) and in a
 developer's `.env`, never in `env.ts`, CI or Vercel: a Vercel build goes by its branch and ignores it, so
 no dashboard variable can turn production into staging.
 
@@ -75,7 +75,9 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`). After a handoff re-sync, run
 `pnpm strip:metadata`: a design export carries a C2PA manifest that `scripts/attribution.mjs` refuses.
 
-`pnpm storybook` serves Storybook on <http://localhost:6006>, for local use only; it is never deployed.
+`pnpm storybook` serves Storybook on <http://localhost:6006>. Staging serves it too, at `/storybook/` (behind Vercel
+login, like every path there): the non-production Vercel build builds it (§ Deployment), and a production build never
+carries it.
 It loads the app's own `app/assets/css/main.css`, so the stories see the real token file, the Tailwind entry and the
 self-hosted fonts. The toolbar sets the three switches as the app does: theme (`data-theme` on `<html>`), dialect
 (`data-dialect` on `<body>`, none for Workspace) and reduced motion (`data-motion="reduce"` on `<html>`). Stories are
@@ -90,7 +92,8 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
 ## Tests
 
 - `pnpm test` runs the unit tests. No database needed.
-- `pnpm build`, then `pnpm test:build`: fails if the production build carries `/api/dev/sign-in` (ADR-0005).
+- `pnpm build`, then `pnpm test:build`: fails if the production build carries `/api/dev/sign-in` or `/storybook`
+  (ADR-0005).
   It reads `.output`, so it needs the build first; CI runs it after `pnpm build`.
 - The API tests build the app, start it, and call it over HTTP, signed in as a throwaway Owner,
   against a local Postgres that they empty on every run:
@@ -160,6 +163,11 @@ migrations in `server/db/migrations/` to that environment's `DATABASE_URL`. driz
 migrations in one transaction. If one fails, nothing is applied, the build fails, and the previous
 deployment keeps serving. Fix forward with a new migration; never edit a migration that has already run
 on staging.
+
+A non-production Vercel build (`VERCEL_ENV` `preview` or `development`, which in practice is the `redesign`
+deployment) also runs `storybook build` inside `nuxt build` and serves the result at `/storybook/`; `nuxt.config.ts`
+does it and `buildsStorybook` in [`stage.ts`](stage.ts) decides. A production build never does, and the build command
+above is unchanged.
 
 `vercel.json` reaches `main` with 1.0.0 (ADR-0002). Until then `main`, and any branch cut from it for a
 hotfix, builds as before: `nuxt build`, no migration.
