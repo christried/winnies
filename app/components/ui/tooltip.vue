@@ -9,10 +9,18 @@ import { anchorPositioningSupported, TOOLTIP_DELAY_MS, tooltipPlacement } from "
 // the keyboard's focus brings up. It has no wrapper: the default slot hands the caller a `trigger` to `v-bind` onto the
 // one element, so a screen's layout classes never meet a new box. The bubble is a sibling of the trigger, never teleported
 // (a teleported one would sit in the `inert` page behind a modal).
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   /** What the bubble says; for an icon button, its label. */
   text: string;
-}>();
+  /**
+   * Whether the bubble describes the trigger. Leave it on where the bubble says something the trigger's name does not. An
+   * icon button's bubble repeats its `aria-label`, so it passes `false`: the trigger gets no `aria-describedby` (a screen
+   * reader would read the name twice) and the bubble is `aria-hidden`.
+   */
+  describes?: boolean;
+}>(), {
+  describes: true,
+});
 
 /** Where the popover goes when CSS does not place it: `position: fixed` offsets from the viewport's top left. */
 interface Corner {
@@ -36,12 +44,15 @@ const fixed = ref<Corner>();
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 let animation: Animation | null = null;
+// The element the bubble is for, taken from the event that started it: a caller may bind its own `aria-describedby` over
+// the tooltip's, so the trigger is never looked up through the DOM.
+let triggerEl: HTMLElement | null = null;
 
 const isOpen = () => !!popover.value?.matches(":popover-open");
 
 /** Measures the bubble and puts the popover beside the trigger, for a browser that cannot do it with anchors. */
 function place() {
-  const trigger = document.querySelector<HTMLElement>(`[aria-describedby="${id}"]`);
+  const trigger = triggerEl;
   const el = popover.value;
   if (!trigger || !el)
     return;
@@ -56,11 +67,15 @@ function place() {
   fixed.value = { left, top };
 }
 
-/** Shows the bubble and plays R10. Nothing under Broadcast: the Overlay has no tooltip. */
-function show() {
+/**
+ * Shows the bubble and plays R10. Nothing under Broadcast: the Overlay has no tooltip.
+ * @param trigger the element the event came to
+ */
+function show(trigger: HTMLElement) {
   const el = popover.value;
   if (!el || !bubble.value || isOpen() || bodyDialect() === "broadcast")
     return;
+  triggerEl = trigger;
   placement.value = anchorPositioningSupported()
     ? "anchored"
     : "fixed";
@@ -79,6 +94,7 @@ function show() {
 function hide() {
   clearTimeout(timer);
   timer = undefined;
+  triggerEl = null;
   animation?.cancel();
   animation = null;
   document.removeEventListener("keydown", onKeydown, true);
@@ -111,7 +127,9 @@ function onPointerenter(event: PointerEvent) {
   if (event.pointerType !== "mouse" && event.pointerType !== "pen")
     return;
   clearTimeout(timer);
-  timer = setTimeout(show, TOOLTIP_DELAY_MS);
+  // Read now: `currentTarget` is null by the time the timer runs.
+  const trigger = event.currentTarget as HTMLElement;
+  timer = setTimeout(show, TOOLTIP_DELAY_MS, trigger);
 }
 
 /**
@@ -119,19 +137,22 @@ function onPointerenter(event: PointerEvent) {
  * @param event the focus event, whose `currentTarget` is the trigger
  */
 function onFocus(event: FocusEvent) {
-  if ((event.currentTarget as HTMLElement | null)?.matches(":focus-visible"))
-    show();
+  const trigger = event.currentTarget as HTMLElement | null;
+  if (trigger?.matches(":focus-visible"))
+    show(trigger);
 }
 
-const trigger: TooltipTrigger = {
-  "aria-describedby": id,
+const triggerBinding = computed((): TooltipTrigger => ({
+  "aria-describedby": props.describes
+    ? id
+    : undefined,
   "style": { "anchor-name": anchorName },
   "onPointerenter": onPointerenter,
   "onPointerleave": hide,
   "onPointerdown": hide,
   "onFocus": onFocus,
   "onBlur": hide,
-};
+}));
 
 // A label that changes while the bubble is up (Start timer, Pause timer) changes its size: the fixed path measures again.
 watch(() => props.text, async () => {
@@ -165,7 +186,7 @@ const style = computed((): CSSProperties => fixed.value && placement.value === "
 </script>
 
 <template>
-  <slot :trigger="trigger" />
+  <slot :trigger="triggerBinding" />
 
   <!--
     P, the popover: positioned, never drawn. The UA's popover box is reset (`inset`, `margin`, `padding`, `border`,
@@ -179,6 +200,7 @@ const style = computed((): CSSProperties => fixed.value && placement.value === "
     ref="popover"
     popover="manual"
     role="tooltip"
+    :aria-hidden="describes ? undefined : 'true'"
     data-tooltip
     :data-placement="placement"
     class="pointer-events-none [inset:auto] m-0 w-max max-w-[440px] [translate:50%_100%] overflow-visible border-0 bg-transparent p-0"

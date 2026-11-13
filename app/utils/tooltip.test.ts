@@ -1,5 +1,27 @@
-import { describe, expect, it } from "vitest";
-import { joinAnchorNames, tooltipPlacement } from "./tooltip";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { anchorPositioningSupported, joinAnchorNames, tooltipPlacement } from "./tooltip";
+
+// The bubble is placed with `position-area`: the check asks for that property, not for `anchor-name`, which Chromium shipped
+// before it (as `inset-area`) and which would put a browser in between on the anchored branch with nowhere to go.
+describe("anchorPositioningSupported", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("is false where only `anchor-name` is known", () => {
+    vi.stubGlobal("CSS", {
+      supports: (property: string) => property === "anchor-name",
+    });
+    expect(anchorPositioningSupported()).toBe(false);
+  });
+
+  it("is true where `position-area` is known", () => {
+    vi.stubGlobal("CSS", {
+      supports: (property: string) => property === "position-area",
+    });
+    expect(anchorPositioningSupported()).toBe(true);
+  });
+});
 
 describe("joinAnchorNames", () => {
   it("gives the own name alone when the caller has no style", () => {

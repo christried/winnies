@@ -14,10 +14,10 @@ export const TOOLTIP_MARGIN = 8;
 /**
  * Whether the browser can place a box by anchor. Read when a bubble shows, never at import: the server has no `CSS`.
  *
- * @returns true where `anchor-name` is a property
+ * @returns true where `position-area` is a property, the one the bubble's style places it with; the menu asks the same
  */
 export function anchorPositioningSupported(): boolean {
-  return typeof CSS !== "undefined" && CSS.supports("anchor-name", "--a");
+  return typeof CSS !== "undefined" && CSS.supports("position-area", "top");
 }
 
 const DASHED = "anchor-name";
@@ -51,8 +51,8 @@ export function joinAnchorNames(style: StyleValue | undefined, own: string): Rec
 
 /** What `UiTooltip` hands its slot: bound onto the one element that triggers the bubble. */
 export interface TooltipTrigger {
-  /** The bubble's id: the trigger is described by it, and its accessible name stays its own. */
-  "aria-describedby": string;
+  /** The bubble's id: the trigger is described by it, and its accessible name stays its own. Absent when the bubble only repeats the name. */
+  "aria-describedby"?: string;
   /** The name the bubble anchors to. A caller that has its own `anchor-name` joins the two with `joinAnchorNames`. */
   "style": { "anchor-name": string };
   "onPointerenter": (event: PointerEvent) => void;

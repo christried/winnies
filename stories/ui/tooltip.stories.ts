@@ -90,8 +90,8 @@ type Story = StoryObj<typeof meta>;
 
 const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
 
-/** P, the popover the trigger is described by. */
-const popoverOf = (trigger: HTMLElement) => document.getElementById(trigger.getAttribute("aria-describedby")!)!;
+/** P, the popover: the bubble is the trigger's next sibling, whether or not the trigger is described by it. */
+const popoverOf = (trigger: HTMLElement) => trigger.nextElementSibling as HTMLElement;
 /** B, the bubble that looks and animates. */
 const bubbleOf = (trigger: HTMLElement) => popoverOf(trigger).querySelector<HTMLElement>("[data-bubble]")!;
 /** Shown means the popover is open and the bubble has a box. */
@@ -206,9 +206,19 @@ export const Default: Story = {
         const tooltip = popoverOf(trigger);
         expect(tooltip).toHaveAttribute("role", "tooltip");
         expect(tooltip.textContent?.trim()).toBe(text);
-        // Described by the bubble, named by itself: a screen reader may say the label twice, and that is the ticket's.
         expect(trigger).toHaveAccessibleName(label);
-        expect(trigger).toHaveAccessibleDescription(text);
+        if (trigger === long) {
+          // A hand-wrapped trigger takes the bubble as its description: its text is not the trigger's own.
+          expect(trigger).toHaveAccessibleDescription(text);
+          expect(tooltip).not.toHaveAttribute("aria-hidden");
+        }
+        else {
+          // An icon button's bubble repeats its `aria-label`: it names the button and does not describe it, and a screen
+          // reader never hears the label twice.
+          expect(trigger).not.toHaveAttribute("aria-describedby");
+          expect(trigger).toHaveAccessibleDescription("");
+          expect(tooltip).toHaveAttribute("aria-hidden", "true");
+        }
         // No `title`: the bubble replaced it, and the browser's own would show beside it.
         expect(trigger).not.toHaveAttribute("title");
         expect(isShown(trigger)).toBe(false);
@@ -449,19 +459,29 @@ export const Focus: Story = {
 /** Three icon buttons placed so the page does not scroll: top left, mid width, and at the right edge. */
 const EDGE_LABELS = ["Back to the first Winnie", "Mid", "Next to the last Winnie, at the right edge"] as const;
 
+const EDGES_NOTE = "edges-note";
+
 function edges(story: string) {
-  const fixed = (css: string, label: string) => h(UiIconButton, { icon: "add", label, style: `position:fixed;${css}` });
+  const fixed = (css: string, label: string, attrs: Record<string, string> = {}) =>
+    h(UiIconButton, {
+      icon: "add",
+      label,
+      style: `position:fixed;${css}`,
+      ...attrs,
+    });
   return h("section", {
     "aria-label": story,
     "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px;padding-top:88px",
   }, [
     h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, story),
     h("div", {
+      id: EDGES_NOTE,
       style: "padding:16px;background:var(--color-surface);border-radius:var(--radius-xl)",
       innerHTML: chip("edges"),
     }),
     fixed("top:8px;left:8px", EDGE_LABELS[0]),
-    fixed("top:240px;left:calc(50% - 26px)", EDGE_LABELS[1]),
+    // The middle one is described by the page, as a caller's row can: the bubble must still find its trigger.
+    fixed("top:240px;left:calc(50% - 26px)", EDGE_LABELS[1], { "aria-describedby": EDGES_NOTE }),
     fixed("top:240px;right:8px", EDGE_LABELS[2]),
   ]);
 }
@@ -485,6 +505,8 @@ async function walkEdges(canvasElement: HTMLElement, placementOf: "anchored" | "
         expect(mid).toHaveFocus();
         await expectShown(mid!);
         await settled();
+        // The caller's own `aria-describedby` stays, and the bubble does not replace it.
+        expect(mid).toHaveAccessibleDescription("edges");
         expect(popoverOf(mid!)).toHaveAttribute("data-placement", placementOf);
         expect(expectPlacement(mid!)).toBe("above");
         const t = mid!.getBoundingClientRect();
@@ -525,11 +547,12 @@ export const Edges: Story = {
 };
 
 // Firefox has no anchor positioning yet, and a Chromium run can only prove that path by asking the component the question
-// the way it does: `CSS.supports("anchor-name", …)`. The stub answers `false` for that property and passes every other.
+// the way it does: `CSS.supports("position-area", …)`, the property its style uses. The stub answers `false` for that
+// property and passes every other, so a check of `anchor-name` alone would still say yes.
 let restoreSupports: (() => void) | undefined;
 function stubAnchorSupport() {
   const original = CSS.supports.bind(CSS);
-  CSS.supports = ((...args: [string, string?]) => args[0] === "anchor-name"
+  CSS.supports = ((...args: [string, string?]) => args[0] === "position-area"
     ? false
     : original(...args as [string, string])) as typeof CSS.supports;
   restoreSupports = () => {
@@ -641,7 +664,7 @@ export const Dismiss: Story = {
         window.addEventListener("unhandledrejection", onError);
         try {
           const vanishing = await findButton(canvasElement, "Vanishing");
-          const popoverId = vanishing.getAttribute("aria-describedby")!;
+          const popoverId = popoverOf(vanishing).id;
           await userEvent.hover(vanishing);
           await sleep(200);
           setPresent!(false);

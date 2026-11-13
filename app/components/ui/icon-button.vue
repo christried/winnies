@@ -10,7 +10,8 @@ import { joinAnchorNames } from "~/utils/tooltip";
 // the lift, the release jelly and the focus ring live once, in `ui/button.vue`. No `click` emit and no `type` prop here:
 // what a caller binds (`onClick`, `onKeydown`, `type`, `id`, `aria-*`, `class`, `style`, `data-*`: a menu's trigger
 // binding is all of these) lands on the one `<button>`, as if there were no tooltip. The tooltip (#311) wraps the button
-// in a fragment, so the root no longer takes the attributes by itself: `bound` merges them with the tooltip's.
+// in a fragment, so the root no longer takes the attributes by itself: `bound` merges them with the tooltip's. The bubble
+// repeats the `aria-label`, so it does not describe the button: a caller's own `aria-describedby` is the only description.
 defineOptions({ inheritAttrs: false });
 
 withDefaults(defineProps<{
@@ -63,6 +64,7 @@ function bound(trigger: TooltipTrigger) {
   <UiTooltip
     v-slot="{ trigger }"
     :text="label"
+    :describes="false"
   >
     <UiButton
       v-bind="bound(trigger)"
