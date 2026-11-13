@@ -2,9 +2,9 @@ import type { DirectiveBinding, ObjectDirective } from "vue";
 import type { LoopSpec } from "../utils/motion/loop-sync";
 import type { WinniesMotion } from "../utils/motion/types";
 import { describe, expect, it } from "vitest";
-import { createSSRApp, defineComponent, h, ref, withDirectives } from "vue";
-import { renderToString } from "vue/server-renderer";
+import { defineComponent, h, ref, withDirectives } from "vue";
 import { fakeElement } from "../../tests/support/fake-motion";
+import { render } from "../../tests/support/ssr-render";
 import { useLoopDirective } from "./use-loop-directive";
 import { provideWinniesMotion } from "./use-winnies-motion";
 
@@ -28,10 +28,6 @@ function surface(seen: { directive?: LoopDirective; m?: WinniesMotion }, body: (
       return () => h("div", h(child));
     },
   });
-}
-
-async function render(component: ReturnType<typeof defineComponent>) {
-  return renderToString(createSSRApp(component));
 }
 
 // Calls a hook the way Vue would, with a binding that carries the values and nothing else.

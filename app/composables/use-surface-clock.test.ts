@@ -1,9 +1,9 @@
 import type { AnimateCall } from "../../tests/support/fake-motion";
 import type { ClockBeat, ClockSource, SurfaceClock } from "./use-surface-clock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createSSRApp, defineComponent, h, ref, watch } from "vue";
-import { renderToString } from "vue/server-renderer";
+import { defineComponent, h, ref, watch } from "vue";
 import { fakeElement, fakeEnv, fakeLayer, WORKSPACE } from "../../tests/support/fake-motion";
+import { render } from "../../tests/support/ssr-render";
 import { createSurfaceMotion } from "../utils/motion/surface";
 import { createSurfaceClock, provideSurfaceClock, resolveSurfaceClock, useSurfaceClock } from "./use-surface-clock";
 
@@ -517,9 +517,9 @@ describe("a surface's clock", () => {
       },
     });
 
-    await renderToString(createSSRApp(defineComponent({
+    await render(defineComponent({
       render: () => h(layout, () => h(child)),
-    })));
+    }));
 
     expect(provided).toBeDefined();
     expect(injected).toBe(provided);

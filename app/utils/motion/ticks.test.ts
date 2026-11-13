@@ -1,7 +1,7 @@
 import type { FakeElement, HarnessInit } from "../../../tests/support/fake-motion";
 import type { FatigueStage, TickKind } from "./types";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { BROADCAST, EASE, motionHarness, SHOWCASE, WORKSPACE } from "../../../tests/support/fake-motion";
+import { BROADCAST, EASE, motionHarness, NONE, SHOWCASE, WORKSPACE } from "../../../tests/support/fake-motion";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -11,8 +11,6 @@ afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
 });
-
-const NONE = { transform: "none" };
 
 // Knobs per dialect, as the token file gives them: hop, squash, gain.
 const DIALECTS = {

@@ -1,7 +1,7 @@
 import type { WinniesMotion } from "../utils/motion/types";
 import { describe, expect, it } from "vitest";
-import { createSSRApp, defineComponent, h, ref } from "vue";
-import { renderToString } from "vue/server-renderer";
+import { defineComponent, h, ref } from "vue";
+import { render } from "../../tests/support/ssr-render";
 import ParticleLayer from "../components/particle-layer.vue";
 import { provideWinniesMotion, resolveSurface, useWinniesMotion } from "./use-winnies-motion";
 
@@ -25,10 +25,6 @@ function child(seen: { injected?: WinniesMotion[] }) {
       return () => h("span");
     },
   });
-}
-
-async function render(component: ReturnType<typeof defineComponent>) {
-  return renderToString(createSSRApp(component));
 }
 
 describe("a surface", () => {
