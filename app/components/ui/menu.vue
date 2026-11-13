@@ -200,8 +200,8 @@ function removeListeners() {
 }
 
 /**
- * A choice. In the capture phase, so it runs before the item's own handler. A press on the heading, a separator or the
- * padding is no choice.
+ * A choice. In the capture phase, so it runs before the item's own handler and the trigger has the focus when that
+ * handler starts. A press on the heading, a separator or the padding is no choice.
  * @param event the click, at its target
  */
 function onChoose(event: MouseEvent) {

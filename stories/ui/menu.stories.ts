@@ -308,9 +308,15 @@ export const Dismiss: Story = {
       expect(trigger).not.toHaveFocus();
 
       // Choosing an item: its handler ran once, and the focus is on the trigger (the item's own handler runs after).
+      // What holds the focus when the handler runs is what a Rename's input or a Delete's modal would start from.
+      let heldAtCall: Element | null = null;
+      spies.pin.mockImplementationOnce(() => {
+        heldAtCall = document.activeElement;
+      });
       const panel = await openByClick(canvasElement);
       await userEvent.click(item(panel, "Pin"));
       expect(spies.pin).toHaveBeenCalledTimes(1);
+      expect(heldAtCall).toBe(trigger);
       await expectClosed(canvasElement);
       expect(trigger).toHaveFocus();
 

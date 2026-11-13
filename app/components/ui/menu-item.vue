@@ -5,6 +5,10 @@ import type { MaterialIconName } from "~/utils/material-icons";
 // An item of `UiMenu` (#313), also its separator. A real <button role="menuitem">, so Enter and Space are its click and
 // `class`, `data-*` and `@click` of the caller fall through to it: no `click` emit is declared. The menu owns the focus
 // (`tabindex="-1"`, it moves it with the keys) and reads `[data-menu-label]` for type-ahead.
+// The look is the prototype's item: 44px, radius 22px (no token). Hover and focus fill with the sunken colour and the ring
+// sits inside the item (offset -2px), so the panel's `overflow` never clips it. R32: no transition on either. A state's
+// selector matches the real pseudo-class or the story's hook class (`is-hover`, `is-focus`). No comment sits between the
+// two roots of the template: it would make the root a fragment, and `@click` would reach no button.
 withDefaults(defineProps<{
   /** The leading glyph. */
   icon?: MaterialIconName;
@@ -34,9 +38,6 @@ withDefaults(defineProps<{
     role="separator"
     class="mx-2.5 my-1 h-0.5 flex-none rounded-[2px] bg-surface-sunken"
   />
-  <!-- The prototype's item: 44px, radius 22px (no token). Hover and focus fill with the sunken colour and the ring sits
-       inside the item (offset -2px), so the panel's `overflow` never clips it. R32: no transition on either. A state's
-       selector matches the real pseudo-class or the story's hook class (`is-hover`, `is-focus`). -->
   <button
     v-else
     type="button"
