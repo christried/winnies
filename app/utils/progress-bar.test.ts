@@ -60,3 +60,26 @@ describe("clampedWon", () => {
     expect(clampedWon(won, total)).toBe(counted);
   });
 });
+
+// The bar plays R29 only when the percent moves (`progress-bar.vue` compares these two numbers), so the cases the
+// stories cannot show cheaply are fixed here.
+describe("progressPercent between two states of a bar", () => {
+  it("a win on 3 of 10 moves the fill from 30 to 40", () => {
+    expect([
+      progressPercent(3, 10),
+      progressPercent(4, 10),
+    ]).toEqual([30, 40]);
+  });
+
+  it("4 of 8 and 5 of 10 are the same percent, so there is nothing to move", () => {
+    expect(progressPercent(4, 8)).toBe(50);
+    expect(progressPercent(5, 10)).toBe(50);
+  });
+
+  it("a total that grows alone changes the percent: 3 of 8 is 38, 3 of 9 is 33", () => {
+    expect([
+      progressPercent(3, 8),
+      progressPercent(3, 9),
+    ]).toEqual([38, 33]);
+  });
+});
