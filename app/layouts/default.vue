@@ -6,6 +6,7 @@ const root = useTemplateRef<HTMLElement>("root");
 const clock = provideSurfaceClock();
 provideWinniesMotion({ root, interval: clock.interval });
 
+const { toasts, dismiss } = useToast();
 const winnieStore = useWinnieStore();
 const { currentWinnie } = storeToRefs(winnieStore);
 const user = useCurrentUser();
@@ -44,5 +45,6 @@ useFavicon(() => ({
       <AppFooter />
     </div>
     <ParticleLayer />
+    <UiToastStack :toasts="toasts" @dismiss="dismiss" />
   </div>
 </template>
