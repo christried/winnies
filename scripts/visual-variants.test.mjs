@@ -171,3 +171,26 @@ describe("catches a table that and the disk do not agree on", () => {
     expect(problems[0]).toContain("not on disk");
   });
 });
+
+describe("the component stories (#307)", () => {
+  const ids = storyIds();
+
+  it("finds the UiIcon story and the plumbing story", () => {
+    expect(ids).toContain("ui-icon--default");
+    expect(ids).toContain("storybook-auto-imports--default");
+  });
+
+  it("a story under stories/ui is shot in every variant that has no `only`, with no edit to the table", () => {
+    for (const variant of VARIANTS.filter(({ only }) => !only))
+      expect(shotIn(variant, "ui-icon--default"), variant.name).toBe(true);
+    for (const variant of VARIANTS.filter(({ only }) => only))
+      expect(shotIn(variant, "ui-icon--default"), variant.name).toBe(false);
+  });
+
+  it("the plumbing story is rendered, played and checked by axe in every variant and shot in none", () => {
+    expect(UNSHOT_PREFIXES).toContain("storybook-");
+    for (const variant of VARIANTS)
+      expect(shotIn(variant, "storybook-auto-imports--default"), variant.name).toBe(false);
+    expect(shotIn({}, "storybook-auto-imports--default")).toBe(false);
+  });
+});
