@@ -169,6 +169,13 @@ deployment) also runs `storybook build` inside `nuxt build` and serves the resul
 does it and `buildsStorybook` in [`stage.ts`](stage.ts) decides. A production build never does, and the build command
 above is unchanged.
 
+A build or a local command that fails with `Cannot find module '<name>'`, although the lockfile lists the package and
+`pnpm install --frozen-lockfile` answers "Already up to date", has a stale `node_modules` (#342). It predates the package
+becoming a regular dependency: pnpm keeps a package it once skipped in `node_modules/.modules.yaml` and never installs it
+into that folder again. Vercel's build cache for `redesign` can hold such a folder, and so can a long-lived local checkout;
+CI and a fresh worktree install cleanly. On Vercel, redeploy the commit with "Use existing Build Cache" switched off, so the
+clean install becomes the new cache. Locally, delete `node_modules` and run `pnpm install --frozen-lockfile`.
+
 `vercel.json` reaches `main` with 1.0.0 (ADR-0002). Until then `main`, and any branch cut from it for a
 hotfix, builds as before: `nuxt build`, no migration.
 
