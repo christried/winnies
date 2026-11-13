@@ -4,7 +4,7 @@ const { currentWinnie, renaming, renameDraft } = storeToRefs(winnieStore);
 const { replaceWinnie, startRename, stopRename } = winnieStore;
 
 // This is neat: when opening the input, select the current input
-const input = useTemplateRef<HTMLInputElement>("input");
+const input = useTemplateRef("input");
 watch(renaming, async (open) => {
   if (!open)
     return;
@@ -40,15 +40,18 @@ async function commit() {
 </script>
 
 <template>
-  <input
+  <UiTextInput
     v-if="renaming"
     ref="input"
     v-model="renameDraft"
-    class="mb-2 border"
+    variant="inline"
+    label="Winnie name"
+    hide-label
+    class="mb-2"
     @keyup.enter="commit"
     @keydown.esc="stopRename"
     @blur="stopRename"
-  >
+  />
   <button
     v-else
     type="button"

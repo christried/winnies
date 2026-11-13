@@ -28,12 +28,14 @@ async function copyUrl() {
 
 <template>
   <div class="flex items-center gap-2">
-    <input
+    <UiTextInput
       ref="urlInput"
-      :value="url"
+      :model-value="url"
       readonly
-      class="min-w-0 flex-1 border font-mono text-[11px]"
-    >
+      label="Share link"
+      hide-label
+      class="min-w-0 flex-1"
+    />
 
     <button
       type="button"
