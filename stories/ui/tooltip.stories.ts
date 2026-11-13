@@ -176,9 +176,10 @@ async function expectRestsAtRecipeEnd(bubble: HTMLElement, started: Animation[])
 function expectPlacement(trigger: HTMLElement) {
   const t = trigger.getBoundingClientRect();
   const b = bubbleOf(trigger).getBoundingClientRect();
-  expect(b.left).toBeGreaterThanOrEqual(0);
+  // The handoff's 8px margin sideways, and at least inside the viewport above and below.
+  expect(b.left).toBeGreaterThanOrEqual(8);
   expect(b.top).toBeGreaterThanOrEqual(0);
-  expect(b.right).toBeLessThanOrEqual(window.innerWidth);
+  expect(b.right).toBeLessThanOrEqual(window.innerWidth - 8);
   expect(b.bottom).toBeLessThanOrEqual(window.innerHeight);
   expect(b.left < t.right && b.right > t.left && b.top < t.bottom && b.bottom > t.top).toBe(false);
   return b.top >= t.bottom

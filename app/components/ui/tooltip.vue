@@ -42,13 +42,15 @@ const isOpen = () => !!popover.value?.matches(":popover-open");
 /** Measures the bubble and puts the popover beside the trigger, for a browser that cannot do it with anchors. */
 function place() {
   const trigger = document.querySelector<HTMLElement>(`[aria-describedby="${id}"]`);
-  const el = bubble.value;
+  const el = popover.value;
   if (!trigger || !el)
     return;
-  // Layout sizes: the pop-in's scale on the first frame must not shrink the measure.
+  // P is B's size and carries no scale: R10's pop-in on the first frame must not shrink the measure, and `offsetWidth`
+  // would round a bubble of 114.4px to 114 and let it sit 0.4px past the margin.
+  const { width, height } = el.getBoundingClientRect();
   const { left, top } = tooltipPlacement(
     trigger.getBoundingClientRect(),
-    { width: el.offsetWidth, height: el.offsetHeight },
+    { width, height },
     { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
   );
   fixed.value = { left, top };
@@ -156,6 +158,8 @@ const style = computed((): CSSProperties => fixed.value && placement.value === "
       positionArea: "top",
       positionTryFallbacks: "flip-block",
       marginBlock: "var(--space-2-5)",
+      // Insets resolve against the area `position-area` picked, which spans the viewport: the 8px margin of the handoff.
+      insetInline: "var(--space-2)",
       zIndex: "var(--z-tooltip)",
     });
 </script>
