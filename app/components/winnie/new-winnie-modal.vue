@@ -59,20 +59,18 @@ defineExpose({
     @action="onSubmit"
   >
     <form class="flex flex-col gap-2" @submit="onSubmit">
-      <input
+      <UiTextInput
         v-model="name"
         v-bind="nameAttrs"
         autofocus
-        aria-label="Winnie name"
-        class="w-full border"
+        label="Winnie name"
+        hide-label
         placeholder="e.g. Kitty vs. the world"
-      >
-      <p v-if="errors.name" class="text-sm">
-        {{ errors.name }}
-      </p>
-      <p v-if="formError">
+        :error="errors.name"
+      />
+      <UiFieldMessage v-if="formError" variant="error">
         {{ formError }}
-      </p>
+      </UiFieldMessage>
     </form>
   </UiModal>
 </template>
