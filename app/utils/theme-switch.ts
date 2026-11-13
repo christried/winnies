@@ -5,7 +5,7 @@ import type { MaterialIconName } from "./material-icons";
 export type ResolvedTheme = "light" | "dark";
 
 /** One radio of the theme switch. */
-export interface ThemeOption {
+export interface ThemeSwitchOption {
   value: ThemePreference;
   icon: MaterialIconName;
   /** The radio's visible word and its accessible name (06-copy.md, A3). */
@@ -13,7 +13,7 @@ export interface ThemeOption {
 }
 
 /** The radios in the handoff's order: the explicit choices first, "Match system" last. Not `THEME_PREFERENCE`'s order. */
-export const THEME_OPTIONS: readonly ThemeOption[] = [
+export const THEME_OPTIONS: readonly ThemeSwitchOption[] = [
   { value: "light", icon: "light_mode", label: "Light" },
   { value: "dark", icon: "dark_mode", label: "Dark" },
   { value: "system", icon: "contrast", label: "Match system" },
