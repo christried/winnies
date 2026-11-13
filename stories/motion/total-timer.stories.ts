@@ -7,7 +7,7 @@ import UiTotalTimer from "../../app/components/ui/total-timer.vue";
 import { expectQuietAfter } from "../support/component-checks";
 import { chip } from "../support/html";
 import { page, readout, section } from "../support/motion-kit";
-import { clickReplay, frames, withMotion } from "../support/motion-play";
+import { clickReplay, frames, ONE_FRAME, withMotion } from "../support/motion-play";
 import { FAKE_START, useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The Total Timer's ticks as the app's own component draws them (#320), on a clock at rate 4: a beat every 250 ms, so a
@@ -218,7 +218,7 @@ interface Seen {
   slots: Set<number>;
   /** The well (the timer's own element) had an animation in some frame. */
   well: boolean;
-  /** The most animations one slot had at the same time. */
+  /** The most animations one slot had at the same time, not counting one that was about to end. */
   mostAtOnce: number;
 }
 
@@ -241,10 +241,12 @@ function sample(root: ParentNode) {
       if (el.getAnimations().length)
         seen[id].well = true;
       for (const slot of slotEls(el)) {
-        const n = slot.getAnimations().length;
-        if (n) {
+        const own = slot.getAnimations();
+        if (own.length) {
           seen[id].slots.add(Number(slot.dataset.pos));
-          seen[id].mostAtOnce = Math.max(seen[id].mostAtOnce, n);
+          // One that is in its last frame does not count: the clamp leaves 5% of a 250 ms beat, less than a frame.
+          const held = own.filter(a => Number(a.effect!.getComputedTiming().endTime) - Number(a.currentTime) > ONE_FRAME);
+          seen[id].mostAtOnce = Math.max(seen[id].mostAtOnce, held.length);
         }
       }
     }
@@ -403,11 +405,9 @@ export const HiddenTab: StoryObj<typeof meta> = {
   },
 };
 
-// #337: a rollover's staggered last digit runs into its next tick, so a slot holds two animations at once. The engine
-// is R1's (PR #328); this assertion is red until #337 is on `redesign`, so the story is tagged `!test` and the test
-// run leaves it out. Take the tag off when #337 lands.
+// #337: a rollover's staggered last digit ran into its next tick, so a slot held two animations at once. The fix is in the
+// engine, and this story holds it, with the allowance of one frame that the fix itself leaves (see `ONE_FRAME`).
 export const FastRolloverNoDoubleTick: StoryObj<typeof meta> = {
-  tags: ["!test"],
   async play({ canvasElement, step }) {
     await ready(canvasElement);
     for (const id of ["minute", "hour"] as const) {

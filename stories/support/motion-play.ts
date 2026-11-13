@@ -16,6 +16,12 @@ export async function frames(n = 2): Promise<void> {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 }
 
+/**
+ * What a frame is, in milliseconds, for a check of two animations that meet. A rollover leaves 5% of a 250 ms beat (12.5 ms)
+ * and an animation starts on the next frame (16.7 ms), so correct timing can overlap by a few milliseconds.
+ */
+export const ONE_FRAME = 17;
+
 /** Sets or removes an attribute, runs `fn`, and puts the attribute back as it was, also when `fn` throws. */
 async function withAttribute(el: HTMLElement, name: string, value: string | null, fn: () => Promise<void>): Promise<void> {
   const before = el.getAttribute(name);

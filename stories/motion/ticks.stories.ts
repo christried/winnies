@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref } from "v
 import { resolved } from "../support/html";
 import { expectQuietWhenReduced } from "../support/motion-checks";
 import { block, page, readout, reset, section, stage } from "../support/motion-kit";
-import { animations, clickReplay, frames, particleCount, withMotion } from "../support/motion-play";
+import { animations, clickReplay, frames, ONE_FRAME, particleCount, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The timer's ticks (T01 to T06, #305), on a clock at rate 4, so a beat comes every 250 ms and a run of six takes
@@ -246,8 +246,6 @@ function worstOverlap(seen: Seen): number {
   }
   return worst;
 }
-
-const ONE_FRAME = 17;
 
 /** Samples the Total digits every frame until stopped: an animation lasts at least 100 ms, so none is missed. */
 function sampleTotals(root: ParentNode) {
