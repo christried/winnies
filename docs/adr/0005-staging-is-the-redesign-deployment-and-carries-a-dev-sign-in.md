@@ -14,5 +14,6 @@ Discord's OAuth needs a fixed redirect address and Better Auth trusts one origin
 
 - The test sign-in of the Safety net stays in test code only (#195, story 17). The dev sign-in is a second thing: it lives in the app, in builds that are not production.
 - A PR into `redesign` gets no Vercel preview. A ticket is checked on staging after its merge.
+- A non-production build also builds Storybook and serves it at `/storybook/`, behind the same Vercel login as staging; a test on the production build fails when it is there (#298, amending #178).
 - Production runs migrations in its build from 1.0.0 on, when `redesign` merges into `main`.
 - What staging tracks once `redesign` is gone is decided at the Release.
