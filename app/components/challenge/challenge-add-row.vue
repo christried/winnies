@@ -124,21 +124,24 @@ const showSkeleton = useDelayed(pending);
             @update:model-value="target = $event"
           />
           <div>
+            <!-- The glyph stays tabler: countOn and countOff have no Material counterpart (#308), and R3 swaps the button for the switch. -->
             <UiIconButton
               type="button"
               label="Counter target"
-              :aria-pressed="counterChecked"
-              :icon="counterChecked ? 'countOn' : 'countOff'"
+              :pressed="counterChecked"
               :disabled="atCap || isSubmitting"
               @click="onCounterToggle"
-            />
+            >
+              <UiTablerIcon :name="counterChecked ? 'countOn' : 'countOff'" :size="28" />
+            </UiIconButton>
           </div>
 
           <div>
             <UiIconButton
               type="submit"
               label="Add challenge"
-              icon="plus"
+              icon="add"
+              variant="primary"
               :disabled="atCap || isSubmitting"
             />
           </div>

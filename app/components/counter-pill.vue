@@ -78,14 +78,13 @@ function cancel(event: KeyboardEvent) {
 
 <template>
   <div class="rounded-full border">
-    <button
-      type="button"
+    <UiIconButton
+      size="sm"
+      icon="remove"
       :disabled="atMinimum"
-      :aria-label="`Decrease ${label}`"
+      :label="`Decrease ${label}`"
       @click="emit('decrement')"
-    >
-      <UiTablerIcon name="minus" />
-    </button>
+    />
 
     <div
       class="flex items-center border-y-0 px-3 font-mono text-xs whitespace-nowrap tabular-nums"
@@ -105,13 +104,12 @@ function cancel(event: KeyboardEvent) {
       <span class="ps-1">/ {{ target }}</span>
     </div>
 
-    <button
-      type="button"
+    <UiIconButton
+      size="sm"
+      icon="add"
       :disabled="atMaximum"
-      :aria-label="`Increase ${label}`"
+      :label="`Increase ${label}`"
       @click="emit('increment')"
-    >
-      <UiTablerIcon name="plus" />
-    </button>
+    />
   </div>
 </template>

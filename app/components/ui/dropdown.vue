@@ -1,9 +1,5 @@
 <script lang="ts" setup>
 defineProps<{
-  /** Accessible name for the trigger button */
-  label?: string;
-  /** Classes for the trigger button. */
-  triggerClass?: string;
   /** Classes for the popover <ul> */
   menuClass?: string;
 }>();
@@ -26,14 +22,12 @@ defineExpose({ close });
 
 <template>
   <div class="inline-block">
-    <button
-      :class="triggerClass"
-      :popovertarget="id"
-      :aria-label="label"
-      :style="`anchor-name: --${id}`"
-    >
-      <slot name="trigger" />
-    </button>
+    <!-- The caller draws the trigger (a UiIconButton or a UiButton) and binds `trigger` onto it: the popover's id and the
+     anchor the menu is placed against. -->
+    <slot
+      name="trigger"
+      :trigger="{ popovertarget: id, style: `anchor-name: --${id}` }"
+    />
 
     <ul
       :id="id"
