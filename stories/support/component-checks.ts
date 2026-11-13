@@ -2,6 +2,7 @@
 // motion preference themselves, so a play function runs the same in every variant.
 import { expect } from "storybook/test";
 import { animations, frames, withMotion } from "./motion-play";
+import { realPointer } from "./real-pointer";
 
 /**
  * Runs an interaction under reduced motion and expects the component to have started nothing: no animation in the
@@ -58,5 +59,29 @@ export async function finish(canvasElement: HTMLElement) {
   document.body.style.visibility = "hidden";
   await frames();
   document.body.style.visibility = "";
+  await frames();
+}
+
+/**
+ * Moves the runner's real mouse out of the way. It stays where the last story left it, and over a control it would draw
+ * the hover ring in the picture: which story ran before would decide the baseline.
+ */
+export async function parkPointer() {
+  const pointer = await realPointer();
+  await pointer?.unhover(document.body);
+}
+
+/**
+ * Paints the canvas again from scratch while the focus stays where it is. The ring is drawn over a page that was already
+ * painted, and the shot compares at the pixel: on some runners the anti-aliased edge pixels of that increment differ from
+ * a fresh paint. Promoting the canvas to its own layer and back makes the browser raster it anew. `finish()` of the
+ * shared checks does it by hiding the body, which would also drop the focus; the ring is this picture.
+ *
+ * @param canvasElement the story's canvas
+ */
+export async function repaint(canvasElement: HTMLElement) {
+  canvasElement.style.willChange = "opacity";
+  await frames();
+  canvasElement.style.willChange = "";
   await frames();
 }
