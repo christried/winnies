@@ -106,7 +106,8 @@ function page(title: string, ...body: VNode[]) {
   ]);
 }
 
-const wrapperOf = (canvasElement: HTMLElement) => canvasElement.querySelector<HTMLElement>("[popover]")!;
+// The trigger is a `UiIconButton`, which draws a tooltip (#311) in front of the menu's own popover: it is not the wrapper.
+const wrapperOf = (canvasElement: HTMLElement) => canvasElement.querySelector<HTMLElement>("[popover]:not([role=\"tooltip\"])")!;
 const triggerOf = (canvasElement: HTMLElement, name = "Open menu") => within(canvasElement).getByRole("button", { name });
 const afterOf = (canvasElement: HTMLElement) => within(canvasElement).getByRole("button", { name: "After" });
 const isOpen = (wrapper: HTMLElement) => wrapper.matches(":popover-open");
