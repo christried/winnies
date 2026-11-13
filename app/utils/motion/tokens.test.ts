@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { BROADCAST, CALM, fakeElement, fakeEnv, REDUCED, SHOWCASE, WORKSPACE } from "../../../tests/support/fake-motion";
 import { defaultTokens, DURATIONS, EASINGS, readTokens } from "./tokens";
@@ -48,52 +49,70 @@ function read(styles: Record<string, string>, linear = true) {
   return readTokens(fakeElement(), fakeEnv({ styles, linear }));
 }
 
+// The first declaration of every --dur-*, --ease-* and --spring-* token in the file: the :root defaults. The dialect,
+// reduced-motion and Calm blocks that redeclare some of them come after, so they never shadow it.
+const TOKEN_FILE = readFileSync(new URL("../../assets/css/winnies-tokens.css", import.meta.url), "utf8");
+
+function declaredIn(css: string, prefix: string) {
+  const found = new Map<string, string>();
+  for (const [, name, value] of css.matchAll(new RegExp(`--(${prefix}-[\\w-]+)\\s*:\\s*([^;]+);`, "g"))) {
+    if (!found.has(name!))
+      found.set(name!, value!.trim());
+  }
+  return found;
+}
+
+// What a token file says the two tables should hold. Easings are compared with the spaces around "," "(" and ")" taken
+// out: the file and the tables spell the same curve with different spacing, and the same curve is the same curve.
+const squeeze = (v: string) => v.replace(/\s*([,()])\s*/g, "$1");
+function squeezed(table: Record<string, string>) {
+  return Object.fromEntries(Object.entries(table).map(([k, v]) => [
+    k,
+    squeeze(v),
+  ]));
+}
+
+function durationsOf(css: string) {
+  return Object.fromEntries([
+    ...declaredIn(css, "dur"),
+  ].map(([name, v]) => [
+    name.slice(4),
+    Number.parseFloat(v) * (v.endsWith("ms")
+      ? 1
+      : 1000),
+  ]));
+}
+
+function easingsOf(css: string) {
+  return Object.fromEntries([
+    ...declaredIn(css, "ease"),
+    ...declaredIn(css, "spring"),
+  ].map(([name, v]) => [
+    name.replace(/^(ease|spring)-/, ""),
+    squeeze(v),
+  ]));
+}
+
 describe("defaults (the handoff's D and E tables)", () => {
-  it("holds the 27 durations in milliseconds", () => {
-    expect(DURATIONS).toEqual({
-      "instant": 90,
-      "fast": 160,
-      "base": 240,
-      "hover": 300,
-      "toast": 360,
-      "flick": 380,
-      "modal": 420,
-      "page-x": 460,
-      "tick": 480,
-      "travel": 560,
-      "theme": 560,
-      "land": 600,
-      "jelly": 700,
-      "minute": 720,
-      "stamp": 900,
-      "droop": 950,
-      "burst": 1300,
-      "hour": 1400,
-      "cheer": 1800,
-      "breathe": 2200,
-      "celebrate": 2400,
-      "wave": 2600,
-      "highlight": 3000,
-      "float": 4800,
-      "shimmer": 9000,
-      "page": 10000,
-      "drift": 60000,
-    });
+  it("hold every --dur-* of winnies-tokens.css, and nothing else, in milliseconds", () => {
+    expect(Object.keys(durationsOf(TOKEN_FILE))).toHaveLength(27);
+    expect(DURATIONS).toEqual(durationsOf(TOKEN_FILE));
   });
 
-  it("holds the ten easings", () => {
-    expect(EASINGS).toEqual({
-      "spring": "cubic-bezier(.3,1.7,.5,1)",
-      "hover": "cubic-bezier(.3,1.8,.5,1)",
-      "out": "cubic-bezier(.15,.7,.3,1)",
-      "in": "cubic-bezier(.55,0,.75,.2)",
-      "in-out": "cubic-bezier(.45,0,.55,1)",
-      "standard": "cubic-bezier(.2,0,0,1)",
-      "stepped": "steps(6,end)",
-      "snappy": "linear(0, .2 4%, .6 10%, .88 16%, 1.02 22%, 1.06 28%, 1.04 36%, 1 46%, .995 60%, 1)",
-      "bouncy": "linear(0, .3 6%, .8 13%, 1.1 20%, 1.15 25%, 1.1 30%, .97 40%, .95 46%, 1 56%, 1.02 64%, 1 78%, 1)",
-      "soft": "linear(0, .12 5%, .4 14%, .7 24%, .92 34%, 1.02 44%, 1.03 52%, 1.01 66%, 1)",
-    });
+  it("hold every --ease-* and --spring-* of winnies-tokens.css, and nothing else", () => {
+    expect(Object.keys(easingsOf(TOKEN_FILE))).toHaveLength(10);
+    expect(squeezed(EASINGS)).toEqual(easingsOf(TOKEN_FILE));
+  });
+
+  it("differ from a token file in which a duration, an easing or a spring changed", () => {
+    const edit = (from: string, to: string) => {
+      const changed = TOKEN_FILE.replace(from, to);
+      expect(changed).not.toBe(TOKEN_FILE);
+      return changed;
+    };
+    expect(DURATIONS).not.toEqual(durationsOf(edit("--dur-tick: 480ms", "--dur-tick: 500ms")));
+    expect(squeezed(EASINGS)).not.toEqual(easingsOf(edit("--ease-out: cubic-bezier(.15, .7, .3, 1)", "--ease-out: cubic-bezier(.2, .7, .3, 1)")));
+    expect(squeezed(EASINGS)).not.toEqual(easingsOf(edit("--spring-soft: linear(0, .12 5%", "--spring-soft: linear(0, .13 5%")));
   });
 
   it("starts with Workspace knobs and the Ambient tier running", () => {
