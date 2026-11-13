@@ -16,6 +16,34 @@ export async function frames(n = 2): Promise<void> {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 }
 
+/**
+ * What a frame is, in milliseconds, for a check of two animations that meet. A rollover leaves 5% of a 250 ms beat (12.5 ms)
+ * and an animation starts on the next frame (16.7 ms), so correct timing can overlap by a few milliseconds.
+ */
+export const ONE_FRAME = 17;
+
+/**
+ * How far a tick runs into the next one on the same digit, in milliseconds, the worst over every slot: the earlier
+ * animation's end on the document timeline, less the later one's start. Both start at a frame, so this is stable under
+ * load where counting animations per frame is not: a stalled frame moves both starts together. It can be a few
+ * milliseconds above zero even for correct timing, because the clamp leaves 5% of the interval (12.5 ms at 250 ms) and
+ * a frame is 16.7 ms; `ONE_FRAME` is the allowance for that.
+ *
+ * @param animations the animations seen on each slot, by the slot's `pos`
+ * @returns the worst overlap in milliseconds, or negative infinity when no slot had two
+ */
+export function worstOverlap(animations: Map<number, Set<Animation>>): number {
+  let worst = Number.NEGATIVE_INFINITY;
+  for (const set of animations.values()) {
+    const byStart = [...set].toSorted((a, b) => Number(a.startTime) - Number(b.startTime));
+    byStart.slice(0, -1).forEach((a, i) => {
+      const end = Number(a.startTime) + Number(a.effect!.getComputedTiming().endTime);
+      worst = Math.max(worst, end - Number(byStart[i + 1]!.startTime));
+    });
+  }
+  return worst;
+}
+
 /** Sets or removes an attribute, runs `fn`, and puts the attribute back as it was, also when `fn` throws. */
 async function withAttribute(el: HTMLElement, name: string, value: string | null, fn: () => Promise<void>): Promise<void> {
   const before = el.getAttribute(name);

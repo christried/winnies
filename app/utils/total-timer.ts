@@ -6,7 +6,7 @@ import type { TickBeat, TickKind } from "./motion/types";
 export type TimerVariant = "workspace" | "overlay" | "row";
 
 /** What a timer shows: `complete` is a Winnie's (a Won Challenge's row timer is `complete` too). */
-export type TimerState = "untouched" | "paused" | "running" | "complete";
+export type TimerState = "notStarted" | "paused" | "running" | "complete";
 
 /** One character of the time, in its own fixed-width slot. */
 export interface TimerSlot {
@@ -29,11 +29,11 @@ function whole(seconds: number): number {
  *
  * @param seconds elapsed seconds; fractions floor, and negative or non-finite is 0
  * @param variant where the timer sits
- * @param untouched a Challenge Timer that was never started; it wins over a non-zero `seconds`
+ * @param notStarted a Challenge Timer that was never started; it wins over a non-zero `seconds`
  * @returns `14:32:07`, `59:59`, `0:52:40`, `00:00`
  */
-export function formatTimerText(seconds: number, variant: TimerVariant, untouched: boolean): string {
-  if (variant === "row" && untouched)
+export function formatTimerText(seconds: number, variant: TimerVariant, notStarted: boolean): string {
+  if (variant === "row" && notStarted)
     return "00:00";
   const s = whole(seconds);
   const hours = Math.floor(s / 3600);
@@ -133,7 +133,7 @@ export function timerSpokenValue(seconds: number, state: TimerState, variant: Ti
     ? `${plural(hours, "hour")} ${plural(minutes, "minute")}`
     : plural(minutes, "minute");
   const word: Record<TimerState, string> = {
-    untouched: "not started",
+    notStarted: "not started",
     paused: "paused",
     running: "running",
     complete: variant === "row"

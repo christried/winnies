@@ -48,7 +48,7 @@ const root = useTemplateRef<HTMLElement>("root");
 // The look of each variant and size, in one place so the icon-only form (#310) adds its cases beside them and does not copy them.
 // Colours are tokens only: light, dark and the dialects come with them. `--lip` is the colour of the clay lip under
 // the button; the shadows below read it. A state's selector matches the real pseudo-class or the story's hook class
-// (`is-hover`, `is-active`), so one definition serves both.
+// (`is-hover`, `is-active`), so one definition serves both. A hover is `hovering:`, which main.css guards with `(hover: hover)`.
 const VARIANT_CLASSES = {
   primary: "bg-accent text-on-accent [--lip:var(--color-accent-lip)]",
   secondary: "bg-control text-text [--lip:var(--color-control-lip)]",
@@ -68,13 +68,13 @@ const LIP_DISABLED = "[box-shadow:0_2px_0_-1px_var(--lip)]";
 // token), and the lip grows as far as the button rises. R02: the press collapses the lip, at once. A toggled-on button
 // (`aria-pressed="true"`, #310) holds that press-down look, so it matches where `:active` does and never lifts.
 const LIVELY_CLASSES = {
-  clay: "[&:is(:hover,.is-hover):not(:is(:active,.is-active,[aria-pressed=true]))]:[translate:0_calc(var(--hover-lift)/2)] "
-    + "[&:is(:hover,.is-hover):not(:is(:active,.is-active,[aria-pressed=true]))]:[box-shadow:0_calc(var(--btn-lip)-var(--hover-lift)/2)_0_-1px_var(--lip),inset_0_4px_6px_var(--color-highlight)] "
-    + "showcase:[&:is(:hover,.is-hover):not(:is(:active,.is-active,[aria-pressed=true]))]:-rotate-1 "
+  clay: "hovering:[&:not(:is(:active,.is-active,[aria-pressed=true]))]:[translate:0_calc(var(--hover-lift)/2)] "
+    + "hovering:[&:not(:is(:active,.is-active,[aria-pressed=true]))]:[box-shadow:0_calc(var(--btn-lip)-var(--hover-lift)/2)_0_-1px_var(--lip),inset_0_4px_6px_var(--color-highlight)] "
+    + "showcase:hovering:[&:not(:is(:active,.is-active,[aria-pressed=true]))]:-rotate-1 "
     + "[&:is(:active,.is-active,[aria-pressed=true])]:[translate:0_calc(var(--btn-lip)-1px)] "
     + "[&:is(:active,.is-active,[aria-pressed=true])]:[box-shadow:0_1px_0_-1px_var(--lip)] "
     + "[&:is(:active,.is-active,[aria-pressed=true])]:[transition-duration:var(--dur-instant)]",
-  ghost: "[&:is(:hover,.is-hover):not(:is(:active,.is-active,[aria-pressed=true]))]:bg-[color-mix(in_oklab,var(--color-text)_9%,transparent)] "
+  ghost: "hovering:[&:not(:is(:active,.is-active,[aria-pressed=true]))]:bg-[color-mix(in_oklab,var(--color-text)_9%,transparent)] "
     + "[&:is(:active,.is-active,[aria-pressed=true])]:bg-[color-mix(in_oklab,var(--color-text)_14%,transparent)] "
     + "[&:is(:active,.is-active,[aria-pressed=true])]:shadow-well",
 } as const;

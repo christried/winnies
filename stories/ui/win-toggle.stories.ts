@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { computed, defineComponent, h, nextTick, reactive, ref } from "vue";
 import UiWinToggle from "../../app/components/ui/win-toggle.vue";
-import { materialIconBody } from "../../app/utils/material-icons";
 import { playUnwon, playWon } from "../../app/utils/win-motion";
 import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
 import { animations, frames, particleCount, withDialect, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
+import { expectHoverGuarded } from "../support/touch";
+import { cutMarkup, labelled, page } from "../support/ui-kit";
 
 // The app's own UiWinToggle (#317): the handoff's win toggle (03-components.md, `win-toggle`; `.w-win` in the reference CSS and
 // the win-timer card, where the prototypes win). No screen uses it yet; R3's rows compose it. The word on it is the
@@ -15,29 +15,6 @@ import { useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 const NOT_WON = "Mark Won";
 const WON = "Won · undo";
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 type Props = Record<string, unknown>;
 
@@ -75,11 +52,6 @@ const findToggle = (canvasElement: HTMLElement, name: string) => within(canvasEl
 
 /** The markup an svg holds, as the browser serialises it: the shipped cut is read back through a probe the same way. */
 const innerOf = (svg: Element) => svg.innerHTML;
-function cutMarkup(cut: "w600" | "w700-fill") {
-  const probe = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  probe.innerHTML = materialIconBody("check", cut);
-  return innerOf(probe);
-}
 
 export const NotWon: Story = {
   render: args => () => page("Win toggle not won", labelled("won false", h(UiWinToggle, {
@@ -91,6 +63,9 @@ export const NotWon: Story = {
     spy.mockClear();
     const el = await findToggle(canvasElement, NOT_WON);
     expect(el).toHaveAttribute("aria-checked", "false");
+
+    // A hover lifts it where the device hovers, and a tap on a phone leaves no lift.
+    expectHoverGuarded(el);
 
     await expectQuietAfter(async () => {
       await userEvent.click(el);
@@ -116,7 +91,7 @@ export const NotWon: Story = {
     expect(el).toHaveAccessibleName(NOT_WON);
 
     // The check is the outline cut, and the icon is decorative: the name is the word alone.
-    expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("w600"));
+    expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("check", "w600"));
     await parkPointer();
     await finish(canvasElement);
   },
@@ -145,8 +120,8 @@ export const Won: Story = {
     expect(spy).toHaveBeenLastCalledWith(false);
 
     // Won and not Won differ by shape as well as colour: the filled cut of the check.
-    expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("w700-fill"));
-    expect(cutMarkup("w700-fill")).not.toBe(cutMarkup("w600"));
+    expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("check", "w700-fill"));
+    expect(cutMarkup("check", "w700-fill")).not.toBe(cutMarkup("check", "w600"));
     await parkPointer();
     await finish(canvasElement);
   },
@@ -327,7 +302,7 @@ export const Busy: Story = {
 
 // A stand-in for R3's `challenge-row`, which R2 does not have: the three parts the Won recipes move (the mid panel, the face
 // disc and the Won sticker), the list they travel in, and the toggle. It is R3's contract in miniature: on `toggle` the row
-// runs `playWon` or `playUnwon` with its own elements and sets `won` only in `commit`. Nini, the progress bar, C02, drag and
+// runs `playWon` or `playUnwon` with its own elements and sets `won` only in `commit`. Winniebert, the progress bar, C02, drag and
 // the rest of the row are not here.
 interface PlaceholderRow { id: string; name: string; won: boolean }
 

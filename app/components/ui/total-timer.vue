@@ -28,7 +28,7 @@ const m = useWinniesMotion();
 const root = useTemplateRef<HTMLElement>("root");
 
 const seconds = computed(() => elapsedSeconds(props.timer, clock.now.value));
-const text = computed(() => formatTimerText(seconds.value, props.variant, props.state === "untouched"));
+const text = computed(() => formatTimerText(seconds.value, props.variant, props.state === "notStarted"));
 const slots = computed(() => timerSlots(text.value));
 // The same string for the whole minute: it never reads the seconds.
 const spoken = computed(() => timerSpokenValue(seconds.value, props.state, props.variant));
@@ -76,21 +76,21 @@ onBeforeUnmount(() => unsubscribe?.());
 
 // By state, the ink of the digits; colours snap, so nothing here transitions.
 const ink = computed(() => ({
-  untouched: "text-text-muted",
+  notStarted: "text-text-muted",
   paused: "text-text",
   running: "text-running-text",
   complete: "text-won-text",
 })[props.state]);
 
 const discGlyph = computed(() => ({
-  untouched: "pause",
+  notStarted: "pause",
   paused: "pause",
   running: "timer",
   complete: "emoji_events",
 } as const)[props.state]);
 
 const discTone = computed(() => ({
-  untouched: "bg-control text-text shadow-[0_4px_0_-1px_var(--color-control-lip)]",
+  notStarted: "bg-control text-text shadow-[0_4px_0_-1px_var(--color-control-lip)]",
   paused: "bg-control text-text shadow-[0_4px_0_-1px_var(--color-control-lip)]",
   running: "bg-accent text-on-accent shadow-[0_4px_0_-1px_var(--color-accent-lip)]",
   complete: "bg-complete text-on-accent shadow-[0_4px_0_-1px_var(--color-complete-lip)]",

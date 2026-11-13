@@ -10,6 +10,7 @@ import { expectQuietAfter } from "../support/component-checks";
 import { chip, headingCss } from "../support/html";
 import { withMotion } from "../support/motion-play";
 import { FAKE_START, withMotionSurface } from "../support/motion-surface";
+import { colourOf } from "../support/ui-kit";
 
 // The app's own UiTotalTimer in a real browser (#320): the Total Timer in the Workspace and the Overlay, and a
 // Challenge Timer in a row, in every state and at the edges of the format. The clock is frozen at FAKE_START, so a
@@ -33,7 +34,7 @@ interface Case {
 }
 
 const ROW_SURFACE: Record<TimerState, string> = {
-  untouched: "var(--color-surface)",
+  notStarted: "var(--color-surface)",
   paused: "var(--color-surface)",
   running: "var(--color-running-surface)",
   complete: "var(--color-won-surface)",
@@ -83,6 +84,7 @@ function sheet(title: string, cases: Case[]): () => VNode {
   ]);
 }
 
+// The first case keeps the word `untouched` for its id and its chip: the chip is in the pictures. The state is `notStarted`.
 const D = 14 * 3600 + 32 * 60 + 7;
 
 const WORKSPACE: Case[] = [
@@ -90,7 +92,7 @@ const WORKSPACE: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "workspace",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -166,7 +168,7 @@ const OVERLAY: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "overlay",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -209,7 +211,7 @@ const ROW: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "row",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -283,26 +285,15 @@ const SLOT_EM: Record<TimerVariant, { digit: number; colon: number }> = {
   row: { digit: 0.66, colon: 0.34 },
 };
 
-// What the colour of a token computes to, read from a probe in the canvas: the digits must show that colour, not a
-// look-alike.
-function colorOf(canvasElement: HTMLElement, token: string): string {
-  const probe = document.createElement("span");
-  probe.style.color = `var(${token})`;
-  canvasElement.append(probe);
-  const color = getComputedStyle(probe).color;
-  probe.remove();
-  return color;
-}
-
 const INK: Record<TimerState, string> = {
-  untouched: "--color-text-muted",
+  notStarted: "--color-text-muted",
   paused: "--color-text",
   running: "--color-running-text",
   complete: "--color-won-text",
 };
 
 const DISC: Record<TimerState, string> = {
-  untouched: "--color-control",
+  notStarted: "--color-control",
   paused: "--color-control",
   running: "--color-accent",
   complete: "--color-complete",
@@ -377,11 +368,11 @@ function play(cases: Case[]): NonNullable<StoryObj<typeof meta>["play"]> {
     });
 
     await step("ink: each state has its colour, and a colon is muted in every state", () => {
-      const muted = colorOf(canvasElement, "--color-text-muted");
+      const muted = colourOf("--color-text-muted");
       for (const c of cases) {
         const el = timerOf(c);
         const digit = slotsOf(el).find(s => s.textContent !== ":")!;
-        expect(getComputedStyle(digit).color, c.id).toBe(colorOf(canvasElement, INK[c.state]));
+        expect(getComputedStyle(digit).color, c.id).toBe(colourOf(INK[c.state]));
         for (const colon of slotsOf(el).filter(s => s.textContent === ":"))
           expect(getComputedStyle(colon).color, c.id).toBe(muted);
       }
@@ -392,7 +383,7 @@ function play(cases: Case[]): NonNullable<StoryObj<typeof meta>["play"]> {
         for (const c of cases) {
           const disc = timerOf(c).querySelector<HTMLElement>("[data-disc]")!;
           expect(disc.getAttribute("aria-hidden"), c.id).toBe("true");
-          expect(getComputedStyle(disc).backgroundColor, c.id).toBe(colorOf(canvasElement, DISC[c.state]));
+          expect(getComputedStyle(disc).backgroundColor, c.id).toBe(colourOf(DISC[c.state]));
           expect(disc.getBoundingClientRect().width, c.id).toBe(58);
           expect(getComputedStyle(disc.querySelector("svg")!).fontSize, c.id).toBe("34px");
         }

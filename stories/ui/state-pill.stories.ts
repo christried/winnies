@@ -5,9 +5,10 @@ import { h, ref } from "vue";
 import UiStatePill from "../../app/components/ui/state-pill.vue";
 import { STATE_PILL_VARIANTS } from "../../app/utils/state-pill";
 import { expectQuietAfter, finish } from "../support/component-checks";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
 import { animations, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { labelled, page } from "../support/ui-kit";
 
 // The app's own UiStatePill (#321): the handoff's `state-pill` (03-components.md; `.w-status` in the reference CSS and
 // the status card, where the prototypes win: the Shared View's summary pill is 34px with `--text-sm` and has its lip on
@@ -26,31 +27,6 @@ const WORDS: Record<StatePillVariant, string> = {
   offline: "Offline",
   loading: "Loading…",
 };
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-// Every pill on a surface panel with its story chip beside it: the colours of all nine, the transparent Gone included,
-// are judged by axe against the panel.
-const PANEL = "display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:16px;background:var(--color-surface);"
-  + "border-radius:var(--radius-xl)";
-
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", { style: PANEL }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 function row(...body: ReturnType<typeof h>[]) {
   return h("div", { style: "display:flex;flex-wrap:wrap;gap:16px" }, body);

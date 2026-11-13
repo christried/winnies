@@ -26,6 +26,9 @@ test("a Winnie's Workspace shows its toast in the bottom right, and Dismiss remo
   await seedSpeedrunWinnie(ownerPage, "Toast test Winnie");
   await visit(ownerPage, "/");
 
+  // The stack is the live region and is in the page before the first toast, so the card that comes is announced.
+  await expect(ownerPage.getByRole("region", { name: "Notifications" })).toHaveAttribute("aria-live", "polite");
+
   await ownerPage.getByRole("button", { name: "Challenge actions" }).click();
   await ownerPage.getByText("Reset timer", { exact: true }).click();
 

@@ -4,7 +4,8 @@ import type { Toast } from "~/composables/use-toast";
 
 // The bottom-right stack of toasts (#315; 03-components.md, `toast-stack`). It plays R08 on a toast it adds, and R09 plus the
 // engine's FLIP on the rest when one leaves. The parent owns the list and removes a toast when it is asked to: the stack
-// never changes its prop.
+// never changes its prop. The stack is the live region, as the old one was (`aria-live="polite"`), and it is in the page before
+// the first toast: a region that is built with its content is announced unreliably. A toast's own `status` or `alert` stays.
 const props = defineProps<{
   /** The toasts, oldest first: the newest is last, so lowest. */
   toasts: readonly Toast[];
@@ -96,6 +97,9 @@ watch(() => props.toasts.map(t => t.id), (ids) => {
   <div
     ref="root"
     data-toast-stack
+    role="region"
+    aria-label="Notifications"
+    aria-live="polite"
     class="pointer-events-none fixed end-4 bottom-4 z-(--z-toast) flex w-[min(var(--toast-w),calc(100vw-2rem))] flex-col items-end gap-2.5"
   >
     <UiToast

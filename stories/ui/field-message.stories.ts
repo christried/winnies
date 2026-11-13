@@ -2,21 +2,11 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { expect, within } from "storybook/test";
 import { h } from "vue";
 import UiFieldMessage from "../../app/components/ui/field-message.vue";
-import { chip, headingCss } from "../support/html";
+import { chip } from "../support/html";
+import { page } from "../support/ui-kit";
 
 // The app's own UiFieldMessage (#312): the small line under an input (03-components.md, `field-message`). It is also used
 // alone, as the Create Winnie modal's `formError`. The copy is story copy, not product copy.
-
-// Text sits on a chip or a surface card, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
   return h("div", {

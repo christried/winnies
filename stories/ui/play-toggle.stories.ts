@@ -1,14 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import type { MaterialIconName } from "../../app/utils/material-icons";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiPlayToggle from "../../app/components/ui/play-toggle.vue";
-import { materialIconBody } from "../../app/utils/material-icons";
 import { expectQuietAfter, finish, freezeSpinners, parkPointer, repaint, settled } from "../support/component-checks";
-import { chip, headingCss, resolved } from "../support/html";
+import { resolved } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { colourOf, cutMarkup, findButton, page, panel } from "../support/ui-kit";
 
 // The app's own UiPlayToggle (#318): the handoff's play / pause toggle (03-components.md, `play-toggle`; R25 and A06 in
 // 04-motion-and-sound.md; the play buttons of the row card, where the prototypes win). It is `UiIconButton` with the icon and
@@ -22,30 +21,6 @@ import { withMotionSurface } from "../support/motion-surface";
 const START = "Start";
 const PAUSE = "Pause";
 const WON = "Won";
-
-// Text sits on a chip, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
-
-// A panel for the toggles, wide enough for the ring's glow, which reaches past the button, with the story's chip beside them.
-function labelled(story: string, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: "display:flex;align-items:center;flex-wrap:wrap;gap:32px;padding:24px;background:var(--color-surface);"
-      + "border-radius:var(--radius-xl)",
-  }, [
-    ...body,
-    h("div", {
-      innerHTML: chip(story),
-    }),
-  ]);
-}
 
 interface Spied { onToggle: ReturnType<typeof fn> }
 const spied = (args: unknown) => args as Spied;
@@ -61,27 +36,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
+// A panel wide enough for the ring's glow, which reaches past the button.
+const labelled = panel({ gap: 32, padding: 24 });
 
 const ringOf = (button: HTMLElement) => button.querySelector<HTMLElement>("[data-ring]");
 const iconWrapOf = (button: HTMLElement) => button.querySelector<HTMLElement>("[data-icon]");
-
-/** The markup an svg holds, as the browser serialises it: the shipped cut is read back through a probe the same way. */
-function cutMarkup(name: MaterialIconName, cut: "w500-fill") {
-  const probe = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  probe.innerHTML = materialIconBody(name, cut);
-  return probe.innerHTML;
-}
-
-/** What a token's colour computes to, read through a probe so the check never writes the palette out. */
-function tokenColour(canvasElement: HTMLElement, token: string) {
-  const probe = document.createElement("div");
-  probe.style.backgroundColor = `var(${token})`;
-  canvasElement.append(probe);
-  const colour = getComputedStyle(probe).backgroundColor;
-  probe.remove();
-  return colour;
-}
 
 const ms = (token: string) => Number.parseFloat(resolved(token));
 
@@ -159,7 +118,7 @@ export const Running: Story = {
 
     // Bubblegum fill: the accent, as the running state of the handoff's play button.
     await settled();
-    expect(getComputedStyle(el).backgroundColor).toBe(tokenColour(canvasElement, "--color-accent"));
+    expect(getComputedStyle(el).backgroundColor).toBe(colourOf("--color-accent", "backgroundColor"));
 
     // The ring is decorative and takes no click.
     const ring = ringOf(el)!;
@@ -323,7 +282,7 @@ export const Focus: Story = {
   async play({ canvasElement }) {
     const idle = await findButton(canvasElement, START);
     const running = await findButton(canvasElement, PAUSE);
-    const focusColour = tokenColour(canvasElement, "--color-focus");
+    const focusColour = colourOf("--color-focus", "backgroundColor");
 
     // Reduced first: the running toggle's ring loop is the one animation the page would otherwise have.
     await withMotion("reduce", async () => {

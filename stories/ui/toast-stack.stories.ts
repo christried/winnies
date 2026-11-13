@@ -5,9 +5,9 @@ import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiToastStack from "../../app/components/ui/toast-stack.vue";
 import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
-import { headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { page } from "../support/ui-kit";
 
 // The app's own UiToastStack (#315): the handoff's bottom-right stack (03-components.md, `toast-stack`). It plays R08 on a toast it
 // adds and R09 plus the engine's FLIP on the rest when one leaves; the parent owns the list. The stack is `position: fixed`, so
@@ -27,17 +27,6 @@ const FRAME_H = 460;
 // `--space-4` and `--space-2-5`, in pixels, as the stack lays them out.
 const INSET = 16;
 const GAP = 10;
-
-// Text sits on a surface panel, never straight on the dialect backdrop: axe cannot judge contrast over it.
-function page(title: string, ...body: ReturnType<typeof h>[]) {
-  return h("section", {
-    "aria-label": title,
-    "style": "display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px",
-  }, [
-    h("h1", { style: `${headingCss};font-size:var(--text-4xl)` }, title),
-    ...body,
-  ]);
-}
 
 function frame(...children: ReturnType<typeof h>[]) {
   return h("div", {
@@ -81,6 +70,13 @@ const THREE: Toast[] = [
 
 const frameOf = (canvasElement: HTMLElement) => canvasElement.querySelector<HTMLElement>("[data-frame]")!;
 const stackOf = (canvasElement: HTMLElement) => canvasElement.querySelector<HTMLElement>("[data-toast-stack]")!;
+
+/** The stack announces what it gets: a polite live region with a name. */
+function expectLiveRegion(canvasElement: HTMLElement) {
+  const stack = within(canvasElement).getByRole("region", { name: "Notifications" });
+  expect(stack).toBe(stackOf(canvasElement));
+  expect(stack).toHaveAttribute("aria-live", "polite");
+}
 function idsOf(canvasElement: HTMLElement) {
   return [
     ...canvasElement.querySelectorAll<HTMLElement>("[data-toast-id]"),
@@ -120,9 +116,8 @@ export const Three: Story = {
     expectLayout(canvasElement, ["a", "b", "c"]);
     expect(canvas.getAllByRole("status")).toHaveLength(2);
     expect(canvas.getAllByRole("alert")).toHaveLength(1);
-    // The live region is each toast's own role: the stack's root adds none.
-    expect(stackOf(canvasElement).hasAttribute("role")).toBe(false);
-    expect(stackOf(canvasElement).hasAttribute("aria-live")).toBe(false);
+    // The stack is the live region, as the old one was: it is there before a toast, so a card that comes is announced.
+    expectLiveRegion(canvasElement);
     // Nothing animated in at mount.
     expect(animations()).toHaveLength(0);
 
@@ -278,6 +273,8 @@ export const Dismiss: Story = {
         await calm();
         expect(stackOf(canvasElement).children).toHaveLength(0);
         expect(stackOf(canvasElement).getBoundingClientRect().height).toBe(0);
+        // Empty, it is still the live region: a toast that comes next is announced.
+        expectLiveRegion(canvasElement);
       });
 
       // The picture shows a fixed list: a success and an error, both sticky.
