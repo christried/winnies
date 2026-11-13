@@ -5,11 +5,10 @@ import UiButton from "../../app/components/ui/button.vue";
 import UiFieldMessage from "../../app/components/ui/field-message.vue";
 import UiModal from "../../app/components/ui/modal.vue";
 import UiTextInput from "../../app/components/ui/text-input.vue";
-import { expectQuietAfter, finish, settled } from "../support/component-checks";
+import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
 import { headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
-import { realPointer } from "../support/real-pointer";
 
 // The app's own UiModal (#314): the handoff's card over a scrim (03-components.md, `modal`; the prototype's card where the
 // reference CSS differs), a native <dialog> that plays R06 on open and R07 on close, traps the focus, and ignores every
@@ -94,15 +93,6 @@ async function expectClosed(canvasElement: HTMLElement) {
   expect(within(canvasElement).queryByRole("dialog")).toBeNull();
   expect(cardOf()).toBeNull();
   expect(triggerOf(canvasElement)).toHaveFocus();
-}
-
-/**
- * Moves the runner's real mouse out of the way. It stays where the last story left it, and over the field it would draw
- * the hover ring in the picture: which story ran before would decide the baseline.
- */
-async function parkPointer() {
-  const pointer = await realPointer();
-  await pointer?.unhover(document.body);
 }
 
 const CREATE_TITLE = "Create a new Winnie";
