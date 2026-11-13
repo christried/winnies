@@ -9,6 +9,7 @@ import { expectQuietAfter, finish, settled } from "../support/component-checks";
 import { headingCss } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { realPointer } from "../support/real-pointer";
 
 // The app's own UiModal (#314): the handoff's card over a scrim (03-components.md, `modal`; the prototype's card where the
 // reference CSS differs), a native <dialog> that plays R06 on open and R07 on close, traps the focus, and ignores every
@@ -93,6 +94,15 @@ async function expectClosed(canvasElement: HTMLElement) {
   expect(within(canvasElement).queryByRole("dialog")).toBeNull();
   expect(cardOf()).toBeNull();
   expect(triggerOf(canvasElement)).toHaveFocus();
+}
+
+/**
+ * Moves the runner's real mouse out of the way. It stays where the last story left it, and over the field it would draw
+ * the hover ring in the picture: which story ran before would decide the baseline.
+ */
+async function parkPointer() {
+  const pointer = await realPointer();
+  await pointer?.unhover(document.body);
 }
 
 const CREATE_TITLE = "Create a new Winnie";
@@ -187,6 +197,7 @@ export const Default: Story = {
 
     // The picture is of the open modal: the shot of a closed one would be the page.
     expect(dialogOf(canvasElement).open).toBe(true);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -226,6 +237,7 @@ export const Destructive: Story = {
     expect(getComputedStyle(action).color).toBe(danger);
     expect(getComputedStyle(cancel).color).not.toBe(danger);
 
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -293,6 +305,7 @@ export const Busy: Story = {
       current?.open();
       await within(canvasElement).findByRole("dialog", { name: CREATE_TITLE });
     });
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -367,6 +380,7 @@ export const BusyLifts: Story = {
       // The picture is of the open modal.
       await openByTrigger(canvasElement, CREATE_TITLE);
     });
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -415,6 +429,7 @@ export const LongContent: Story = {
 
     dialog.scrollTop = 0;
     expect(animations().filter(a => a.playState === "running")).toHaveLength(0);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
