@@ -4,8 +4,10 @@ const props = defineProps<{
   title: string;
   /** Text on the confirm button, e.g. "Create". Cancel is always present. */
   actionLabel: string;
-  /** Disables the action button while actioning. */
+  /** Makes the action button busy while actioning: it ignores presses and shows `busyLabel`. */
   pending?: boolean;
+  /** Shown on the action button while `pending`, e.g. "Creating…". */
+  busyLabel: string;
   /** When action is destructive, render button in other colour than primary */
   destructive?: boolean;
 }>();
@@ -37,17 +39,18 @@ defineExpose({
       </div>
       <div class="flex justify-end gap-2">
         <form method="dialog">
-          <button class="rounded-lg border">
+          <UiButton variant="ghost" type="submit">
             Cancel
-          </button>
+          </UiButton>
         </form>
-        <button
-          :disabled="pending"
-          class="rounded-lg border"
+        <UiButton
+          :variant="destructive ? 'danger' : 'primary'"
+          :busy="pending"
+          :busy-label="busyLabel"
           @click="$emit('action')"
         >
           {{ actionLabel }}
-        </button>
+        </UiButton>
       </div>
     </div>
 

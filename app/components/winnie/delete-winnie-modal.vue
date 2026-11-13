@@ -50,6 +50,7 @@ defineExpose({
     ref="modal"
     title="Delete Winnie"
     action-label="Delete"
+    busy-label="Deleting…"
     destructive
     :pending="deleting"
     @action="confirmDelete"

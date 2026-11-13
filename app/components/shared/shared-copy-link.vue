@@ -35,11 +35,11 @@ async function copyUrl() {
       class="min-w-0 flex-1 border font-mono text-[11px]"
     >
 
-    <button
-      type="button"
+    <UiButton
+      variant="secondary"
       @click="copyUrl"
     >
       {{ isUrlCopied ? "Copied!" : "Copy link" }}
-    </button>
+    </UiButton>
   </div>
 </template>
