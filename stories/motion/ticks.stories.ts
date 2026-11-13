@@ -345,12 +345,9 @@ export const Default: StoryObj<typeof meta> = {
             expect(a.effect!.getComputedTiming().duration as number).toBeLessThanOrEqual(interval * 0.95 + 0.01);
         }
       }
-      // Left out, and reported on #305: a rollover's tick must not overlap the next beat's tick on a digit, that is
-      // `expect(worstOverlap(minute)).toBeLessThanOrEqual(ONE_FRAME)` and the same for `hour`. The engine staggers a
-      // rollover's digits by `min(i * 50, 30% of the interval)` and gives each the clamped duration, so at a 250 ms
-      // interval slot 5 starts 75 ms late and ends at 312.5 ms, and the next beat ticks slot 5 again at 250 ms.
-      // Measured at rate 4: the minute and the hour run overlap by 62.5 ms (up to 80 ms on a loaded run), a plain second
-      // run by -12.5 ms, which is the 5% the clamp leaves.
+      // A rollover's staggered tick ends before the next beat ticks the same digit (#337).
+      for (const seen of [minute, hour])
+        expect(worstOverlap(seen)).toBeLessThanOrEqual(ONE_FRAME);
     }));
 
     await step("when reduced a run still counts its ticks and ends, and nothing animates", () => withMotion("reduce", async () => {
