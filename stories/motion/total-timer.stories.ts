@@ -7,7 +7,7 @@ import UiTotalTimer from "../../app/components/ui/total-timer.vue";
 import { expectQuietAfter } from "../support/component-checks";
 import { chip } from "../support/html";
 import { page, readout, section } from "../support/motion-kit";
-import { clickReplay, frames, ONE_FRAME, withMotion } from "../support/motion-play";
+import { clickReplay, frames, ONE_FRAME, withMotion, worstOverlap } from "../support/motion-play";
 import { FAKE_START, useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The Total Timer's ticks as the app's own component draws them (#320), on a clock at rate 4: a beat every 250 ms, so a
@@ -218,8 +218,8 @@ interface Seen {
   slots: Set<number>;
   /** The well (the timer's own element) had an animation in some frame. */
   well: boolean;
-  /** The most animations one slot had at the same time, not counting one that was about to end. */
-  mostAtOnce: number;
+  /** Every animation seen on a slot, by its `pos`. */
+  animations: Map<number, Set<Animation>>;
 }
 
 /** Looks at the timers every frame until stopped: a tick lasts at least 100 ms, so none is missed. */
@@ -229,7 +229,7 @@ function sample(root: ParentNode) {
     {
       slots: new Set<number>(),
       well: false,
-      mostAtOnce: 0,
+      animations: new Map<number, Set<Animation>>(),
     },
   ])) as Record<Display, Seen>;
   let frame = 0;
@@ -244,9 +244,11 @@ function sample(root: ParentNode) {
         const own = slot.getAnimations();
         if (own.length) {
           seen[id].slots.add(Number(slot.dataset.pos));
-          // One that is in its last frame does not count: the clamp leaves 5% of a 250 ms beat, less than a frame.
-          const held = own.filter(a => Number(a.effect!.getComputedTiming().endTime) - Number(a.currentTime) > ONE_FRAME);
-          seen[id].mostAtOnce = Math.max(seen[id].mostAtOnce, held.length);
+          const pos = Number(slot.dataset.pos);
+          const set = seen[id].animations.get(pos) ?? new Set<Animation>();
+          for (const a of own)
+            set.add(a);
+          seen[id].animations.set(pos, set);
         }
       }
     }
@@ -406,7 +408,7 @@ export const HiddenTab: StoryObj<typeof meta> = {
 };
 
 // #337: a rollover's staggered last digit ran into its next tick, so a slot held two animations at once. The fix is in the
-// engine, and this story holds it, with the allowance of one frame that the fix itself leaves (see `ONE_FRAME`).
+// engine, and this story holds it: no tick runs into the next one by more than a frame (see `ONE_FRAME`).
 export const FastRolloverNoDoubleTick: StoryObj<typeof meta> = {
   async play({ canvasElement, step }) {
     await ready(canvasElement);
@@ -414,7 +416,7 @@ export const FastRolloverNoDoubleTick: StoryObj<typeof meta> = {
       await step(`no slot holds two animations at once over a ${id} run`, () => withMotion("full", async () => {
         const seen = await runAndSample(canvasElement, id);
         for (const display of DISPLAYS)
-          expect(seen[display].mostAtOnce, display).toBeLessThanOrEqual(1);
+          expect(worstOverlap(seen[display].animations), display).toBeLessThanOrEqual(ONE_FRAME);
       }));
     }
   },
