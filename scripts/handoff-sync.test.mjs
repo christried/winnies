@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { deviationProblems, deviations } from "./handoff-deviations.mjs";
 
-// The token file and the fonts are copied from the design handoff into the app, verbatim: the handoff is the
+// The token file, the fonts and the icons are copied from the design handoff into the app, verbatim: the handoff is the
 // design's source of truth and the copy is what Winnies ships (ADR-0001), apart from the deviation blocks the
 // token file's copy may carry (docs/design-deviations.md). ESLint ignores the copies, so
 // nothing reformats them; this test fails `pnpm test` (the `check` job) the moment one differs, with a message
@@ -14,6 +14,7 @@ import { deviationProblems, deviations } from "./handoff-deviations.mjs";
 
 const HANDOFF = "docs/design_handoff_winnies";
 const APP_FONTS = "app/assets/fonts";
+const APP_ICONS = "app/assets/icons";
 const FIX = "Copy the handoff's file again. A deliberate change to the token file goes in a winnies:deviation block at the end of the copy, with an entry in docs/design-deviations.md (#178).";
 const TOKENS_COPY = "app/assets/css/winnies-tokens.css";
 const DEVIATIONS_DOC = "docs/design-deviations.md";
@@ -31,9 +32,10 @@ const TEXT_PAIRS = [
   [`${HANDOFF}/assets/fonts/fonts.css`, `${APP_FONTS}/fonts.css`],
   [`${HANDOFF}/assets/fonts/licences/MochiyPopOne-OFL.txt`, `${APP_FONTS}/licences/MochiyPopOne-OFL.txt`],
   [`${HANDOFF}/assets/fonts/licences/MPLUSRounded1c-OFL.txt`, `${APP_FONTS}/licences/MPLUSRounded1c-OFL.txt`],
+  [`${HANDOFF}/assets/fonts/licences/MaterialSymbols-Apache-2.0.txt`, `${APP_ICONS}/licences/MaterialSymbols-Apache-2.0.txt`],
 ];
 
-// The seven faces that ship in R0. MaterialSymbols is not one of them: icons are R2, which brings its own licence.
+// The seven faces that ship in R0. MaterialSymbols is not one of them: its icons ship as SVG files (ICON_CUTS below).
 const WOFF2 = [
   "MochiyPopOne-400-latin.woff2",
   "MPLUSRounded1c-500-latin.woff2",
@@ -45,6 +47,30 @@ const WOFF2 = [
 ];
 
 const FONTS_CSS = `${APP_FONTS}/fonts.css`;
+
+// The four cuts of Material Symbols Rounded the app ships (#308): a folder each, the same names in all four, each file
+// copied from the handoff's folder of that name. The handoff has 125 names; the app ships the ones MATERIAL_ICON_NAMES
+// lists (app/utils/material-icons.ts), which the cut folders' own listing supplies here, so this test needs no TypeScript.
+const ICON_CUTS = [
+  "w500",
+  "w500-fill",
+  "w600",
+  "w700-fill",
+];
+function iconNames(cut) {
+  return readdirSync(`${APP_ICONS}/${cut}`)
+    .filter(name => name.endsWith(".svg"))
+    .toSorted();
+}
+// The copies on disk define the list, so the handoff's side is read for each of them, and a copy that was never made
+// reads as empty and fails as a difference. The list is the first cut's: iconProblems checks the other three agree.
+const SHIPPED_ICONS = iconNames(ICON_CUTS[0]);
+function iconPairs() {
+  return ICON_CUTS.flatMap(cut => SHIPPED_ICONS.map(file => [
+    `${HANDOFF}/assets/icons/${cut}/${file}`,
+    `${APP_ICONS}/${cut}/${file}`,
+  ]));
+}
 
 // A checkout may be CRLF (.gitattributes forces LF in the repository, a Windows editor may not): compare LF.
 const lf = text => text.replace(/\r\n/g, "\n");
@@ -146,6 +172,7 @@ function allDifferences(sources) {
       sources.bytes[`${APP_FONTS}/${name}`],
       [`${HANDOFF}/assets/fonts/${name}`, `${APP_FONTS}/${name}`],
     )),
+    ...iconPairs().flatMap(pair => byteDifferences(sources.bytes[pair[0]], sources.bytes[pair[1]], pair)),
   ];
 }
 
@@ -161,7 +188,10 @@ function real() {
     ...TEXT_PAIRS.flatMap(pair => pair.slice(0, 2)),
     DEVIATIONS_DOC,
   ];
-  const woff2 = WOFF2.flatMap(name => [`${HANDOFF}/assets/fonts/${name}`, `${APP_FONTS}/${name}`]);
+  const woff2 = [
+    ...WOFF2.flatMap(name => [`${HANDOFF}/assets/fonts/${name}`, `${APP_FONTS}/${name}`]),
+    ...iconPairs().flat(),
+  ];
   return {
     text: Object.fromEntries(paths.map(path => [
       path,
@@ -174,12 +204,32 @@ function real() {
   };
 }
 
+/**
+ * What is wrong with the list of icon names across the four cut folders: a name in one cut and not in another, and a
+ * name the handoff does not have. A name missing in a cut would otherwise be a thrown Error at render time.
+ * @param {Record<string, string[]>} byCut the .svg file names in each cut's folder
+ * @param {string[]} handoffNames the .svg file names in the handoff's w500 folder
+ */
+function iconProblems(byCut, handoffNames) {
+  const all = [
+    ...new Set(Object.values(byCut).flat()),
+  ].toSorted();
+  return [
+    ...ICON_CUTS.flatMap(cut => all
+      .filter(file => !byCut[cut].includes(file))
+      .map(file => `${APP_ICONS}/${cut}/${file} is missing, though another cut ships it: all four cuts ship the same names. Copy it from ${HANDOFF}/assets/icons/${cut}/.`)),
+    ...all
+      .filter(file => !handoffNames.includes(file))
+      .map(file => `${APP_ICONS}/ ships ${file}, which ${HANDOFF}/assets/icons/ does not have. An icon comes from the handoff: copy it from ${HANDOFF}/assets/icons/, or ask for it in a Claude Design hand-off.`),
+  ];
+}
+
 const shippedFonts = () => readdirSync(APP_FONTS).filter(name => name.endsWith(".woff2"));
 const noProblems = problems => expect(problems, problems.join("\n")).toEqual([]);
 
 const onDisk = real();
 
-describe("the app ships the handoff's tokens and fonts", () => {
+describe("the app ships the handoff's tokens, fonts and icons", () => {
   // The same walk the planted cases below go through, over the files on disk.
   it("every copy is the handoff's, byte for byte, and every deviation block has its entry in the doc", () => {
     noProblems(allDifferences(onDisk));
@@ -189,10 +239,21 @@ describe("the app ships the handoff's tokens and fonts", () => {
     noProblems(fontProblems(onDisk.text[FONTS_CSS], shippedFonts()));
   });
 
-  it("finds all seven faces and every file it compares (a moved file must not make a rule pass on nothing)", () => {
+  it("the four icon cuts ship the same names, each in the handoff", () => {
+    noProblems(iconProblems(
+      Object.fromEntries(ICON_CUTS.map(cut => [
+        cut,
+        iconNames(cut),
+      ])),
+      readdirSync(`${HANDOFF}/assets/icons/w500`),
+    ));
+  });
+
+  it("finds all seven faces, the 36 icons in four cuts and every file it compares (a moved file must not make a rule pass on nothing)", () => {
     expect(shippedFonts().toSorted()).toEqual(WOFF2.toSorted());
+    expect(SHIPPED_ICONS).toHaveLength(36);
     expect(Object.keys(onDisk.text)).toHaveLength(TEXT_PAIRS.length * 2 + 1);
-    expect(Object.keys(onDisk.bytes)).toHaveLength(WOFF2.length * 2);
+    expect(Object.keys(onDisk.bytes)).toHaveLength(WOFF2.length * 2 + SHIPPED_ICONS.length * ICON_CUTS.length * 2);
   });
 });
 
@@ -337,6 +398,51 @@ describe("catches drift", () => {
     expect(problems).toHaveLength(1);
     expect(problems[0]).toContain(path);
     expect(problems[0]).toContain("at byte 100");
+  });
+
+  it("an icon copy with one byte changed", () => {
+    const sources = cleanSources();
+    const [handoffPath, path] = iconPairs()[0];
+    const changed = Buffer.from(sources.bytes[path]);
+    changed[10] ^= 0xFF;
+    sources.bytes[path] = changed;
+    const problems = allDifferences(sources);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain(path);
+    expect(problems[0]).toContain(handoffPath);
+    expect(problems[0]).toContain("at byte 10");
+    expect(problems[0]).toContain(`${HANDOFF}/`);
+  });
+
+  it("an icon copy that was never made is a problem, not a stack trace", () => {
+    const sources = cleanSources();
+    const [, path] = iconPairs()[0];
+    sources.bytes[path] = Buffer.alloc(0);
+    const problems = allDifferences(sources);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain(path);
+  });
+
+  it("an icon in one cut and not in another, and an icon the handoff does not have", () => {
+    const byCut = Object.fromEntries(ICON_CUTS.map(cut => [
+      cut,
+      iconNames(cut),
+    ]));
+    const handoff = readdirSync(`${HANDOFF}/assets/icons/w500`);
+    expect(iconProblems(byCut, handoff)).toEqual([]);
+    const missing = iconProblems({
+      ...byCut,
+      w600: byCut.w600.slice(1),
+    }, handoff);
+    expect(missing).toHaveLength(1);
+    expect(missing[0]).toContain(`${APP_ICONS}/w600/${byCut.w600[0]} is missing`);
+    const foreign = iconProblems(Object.fromEntries(ICON_CUTS.map(cut => [
+      cut,
+      [...byCut[cut], "not_in_the_handoff.svg"],
+    ])), handoff);
+    expect(foreign).toHaveLength(1);
+    expect(foreign[0]).toContain("not_in_the_handoff.svg");
+    expect(foreign[0]).toContain(`${HANDOFF}/assets/icons/`);
   });
 
   it("a copy that was never made", () => {

@@ -26,12 +26,12 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       class="drag-grip flex size-11 cursor-grab items-center justify-center"
       aria-hidden="true"
     >
-      <UiIcon name="grip" class="size-6" />
+      <UiTablerIcon name="grip" class="size-6" />
     </span>
 
     <StatusDot :status="isWon ? 'won' : isRunning ? 'running' : 'idle'" />
 
-    <UiIcon
+    <UiTablerIcon
       v-if="challenge.pinned"
       name="pin"
       class="size-6"
