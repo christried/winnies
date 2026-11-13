@@ -26,14 +26,14 @@ async function onSignOut(close: () => void) {
 </script>
 
 <template>
-  <button
+  <UiButton
     v-if="!user"
-    type="button"
+    variant="primary"
     :disabled="signingIn"
     @click="onSignIn()"
   >
     Sign in with Discord
-  </button>
+  </UiButton>
 
   <UiDropdown
     v-else
