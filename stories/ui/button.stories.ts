@@ -3,7 +3,7 @@ import type { MaterialIconName } from "../../app/utils/material-icons";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
-import { expectQuietAfter } from "../support/component-checks";
+import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/component-checks";
 import { chip, headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
@@ -112,41 +112,6 @@ interface Spied {
 const spied = (args: unknown) => args as Spied;
 
 const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
-
-/** Waits for every animation that ends (a CSS transition, a release jelly), so a picture or a read never catches one halfway. */
-async function settled() {
-  await frames();
-  const ending = animations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity);
-  await Promise.all(ending.map(a => a.finished.catch(() => undefined)));
-  await frames();
-}
-
-/**
- * Stops every spinner at its first frame. The spin loop never ends, so a picture of a busy button would catch it at a
- * different angle each run: the pictures show the icon, the plays check that it turns.
- */
-function freezeSpinners(canvasElement: HTMLElement) {
-  for (const svg of canvasElement.querySelectorAll("button[aria-busy='true'] svg, a[aria-busy='true'] svg")) {
-    for (const a of svg.getAnimations()) {
-      a.pause();
-      a.currentTime = 0;
-    }
-  }
-}
-
-/**
- * Leaves the page as its picture should find it: nothing focused, every spinner still, no animation half-run, and the
- * page painted from scratch, not on top of what the interaction left (the shot compares at the pixel).
- */
-async function finish(canvasElement: HTMLElement) {
-  (document.activeElement as HTMLElement | null)?.blur();
-  freezeSpinners(canvasElement);
-  await settled();
-  document.body.style.visibility = "hidden";
-  await frames();
-  document.body.style.visibility = "";
-  await frames();
-}
 
 /** The first icon of a button (the spinner while it is busy), or null when it has none. */
 const iconOf = (button: HTMLElement) => button.querySelector("svg");
