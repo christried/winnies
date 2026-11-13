@@ -113,11 +113,11 @@ const spied = (args: unknown) => args as Spied;
 
 const findButton = (canvasElement: HTMLElement, name: string) => within(canvasElement).findByRole("button", { name });
 
-/** Waits for every CSS transition in the document, so a picture or a read never catches one halfway. */
+/** Waits for every animation that ends (a CSS transition, a release jelly), so a picture or a read never catches one halfway. */
 async function settled() {
   await frames();
-  const transitions = animations().filter(a => a instanceof CSSTransition);
-  await Promise.all(transitions.map(a => a.finished.catch(() => undefined)));
+  const ending = animations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity);
+  await Promise.all(ending.map(a => a.finished.catch(() => undefined)));
   await frames();
 }
 
@@ -132,6 +132,20 @@ function freezeSpinners(canvasElement: HTMLElement) {
       a.currentTime = 0;
     }
   }
+}
+
+/**
+ * Leaves the page as its picture should find it: nothing focused, every spinner still, no animation half-run, and the
+ * page painted from scratch, not on top of what the interaction left (the shot compares at the pixel).
+ */
+async function finish(canvasElement: HTMLElement) {
+  (document.activeElement as HTMLElement | null)?.blur();
+  freezeSpinners(canvasElement);
+  await settled();
+  document.body.style.visibility = "hidden";
+  await frames();
+  document.body.style.visibility = "";
+  await frames();
 }
 
 /** The first icon of a button (the spinner while it is busy), or null when it has none. */
@@ -239,7 +253,7 @@ export const Hover: Story = {
         expect(getComputedStyle(primary).rotate).toBe("-1deg");
       });
     });
-    await settled();
+    await finish(canvasElement);
   },
 };
 
@@ -258,7 +272,7 @@ export const Active: Story = {
       expect(getComputedStyle(ghost).translate).toBe("none");
       expect(getComputedStyle(ghost).boxShadow).not.toBe("none");
     });
-    await settled();
+    await finish(canvasElement);
   },
 };
 
@@ -282,7 +296,7 @@ export const Focus: Story = {
     expect(ring.outlineWidth).not.toBe("0px");
     // R32: the ring is never animated, so neither `outline` nor `all` is a transitioned property.
     expect(ring.transitionProperty).not.toMatch(/outline|\ball\b/);
-    first.blur();
+    await finish(canvasElement);
   },
 };
 
@@ -346,8 +360,8 @@ export const Busy: Story = {
       expect(iconOf(plain)!.getAnimations()).toHaveLength(1);
       freezeSpinners(canvasElement);
     });
-    freezeSpinners(canvasElement);
     expect(spy).not.toHaveBeenCalled();
+    await finish(canvasElement);
   },
 };
 
@@ -386,7 +400,7 @@ export const Longest: Story = {
       expect(narrow.scrollWidth).toBeLessThanOrEqual(narrow.clientWidth);
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(document.documentElement.clientWidth);
     });
-    freezeSpinners(canvasElement);
+    await finish(canvasElement);
   },
 };
 
@@ -529,9 +543,6 @@ export const Pressing: Story = {
     }
     expect(busyLink).toHaveAttribute("aria-busy", "true");
 
-    // Ends as it began, so the picture shows the state and not the ring or a half-run animation.
-    (document.activeElement as HTMLElement | null)?.blur();
-    freezeSpinners(canvasElement);
-    await settled();
+    await finish(canvasElement);
   },
 };
