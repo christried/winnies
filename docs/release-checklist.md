@@ -4,6 +4,18 @@ Steps a release or a dependency update runs by hand, because no test can: only t
 with Discord. Everything automation can check (lint, typecheck, unit, API and e2e tests) is in CI and
 is not repeated here.
 
+## Production's migration record (before the 1.0.0 merge)
+
+Read only, before the human merges `redesign` into `main`. From 1.0.0 on, `main` builds with `vercel.json`'s
+`pnpm db:migrate && pnpm build`, so the first production deploy of 1.0.0 runs `drizzle-kit migrate` against
+production's database (Neon branch `production`). Until then `main` builds with `nuxt build` and no migration (#233).
+
+Production's migration record, the table `drizzle.__drizzle_migrations`, must match `server/db/migrations/`: one row
+per migration already applied, with the same hash. A schema pushed or migrated by hand without a record makes the
+build run those migrations again, and a failed migration fails the deploy while the previous deployment keeps serving
+(`docs/agents/delivery.md` § Database migrations). No agent holds a database credential, so who reads it is settled
+when the Release phase starts. Recorded on #211 when #233 merged.
+
 ## Required checks on `main` (1.0.0)
 
 Run after the 1.0.0 merge of `redesign` into `main`, once the `visual` job has run green on `main`. Branch protection
