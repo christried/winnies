@@ -92,9 +92,11 @@ async function kindPlay(kind: ToastKind, { canvasElement, args }: { canvasElemen
     expect(glyph.innerHTML).not.toBe(iconMarkup(ICONS[other]));
 
   // The message and nothing else: no second line, whatever the kind (the human, 2026-11-13).
-  expect(toast.children).toHaveLength(3);
-  expect(toast.children[1]!.textContent!.trim()).toBe(MESSAGES[kind]);
-  expect(toast.children[1]!.children).toHaveLength(0);
+  // The Dismiss button's tooltip (#311) is a hidden sibling of the button, not a part of the card.
+  const parts = [...toast.children].filter(el => el.getAttribute("role") !== "tooltip");
+  expect(parts).toHaveLength(3);
+  expect(parts[1]!.textContent!.trim()).toBe(MESSAGES[kind]);
+  expect(parts[1]!.children).toHaveLength(0);
 
   // Reduced first: a finished full-motion animation would stay in the document and fail the quiet check. The card
   // animates nothing, with or without the preference.
