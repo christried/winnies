@@ -91,6 +91,21 @@ export const Light = rest("Theme switch, Light", "light", "Light");
 export const Dark = rest("Theme switch, Dark", "dark", "Dark");
 export const MatchSystem = rest("Theme switch, Match system", "system", "Match system");
 
+/**
+ * Paints the canvas again from scratch while the focus stays where it is. The ring is drawn over a page that was already
+ * painted, and the shot compares at the pixel: on some runners the anti-aliased edge pixels of that increment differ from
+ * a fresh paint. Promoting the canvas to its own layer and back makes the browser raster it anew. `finish()` of the
+ * shared checks does it by hiding the body, which would also drop the focus; the ring is this picture.
+ *
+ * @param canvasElement the story's canvas
+ */
+async function repaint(canvasElement: HTMLElement) {
+  canvasElement.style.willChange = "opacity";
+  await frames();
+  canvasElement.style.willChange = "";
+  await frames();
+}
+
 export const Focus: Story = {
   render: args => () => page("Theme switch focus", labelled("keyboard focus", h(UiThemeSwitch, {
     modelValue: "light",
@@ -109,6 +124,8 @@ export const Focus: Story = {
     // R32: no state of a segment animates, the ring and the checked fill included.
     for (const name of NAMES)
       expect(getComputedStyle(await radio(canvasElement, name)).transitionDuration).toBe("0s");
+    await repaint(canvasElement);
+    expect(light).toHaveFocus();
   },
 };
 
