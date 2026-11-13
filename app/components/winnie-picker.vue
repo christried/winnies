@@ -45,9 +45,15 @@ function shortDate(value: string) {
     {{ currentWinnie.name }}
   </span>
   <UiDropdown v-else>
-    <template #trigger>
-      <span class="max-w-56 truncate">{{ currentWinnie.name }} </span>
-      <UiTablerIcon name="chevron" />
+    <template #trigger="{ trigger }">
+      <!-- A name and a caret, so not an icon button. The accessible name stays the Winnie's name. -->
+      <UiButton
+        v-bind="trigger"
+        variant="secondary"
+        trailing-icon="expand_more"
+      >
+        <span class="max-w-56 truncate">{{ currentWinnie.name }}</span>
+      </UiButton>
     </template>
 
     <template #default="{ close }">

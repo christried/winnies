@@ -22,9 +22,14 @@ function onDelete(close: () => void) {
 </script>
 
 <template>
-  <UiDropdown label="More actions">
-    <template #trigger>
-      <UiTablerIcon name="more" />
+  <UiDropdown>
+    <template #trigger="{ trigger }">
+      <UiIconButton
+        v-bind="trigger"
+        icon="more_horiz"
+        label="More actions"
+        variant="ghost"
+      />
     </template>
 
     <template #default="{ close }">

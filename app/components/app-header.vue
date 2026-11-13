@@ -74,7 +74,7 @@ async function copyOverlayLink(close: () => void) {
       />
       <div>
         <UiIconButton
-          icon="plus"
+          icon="add"
           label="Create new Winnie"
           @click="newWinnie?.open()"
         />
@@ -83,9 +83,13 @@ async function copyOverlayLink(close: () => void) {
       </div>
 
       <div v-if="currentWinnie">
-        <UiDropdown label="Copy share links">
-          <template #trigger>
-            <UiTablerIcon name="share" />
+        <UiDropdown>
+          <template #trigger="{ trigger }">
+            <UiIconButton
+              v-bind="trigger"
+              icon="share"
+              label="Copy share links"
+            />
           </template>
           <template #default="{ close }">
             <li>

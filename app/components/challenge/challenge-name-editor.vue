@@ -83,11 +83,15 @@ function cancel() {
     <UiIconButton
       label="Save"
       icon="check"
+      variant="primary"
+      size="sm"
       @click="saveChellengeEdit"
     />
     <UiIconButton
       label="Cancel"
       icon="close"
+      variant="ghost"
+      size="sm"
       @click="cancel"
     />
   </div>

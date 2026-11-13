@@ -45,14 +45,13 @@ const totalSeconds = computed(() => elapsedSeconds(
           size="total"
           :status="isRunning ? 'running' : 'idle'"
         />
-        <button
-          type="button"
-          :aria-label="isRunning ? 'Pause Winnie' : 'Start Winnie'"
+        <UiIconButton
+          variant="primary"
+          :icon="isRunning ? 'pause' : 'play_arrow'"
+          :label="isRunning ? 'Pause Winnie' : 'Start Winnie'"
           :disabled="timerInFlight || isComplete || totalCount === 0"
           @click="winnieStore.toggleTotalTimer"
-        >
-          <UiTablerIcon :name="isRunning ? 'pause' : 'play'" />
-        </button>
+        />
         <WinnieCardOverflowMenu />
       </div>
     </div>

@@ -12,12 +12,13 @@ const { toasts, dismiss } = useToast();
       :key="t.id"
     >
       <span>{{ t.message }}</span>
-      <button
-        aria-label="Dismiss"
+      <UiIconButton
+        size="sm"
+        variant="ghost"
+        icon="close"
+        label="Dismiss"
         @click="dismiss(t.id)"
-      >
-        <UiTablerIcon name="close" />
-      </button>
+      />
     </div>
   </div>
 </template>

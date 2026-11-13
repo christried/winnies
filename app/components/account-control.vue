@@ -35,21 +35,22 @@ async function onSignOut(close: () => void) {
     Sign in with Discord
   </UiButton>
 
-  <UiDropdown
-    v-else
-    label="Account Menu"
-  >
-    <template #trigger>
-      <div v-if="user.image" class="cursor-pointer">
-        <div class="w-12 rounded-full">
-          <img alt="" :src="user.image">
-        </div>
-      </div>
-      <div v-else>
-        <div class="w-12 rounded-full">
-          <span> {{ userShorthand }}</span>
-        </div>
-      </div>
+  <UiDropdown v-else>
+    <template #trigger="{ trigger }">
+      <!-- The avatar is the glyph: a ghost icon button with the picture (or the initials) inside the circle. -->
+      <UiIconButton
+        v-bind="trigger"
+        label="Account Menu"
+        variant="ghost"
+      >
+        <img
+          v-if="user.image"
+          alt=""
+          :src="user.image"
+          class="size-9 rounded-full object-cover"
+        >
+        <span v-else class="text-sm">{{ userShorthand }}</span>
+      </UiIconButton>
     </template>
     <template #default=" { close }">
       <li>
