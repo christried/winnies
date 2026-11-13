@@ -393,6 +393,7 @@ export const Saving: Story = {
     expect(spy).not.toHaveBeenCalled();
     // The text was selected when the edit began: the picture shows the still input, not a highlight.
     el.setSelectionRange(0, 0);
+    window.getSelection()?.removeAllRanges();
     await parkPointer();
     await finish(canvasElement);
   },
