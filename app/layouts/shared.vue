@@ -5,6 +5,7 @@ useDialect("broadcast");
 const root = useTemplateRef<HTMLElement>("root");
 const clock = provideSurfaceClock();
 provideWinniesMotion({ root, interval: clock.interval });
+const { toasts, dismiss } = useToast();
 </script>
 
 <template>
@@ -14,5 +15,6 @@ provideWinniesMotion({ root, interval: clock.interval });
       <AppFooter />
     </div>
     <ParticleLayer />
+    <UiToastStack :toasts="toasts" @dismiss="dismiss" />
   </div>
 </template>
