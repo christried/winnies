@@ -31,6 +31,7 @@ What the Standards review checks in Winnies, on top of `GLOSSARY.md`, the ADRs a
 ## Motion
 
 - Every animation is a recipe of the motion engine, under its name in `docs/design_handoff_winnies/04-motion-and-sound.md`. No animation library, no `<TransitionGroup>` for list moves (ADR-0003).
+- Two exceptions to the rule above, both decided by the human on 2026-11-13. Hover and press are CSS on the motion tokens, not recipes (#309, `ui/button.vue`): the jelly after a click is the recipe `m.release`. The switch knob's slide is the recipe `m.switchSlide`, which has no moment in `04-motion-and-sound.md`: the reference CSS's timing (`--dur-fast`, `--ease-spring`) on `transform` (#316).
 - The server renders the reduced-motion end state, and `prefers-reduced-motion` turns all animation off (ADR-0001, ADR-0003).
 - A component reaches its surface's engine through `useWinniesMotion()`, never `createMotionEngine`; a layout calls `provideWinniesMotion()` and renders `<ParticleLayer />` (#300).
 - Time on a surface comes from its clock: a component reads `useSurfaceClock()`, a layout the clock its own `provideSurfaceClock()` returned (a component cannot inject what it provides). No component keeps a `setInterval` or `Date.now()` of its own for a displayed time or a tab title, so every digit of a surface changes in the same frame (ADR-0003, #304).
