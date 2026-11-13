@@ -14,12 +14,8 @@ async function onSignIn() {
   await authClient.signIn.social({ provider: "discord", callbackURL: "/" });
 }
 
-/**
- * Processes logging out the current User.
- * @param close Passed up from the menu. Gives access to closing the popover menu.
- */
-async function onSignOut(close: () => void) {
-  close();
+/** Processes logging out the current User. */
+async function onSignOut() {
   await authClient.signOut();
   await reloadNuxtApp({ path: "/" });
 }
@@ -35,7 +31,10 @@ async function onSignOut(close: () => void) {
     Sign in with Discord
   </UiButton>
 
-  <UiDropdown v-else>
+  <UiMenu
+    v-else
+    :heading="`Logged in as ${user.name}`"
+  >
     <template #trigger="{ trigger }">
       <!-- The avatar is the glyph: a ghost icon button with the picture (or the initials) inside the circle. -->
       <UiIconButton
@@ -52,15 +51,8 @@ async function onSignOut(close: () => void) {
         <span v-else class="text-sm">{{ userShorthand }}</span>
       </UiIconButton>
     </template>
-    <template #default=" { close }">
-      <li>
-        Logged in as {{ user.name }}
-      </li>
-      <li>
-        <button type="button" @click="onSignOut(close)">
-          Log out
-        </button>
-      </li>
-    </template>
-  </UiDropdown>
+    <UiMenuItem @click="onSignOut()">
+      Log out
+    </UiMenuItem>
+  </UiMenu>
 </template>
