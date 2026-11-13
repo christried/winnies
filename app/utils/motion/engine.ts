@@ -779,6 +779,13 @@ export function createMotionEngine(o: MotionOptions): WinniesMotion {
     { transform: `translateX(${fromX}%)` },
     { transform: `translateX(${toX}%)` },
   ], { duration: T.D.land, easing: T.E.bouncy });
+  // The switch knob's slide (#316). The reference's `.w-switch::after` transitions `left` over --dur-fast with
+  // --ease-spring; rule 2 allows only transform, so it is `translateX` with the same timing (the human, 2026-11-13).
+  // The moment has no ID in 04-motion-and-sound.md, which is the handoff's copy and stays as it is.
+  m.switchSlide = (knob, fromX, toX) => m.play("resp", knob, [
+    { transform: `translateX(${fromX}%)` },
+    { transform: `translateX(${toX}%)` },
+  ], { duration: T.D.fast, easing: T.E.spring });
   m.pop = (el, s = 1.3) => m.play("resp", el, [
     { transform: `scale(${1 + (s - 1) * g()})` },
     { transform: "none" },
