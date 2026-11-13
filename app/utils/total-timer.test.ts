@@ -10,7 +10,7 @@ describe("formatTimerText", () => {
     expect(formatTimerText(3 * 3600 + 12 * 60 + 36, "row", false)).toBe("3:12:36");
   });
 
-  it("writes an untouched Challenge Timer as 00:00, whatever the seconds say", () => {
+  it("writes a Challenge Timer that was never started as 00:00, whatever the seconds say", () => {
     expect(formatTimerText(0, "row", true)).toBe("00:00");
     expect(formatTimerText(5, "row", true)).toBe("00:00");
   });
@@ -34,7 +34,7 @@ describe("formatTimerText", () => {
     expect(formatTimerText(Number.NaN, "row", false)).toBe("0:00:00");
   });
 
-  it("ignores untouched outside a row, whose Total Timer has no such state", () => {
+  it("ignores notStarted outside a row, whose Total Timer has no such state", () => {
     expect(formatTimerText(65, "workspace", true)).toBe("01:05");
   });
 });
@@ -130,7 +130,7 @@ describe("timerSpokenValue", () => {
   });
 
   it("says each state by its word", () => {
-    expect(timerSpokenValue(0, "untouched", "row")).toBe("0 minutes, not started");
+    expect(timerSpokenValue(0, "notStarted", "row")).toBe("0 minutes, not started");
     expect(timerSpokenValue(0, "paused", "row")).toBe("0 minutes, paused");
     expect(timerSpokenValue(0, "running", "row")).toBe("0 minutes, running");
     expect(timerSpokenValue(0, "complete", "workspace")).toBe("0 minutes, complete");

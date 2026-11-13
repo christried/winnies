@@ -22,7 +22,7 @@ export interface WinTarget {
 /**
  * Marks a Challenge Won as the handoff plays it: C01 (the jelly, the face pop, the fountain and the cue), then the row
  * travels to the Won group and lands (R17). The row, not the toggle, owns the elements, so the toggle only asks and the
- * row calls this from its `toggle` handler. Nini's hop and the progress bar's move (R29) are the row's own.
+ * row calls this from its `toggle` handler. Winniebert's hop and the progress bar's move (R29) are the row's own.
  *
  * It resolves once the flip has started, not when the arc ends, so a caller's "ignore a second toggle until this is
  * done" covers the wait for the jelly and the commit. Under reduced motion every recipe creates nothing, `on("cel")` is

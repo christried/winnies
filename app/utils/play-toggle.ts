@@ -12,7 +12,7 @@ export interface PlayToggleView {
 }
 
 // The words are 06-copy.md's `row.labels`, the component's own copy: the toggle has no text, so the word is its name.
-const IDLE: PlayToggleView = {
+const NOT_RUNNING: PlayToggleView = {
   label: "Start",
   icon: "play_arrow",
   variant: "default",
@@ -48,5 +48,5 @@ export function playToggleView(running: boolean, won: boolean): PlayToggleView {
     return WON;
   return running
     ? RUNNING
-    : IDLE;
+    : NOT_RUNNING;
 }

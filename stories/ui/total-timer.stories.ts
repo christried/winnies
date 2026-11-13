@@ -33,7 +33,7 @@ interface Case {
 }
 
 const ROW_SURFACE: Record<TimerState, string> = {
-  untouched: "var(--color-surface)",
+  notStarted: "var(--color-surface)",
   paused: "var(--color-surface)",
   running: "var(--color-running-surface)",
   complete: "var(--color-won-surface)",
@@ -83,6 +83,7 @@ function sheet(title: string, cases: Case[]): () => VNode {
   ]);
 }
 
+// The first case keeps the word `untouched` for its id and its chip: the chip is in the pictures. The state is `notStarted`.
 const D = 14 * 3600 + 32 * 60 + 7;
 
 const WORKSPACE: Case[] = [
@@ -90,7 +91,7 @@ const WORKSPACE: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "workspace",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -166,7 +167,7 @@ const OVERLAY: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "overlay",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -209,7 +210,7 @@ const ROW: Case[] = [
     id: "untouched",
     label: "untouched",
     variant: "row",
-    state: "untouched",
+    state: "notStarted",
     seconds: 0,
     text: "00:00",
   },
@@ -295,14 +296,14 @@ function colorOf(canvasElement: HTMLElement, token: string): string {
 }
 
 const INK: Record<TimerState, string> = {
-  untouched: "--color-text-muted",
+  notStarted: "--color-text-muted",
   paused: "--color-text",
   running: "--color-running-text",
   complete: "--color-won-text",
 };
 
 const DISC: Record<TimerState, string> = {
-  untouched: "--color-control",
+  notStarted: "--color-control",
   paused: "--color-control",
   running: "--color-accent",
   complete: "--color-complete",

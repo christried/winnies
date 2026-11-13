@@ -331,7 +331,7 @@ export const Busy: Story = {
 
 // A stand-in for R3's `challenge-row`, which R2 does not have: the three parts the Won recipes move (the mid panel, the face
 // disc and the Won sticker), the list they travel in, and the toggle. It is R3's contract in miniature: on `toggle` the row
-// runs `playWon` or `playUnwon` with its own elements and sets `won` only in `commit`. Nini, the progress bar, C02, drag and
+// runs `playWon` or `playUnwon` with its own elements and sets `won` only in `commit`. Winniebert, the progress bar, C02, drag and
 // the rest of the row are not here.
 interface PlaceholderRow { id: string; name: string; won: boolean }
 
