@@ -4,7 +4,7 @@ import { computed, defineComponent, h, nextTick, reactive, ref } from "vue";
 import UiWinToggle from "../../app/components/ui/win-toggle.vue";
 import { materialIconBody } from "../../app/utils/material-icons";
 import { playUnwon, playWon } from "../../app/utils/win-motion";
-import { expectQuietAfter, finish, settled } from "../support/component-checks";
+import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
 import { chip, headingCss } from "../support/html";
 import { animations, frames, particleCount, withDialect, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
@@ -117,6 +117,7 @@ export const NotWon: Story = {
 
     // The check is the outline cut, and the icon is decorative: the name is the word alone.
     expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("w600"));
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -146,6 +147,7 @@ export const Won: Story = {
     // Won and not Won differ by shape as well as colour: the filled cut of the check.
     expect(innerOf(el.querySelector("svg")!)).toBe(cutMarkup("w700-fill"));
     expect(cutMarkup("w700-fill")).not.toBe(cutMarkup("w600"));
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -205,6 +207,7 @@ export const Hover: Story = {
         }
       });
     });
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -222,6 +225,7 @@ export const Active: Story = {
         expect(getComputedStyle(el).boxShadow).toMatch(/ 0px 1px 0px -1px$/);
       }
     });
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -249,6 +253,7 @@ export const Focus: Story = {
     expect(ring.outlineStyle).toBe("solid");
     expect(ring.outlineWidth).not.toBe("0px");
     expect(ring.transitionProperty).not.toMatch(/outline|\ball\b/);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -272,6 +277,7 @@ export const Disabled: Story = {
     await userEvent.tab();
     expect([open, won].includes(document.activeElement as HTMLElement)).toBe(false);
     expect(spy).not.toHaveBeenCalled();
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -314,6 +320,7 @@ export const Busy: Story = {
         expect(svg.getAnimations()).toHaveLength(1);
       }
     });
+    await parkPointer();
     await finish(canvasElement);
   },
 };
@@ -550,6 +557,7 @@ export const Row: Story = {
     })));
 
     expect(order()).toEqual(["boss", "dark", "celeste"]);
+    await parkPointer();
     await finish(canvasElement);
   },
 };
