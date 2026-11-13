@@ -26,6 +26,13 @@ export function nuxtConfig(root: string): UserConfig {
       Unimport.vite(importsOptions(root)),
       componentsPlugin(root),
     ],
+    // `plugin-vue` compiles a `.vue` file's TypeScript with the tsconfig nearest to the file, which for app/ is the root
+    // one: it only references `.nuxt/tsconfig.*.json`, and the `visual` job runs no `nuxt prepare`. Named here, as the
+    // Vitest config names it for the stories' own `.ts` files. Vite passes the `oxc` object on to the transform, which
+    // takes a `tsconfig`; its type for the option leaves it out.
+    oxc: {
+      tsconfig: path.join(root, ".storybook/tsconfig.json"),
+    } as UserConfig["oxc"],
     resolve: {
       alias: [
         { find: /^~\//, replacement: `${at("app")}/` },
