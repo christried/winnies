@@ -7,6 +7,7 @@ import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/co
 import { chip, headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
+import { expectHoverOnlyWhereTheDeviceHovers } from "../support/touch";
 
 // The app's own UiButton (#309): the handoff's clay button (03-components.md, `button`; `.w-btn*` in the reference CSS and
 // the buttons card, where the prototypes win). Today's screens use it for their five text buttons; the labels here are
@@ -428,6 +429,9 @@ export const Pressing: Story = {
 
     const press = await findButton(canvasElement, "Press");
     const save = await findButton(canvasElement, "Save");
+
+    // A hover lifts it where the device hovers, and a tap on a phone leaves no lift.
+    await step("a hover lifts it only on a device that can hover", () => expectHoverOnlyWhereTheDeviceHovers(press));
 
     // The animations that act on one button or its icon, whatever the rest of the page runs.
     const on = (el: HTMLElement) => animations().filter(a => el.contains((a.effect as KeyframeEffect | null)?.target ?? null));

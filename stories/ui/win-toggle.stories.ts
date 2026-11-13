@@ -8,6 +8,7 @@ import { expectQuietAfter, finish, parkPointer, settled } from "../support/compo
 import { chip, headingCss } from "../support/html";
 import { animations, frames, particleCount, withDialect, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
+import { expectHoverOnlyWhereTheDeviceHovers } from "../support/touch";
 
 // The app's own UiWinToggle (#317): the handoff's win toggle (03-components.md, `win-toggle`; `.w-win` in the reference CSS and
 // the win-timer card, where the prototypes win). No screen uses it yet; R3's rows compose it. The word on it is the
@@ -91,6 +92,9 @@ export const NotWon: Story = {
     spy.mockClear();
     const el = await findToggle(canvasElement, NOT_WON);
     expect(el).toHaveAttribute("aria-checked", "false");
+
+    // A hover lifts it where the device hovers, and a tap on a phone leaves no lift.
+    await expectHoverOnlyWhereTheDeviceHovers(el);
 
     await expectQuietAfter(async () => {
       await userEvent.click(el);

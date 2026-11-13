@@ -43,12 +43,12 @@ const LIP_DISABLED = "[box-shadow:0_2px_0_-1px_var(--lip)]";
 // The class names are written out whole: Tailwind finds them by scanning the source, so a name built from a variable is
 // never generated.
 const LIVELY_CLASSES = {
-  open: "[&:is(:hover,.is-hover):not(:is(:active,.is-active))]:text-won-text "
-    + "[&:is(:hover,.is-hover):not(:is(:active,.is-active))]:[--lip:var(--color-won-lip)] ",
+  open: "hovering:[&:not(:is(:active,.is-active))]:text-won-text "
+    + "hovering:[&:not(:is(:active,.is-active))]:[--lip:var(--color-won-lip)] ",
   won: "",
-  shared: "[&:is(:hover,.is-hover):not(:is(:active,.is-active))]:[translate:0_calc(var(--hover-lift)/2)] "
-    + "[&:is(:hover,.is-hover):not(:is(:active,.is-active))]:[box-shadow:0_calc(var(--lip-md)-var(--hover-lift)/2)_0_-1px_var(--lip)] "
-    + "showcase:[&:is(:hover,.is-hover):not(:is(:active,.is-active))]:-rotate-1 "
+  shared: "hovering:[&:not(:is(:active,.is-active))]:[translate:0_calc(var(--hover-lift)/2)] "
+    + "hovering:[&:not(:is(:active,.is-active))]:[box-shadow:0_calc(var(--lip-md)-var(--hover-lift)/2)_0_-1px_var(--lip)] "
+    + "showcase:hovering:[&:not(:is(:active,.is-active))]:-rotate-1 "
     + "[&:is(:active,.is-active)]:[translate:0_calc(var(--lip-md)-1px)] "
     + "[&:is(:active,.is-active)]:[box-shadow:0_1px_0_-1px_var(--lip)] "
     + "[&:is(:active,.is-active)]:[transition-duration:var(--dur-instant)]",

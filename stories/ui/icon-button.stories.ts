@@ -8,6 +8,7 @@ import { chip, headingCss } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
+import { expectHoverOnlyWhereTheDeviceHovers } from "../support/touch";
 
 // The app's own UiIconButton (#310): the handoff's round icon button (03-components.md, `icon-button`; `.w-btn--icon` in the
 // reference CSS and the buttons card, where the prototypes win). It is `UiButton`'s icon-only form, so its hover, press,
@@ -247,6 +248,9 @@ export const Hover: Story = {
         });
       }
     });
+
+    // A tap on a phone leaves no lift: the hover look is for a device that can hover.
+    await expectHoverOnlyWhereTheDeviceHovers(await findButton(canvasElement, "Real hover"));
     await finish(canvasElement);
   },
 };

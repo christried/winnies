@@ -16,6 +16,19 @@
 @custom-variant broadcast (&:where([data-dialect="broadcast"], [data-dialect="broadcast"] *));
 @custom-variant showcase (&:where([data-dialect="showcase"], [data-dialect="showcase"] *));
 @custom-variant reduced (&:where([data-motion="reduce"], [data-motion="reduce"] *));
+/* A hover look for a device that can hover: a tap on a phone leaves `:hover` on the button until the next tap, so the
+   lift would stick. `.is-hover` is the stories' hook class and draws the look on any device. */
+@custom-variant hovering {
+  &:is(.is-hover) {
+    @slot;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --color-*: initial;
