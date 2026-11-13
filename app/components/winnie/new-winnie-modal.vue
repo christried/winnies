@@ -54,6 +54,7 @@ defineExpose({
     ref="modal"
     title="Create a new Winnie"
     action-label="Create"
+    busy-label="Creating…"
     :pending="isSubmitting"
     @action="onSubmit"
   >
