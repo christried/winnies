@@ -4,7 +4,7 @@ import { getStoryTitle } from "storybook/internal/common";
 import { loadCsf } from "storybook/internal/csf-tools";
 import { describe, expect, it } from "vitest";
 import storybookConfig from "../.storybook/main.ts";
-import { baselinePath, shotIn, UNSHOT_PREFIXES, VARIANTS } from "../.storybook/visual-variants.ts";
+import { baselinePath, contextOptions, shotIn, storyTags, UNSHOT_PREFIXES, VARIANTS } from "../.storybook/visual-variants.ts";
 
 // The variant table decides which story renders are compared with a baseline (.storybook/visual-variants.ts), and the
 // baselines are PNG files in stories/__screenshots__/. Vitest fails a missing baseline in CI, and nothing else ties the
@@ -21,6 +21,15 @@ const posix = file => file.replaceAll("\\", "/");
  * @returns {string[]} the ids, sorted
  */
 function storyIds() {
+  return storyEntries().map(({ id }) => id).toSorted();
+}
+
+/**
+ * The id and the tags of every story Storybook indexes, read the way its indexer reads them: the meta's tags and the
+ * story's own. A variant that selects stories by tag selects what these say, not what a story file seems to say.
+ * @returns {{ id: string, tags: string[] }[]} one entry per story
+ */
+function storyEntries() {
   const files = storybookConfig.stories.flatMap(pattern => globSync(pattern, { cwd: CONFIG_DIR }).map(file => path.resolve(CONFIG_DIR, file)));
   return files.flatMap((file) => {
     const csf = loadCsf(readFileSync(file, "utf8"), {
@@ -33,8 +42,8 @@ function storyIds() {
         userTitle,
       }) ?? userTitle,
     }).parse();
-    return csf.stories.map(story => story.id);
-  }).toSorted();
+    return csf.indexInputs.map(({ __id: id, tags }) => ({ id, tags }));
+  });
 }
 
 /** The story ids a variant's `only` and `skip` name that are not stories, one problem each. */
@@ -43,6 +52,20 @@ function unknownIds(variants, ids) {
     ...(variant.only ?? []).map(id => ({ list: "only", id })),
     ...(variant.skip ?? []).map(id => ({ list: "skip", id })),
   ].filter(({ id }) => !ids.includes(id)).map(({ list, id }) => `Variant ${variant.name} names the story id ${JSON.stringify(id)} in \`${list}\`, which is not a story. Fix the id in .storybook/visual-variants.ts (the stories are: ${ids.join(", ")}).`));
+}
+
+/**
+ * The tags a variant selects stories by that no story carries, one problem each. A tag nothing carries makes the
+ * variant's project run no test, and a project with no test passes.
+ * @param {object[]} variants the table
+ * @param {{ id: string, tags: string[] }[]} entries every story with its tags
+ * @returns {string[]} the problems
+ */
+function variantTagProblems(variants, entries) {
+  const carried = new Set(entries.flatMap(({ tags }) => tags));
+  return variants.flatMap(variant => (variant.tags ?? [])
+    .filter(tag => !carried.has(tag))
+    .map(tag => `Variant ${variant.name} selects stories by the tag ${JSON.stringify(tag)}, which no story carries, so its project would run nothing and pass. Fix the tag in .storybook/visual-variants.ts or put it on a story.`));
 }
 
 /** The baseline files a table shoots: every variant, every story that variant shoots. */
@@ -209,5 +232,56 @@ describe("the component stories (#307)", () => {
     for (const variant of VARIANTS)
       expect(shotIn(variant, "storybook-auto-imports--default"), variant.name).toBe(false);
     expect(shotIn({}, "storybook-auto-imports--default")).toBe(false);
+  });
+});
+
+describe("the browser's preference for reduced motion (#345)", () => {
+  const entries = storyEntries();
+  const ids = entries.map(({ id }) => id);
+  const variant = VARIANTS.find(({ name }) => name === "browser-prefers-reduced");
+  const others = VARIANTS.filter(({ name }) => name !== "browser-prefers-reduced");
+
+  it("has a variant that emulates the preference, keeps the toolbar at full motion and shoots nothing", () => {
+    expect(variant).toBeDefined();
+    // The toolbar stays at "full" on purpose: with "reduce" the attribute alone would reduce, and only the media query
+    // is the case this variant exists for.
+    expect(variant.globals.motion).toBe("full");
+    expect(variant.emulateReducedMotion).toBe(true);
+    for (const id of ids)
+      expect(shotIn(variant, id), id).toBe(false);
+  });
+
+  it("hands the emulation and the tag to the one variant, and nothing to the other variants", () => {
+    expect(contextOptions(variant)).toEqual({ reducedMotion: "reduce" });
+    expect(storyTags(variant)).toEqual({
+      include: ["reduced-preference"],
+    });
+    expect(others.length).toBeGreaterThan(0);
+    for (const other of others) {
+      expect(contextOptions(other), other.name).toBeUndefined();
+      expect(storyTags(other), other.name).toBeUndefined();
+    }
+  });
+
+  it("the tag is on the motion press story and the switch's toggling story, and on no other", () => {
+    const tagged = entries.filter(({ tags }) => tags.includes("reduced-preference")).map(({ id }) => id);
+    // The exact list is the decision: a third story grows the job, and a missing tag makes the project run nothing.
+    expect(tagged.toSorted()).toEqual(["motion-press--default", "ui-switch--toggling"]);
+    noProblems(variantTagProblems(VARIANTS, entries));
+  });
+
+  it("a variant whose tag no story carries is one problem", () => {
+    const typo = [
+      {
+        name: "typo",
+        globals: {},
+        tags: ["reduced-prefrence"],
+      },
+      { name: "plain", globals: {} },
+    ];
+    const problems = variantTagProblems(typo, entries);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain("typo");
+    expect(problems[0]).toContain("reduced-prefrence");
   });
 });
