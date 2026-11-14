@@ -6,7 +6,7 @@ import UiStatePill from "../../app/components/ui/state-pill.vue";
 import { STATE_PILL_VARIANTS } from "../../app/utils/state-pill";
 import { expectQuietAfter, finish } from "../support/component-checks";
 import { chip } from "../support/html";
-import { animations, withMotion } from "../support/motion-play";
+import { animations, runningLoops, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { labelled, page } from "../support/ui-kit";
 
@@ -104,7 +104,7 @@ export const Loading: Story = {
     const running = await pillOf(canvasElement, WORDS.running);
     await withMotion("full", async () => {
       // R35: the spinner is the engine's `spin` loop, one animation on the icon of the loading pill and none elsewhere.
-      await waitFor(() => expect(iconOf(loading).getAnimations().filter(a => a.playState === "running")).toHaveLength(1));
+      await waitFor(async () => expect(await runningLoops(iconOf(loading))).toHaveLength(1));
       expect(iconOf(loading).getAnimations()).toHaveLength(1);
       expect(animations()).toHaveLength(1);
       const spin = iconOf(loading).getAnimations()[0]!;
@@ -114,7 +114,6 @@ export const Loading: Story = {
       expect(effect.getKeyframes().map(k => k.transform)).toEqual(["rotate(0deg)", "rotate(360deg)"]);
       expect(effect.getComputedTiming().duration).toBe(900);
       expect(effect.getTiming().easing).toBe("linear");
-      expect(effect.getComputedTiming().iterations).toBe(Infinity);
       expect(running.getAnimations({ subtree: true })).toHaveLength(0);
     });
 

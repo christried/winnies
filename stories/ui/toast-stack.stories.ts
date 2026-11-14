@@ -5,7 +5,7 @@ import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiToastStack from "../../app/components/ui/toast-stack.vue";
 import { expectQuietAfter, finish, parkPointer, settled } from "../support/component-checks";
-import { animations, frames, withMotion } from "../support/motion-play";
+import { animations, frames, isLoop, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { page } from "../support/ui-kit";
 
@@ -141,7 +141,7 @@ const slideStart = (el: HTMLElement) => Number.parseFloat(slideOf(el)![0]!.slice
 async function calm() {
   for (let i = 0; i < 6; i++) {
     await settled();
-    if (!animations().some(a => a.playState === "running" && a.effect?.getComputedTiming().iterations !== Infinity))
+    if (!animations().some(a => a.playState === "running" && !isLoop(a)))
       return;
   }
 }

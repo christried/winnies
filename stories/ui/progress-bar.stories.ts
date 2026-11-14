@@ -5,7 +5,7 @@ import { h, ref } from "vue";
 import UiProgressBar from "../../app/components/ui/progress-bar.vue";
 import { expectQuietAfter, finish } from "../support/component-checks";
 import { chip, resolved } from "../support/html";
-import { animations, frames, withMotion } from "../support/motion-play";
+import { animations, frames, runningLoops, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { page } from "../support/ui-kit";
 
@@ -243,12 +243,11 @@ export const Running: Story = {
     await step("full motion: one infinite linear loop on each stripes layer, none on the fill", () => withMotion("full", async () => {
       for (const bar of bars) {
         const { fill, stripes } = partsOf(bar);
-        await waitFor(() => expect(stripes.getAnimations()).toHaveLength(1), { timeout: 4000 });
+        await waitFor(async () => expect(await runningLoops(stripes)).toHaveLength(1), { timeout: 4000 });
         const loop = stripes.getAnimations()[0]!;
         const effect = loop.effect as KeyframeEffect;
         expect(effect.target).toBe(stripes);
         const timing = effect.getTiming();
-        expect(timing.iterations).toBe(Number.POSITIVE_INFINITY);
         expect(timing.easing).toBe("linear");
         expect(timing.duration).toBe(seconds("--dur-breathe"));
         expect(effect.getKeyframes().at(-1)!.transform).toBe("translateX(28.28px)");
@@ -264,7 +263,7 @@ export const Running: Story = {
       await expectQuietAfter(async () => {});
       await withMotion("full", async () => {
         for (const bar of bars)
-          await waitFor(() => expect(partsOf(bar).stripes.getAnimations()).toHaveLength(1), { timeout: 4000 });
+          await waitFor(async () => expect(await runningLoops(partsOf(bar).stripes)).toHaveLength(1), { timeout: 4000 });
       });
     });
 
@@ -282,7 +281,7 @@ export const Running: Story = {
 
       await userEvent.click(toggle);
       for (const bar of bars)
-        await waitFor(() => expect(partsOf(bar).stripes.getAnimations()).toHaveLength(1), { timeout: 4000 });
+        await waitFor(async () => expect(await runningLoops(partsOf(bar).stripes)).toHaveLength(1), { timeout: 4000 });
 
       // The loop runs for the plays above; the picture needs it still. Playwright's screenshot is meant to cancel an
       // infinite animation, but CI caught the stripes a pixel off in some runs, so the loop is paused at its first frame.
