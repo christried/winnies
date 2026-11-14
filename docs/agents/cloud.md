@@ -21,9 +21,9 @@ Before the first run of `pnpm test:api` or `pnpm test:e2e`, and again after the 
 
 The container brings one Chromium, at `/opt/pw-browsers/chromium`, and `WINNIES_CHROMIUM` points `playwright.config.ts` and `scripts/shots.mjs` at it. `pnpm exec playwright install` is not run there.
 
-It is an older build than the one `@playwright/test` pins. So `pnpm test:e2e` is a check before the push, and CI's `e2e` job stays the gate; a screenshot comparison counts only from the pinned image (ADR-0004).
+It is an older build than the one `@playwright/test` pins. So `pnpm test:e2e` is a check before the push, and CI's `e2e` job stays the gate; a screenshot comparison counts only from the pinned image (ADR-0004). The pinned image runs here under Docker, from one command: `pnpm test:visual:image` (README § Tests), which needs the daemon of § Getting ready, step 3, but not `docker compose`.
 
-The motion stories' play functions run there too, as a check before the push: `WINNIES_VISUAL=container CI=true pnpm vitest run -c vitest.storybook.config.ts stories/motion` (add `--project <variant>` for one variant). The token stories' screenshot comparisons fail in that container, an older Chromium than the pinned one, so keep the `stories/motion` filter. `--update` is never passed outside the pinned image, and CI's `visual` job stays the gate (ADR-0004).
+The motion stories' play functions run there too, as a check before the push: `WINNIES_VISUAL=container CI=true pnpm vitest run -c vitest.storybook.config.ts stories/motion` (add `--project <variant>` for one variant). The token stories' screenshot comparisons fail in that container, an older Chromium than the pinned one, so keep the `stories/motion` filter. For the screenshots themselves run `pnpm test:visual:image`. `--update` is never passed outside the pinned image, and CI's `visual` job stays the gate (ADR-0004).
 
 ## GitHub
 
@@ -50,6 +50,8 @@ It must not reach a commit. A merge commit takes the PR's title, not its body, w
 
 `scripts/shots.mjs` reaches staging only when the human has saved the bypass secret on the `winnies` environment as a network secret: host `staging.winnies.christried.me`, header `x-vercel-protection-bypass`. The container's proxy then adds the header to every request to that host, the browser's included, and no agent sees the value. `VERCEL_AUTOMATION_BYPASS_SECRET` in the container's `.env` is a placeholder that only gets the helper past its own check; the rules for the real one (`delivery.md` § Issues) hold.
 
+A story (`--story <id>`) goes through the same proxy as a page, so the same network secret reaches `/storybook/`, and the two failures below mean the same for it. `--dark` and `--full-motion` are settings of the container's own Chromium and need nothing from the network.
+
 `net::ERR_TUNNEL_CONNECTION_FAILED` from the helper means the host is not allowed, so the secret is not saved. Vercel's login page means it is wrong or expired. Either way the staging check becomes a local check (§ What stays local), and the comment says which of the two it was.
 
 The Vercel connector's tools are named `mcp__Vercel__…` here; `.claude/settings.json` denies the two share-link tools under both names.
@@ -69,4 +71,4 @@ A scratchpad and a transcript stay on the machine that wrote them. So a handoff 
 
 ## The container is not the human's machine
 
-It is thrown away after the session, so starting `dockerd` there needs no question. Its disk is small: a ticket's Docker volume for the pinned image (`winnies-visual-node-modules-<n>`) is removed as soon as the ticket is merged into the integration branch, with `docker volume rm` (the human, 2026-11-13, #295: the disk stood at 98% with eleven such volumes, and a compare run died with `ENOSPC`). The shared `winnies-visual-pnpm-store` stays. What a later session should find installed belongs in the environment's setup script, which the human approves on a card; `scripts/machine-guard.mjs` still asks before an install.
+It is thrown away after the session, so starting `dockerd` there needs no question. Its disk is small: a ticket's Docker volume for the pinned image (`winnies-visual-node-modules-<hash of the checkout path>`, found with `docker volume ls`) is removed as soon as the ticket is merged into the integration branch, with `docker volume rm` (the human, 2026-11-13, #295: the disk stood at 98% with eleven such volumes, and a compare run died with `ENOSPC`). The shared `winnies-visual-pnpm-store` stays. What a later session should find installed belongs in the environment's setup script, which the human approves on a card; `scripts/machine-guard.mjs` still asks before an install.

@@ -54,7 +54,7 @@ app's. It lives in `.env.example` (commented out) and in the main checkout's `.e
 `pnpm exec playwright install chromium` downloads. Unset everywhere but in a cloud session's environment
 ([`docs/agents/cloud.md`](docs/agents/cloud.md)); it lives in `.env.example` (commented out) and nowhere else.
 
-`WINNIES_VISUAL` is the fifth exception. [`scripts/visual-podman.mjs`](scripts/visual-podman.mjs) and the `visual`
+`WINNIES_VISUAL` is the fifth exception. [`scripts/visual-image.mjs`](scripts/visual-image.mjs) and the `visual`
 job in [`ci.yml`](.github/workflows/ci.yml) set it to `container`, and only the screenshot suite's config reads it,
 through [`scripts/visual-env.mjs`](scripts/visual-env.mjs): it refuses to run, or to write a baseline, outside the
 pinned Playwright image (ADR-0004). The app never reads it, so it lives in those two places and not in
@@ -69,7 +69,7 @@ and `scripts/harness-sync.test.mjs` fails `pnpm test` when the copies, the servi
 `pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` ·
 `pnpm test:build` · `pnpm test:e2e` · `pnpm test:db:up` · `pnpm test:db:down` · `pnpm db:generate` ·
 `pnpm db:migrate` · `pnpm db:studio` · `pnpm favicons:stage` · `pnpm storybook` · `pnpm build-storybook` ·
-`pnpm test:visual:podman`
+`pnpm test:visual:image`
 
 `pnpm favicons:stage` regenerates `public/staging/` from `public/`; `scripts/favicon-tint.test.mjs` fails `pnpm test`
 when a committed copy differs (the rule is in `scripts/favicon-tint.mjs`). After a handoff re-sync, run
@@ -102,7 +102,8 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
 - The API tests build the app, start it, and call it over HTTP, signed in as a throwaway Owner,
   against a local Postgres that they empty on every run:
   1. Install [Podman](https://podman.io) with its compose provider (`winget install RedHat.Podman`,
-     then `podman machine init` and `podman machine start`). Podman is the prerequisite, Docker is not used.
+     then `podman machine init` and `podman machine start`). Podman is the prerequisite on this machine and Docker is not used here; a cloud container has Docker
+     instead ([`docs/agents/cloud.md`](docs/agents/cloud.md)).
   2. Create `.env.test` (git-ignored) with the `TEST_DATABASE_URL` line from `.env.example`. The
      other values the tests need are committed in `tests/support/env.ts`.
      In an agent worktree this step does not apply: Claude Code copies `.env.test` into it from the
@@ -130,21 +131,27 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
     `@playwright/test` in `package.json` move together: `scripts/playwright-pin.test.mjs` fails `pnpm test` when one differs.
 - The screenshot tests render every token story in Storybook, run axe on it and compare it with a committed baseline,
   pixel for pixel. They run inside the pinned Playwright image only: Windows rasterizes fonts differently, so a baseline
-  made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:podman` runs them there under Podman. The motion
+  made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:image` runs them there, under Podman on the human's machine and under Docker in a cloud container.
+  `pnpm test:visual:podman` is the same command pinned to Podman, kept so today's calls work. The motion
   stories (`stories/motion/`, ids starting with `motion-`) are rendered, checked by axe and run through their play
   functions in every variant, but never shot: a still of motion shows its end state only.
-  - Prerequisite: Podman, as for the API tests (`podman machine start`). The first run pulls the image
+  - Prerequisite: a container runtime, which the command picks: Docker when `CLAUDE_CODE_REMOTE` is set (a cloud
+    container), else Podman; `--runtime=podman` or `--runtime=docker` names one. On a Windows machine it is Podman, as
+    for the API tests (`podman machine start`); a cloud container needs the Docker daemon running (`docs/agents/cloud.md`
+    § Getting ready, step 3). A missing runtime is reported by name, with a pointer to this section. The first run pulls the image
     (`mcr.microsoft.com/playwright:v<X.Y.Z>-noble`, about 2 GB) and installs the dependencies inside the container,
     which takes minutes; later runs reuse them.
-  - The repo is mounted into the container. The Linux `node_modules` live in a named Podman volume
+  - The repo is mounted into the container. The Linux `node_modules` live in a named volume
     (`winnies-visual-node-modules-<hash of the checkout path>`) and the pnpm store in `winnies-visual-pnpm-store`; the
-    Windows `node_modules` are never visible there. `podman volume rm` frees them.
-  - `pnpm test:visual:podman --update` regenerates the baselines in `stories/__screenshots__/<variant>/`. Commit them
+    Windows `node_modules` are never visible there. `podman volume rm` (`docker volume rm` in a cloud container) frees them.
+  - In a cloud container the script runs the image on the host network, with the container's proxy and its CA bundle,
+    because the proxy listens on loopback; there is nothing to set up.
+  - `pnpm test:visual:image --update` regenerates the baselines in `stories/__screenshots__/<variant>/`. Commit them
     with the change that moved them: the PR shows each as an image diff, and that is the review. Arguments after the
     flags go to Vitest (`--project workspace-dark`).
   - `pnpm test:visual` and `pnpm test:visual:update` are what runs inside the image; run on the host they refuse
     to start (`scripts/visual-env.mjs`), so a baseline can only come from the container.
-  - A story with no baseline fails the run (`CI=true`, which the Podman script and the `visual` job set); it does not
+  - A story with no baseline fails the run (`CI=true`, which the script and the `visual` job set); it does not
     write one. Tolerance is zero.
   - A failed comparison leaves the new picture and a diff image in `.vitest/attachments/`. In CI the `visual` job
     uploads that directory as the `visual-diffs` artifact.

@@ -31,7 +31,8 @@
     "test:e2e": "playwright test",
     "test:visual": "vitest run -c vitest.storybook.config.ts",
     "test:visual:update": "vitest run -c vitest.storybook.config.ts --update",
-    "test:visual:podman": "node scripts/visual-podman.mjs",
+    "test:visual:image": "node scripts/visual-image.mjs",
+    "test:visual:podman": "node scripts/visual-image.mjs --runtime=podman",
     "test:db:up": "podman compose -f compose.test.yaml up -d",
     "test:db:down": "podman compose -f compose.test.yaml down -v"
   },
