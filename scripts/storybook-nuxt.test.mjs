@@ -84,6 +84,14 @@ describe("useState, the one Nuxt global a story may reach", () => {
     expect(useState("another-key", () => 3).value).toBe(3);
   });
 
+  it("is imported from a path a Windows checkout can write into an import statement", async () => {
+    const unimport = createUnimport(importsOptions("C:\\repo\\winnies"));
+    await unimport.init();
+    const { code } = await unimport.injectImports("export const count = useState(\"count\", () => 0);", "C:/repo/winnies/app/composables/use-count.ts");
+    expect(code).toContain("from 'C:/repo/winnies/.storybook/nuxt/stubs.ts'");
+    expect(code).not.toContain("\\");
+  });
+
   it("is registered for the app's sources, and nothing else of Nuxt's is", async () => {
     const unimport = createUnimport(importsOptions(ROOT));
     await unimport.init();
