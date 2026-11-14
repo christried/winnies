@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { firstLine, flagError, ghErrorLine, git } from "./cli-helpers.mjs";
+import { firstLine, flagError, ghErrorLine, git, isErrorPage } from "./cli-helpers.mjs";
 
 describe("scripts/cli-helpers.mjs firstLine", () => {
   it("picks git's refusal over the `To <url>` line before it", () => {
@@ -79,6 +79,22 @@ describe("scripts/cli-helpers.mjs ghErrorLine", () => {
     expect(ghErrorLine({
       stderr: "a".repeat(400),
     })).not.toMatch(/[\n<]/);
+  });
+});
+
+// ci-verdict.mjs's retryDecision and ghErrorLine ask the same question of a failed call's text.
+describe("scripts/cli-helpers.mjs isErrorPage", () => {
+  it("is true for a whole HTML page", () => {
+    expect(isErrorPage("<!DOCTYPE html>\n<html><head><title>Unicorn!</title></head><body>x</body></html>\ngh: HTTP 502\n")).toBe(true);
+  });
+
+  it("is false for the line `gh` prints for a status without a page", () => {
+    expect(isErrorPage("gh: HTTP 502\n")).toBe(false);
+    expect(isErrorPage("gh: HTTP 404")).toBe(false);
+  });
+
+  it("is false for no text", () => {
+    expect(isErrorPage("")).toBe(false);
   });
 });
 
