@@ -7,7 +7,7 @@ describe("scripts/pr-state.mjs mergeState", () => {
     ["dirty", "conflict"],
     ["clean", "clean"],
     ["behind", "behind"],
-    ["blocked", "ok"],
+    ["blocked", "blocked"],
     ["unstable", "ok"],
     ["has_hooks", "ok"],
     ["draft", "ok"],
