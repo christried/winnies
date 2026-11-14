@@ -57,3 +57,11 @@ export function grid(items: string[], min = 96) {
 export function resolved(name: string) {
   return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
+
+/**
+ * A token that resolves to a number, such as a duration in seconds or a pixel length without its unit.
+ *
+ * @param token the custom property, such as `--dur-breathe`
+ * @returns what it resolves to, as a number
+ */
+export const resolvedNumber = (token: string) => Number.parseFloat(resolved(token));

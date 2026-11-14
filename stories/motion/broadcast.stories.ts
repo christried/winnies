@@ -1,16 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import type { Ref, VNodeChild } from "vue";
 import { expect, waitFor, within } from "storybook/test";
-import { defineComponent, h, ref } from "vue";
-import { block, page, reset, section, stage } from "../support/motion-kit";
+import { defineComponent, h } from "vue";
+import { block, elementRef, page, reset, section, stage } from "../support/motion-kit";
 import { animations, clickReplay, frames, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // Broadcast's moments B01 to B07 (handoff 04-motion-and-sound), one section each. Every Replay resets its elements and
 // then calls the recipe, as the handoff's playground does (Winnies Motion Playground, B01-B07); the static CSS of an
 // element is its recipe's resting frame, so a reduced-motion run shows that frame and nothing moves.
-
-const elementRef = () => ref<HTMLElement | null>(null);
 
 const Broadcast = defineComponent({
   name: "BroadcastStory",

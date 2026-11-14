@@ -2,23 +2,10 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { expect, within } from "storybook/test";
 import { h } from "vue";
 import UiFieldMessage from "../../app/components/ui/field-message.vue";
-import { chip } from "../support/html";
-import { page } from "../support/ui-kit";
+import { card, page } from "../support/ui-kit";
 
 // The app's own UiFieldMessage (#312): the small line under an input (03-components.md, `field-message`). It is also used
 // alone, as the Create Winnie modal's `formError`. The copy is story copy, not product copy.
-
-function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: `box-sizing:border-box;width:${width}px;max-width:100%;display:flex;flex-direction:column;gap:12px;`
-      + "padding:16px;background:var(--color-surface);border-radius:var(--radius-xl)",
-  }, [
-    h("div", {
-      innerHTML: chip(story),
-    }),
-    ...body,
-  ]);
-}
 
 const meta = {
   title: "UI/Field message",

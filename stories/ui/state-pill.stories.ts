@@ -8,7 +8,7 @@ import { expectQuietAfter, finish } from "../support/component-checks";
 import { chip } from "../support/html";
 import { animations, runningLoops, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
-import { labelled, page } from "../support/ui-kit";
+import { labelled, page, row } from "../support/ui-kit";
 
 // The app's own UiStatePill (#321): the handoff's `state-pill` (03-components.md; `.w-status` in the reference CSS and
 // the status card, where the prototypes win: the Shared View's summary pill is 34px with `--text-sm` and has its lip on
@@ -27,10 +27,6 @@ const WORDS: Record<StatePillVariant, string> = {
   offline: "Offline",
   loading: "Loading…",
 };
-
-function row(...body: ReturnType<typeof h>[]) {
-  return h("div", { style: "display:flex;flex-wrap:wrap;gap:16px" }, body);
-}
 
 const meta = {
   title: "UI/State pill",
