@@ -16,32 +16,41 @@ export async function frames(n = 2): Promise<void> {
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 }
 
-/**
- * What a frame is, in milliseconds, for a check of two animations that meet. A rollover leaves 5% of a 250 ms beat (12.5 ms)
- * and an animation starts on the next frame (16.7 ms), so correct timing can overlap by a few milliseconds.
- */
-export const ONE_FRAME = 17;
+/** How much of a beat a tick may take: the engine clamps every tick, its delay included, to this share (`m.tick`). */
+const TICK_SHARE = 0.95;
 
 /**
- * How far a tick runs into the next one on the same digit, in milliseconds, the worst over every slot: the earlier
- * animation's end on the document timeline, less the later one's start. Both start at a frame, so this is stable under
- * load where counting animations per frame is not: a stalled frame moves both starts together. It can be a few
- * milliseconds above zero even for correct timing, because the clamp leaves 5% of the interval (12.5 ms at 250 ms) and
- * a frame is 16.7 ms; `ONE_FRAME` is the allowance for that.
+ * What is wrong with the tick animations a sampler saw, in words; an empty list is a clean run. It asserts what a
+ * measure of the overlap between two ticks stood for, without its dependence on the scheduler: a beat's timer can
+ * come late by whole frames under load, which moves a tick's start and so the overlap (a late tick plus an on-time one
+ * left 20.8 ms against an allowance of 17), but never what the engine hands `animate()`. Per slot: every tick ends
+ * within 95% of the beat measured from its own start (delay and duration, the #337 fault), and no two ticks start less
+ * than a quarter of a beat apart (a beat ticked the slot twice; real beats are a whole interval apart, give or take
+ * a few frames of jitter).
  *
  * @param animations the animations seen on each slot, by the slot's `pos`
- * @returns the worst overlap in milliseconds, or negative infinity when no slot had two
+ * @param interval the beat in milliseconds, 1000 / the story's rate
+ * @returns one sentence per fault, naming the slot; empty when there is none
  */
-export function worstOverlap(animations: Map<number, Set<Animation>>): number {
-  let worst = Number.NEGATIVE_INFINITY;
-  for (const set of animations.values()) {
-    const byStart = [...set].toSorted((a, b) => Number(a.startTime) - Number(b.startTime));
-    byStart.slice(0, -1).forEach((a, i) => {
-      const end = Number(a.startTime) + Number(a.effect!.getComputedTiming().endTime);
-      worst = Math.max(worst, end - Number(byStart[i + 1]!.startTime));
+export function tickFaults(animations: Map<number, Set<Animation>>, interval: number): string[] {
+  const faults: string[] = [];
+  for (const [slot, set] of animations) {
+    // A null start time is an animation a Replay cancelled, or one that never started: nothing to measure.
+    const started = [...set]
+      .filter(a => a.startTime !== null)
+      .toSorted((a, b) => Number(a.startTime) - Number(b.startTime));
+    for (const a of started) {
+      const end = Number(a.effect!.getComputedTiming().endTime);
+      if (end > interval * TICK_SHARE + 0.01)
+        faults.push(`slot ${slot}: a tick lasts ${end.toFixed(1)} ms from its start, past ${TICK_SHARE * 100}% of the ${interval} ms beat`);
+    }
+    started.slice(0, -1).forEach((a, i) => {
+      const gap = Number(started[i + 1]!.startTime) - Number(a.startTime);
+      if (gap < interval / 4)
+        faults.push(`slot ${slot}: two ticks start ${gap.toFixed(1)} ms apart, so one beat ticked it twice (a beat is ${interval} ms)`);
     });
   }
-  return worst;
+  return faults;
 }
 
 /** Sets or removes an attribute, runs `fn`, and puts the attribute back as it was, also when `fn` throws. */
