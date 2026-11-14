@@ -46,6 +46,18 @@ function anims(el: FakeElement): FakeAnimation[] {
   return el.animations;
 }
 
+// An element under a frame of its own, as a loop's element sits under its component: the host asks about the frame.
+function framedIn(make: () => FakeElement) {
+  const frame = make();
+  const el = make();
+  frame.appendChild(el);
+  return { frame, el };
+}
+
+function framed(h: MotionHarness) {
+  return framedIn(() => h.el());
+}
+
 function running(h: MotionHarness) {
   return h.log.map(c => c.animation).filter(a => !a.cancelled);
 }
@@ -143,15 +155,15 @@ describe("a changed spec", () => {
 describe("pausing", () => {
   it("pauses a loop whose element leaves the screen and resumes it, re-aligned, when it returns", () => {
     const { h, env, host } = setup();
-    const el = h.el();
+    const { frame, el } = framed(h);
     host.set(el, "ring");
     const a = anims(el)[0] as FakeAnimation;
 
-    env.setVisible(el, false);
+    env.setVisible(frame, false);
     expect(a.playState).toBe("paused");
 
     a.startTime = 5000; // what a browser's clock would have moved it to
-    env.setVisible(el, true);
+    env.setVisible(frame, true);
     expect(a.playState).toBe("running");
     expect(a.startTime).toBe(LOOP_ORIGIN);
   });
@@ -175,16 +187,16 @@ describe("pausing", () => {
 
   it("keeps a loop paused while either reason holds", () => {
     const { h, env, host } = setup();
-    const el = h.el();
+    const { frame, el } = framed(h);
     host.set(el, "ring");
     const a = anims(el)[0] as FakeAnimation;
 
-    env.setVisible(el, false);
+    env.setVisible(frame, false);
     env.setHidden(true);
     env.setHidden(false);
     expect(a.playState).toBe("paused");
 
-    env.setVisible(el, true);
+    env.setVisible(frame, true);
     expect(a.playState).toBe("running");
   });
 
@@ -201,13 +213,95 @@ describe("pausing", () => {
 
   it("starts the replacement paused when the element is off-screen", () => {
     const { h, env, host } = setup();
-    const el = h.el();
+    const { frame, el } = framed(h);
     host.set(el, "ring");
-    env.setVisible(el, false);
+    env.setVisible(frame, false);
 
     host.set(el, "glow");
 
     expect(anims(el)[1]?.playState).toBe("paused");
+  });
+});
+
+// The host asks about the frame a loop moves in, not the element it moves: a loop that carries its element out of a clip
+// (the Total Timer's gloss) would otherwise be paused by its own motion and never resume (#355).
+describe("the observed frame", () => {
+  it("observes the element's parent, not the element", () => {
+    const { h, env, host } = setup();
+    const { frame, el } = framed(h);
+
+    host.set(el, "shimmer");
+
+    expect(env.isObserved(frame)).toBe(true);
+    expect(env.isObserved(el)).toBe(false);
+    expect(env.observed).toBe(1);
+  });
+
+  it("observes an element that has no parent itself", () => {
+    const { h, env, host } = setup();
+    const el = h.el();
+
+    host.set(el, "ring");
+
+    expect(env.isObserved(el)).toBe(true);
+    expect(env.observed).toBe(1);
+  });
+
+  it("does not pause a loop whose element alone is reported off-screen", () => {
+    const { h, env, host } = setup();
+    const { el } = framed(h);
+    host.set(el, "shimmer");
+
+    env.setVisible(el, false);
+
+    expect(anims(el)[0]?.playState).toBe("running");
+  });
+
+  it("pauses both loops under one parent when it leaves, and resumes both aligned when it returns", () => {
+    const { h, env, host } = setup();
+    const frame = h.el();
+    const [a, b] = [
+      h.el(),
+      h.el(),
+    ];
+    frame.appendChild(a);
+    frame.appendChild(b);
+    host.set(a, "shimmer");
+    host.set(b, "ring");
+    expect(env.observed).toBe(2);
+
+    env.setVisible(frame, false);
+    expect(anims(a)[0]?.playState).toBe("paused");
+    expect(anims(b)[0]?.playState).toBe("paused");
+
+    (anims(a)[0] as FakeAnimation).startTime = 4000;
+    (anims(b)[0] as FakeAnimation).startTime = 4000;
+    env.setVisible(frame, true);
+    expect(anims(a)[0]?.playState).toBe("running");
+    expect(anims(b)[0]?.playState).toBe("running");
+    expect(anims(a)[0]?.startTime).toBe(LOOP_ORIGIN);
+    expect(anims(b)[0]?.startTime).toBe(LOOP_ORIGIN);
+  });
+
+  it("keeps the other loop's observer working when one of two under a parent is removed", () => {
+    const { h, env, host } = setup();
+    const frame = h.el();
+    const [a, b] = [
+      h.el(),
+      h.el(),
+    ];
+    frame.appendChild(a);
+    frame.appendChild(b);
+    host.set(a, "shimmer");
+    host.set(b, "ring");
+
+    host.remove(a);
+    expect(env.observed).toBe(1);
+
+    env.setVisible(frame, false);
+    expect(anims(b)[0]?.playState).toBe("paused");
+    env.setVisible(frame, true);
+    expect(anims(b)[0]?.playState).toBe("running");
   });
 });
 
@@ -244,18 +338,19 @@ describe("a shared phase", () => {
 
   it("puts a loop back in step with its sibling after it was off-screen for a while", () => {
     const { h, env, host } = setup();
-    const [a, b] = [
-      h.el(),
-      h.el(),
+    const [fa, fb] = [
+      framed(h),
+      framed(h),
     ];
+    const [a, b] = [fa.el, fb.el];
     host.set(a, "ring");
     host.set(b, "ring");
 
-    env.setVisible(b, false);
+    env.setVisible(fb.frame, false);
     (anims(a)[0] as FakeAnimation).startTime = 123; // a keeps running, its time reading drifts in the recorder
-    env.setVisible(a, false);
-    env.setVisible(b, true);
-    env.setVisible(a, true);
+    env.setVisible(fa.frame, false);
+    env.setVisible(fb.frame, true);
+    env.setVisible(fa.frame, true);
 
     expect(anims(a)[0]?.startTime).toBe(anims(b)[0]?.startTime);
     expect(anims(b)[0]?.startTime).toBe(LOOP_ORIGIN);
@@ -263,13 +358,14 @@ describe("a shared phase", () => {
 
   it("re-aligns every running loop when the tokens change, and leaves a paused one paused", () => {
     const { h, env, host } = setup();
-    const [a, b] = [
-      h.el(),
-      h.el(),
+    const [fa, fb] = [
+      framed(h),
+      framed(h),
     ];
+    const [a, b] = [fa.el, fb.el];
     host.set(a, "ring");
     host.set(b, "ring");
-    env.setVisible(b, false);
+    env.setVisible(fb.frame, false);
     (anims(a)[0] as FakeAnimation).startTime = 77;
 
     h.env.styleOf(SHOWCASE);
@@ -380,9 +476,9 @@ describe("gating", () => {
 
   it("starts a restarted loop paused when its element is off-screen", () => {
     const { h, env, host } = setup();
-    const el = h.el();
+    const { frame, el } = framed(h);
     host.set(el, "ring");
-    env.setVisible(el, false);
+    env.setVisible(frame, false);
 
     h.env.changeMedia(true);
     h.env.changeMedia(false);
@@ -710,15 +806,15 @@ describe("a loop of the first render", () => {
 
   it("stays paused through the surface's start while the element is off-screen, and resumes aligned", () => {
     const s = firstRender(SHOWCASE);
-    const el = s.el();
+    const { frame, el } = framedIn(s.el);
     s.host.set(el, "breathe");
-    s.loopEnv.setVisible(el, false);
+    s.loopEnv.setVisible(frame, false);
 
     s.surface.start();
     expect(live(el).anim?.playState).toBe("paused");
 
     (live(el).anim as FakeAnimation).startTime = 4000;
-    s.loopEnv.setVisible(el, true);
+    s.loopEnv.setVisible(frame, true);
     expect(live(el).anim?.playState).toBe("running");
     expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
   });
@@ -763,17 +859,17 @@ describe("a dialect change under a running loop", () => {
 
   it("keeps a paused loop paused through the rebuild, and resumes it aligned", () => {
     const s = firstRender(WORKSPACE);
-    const el = s.el();
+    const { frame, el } = framedIn(s.el);
     s.host.set(el, "breathe");
     s.surface.start();
-    s.loopEnv.setVisible(el, false);
+    s.loopEnv.setVisible(frame, false);
 
     s.env.styleOf(SHOWCASE);
     s.env.setAttr("data-dialect", "showcase");
     expect(live(el).keyframes).toEqual(breatheAt(1.6));
     expect(live(el).anim?.playState).toBe("paused");
 
-    s.loopEnv.setVisible(el, true);
+    s.loopEnv.setVisible(frame, true);
     expect(live(el).anim?.playState).toBe("running");
     expect(live(el).anim?.startTime).toBe(LOOP_ORIGIN);
   });

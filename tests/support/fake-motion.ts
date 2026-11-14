@@ -199,6 +199,10 @@ function buildElement(init: FakeElementInit): FakeElement {
     offsetWidth: init.offsetWidth ?? 0,
     offsetHeight: init.offsetHeight ?? 0,
     ownerDocument: doc,
+    // Null until `appendChild` puts the element under another, as in the DOM.
+    get parentElement() {
+      return parent;
+    },
     setParent: (p: FakeElement | null) => {
       parent = p;
     },
