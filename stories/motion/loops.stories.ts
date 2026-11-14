@@ -7,7 +7,7 @@ import { useLoopDirective } from "../../app/composables/use-loop-directive";
 import { LOOPS } from "../../app/utils/motion/loops";
 import { resolved } from "../support/html";
 import { block, onSwitches, page, readout, section, stage } from "../support/motion-kit";
-import { animations, clickReplay, frames, live, withDialect, withMotion } from "../support/motion-play";
+import { animations, clickReplay, frames, live, runningLoops, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 
 // Every ambient loop and the two Responsive ones (A01 to A11, face accents, spin, skel), one cell each, on the real
@@ -262,17 +262,18 @@ export const Default: StoryObj<typeof meta> = {
   async play({ canvasElement, step }) {
     // The story mounts one tick after the surface has read its tokens, so the first element has to be waited for.
     await within(canvasElement).findByRole("button", { name: "Replay" });
-    const everyLoopRuns = () => {
+    const everyLoopRuns = async () => {
       const els = loopEls(canvasElement);
       expect([
         ...new Set(els.map(el => el.dataset.loop)),
       ].toSorted()).toEqual(names);
-      els.forEach(el => expect(el.getAnimations(), el.dataset.loop).toHaveLength(1));
+      for (const el of els)
+        expect(await runningLoops(el), el.dataset.loop).toHaveLength(1);
     };
     // Both probes exist and run: b starts 700 ms after a.
-    const probesRun = () => {
-      expect(probeEl(canvasElement, "a").getAnimations()).toHaveLength(1);
-      expect(probeEl(canvasElement, "b").getAnimations()).toHaveLength(1);
+    const probesRun = async () => {
+      expect(await runningLoops(probeEl(canvasElement, "a"))).toHaveLength(1);
+      expect(await runningLoops(probeEl(canvasElement, "b"))).toHaveLength(1);
     };
 
     await step("a replay creates no animation when reduced", () => withMotion("reduce", async () => {
@@ -285,7 +286,7 @@ export const Default: StoryObj<typeof meta> = {
     await step("reduce cancels every running loop and leaving it restarts them", () => withMotion("full", async () => {
       await waitFor(everyLoopRuns, { timeout: 4000 });
       await withMotion("reduce", async () => {
-        await waitFor(() => expect(live()).toHaveLength(0));
+        await waitFor(() => expect(animations()).toHaveLength(0));
       });
       await waitFor(everyLoopRuns, { timeout: 4000 });
     }));
@@ -325,9 +326,13 @@ export const Default: StoryObj<typeof meta> = {
       const wrap = wrapEl(canvasElement, "b");
       wrap.style.display = "none";
       try {
-        await waitFor(() => {
+        await waitFor(async () => {
           expect(animOf(probeEl(canvasElement, "b")).playState).toBe("paused");
           expect(animOf(probeEl(canvasElement, "a")).playState).toBe("running");
+          // The paused loop, through the real host: not a running loop, and not what `live` counts.
+          expect(await runningLoops(probeEl(canvasElement, "b"))).toHaveLength(0);
+          expect(await runningLoops(probeEl(canvasElement, "a"))).toHaveLength(1);
+          expect(live()).not.toContain(animOf(probeEl(canvasElement, "b")));
         });
         await new Promise(resolve => setTimeout(resolve, 400));
       }
