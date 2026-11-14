@@ -126,6 +126,95 @@ export function readStoryUrl(id, look, target) {
 }
 
 /**
+ * How a story's render ended, from the last `currentRender.phase` the preview showed. A story with no play function
+ * ends `completed` too, so it reads as passed.
+ *
+ * @param {string | null | undefined} phase the last phase, `null` or `undefined` when the page had no preview or render
+ * @returns {{ outcome: "passed" | "failed" | "never ended", line: string }} the outcome and the line to print
+ */
+export function describePhase(phase) {
+  if (phase === "completed" || phase === "finished") {
+    return { outcome: "passed", line: `play function passed (phase ${phase})` };
+  }
+  if (phase === "errored") {
+    return { outcome: "failed", line: "play function failed (phase errored)" };
+  }
+  if (phase === "aborted") {
+    return { outcome: "failed", line: "play function failed (phase aborted: the render was cut off)" };
+  }
+  return { outcome: "never ended", line: `play function never ended (last phase: ${phase || "none"})` };
+}
+
+/**
+ * The phase to describe, from the last one the preview showed and every one it went through. Storybook runs a render
+ * on to `completed` and `finished` after a play function threw, so the last phase alone reads a failure as a pass:
+ * a render that went through `errored` or `aborted` ended in it.
+ *
+ * @param {string | null | undefined} last the last `currentRender.phase` the page showed
+ * @param {string[] | undefined} seen the phases of every `storyRenderPhaseChanged` event, `undefined` when none were recorded
+ * @returns {string | null | undefined} the phase `describePhase` reads
+ */
+export function settlePhase(last, seen) {
+  return ["errored", "aborted"].find(phase => seen?.includes(phase)) ?? last;
+}
+
+/**
+ * What to print about the look, so a caller can tell a picture that took it from one that did not: an account that
+ * saved a theme beats the browser's dark scheme. Nothing for the default look, so a call without flags prints as before.
+ *
+ * @param {{ theme: string, motion: string, dialect: string }} look what `readLook` returned
+ * @param {{ theme: string | null, motion: string | null, prefersReduced: boolean }} seen `<html data-theme>`, `<html data-motion>` and `prefers-reduced-motion: reduce` as the page ended up
+ * @param {number} width the viewport width the line is about
+ * @returns {string[]} the lines, none for the default look
+ */
+export function describeLook(look, seen, width) {
+  if (look.theme === "light" && look.motion === "reduce" && look.dialect === "workspace") {
+    return [];
+  }
+  const lines = [
+    `look [${width}]: <html data-theme="${seen.theme ?? "none"}" data-motion="${seen.motion ?? "none"}">, prefers-reduced-motion ${seen.prefersReduced ? "reduce" : "no-preference"}`,
+  ];
+  if (look.theme === "dark" && seen.theme !== "dark") {
+    lines.push(`note: --dark asked, but <html data-theme> is "${seen.theme ?? "none"}": the page keeps its own saved theme`);
+  }
+  if (look.motion === "full" && (seen.motion === "reduce" || seen.prefersReduced)) {
+    const what = [
+      seen.motion === "reduce"
+        ? "<html data-motion> is \"reduce\""
+        : null,
+      seen.prefersReduced ? "prefers-reduced-motion still matches" : null,
+    ].filter(Boolean).join(" and ");
+    lines.push(`note: --full-motion asked, but reduced motion is still on: ${what}`);
+  }
+  return lines;
+}
+
+/**
+ * The name of a screenshot: the slug, the width and, only for a look that is not the default, the look.
+ *
+ * @param {string} slug what `slugOf` returned, or `story-` and that of a story's id
+ * @param {number} width the viewport width
+ * @param {{ theme: string, motion: string, dialect: string }} look what `readLook` returned
+ * @returns {string} the file name, `home-1440.png` for the default look
+ */
+export function shotFileName(slug, width, look) {
+  const parts = [
+    slug,
+    String(width),
+  ];
+  if (look.theme === "dark") {
+    parts.push("dark");
+  }
+  if (look.motion === "full") {
+    parts.push("full-motion");
+  }
+  if (look.dialect !== "workspace") {
+    parts.push(look.dialect);
+  }
+  return `${parts.join("-")}.png`;
+}
+
+/**
  * The part of a screenshot's file name that says which path it shows.
  *
  * @param {string} path the path that was opened

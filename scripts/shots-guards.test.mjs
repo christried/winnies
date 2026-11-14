@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readLook, readPath, readStoryUrl, readTarget, Refusal, scrub, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
+import { describeLook, describePhase, readLook, readPath, readStoryUrl, readTarget, Refusal, scrub, settlePhase, shotFileName, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
 
 // scripts/shots.mjs holds the Playwright work; what keeps the Vercel bypass secret from leaving the staging
 // origin is decided here (#238): which origin it may open, which path, and what a printed line may show.
@@ -252,5 +252,157 @@ describe("scripts/shots-guards.mjs readStoryUrl", () => {
     const id = `${"a".repeat(100)}--${"b".repeat(98)}`;
     expect(id).toHaveLength(200);
     expect(new URL(readStoryUrl(id, DEFAULT_LOOK, STAGING)).searchParams.get("id")).toBe(id);
+  });
+});
+
+describe("scripts/shots-guards.mjs describePhase", () => {
+  it.each(["completed", "finished"])("reads the phase %j as a play function that passed", (phase) => {
+    expect(describePhase(phase)).toEqual({ outcome: "passed", line: `play function passed (phase ${phase})` });
+  });
+
+  it("reads errored as a play function that failed", () => {
+    expect(describePhase("errored")).toEqual({ outcome: "failed", line: "play function failed (phase errored)" });
+  });
+
+  it("reads aborted as a play function that failed, the render cut off", () => {
+    expect(describePhase("aborted")).toEqual({
+      outcome: "failed",
+      line: "play function failed (phase aborted: the render was cut off)",
+    });
+  });
+
+  it.each([
+    ["rendering", "rendering"],
+    ["playing", "playing"],
+    ["loading", "loading"],
+    ["", "none"],
+    [null, "none"],
+    [undefined, "none"],
+  ])("reads the last phase %j as a play function that never ended, naming %s", (phase, named) => {
+    expect(describePhase(phase)).toEqual({ outcome: "never ended", line: `play function never ended (last phase: ${named})` });
+  });
+});
+
+describe("scripts/shots-guards.mjs settlePhase", () => {
+  it("keeps the last phase when the render ran without a failure", () => {
+    expect(settlePhase("finished", [
+      "preparing",
+      "playing",
+      "played",
+      "completed",
+      "finished",
+    ])).toBe("finished");
+    expect(settlePhase("completed", undefined)).toBe("completed");
+    expect(settlePhase(null, [])).toBe(null);
+  });
+
+  // Storybook runs on to `finished` after a play function threw: the last phase alone reads a failure as a pass.
+  it("reads a render that went through errored as errored, whatever phase it ended in", () => {
+    expect(settlePhase("finished", [
+      "playing",
+      "errored",
+      "completing",
+      "completed",
+      "finished",
+    ])).toBe("errored");
+    expect(settlePhase(null, ["playing", "errored"])).toBe("errored");
+  });
+
+  it("reads a render that went through aborted as aborted", () => {
+    expect(settlePhase("finished", ["playing", "aborted", "finished"])).toBe("aborted");
+  });
+
+  it("puts errored before aborted", () => {
+    expect(settlePhase("finished", ["aborted", "errored"])).toBe("errored");
+  });
+});
+
+describe("scripts/shots-guards.mjs describeLook", () => {
+  it.each([
+    [
+      { theme: "dark", motion: "full", prefersReduced: false },
+    ],
+    [
+      { theme: null, motion: null, prefersReduced: true },
+    ],
+    [
+      { theme: "light", motion: "reduce", prefersReduced: true },
+    ],
+  ])("says nothing for the default look, so a call without flags prints what it printed before: %j", (seen) => {
+    expect(describeLook(DEFAULT_LOOK, seen, 1440)).toEqual([]);
+  });
+
+  it("prints one line for a dark look the page took", () => {
+    const look = readLook({ dark: true }, false);
+    expect(describeLook(look, { theme: "dark", motion: "reduce", prefersReduced: true }, 1440)).toEqual([
+      "look [1440]: <html data-theme=\"dark\" data-motion=\"reduce\">, prefers-reduced-motion reduce",
+    ]);
+  });
+
+  it("adds a note when --dark found a light page: the page keeps its own saved theme", () => {
+    const look = readLook({ dark: true }, false);
+    const lines = describeLook(look, { theme: "light", motion: "reduce", prefersReduced: true }, 390);
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toMatch(/^look \[390\]: /);
+    expect(lines[1]).toBe("note: --dark asked, but <html data-theme> is \"light\": the page keeps its own saved theme");
+  });
+
+  it("says none for an attribute the page does not carry", () => {
+    const look = readLook({ fullMotion: true }, false);
+    expect(describeLook(look, { theme: null, motion: null, prefersReduced: false }, 1440)).toEqual([
+      "look [1440]: <html data-theme=\"none\" data-motion=\"none\">, prefers-reduced-motion no-preference",
+    ]);
+  });
+
+  it("adds a note when --full-motion still meets data-motion reduce", () => {
+    const look = readLook({ fullMotion: true }, true);
+    const lines = describeLook(look, { theme: "light", motion: "reduce", prefersReduced: false }, 1440);
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).toMatch(/^note: --full-motion asked, but reduced motion is still on: .*data-motion/);
+  });
+
+  it("adds a note when --full-motion still meets a reduced-motion preference", () => {
+    const look = readLook({ fullMotion: true }, true);
+    const lines = describeLook(look, { theme: "light", motion: null, prefersReduced: true }, 1440);
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).toMatch(/^note: --full-motion asked, but reduced motion is still on: .*prefers-reduced-motion/);
+  });
+
+  it("prints a line for a dialect alone: a story in Showcase is not the default look", () => {
+    const look = readLook({ dialect: "showcase" }, true);
+    expect(describeLook(look, { theme: "light", motion: "reduce", prefersReduced: true }, 1440)).toHaveLength(1);
+  });
+});
+
+describe("scripts/shots-guards.mjs shotFileName", () => {
+  it("names a picture as before for the default look", () => {
+    expect(shotFileName("home", 1440, DEFAULT_LOOK)).toBe("home-1440.png");
+    expect(shotFileName("story-ui-button-primary", 390, DEFAULT_LOOK)).toBe("story-ui-button-primary-390.png");
+  });
+
+  it.each([
+    [
+      { dark: true },
+      "home-1440-dark.png",
+    ],
+    [
+      { fullMotion: true },
+      "home-1440-full-motion.png",
+    ],
+    [
+      { dark: true, fullMotion: true },
+      "home-1440-dark-full-motion.png",
+    ],
+  ])("adds the look to the name for %j", (flags, expected) => {
+    expect(shotFileName("home", 1440, readLook(flags, false))).toBe(expected);
+  });
+
+  it("adds a dialect that is not Workspace, and only that", () => {
+    expect(shotFileName("story-ui-button-primary", 390, readLook({ dialect: "showcase" }, true))).toBe("story-ui-button-primary-390-showcase.png");
+    expect(shotFileName("story-ui-button-primary", 390, readLook({ dialect: "workspace" }, true))).toBe("story-ui-button-primary-390.png");
+  });
+
+  it("puts dark, full motion and the dialect in that order", () => {
+    expect(shotFileName("home", 1440, readLook({ dark: true, fullMotion: true, dialect: "showcase" }, true))).toBe("home-1440-dark-full-motion-showcase.png");
   });
 });
