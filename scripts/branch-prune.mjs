@@ -9,8 +9,10 @@
 // when an open PR has it as head or as base, when it is not merged (a squash-merged branch is never an ancestor), or when
 // its tip is on the first-parent line: it has no commit of its own (another session may have just cut it) or was merged
 // without a merge commit (a fast-forward), and the two look alike. `--dry-run` prints
-// what it would do and changes nothing. One line per branch. The decision is scripts/branch-verdict.mjs; this file
-// gathers the data and acts on it.
+// what it would do and changes nothing. One line per branch. After them it lists, with the age of its last commit, each
+// kept branch that is not merged, has no open PR and is not contained in an open PR's head, under a heading that says to
+// ask about it (#370): nothing there is deleted. The decision is scripts/branch-verdict.mjs; this file gathers the data
+// and acts on it.
 //
 // Each delete is a lease against the sha judged here, so a push that lands in between makes git refuse instead of
 // deleting it. Accepted residual risks: a branch cut from an already-merged branch tip, with no commit yet, looks merged
@@ -18,7 +20,7 @@
 // Only `refs/heads/*` on origin is touched: no local branch, no worktree.
 import { execFileSync, spawnSync } from "node:child_process";
 import process from "node:process";
-import { decide } from "./branch-verdict.mjs";
+import { asksAbout, decide, formatAge, openPrsHolding } from "./branch-verdict.mjs";
 import { firstLine, git, parseFlags } from "./cli-helpers.mjs";
 
 // Before any git call: a flag or an argument this script does not know must stop it, not be read as a real run.
@@ -82,11 +84,12 @@ catch (error) {
 }
 
 const prefix = "refs/remotes/origin/";
-const branches = git("for-each-ref", prefix, "--format=%(refname) %(objectname)").split("\n").filter(Boolean).map((line) => {
-  const [ref, tip] = line.split(" ");
+const branches = git("for-each-ref", prefix, "--format=%(refname) %(objectname) %(committerdate:unix)").split("\n").filter(Boolean).map((line) => {
+  const [ref, tip, committedAt] = line.split(" ");
   return {
     name: ref.slice(prefix.length),
     tip,
+    committedAt: Number(committedAt),
   };
 }).filter(branch => branch.name !== "HEAD").sort((a, b) => (a.name < b.name
   ? -1
@@ -100,18 +103,29 @@ if (branches.length === 0)
 // One call: the commits `redesign` and `main` reached along their first parent (a missing origin/main stops the script).
 const firstParentLine = new Set(git("rev-list", "--first-parent", "origin/redesign", "origin/main").split("\n"));
 
+/** The numbers of the open PRs whose head branch on origin has `tip` in its history. */
+function openPrsContaining(tip) {
+  const containing = git("for-each-ref", prefix, "--contains", tip, "--format=%(refname)").split("\n").filter(Boolean).map(ref => ref.slice(prefix.length));
+  return openPrsHolding(containing, pulls);
+}
+
+const toAskAbout = [];
 let failed = false;
-for (const { name, tip } of branches) {
-  const verdict = decide({
+for (const { name, tip, committedAt } of branches) {
+  const data = {
     name,
     tip,
     mergedInto: ["redesign", "main"].filter(into => isAncestor(tip, `origin/${into}`)),
     onFirstParentLine: firstParentLine.has(tip),
     openPrs: pulls.filter(pull => pull.head === name).map(pull => pull.number),
     baseOfOpenPrs: pulls.filter(pull => pull.base === name).map(pull => pull.number),
-  });
+    containedInOpenPrs: openPrsContaining(tip),
+  };
+  const verdict = decide(data);
   if (verdict.action === "keep") {
     console.log(`kept ${name}: ${verdict.reason}`);
+    if (asksAbout(data))
+      toAskAbout.push({ name, committedAt });
     continue;
   }
   if (dryRun) {
@@ -127,5 +141,13 @@ for (const { name, tip } of branches) {
     failed = true;
     console.log(`failed ${name}: ${firstLine(error)}`);
   }
+}
+// Nothing here is deleted: an unmerged branch is the human's to delete. The list is for the session that ends now to ask about.
+if (toAskAbout.length > 0) {
+  const now = Math.floor(Date.now() / 1000);
+  console.log("");
+  console.log("Not merged, no open PR, and in no open PR's branch: ask about each of these before anyone deletes it (nothing here is deleted):");
+  for (const { name, committedAt } of toAskAbout)
+    console.log(`  ${name} (last commit ${formatAge(committedAt, now)} ago)`);
 }
 process.exit(failed ? 1 : 0);
