@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { tickFaults } from "./motion-play";
+import { isLoop, isRunningLoop, tickFaults } from "./motion-play";
 
 const INTERVAL = 250;
 
@@ -83,5 +83,43 @@ describe("tickFaults", () => {
     const faults = tickFaults(slots, INTERVAL);
     expect(faults).toHaveLength(1);
     expect(faults[0]).toContain("slot 4");
+  });
+});
+
+/** An animation as  reads it: how often its effect repeats, and its play state. */
+function anim(iterations: number, playState: AnimationPlayState): Animation {
+  return {
+    playState,
+    effect: {
+      getComputedTiming: () => ({ iterations }),
+    },
+  } as unknown as Animation;
+}
+
+describe("isRunningLoop", () => {
+  it("is true for an infinite animation that is running", () => {
+    expect(isLoop(anim(Infinity, "running"))).toBe(true);
+    expect(isRunningLoop(anim(Infinity, "running"))).toBe(true);
+  });
+
+  it("is not true for a paused loop, which is still a loop", () => {
+    expect(isLoop(anim(Infinity, "paused"))).toBe(true);
+    expect(isRunningLoop(anim(Infinity, "paused"))).toBe(false);
+  });
+
+  it("is not true for a loop that was cancelled or has finished", () => {
+    expect(isRunningLoop(anim(Infinity, "idle"))).toBe(false);
+    expect(isRunningLoop(anim(Infinity, "finished"))).toBe(false);
+  });
+
+  it("is not true for a one-shot, which ends by itself", () => {
+    expect(isLoop(anim(1, "running"))).toBe(false);
+    expect(isRunningLoop(anim(1, "running"))).toBe(false);
+  });
+
+  it("is not true for an animation without an effect", () => {
+    const bare = { playState: "running", effect: null } as unknown as Animation;
+    expect(isLoop(bare)).toBe(false);
+    expect(isRunningLoop(bare)).toBe(false);
   });
 });
