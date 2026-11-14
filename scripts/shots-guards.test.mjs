@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describeLook, describePhase, readLook, readPath, readStoryUrl, readTarget, Refusal, scrub, settlePhase, shotFileName, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
+import { describeAnimations, describeFocus, describeLook, describePhase, describeStep, describeStepFailure, describeTarget, readLook, readPath, readSteps, readStepsPath, readStoryUrl, readTarget, readWidth, Refusal, scrub, settlePhase, shotFileName, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
 
 // scripts/shots.mjs holds the Playwright work; what keeps the Vercel bypass secret from leaving the staging
 // origin is decided here (#238): which origin it may open, which path, and what a printed line may show.
@@ -404,5 +404,1029 @@ describe("scripts/shots-guards.mjs shotFileName", () => {
 
   it("puts dark, full motion and the dialect in that order", () => {
     expect(shotFileName("home", 1440, readLook({ dark: true, fullMotion: true, dialect: "showcase" }, true))).toBe("home-1440-dark-full-motion-showcase.png");
+  });
+});
+
+describe("scripts/shots-guards.mjs readSteps", () => {
+  it("reads a click named by role and accessible name", () => {
+    expect(readSteps(JSON.stringify([
+      { do: "click", role: "button", name: "Open menu" },
+    ]))).toEqual([
+      {
+        number: 1,
+        do: "click",
+        target: { kind: "role", role: "button", name: "Open menu" },
+        read: [],
+      },
+    ]);
+  });
+
+  it.each([
+    [
+      "a click with an exact name",
+      {
+        do: "click",
+        role: "button",
+        name: "Create",
+        exact: true,
+      },
+      {
+        number: 1,
+        do: "click",
+        target: {
+          kind: "role",
+          role: "button",
+          name: "Create",
+          exact: true,
+        },
+        read: [],
+      },
+    ],
+    [
+      "a click by role alone",
+      { do: "click", role: "button" },
+      {
+        number: 1,
+        do: "click",
+        target: { kind: "role", role: "button" },
+        read: [],
+      },
+    ],
+    [
+      "a click by selector",
+      { do: "click", selector: "header nav a" },
+      {
+        number: 1,
+        do: "click",
+        target: { kind: "selector", selector: "header nav a" },
+        read: [],
+      },
+    ],
+    [
+      "a hover",
+      { do: "hover", role: "link", name: "Home" },
+      {
+        number: 1,
+        do: "hover",
+        target: { kind: "role", role: "link", name: "Home" },
+        read: [],
+      },
+    ],
+    [
+      "a key press with a modifier",
+      { do: "press", key: "Shift+Tab" },
+      {
+        number: 1,
+        do: "press",
+        key: "Shift+Tab",
+        read: [],
+      },
+    ],
+    [
+      "typed text",
+      {
+        do: "type",
+        role: "textbox",
+        name: "Game",
+        text: "Speedrun",
+      },
+      {
+        number: 1,
+        do: "type",
+        target: { kind: "role", role: "textbox", name: "Game" },
+        text: "Speedrun",
+        read: [],
+      },
+    ],
+    [
+      "typed empty text",
+      { do: "type", selector: "input", text: "" },
+      {
+        number: 1,
+        do: "type",
+        target: { kind: "selector", selector: "input" },
+        text: "",
+        read: [],
+      },
+    ],
+    [
+      "a wait of milliseconds",
+      { do: "wait", ms: 500 },
+      {
+        number: 1,
+        do: "wait",
+        ms: 500,
+        read: [],
+      },
+    ],
+    [
+      "a wait for a target",
+      { do: "wait", role: "status", name: "Timer reset" },
+      {
+        number: 1,
+        do: "wait",
+        target: { kind: "role", role: "status", name: "Timer reset" },
+        read: [],
+      },
+    ],
+    [
+      "a picture asked as true, labelled by the kind",
+      { do: "click", role: "button", shot: true },
+      {
+        number: 1,
+        do: "click",
+        target: { kind: "role", role: "button" },
+        shot: "click",
+        read: [],
+      },
+    ],
+    [
+      "a picture with a label",
+      { do: "click", role: "button", shot: "open" },
+      {
+        number: 1,
+        do: "click",
+        target: { kind: "role", role: "button" },
+        shot: "open",
+        read: [],
+      },
+    ],
+    [
+      "both read-outs",
+      {
+        do: "press",
+        key: "Escape",
+        read: ["focus", "animations"],
+      },
+      {
+        number: 1,
+        do: "press",
+        key: "Escape",
+        read: ["focus", "animations"],
+      },
+    ],
+  ])("reads %s", (_what, raw, expected) => {
+    expect(readSteps(JSON.stringify([raw]))).toEqual([expected]);
+  });
+
+  it("numbers the steps from 1, in order", () => {
+    const steps = readSteps(JSON.stringify([
+      { do: "wait", ms: 0 },
+      { do: "press", key: "Tab" },
+      { do: "wait", ms: 1 },
+    ]));
+    expect(steps.map(step => step.number)).toEqual([1, 2, 3]);
+  });
+
+  it.each([
+    ["an object", "{\"steps\": []}"],
+    ["a string", "\"click\""],
+    ["a number", "3"],
+    ["null", "null"],
+    ["an empty list", "[]"],
+    [
+      "51 steps",
+      JSON.stringify(Array.from({ length: 51 }, () => ({ do: "wait", ms: 1 }))),
+    ],
+  ])("refuses a file that is %s", (_what, text) => {
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(/not a list of steps/);
+  });
+
+  it("takes a list of 50 steps", () => {
+    expect(readSteps(JSON.stringify(Array.from({ length: 50 }, () => ({ do: "wait", ms: 1 }))))).toHaveLength(50);
+  });
+
+  it("refuses text that is not JSON, with the first line of the parse error", () => {
+    expect(() => readSteps("[{do: click}]")).toThrow(Refusal);
+    expect(() => readSteps("[{do: click}]")).toThrow(/not JSON: .+/);
+    expect(() => readSteps("[{do: click}]")).not.toThrow(/\n/);
+  });
+
+  it.each([
+    ["a string", "click"],
+    ["a number", 3],
+    ["null", null],
+    [
+      "a list",
+      [
+        { do: "click" },
+      ],
+    ],
+  ])("refuses a step that is %s, not an object", (_what, element) => {
+    const text = JSON.stringify([
+      { do: "wait", ms: 1 },
+      element,
+    ]);
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(/step 2: a step is an object/);
+  });
+
+  it.each([
+    [
+      "evaluate",
+      { do: "evaluate", script: "1" },
+      /unknown step "evaluate"/,
+    ],
+    [
+      "goto",
+      { do: "goto", url: "https://evil.com" },
+      /unknown step "goto"/,
+    ],
+    [
+      "route",
+      { do: "route" },
+      /unknown step "route"/,
+    ],
+    [
+      "a kind in another case",
+      { do: "Click", role: "button" },
+      /unknown step "Click"/,
+    ],
+    [
+      "no do",
+      { role: "button" },
+      /unknown step \(no "do"\)/,
+    ],
+    [
+      "a do that is not a string",
+      {
+        do: ["click"],
+        role: "button",
+      },
+      /unknown step/,
+    ],
+    [
+      "a do that is null",
+      { do: null },
+      /unknown step/,
+    ],
+  ])("refuses an unknown step: %s", (_what, element, message) => {
+    const text = JSON.stringify([
+      { do: "wait", ms: 1 },
+      element,
+    ]);
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(/^step 2:/);
+    expect(() => readSteps(text)).toThrow(message);
+  });
+
+  it("cuts a long unknown step at 40 characters", () => {
+    const text = JSON.stringify([
+      {
+        do: "x".repeat(300),
+      },
+    ]);
+    expect(() => readSteps(text)).toThrow(/step 1: unknown step/);
+    expect(() => readSteps(text)).not.toThrow(/x{41}/);
+  });
+
+  it.each([
+    [
+      "eval",
+      { do: "click", role: "button", eval: "alert(1)" },
+    ],
+    [
+      "script",
+      { do: "hover", role: "button", script: "alert(1)" },
+    ],
+    [
+      "function",
+      { do: "wait", ms: 1, function: "() => 1" },
+    ],
+    [
+      "headers",
+      {
+        do: "click",
+        role: "button",
+        headers: { "x-vercel-protection-bypass": "x" },
+      },
+    ],
+    [
+      "url",
+      { do: "click", role: "button", url: "https://evil.com" },
+    ],
+    [
+      "onclick",
+      { do: "click", role: "button", onclick: "alert(1)" },
+    ],
+    [
+      "key on a click",
+      { do: "click", role: "button", key: "Escape" },
+    ],
+    [
+      "text on a click",
+      { do: "click", role: "button", text: "x" },
+    ],
+    [
+      "ms on a type",
+      {
+        do: "type",
+        role: "textbox",
+        text: "x",
+        ms: 1,
+      },
+    ],
+    [
+      "target on a press",
+      { do: "press", key: "Escape", role: "button" },
+    ],
+    [
+      "selector on a press",
+      { do: "press", key: "Escape", selector: "body" },
+    ],
+  ])("refuses the field %s as unknown, with the step's number", (field, element) => {
+    const text = JSON.stringify([
+      { do: "wait", ms: 1 },
+      element,
+    ]);
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(/^step 2 \(\w+\): unknown field/);
+    expect(() => readSteps(text)).toThrow(/nothing in it runs/);
+  });
+
+  it("refuses a planted __proto__ as unknown and copies nothing of it", () => {
+    // JSON.parse makes `__proto__` an own property of the object, which is how a file can carry one.
+    const text = "[{\"do\": \"click\", \"role\": \"button\", \"__proto__\": {\"polluted\": true}}]";
+    expect(() => readSteps(text)).toThrow(/step 1 \(click\): unknown field "__proto__"/);
+    expect({}.polluted).toBeUndefined();
+  });
+
+  it("returns objects with no inherited surprises for a step with only known fields", () => {
+    const [step] = readSteps(JSON.stringify([
+      { do: "click", role: "button" },
+    ]));
+    expect(Object.keys(step).sort()).toEqual(["do", "number", "read", "target"]);
+  });
+
+  it.each([
+    [
+      "a click with no target",
+      { do: "click" },
+      /step 2 \(click\): no target/,
+    ],
+    [
+      "a hover with no target",
+      { do: "hover" },
+      /step 2 \(hover\): no target/,
+    ],
+    [
+      "a type with no target",
+      { do: "type", text: "x" },
+      /step 2 \(type\): no target/,
+    ],
+    [
+      "a name without a role",
+      { do: "click", name: "Open" },
+      /step 2 \(click\): .*"name"/,
+    ],
+    [
+      "exact without a role",
+      { do: "click", exact: true },
+      /step 2 \(click\): .*"exact"/,
+    ],
+    [
+      "exact without a name",
+      { do: "click", role: "button", exact: true },
+      /step 2 \(click\): "exact" goes with a "name"/,
+    ],
+    [
+      "a role and a selector",
+      { do: "click", role: "button", selector: "button" },
+      /step 2 \(click\): .*"role" and "selector"/,
+    ],
+    [
+      "a type with no text",
+      { do: "type", role: "textbox" },
+      /step 2 \(type\): no text/,
+    ],
+    [
+      "a press with no key",
+      { do: "press" },
+      /step 2 \(press\): no key/,
+    ],
+    [
+      "a wait with nothing to wait for",
+      { do: "wait" },
+      /step 2 \(wait\): nothing to wait for/,
+    ],
+    [
+      "a wait with a time and a target",
+      { do: "wait", ms: 5, role: "status" },
+      /step 2 \(wait\): .*not both/,
+    ],
+    [
+      "a wait with half a target",
+      { do: "wait", name: "x" },
+      /step 2 \(wait\): .*"name"/,
+    ],
+  ])("refuses %s", (_what, element, message) => {
+    const text = JSON.stringify([
+      { do: "wait", ms: 1 },
+      element,
+    ]);
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(message);
+  });
+
+  it.each([
+    [
+      "a role that is an object",
+      {
+        do: "click",
+        role: { a: 1 },
+      },
+      /"role"/,
+    ],
+    [
+      "a role in capitals",
+      { do: "click", role: "Button" },
+      /"role"/,
+    ],
+    [
+      "a role with a dash",
+      { do: "click", role: "a-b" },
+      /"role"/,
+    ],
+    [
+      "a role of 31 letters",
+      {
+        do: "click",
+        role: "a".repeat(31),
+      },
+      /"role"/,
+    ],
+    [
+      "a name that is a list",
+      {
+        do: "click",
+        role: "button",
+        name: ["a"],
+      },
+      /"name"/,
+    ],
+    [
+      "an empty name",
+      { do: "click", role: "button", name: "" },
+      /"name"/,
+    ],
+    [
+      "a name of 201 characters",
+      {
+        do: "click",
+        role: "button",
+        name: "n".repeat(201),
+      },
+      /"name"/,
+    ],
+    [
+      "an exact that is a string",
+      {
+        do: "click",
+        role: "button",
+        name: "a",
+        exact: "yes",
+      },
+      /"exact"/,
+    ],
+    [
+      "an empty selector",
+      { do: "click", selector: "" },
+      /"selector"/,
+    ],
+    [
+      "a selector of 201 characters",
+      {
+        do: "click",
+        selector: "s".repeat(201),
+      },
+      /"selector"/,
+    ],
+    [
+      "a selector that is a number",
+      { do: "click", selector: 3 },
+      /"selector"/,
+    ],
+    [
+      "text that is a number",
+      { do: "type", role: "textbox", text: 3 },
+      /"text"/,
+    ],
+    [
+      "text of 201 characters",
+      {
+        do: "type",
+        role: "textbox",
+        text: "t".repeat(201),
+      },
+      /"text"/,
+    ],
+    [
+      "a key with a space",
+      { do: "press", key: "Escape now" },
+      /"key"/,
+    ],
+    [
+      "a key that is a list",
+      {
+        do: "press",
+        key: ["Escape"],
+      },
+      /"key"/,
+    ],
+    [
+      "a key of 41 characters",
+      {
+        do: "press",
+        key: "k".repeat(41),
+      },
+      /"key"/,
+    ],
+    [
+      "a key ending in a plus",
+      { do: "press", key: "Shift+" },
+      /"key"/,
+    ],
+    [
+      "ms of 10001",
+      { do: "wait", ms: 10_001 },
+      /"ms"/,
+    ],
+    [
+      "ms of 1.5",
+      { do: "wait", ms: 1.5 },
+      /"ms"/,
+    ],
+    [
+      "ms of -1",
+      { do: "wait", ms: -1 },
+      /"ms"/,
+    ],
+    [
+      "ms as a string",
+      { do: "wait", ms: "5" },
+      /"ms"/,
+    ],
+    [
+      "a shot of false",
+      { do: "click", role: "button", shot: false },
+      /"shot"/,
+    ],
+    [
+      "a shot label in capitals",
+      { do: "click", role: "button", shot: "Open" },
+      /"shot"/,
+    ],
+    [
+      "a shot label with a slash",
+      { do: "click", role: "button", shot: "../x" },
+      /"shot"/,
+    ],
+    [
+      "a shot label of 41 characters",
+      {
+        do: "click",
+        role: "button",
+        shot: "a".repeat(41),
+      },
+      /"shot"/,
+    ],
+    [
+      "a read that is a string",
+      { do: "click", role: "button", read: "focus" },
+      /"read"/,
+    ],
+    [
+      "a read of something else",
+      {
+        do: "click",
+        role: "button",
+        read: ["network"],
+      },
+      /"read"/,
+    ],
+    [
+      "a read with a duplicate",
+      {
+        do: "click",
+        role: "button",
+        read: ["focus", "focus"],
+      },
+      /"read"/,
+    ],
+  ])("refuses a value of the wrong kind: %s", (_what, element, message) => {
+    const text = JSON.stringify([
+      { do: "wait", ms: 1 },
+      element,
+    ]);
+    expect(() => readSteps(text)).toThrow(Refusal);
+    expect(() => readSteps(text)).toThrow(/^step 2 \(\w+\)/);
+    expect(() => readSteps(text)).toThrow(message);
+  });
+
+  it.each([
+    [
+      "a name of 200 characters",
+      {
+        do: "click",
+        role: "button",
+        name: "n".repeat(200),
+      },
+    ],
+    [
+      "a selector of 200 characters",
+      {
+        do: "click",
+        selector: "s".repeat(200),
+      },
+    ],
+    [
+      "text of 200 characters",
+      {
+        do: "type",
+        role: "textbox",
+        text: "t".repeat(200),
+      },
+    ],
+    [
+      "a role of 30 letters",
+      {
+        do: "click",
+        role: "a".repeat(30),
+      },
+    ],
+    [
+      "a key of 40 characters",
+      {
+        do: "press",
+        key: "k".repeat(40),
+      },
+    ],
+    [
+      "ms of 0",
+      { do: "wait", ms: 0 },
+    ],
+    [
+      "ms of 10000",
+      { do: "wait", ms: 10_000 },
+    ],
+    [
+      "a shot label of 40 characters",
+      {
+        do: "click",
+        role: "button",
+        shot: "a".repeat(40),
+      },
+    ],
+  ])("takes %s, the edge of its limit", (_what, element) => {
+    expect(readSteps(JSON.stringify([element]))).toHaveLength(1);
+  });
+});
+
+describe("scripts/shots-guards.mjs readStepsPath", () => {
+  it.each(["steps.json", "dir/steps.JSON", "C:\\tmp\\steps.json"])("takes %s", (raw) => {
+    expect(readStepsPath(raw)).toBe(raw);
+  });
+
+  it.each([
+    "steps.js",
+    "steps.mjs",
+    "steps.cjs",
+    "steps.json.js",
+    "steps",
+    "steps.json ",
+  ])("refuses %j: a step file is data, not a script", (raw) => {
+    expect(() => readStepsPath(raw)).toThrow(Refusal);
+    expect(() => readStepsPath(raw)).toThrow(/\.json/);
+  });
+});
+
+describe("scripts/shots-guards.mjs readWidth", () => {
+  it("is the one 1440 px viewport with steps and no width", () => {
+    expect(readWidth(undefined, true)).toEqual({ width: 1440, height: 900 });
+  });
+
+  it("is nothing without steps and without a width: the script shoots its two widths", () => {
+    expect(readWidth(undefined, false)).toBeUndefined();
+  });
+
+  it.each([
+    [
+      "390",
+      { width: 390, height: 844 },
+    ],
+    [
+      "1280",
+      { width: 1280, height: 900 },
+    ],
+    [
+      "320",
+      { width: 320, height: 844 },
+    ],
+    [
+      "600",
+      { width: 600, height: 844 },
+    ],
+    [
+      "601",
+      { width: 601, height: 900 },
+    ],
+    [
+      "2560",
+      { width: 2560, height: 900 },
+    ],
+  ])("takes %s with steps", (raw, expected) => {
+    expect(readWidth(raw, true)).toEqual(expected);
+  });
+
+  it.each([
+    "abc",
+    "12.5",
+    "319",
+    "2561",
+    "0",
+    "",
+    "-390",
+    "99999",
+  ])("refuses %j and names the range", (raw) => {
+    expect(() => readWidth(raw, true)).toThrow(Refusal);
+    expect(() => readWidth(raw, true)).toThrow(/320 to 2560/);
+  });
+
+  it("refuses a width without steps", () => {
+    expect(() => readWidth("390", false)).toThrow(Refusal);
+    expect(() => readWidth("390", false)).toThrow(/--width needs --steps/);
+  });
+});
+
+describe("scripts/shots-guards.mjs describeTarget and describeStep", () => {
+  it.each([
+    [
+      { kind: "role", role: "button", name: "Open menu" },
+      "button named \"Open menu\"",
+    ],
+    [
+      {
+        kind: "role",
+        role: "button",
+        name: "Create",
+        exact: true,
+      },
+      "button named \"Create\" (exact)",
+    ],
+    [
+      {
+        kind: "role",
+        role: "button",
+        name: "Create",
+        exact: false,
+      },
+      "button named \"Create\"",
+    ],
+    [
+      { kind: "role", role: "button" },
+      "button",
+    ],
+    [
+      { kind: "selector", selector: "header nav a" },
+      "selector \"header nav a\"",
+    ],
+  ])("describes the target %j as %s", (target, expected) => {
+    expect(describeTarget(target)).toBe(expected);
+  });
+
+  it.each([
+    [
+      {
+        do: "click",
+        target: { kind: "role", role: "button", name: "Open menu" },
+      },
+      "click button named \"Open menu\"",
+    ],
+    [
+      {
+        do: "hover",
+        target: { kind: "selector", selector: "nav" },
+      },
+      "hover selector \"nav\"",
+    ],
+    [
+      { do: "press", key: "Escape" },
+      "press \"Escape\"",
+    ],
+    [
+      {
+        do: "type",
+        text: "Speedrun",
+        target: { kind: "role", role: "textbox", name: "Game" },
+      },
+      "type \"Speedrun\" into textbox named \"Game\"",
+    ],
+    [
+      { do: "wait", ms: 500 },
+      "wait 500 ms",
+    ],
+    [
+      { do: "wait", ms: 0 },
+      "wait 0 ms",
+    ],
+    [
+      {
+        do: "wait",
+        target: { kind: "role", role: "status", name: "Timer reset" },
+      },
+      "wait for status named \"Timer reset\"",
+    ],
+  ])("describes the step %j as %s", (step, expected) => {
+    expect(describeStep(step)).toBe(expected);
+  });
+
+  it("cuts typed text at 40 characters", () => {
+    const step = {
+      do: "type",
+      text: "a".repeat(41),
+      target: { kind: "role", role: "textbox" },
+    };
+    expect(describeStep(step)).toBe(`type "${"a".repeat(40)}..." into textbox`);
+    expect(describeStep({
+      ...step,
+      text: "a".repeat(40),
+    })).toBe(`type "${"a".repeat(40)}" into textbox`);
+  });
+
+  it("shows typed text as a JSON string, so a quote or a new line stays on the line", () => {
+    const step = {
+      do: "type",
+      text: "a\"b\nc",
+      target: { kind: "role", role: "textbox" },
+    };
+    expect(describeStep(step)).toBe("type \"a\\\"b\\nc\" into textbox");
+  });
+});
+
+describe("scripts/shots-guards.mjs describeStepFailure", () => {
+  const step = {
+    number: 3,
+    do: "click",
+    target: { kind: "role", role: "button", name: "Open menu" },
+  };
+
+  it("says nothing matched, with the step's number, what it looked for and the wait", () => {
+    expect(describeStepFailure(step, 5, { kind: "missing" })).toBe("step 3 of 5 failed: click button named \"Open menu\": nothing matched within 5 s");
+  });
+
+  it("says more than one element matched and what to do", () => {
+    expect(describeStepFailure(step, 5, { kind: "ambiguous" })).toBe("step 3 of 5 failed: click button named \"Open menu\": more than one element matched; give the exact name (exact), a longer name or a selector");
+  });
+
+  it("carries Playwright's first line for any other failure", () => {
+    expect(describeStepFailure(step, 5, { kind: "other", message: "element is not enabled" })).toBe("step 3 of 5 failed: click button named \"Open menu\": element is not enabled");
+  });
+});
+
+describe("scripts/shots-guards.mjs describeFocus", () => {
+  const trigger = {
+    tag: "button",
+    id: "trigger",
+    classes: ["menu-trigger", "ui", "extra"],
+    role: null,
+  };
+
+  it("says the page itself has focus when nothing does", () => {
+    expect(describeFocus(null)).toBe("focus: none (the page itself)");
+  });
+
+  it("names the role and name the way a step does, the element and :focus-visible", () => {
+    expect(describeFocus({ element: trigger, aria: "button \"Open menu\" [expanded]", focusVisible: true })).toBe("focus: button \"Open menu\" [expanded] (<button#trigger.menu-trigger.ui>), :focus-visible matches");
+  });
+
+  it("says when :focus-visible does not match", () => {
+    expect(describeFocus({ element: trigger, aria: "button \"Open menu\"", focusVisible: false })).toMatch(/, :focus-visible does not match$/);
+  });
+
+  it("says there is no role when the page gave no accessible name", () => {
+    expect(describeFocus({
+      element: {
+        tag: "div",
+        id: "x",
+        classes: [],
+        role: null,
+      },
+      aria: null,
+      focusVisible: true,
+    })).toBe("focus: <div#x> (no role), :focus-visible matches");
+  });
+
+  it("shows the role attribute and a pseudo-element", () => {
+    expect(describeFocus({
+      element: {
+        tag: "ul",
+        id: null,
+        classes: ["menu"],
+        role: "menu",
+        pseudo: "::before",
+      },
+      aria: null,
+      focusVisible: false,
+    })).toBe("focus: <ul.menu role=menu>::before (no role), :focus-visible does not match");
+  });
+});
+
+describe("scripts/shots-guards.mjs describeAnimations", () => {
+  const menu = {
+    tag: "div",
+    id: null,
+    classes: ["menu"],
+    role: null,
+  };
+  const running = (over = {}) => ({
+    kind: "script",
+    name: null,
+    properties: ["transform"],
+    durationMs: 300,
+    iterations: 1,
+    target: menu,
+    ...over,
+  });
+
+  it("says none is running", () => {
+    expect(describeAnimations({ running: [], paused: 0 })).toEqual(["animations: none running"]);
+  });
+
+  it("lists one of each kind, with what moves and for how long", () => {
+    expect(describeAnimations({
+      running: [
+        running({
+          kind: "css-animation",
+          name: "fade-in",
+          properties: ["opacity", "transform"],
+          durationMs: 180,
+        }),
+        running({
+          kind: "css-transition",
+          name: "opacity",
+          properties: ["opacity"],
+          durationMs: 150,
+        }),
+        running({
+          kind: "script",
+          target: {
+            tag: "div",
+            id: null,
+            classes: ["gloss"],
+            role: null,
+          },
+          durationMs: 1200,
+          iterations: "infinite",
+        }),
+      ],
+      paused: 0,
+    })).toEqual([
+      "animations: 3 running",
+      "  CSS animation \"fade-in\" on <div.menu>: opacity, transform; 180 ms",
+      "  CSS transition on <div.menu>: opacity; 150 ms",
+      "  script animation on <div.gloss>: transform; 1200 ms, infinite",
+    ]);
+  });
+
+  it("counts a paused animation and does not list it", () => {
+    expect(describeAnimations({
+      running: [
+        running(),
+      ],
+      paused: 1,
+    })).toEqual([
+      "animations: 1 running, 1 paused (not listed)",
+      "  script animation on <div.menu>: transform; 300 ms",
+    ]);
+    expect(describeAnimations({ running: [], paused: 2 })).toEqual(["animations: none running, 2 paused (not listed)"]);
+  });
+
+  it("prints the iterations only when they are not 1", () => {
+    expect(describeAnimations({
+      running: [
+        running({ iterations: 3 }),
+      ],
+      paused: 0,
+    })[1]).toBe("  script animation on <div.menu>: transform; 300 ms, 3 times");
+  });
+
+  it("says when there is no element", () => {
+    expect(describeAnimations({
+      running: [
+        running({ target: null }),
+      ],
+      paused: 0,
+    })[1]).toBe("  script animation on <no element>: transform; 300 ms");
+  });
+
+  it("cuts 25 running animations to 20 lines and says how many more", () => {
+    const lines = describeAnimations({
+      running: Array.from({ length: 25 }, () => running()),
+      paused: 0,
+    });
+    expect(lines[0]).toBe("animations: 25 running");
+    expect(lines).toHaveLength(1 + 20 + 1);
+    expect(lines.at(-1)).toBe("  ... and 5 more");
   });
 });
