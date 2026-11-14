@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { conclude, expectedWorkflows, latestRuns, missingWorkflows, redRuns, rerunDecision, verdict } from "./ci-verdict.mjs";
+import { conclude, expectedWorkflows, giveUpLine, laterAttemptLines, latestRuns, missingWorkflows, parseJobCount, redRuns, rerunDecision, retryDecision, verdict, waitLine } from "./ci-verdict.mjs";
 
 const WORKFLOW = new URL("../.github/workflows/attribution.yml", import.meta.url);
 
@@ -339,5 +339,238 @@ describe("scripts/ci-verdict.mjs conclude", () => {
       pr: null,
       expected: ["CI"],
     })).toBe("green");
+  });
+});
+
+// A read GitHub answered with a blip (a 5xx, an error page, a cut-off answer) is read again; anything else is an answer.
+describe("scripts/ci-verdict.mjs retryDecision", () => {
+  const page = `<!DOCTYPE html>\n<html><head><title>Unicorn!</title></head><body>${"x".repeat(5000)}</body></html>\n`;
+  const cutOff = new SyntaxError("Unexpected end of JSON input");
+
+  it("reads a cut-off answer again, waiting longer each time, up to four reads", () => {
+    expect(retryDecision(cutOff, 1)).toEqual({ retry: true, afterMs: 2_000 });
+    expect(retryDecision(cutOff, 2)).toEqual({ retry: true, afterMs: 5_000 });
+    expect(retryDecision(cutOff, 3)).toEqual({ retry: true, afterMs: 10_000 });
+    expect(retryDecision(cutOff, 4)).toEqual({ retry: false });
+  });
+
+  it.each([
+    [
+      "a bare 502",
+      { stderr: "gh: HTTP 502\n" },
+    ],
+    [
+      "a 500 with its message",
+      { stderr: "gh: Server Error (HTTP 500)" },
+    ],
+    [
+      "a whole error page",
+      { stderr: page },
+    ],
+  ])("reads again after %s", (_name, error) => {
+    expect(retryDecision(error, 1)).toEqual({ retry: true, afterMs: 2_000 });
+  });
+
+  it.each([
+    [
+      "a 404",
+      { stderr: "gh: Not Found (HTTP 404)" },
+    ],
+    [
+      "a 403",
+      { stderr: "gh: Resource not accessible (HTTP 403)" },
+    ],
+    [
+      "gh missing",
+      { message: "spawn gh ENOENT" },
+    ],
+    [
+      "gh not signed in",
+      { stderr: "gh: To get started with GitHub CLI, please run:  gh auth login" },
+    ],
+  ])("does not read again after %s: reading again would not change the answer", (_name, error) => {
+    expect(retryDecision(error, 1)).toEqual({ retry: false });
+  });
+});
+
+// The one line a read that could not be made ends in: no page, and not read as a red run.
+describe("scripts/ci-verdict.mjs giveUpLine", () => {
+  const page = `<!DOCTYPE html>\n<html><head><title>Unicorn!</title></head><body>${"x".repeat(5000)}</body></html>\ngh: HTTP 502\n`;
+  const what = "reading the runs of 3e23713 failed";
+
+  it("names the status, the number of reads and that this is not a red run, on one line", () => {
+    const line = giveUpLine(what, { stderr: page }, 4);
+    expect(line).toBe("reading the runs of 3e23713 failed: GitHub answered with an error page (HTTP 502) after 4 reads (not a red run: run this again)");
+    expect(line).not.toMatch(/[\n<]/);
+  });
+
+  it("leaves the count out after one read", () => {
+    const line = giveUpLine(what, { stderr: "gh: Not Found (HTTP 404)" }, 1);
+    expect(line).toBe("reading the runs of 3e23713 failed: Not Found (HTTP 404) (not a red run: run this again)");
+    expect(line).not.toContain("after");
+  });
+
+  it("says a cut-off answer was cut off", () => {
+    expect(giveUpLine(what, new SyntaxError("Unexpected end of JSON input"), 4)).toContain("cut off");
+  });
+
+  it("stays one line for a long first line", () => {
+    expect(giveUpLine(what, { stderr: `${"a".repeat(400)}\nmore` }, 2)).not.toContain("\n");
+  });
+});
+
+// `Number("")` is 0: an empty or cut-off answer would read as "no jobs", a start failure, and re-run a red run.
+describe("scripts/ci-verdict.mjs parseJobCount", () => {
+  it("reads the count `gh` printed, zero included", () => {
+    expect(parseJobCount("3\n")).toBe(3);
+    expect(parseJobCount("0\n")).toBe(0);
+  });
+
+  it.each([
+    [""],
+    ["\n"],
+    ["null"],
+    ["<html>"],
+  ])("throws a SyntaxError, which is read again, for %j", (text) => {
+    expect(() => parseJobCount(text)).toThrow(SyntaxError);
+  });
+});
+
+// The note on a green that needed a second attempt: a flake is told, a re-run after a start failure is told apart.
+describe("scripts/ci-verdict.mjs laterAttemptLines", () => {
+  const POINTER = "A required check that passes on a re-run is a flake and gets a ticket at once: docs/agents/delivery.md § Branches and merges, A flake at a required check.";
+  const RUNS = "https://github.com/christried/winnies/actions/runs";
+  // Read on this repository: run 43591584174 of CI (pull_request) passed on attempt 2; its attempt 1 failed at `check`.
+  const failedAtCheck = {
+    total_count: 4,
+    jobs: [
+      { name: "api-tests", conclusion: "success" },
+      { name: "check", conclusion: "failure" },
+      { name: "e2e", conclusion: "success" },
+      { name: "visual", conclusion: "success" },
+    ],
+  };
+  const nothingRan = { total_count: 0, jobs: [] };
+  const flaked = {
+    label: "CI (pull_request)",
+    url: `${RUNS}/43591584174`,
+    attempt: 2,
+    earlier: [failedAtCheck],
+  };
+  const startFailure = {
+    label: "CI (push)",
+    url: `${RUNS}/43591584999`,
+    attempt: 2,
+    earlier: [nothingRan],
+  };
+
+  it("says nothing when no run passed on a later attempt", () => {
+    expect(laterAttemptLines([])).toEqual([]);
+  });
+
+  it("names a run that passed on attempt 2, the job that failed, and the failed attempt's page, then points at the standard", () => {
+    expect(laterAttemptLines([flaked])).toEqual([
+      `passed on attempt 2 after check failed: CI (pull_request) ${RUNS}/43591584174/attempts/1`,
+      POINTER,
+    ]);
+  });
+
+  it("tells a re-run after a start failure apart: no pointer and no attempt link", () => {
+    const lines = laterAttemptLines([startFailure]);
+    expect(lines).toEqual([`re-run after a start failure (zero jobs), nothing flaked: CI (push) ${RUNS}/43591584999`]);
+    expect(lines.join("\n")).not.toContain("attempts/");
+  });
+
+  it("counts a run as a later-attempt pass when any earlier attempt had jobs, and links the last of those", () => {
+    const lines = laterAttemptLines([
+      {
+        ...flaked,
+        attempt: 3,
+        earlier: [nothingRan, failedAtCheck],
+      },
+    ]);
+    expect(lines[0]).toBe(`passed on attempt 3 after check failed: CI (pull_request) ${RUNS}/43591584174/attempts/2`);
+  });
+
+  it("names a cancelled job: cancelled is not a pass", () => {
+    const lines = laterAttemptLines([
+      {
+        ...flaked,
+        earlier: [
+          {
+            total_count: 1,
+            jobs: [
+              { name: "visual", conclusion: "cancelled" },
+            ],
+          },
+        ],
+      },
+    ]);
+    expect(lines[0]).toContain("after visual failed");
+  });
+
+  it("names each failed job once, in order, over all earlier attempts", () => {
+    const earlier = [
+      {
+        total_count: 2,
+        jobs: [
+          { name: "e2e", conclusion: "failure" },
+          { name: "check", conclusion: "failure" },
+        ],
+      },
+      {
+        total_count: 2,
+        jobs: [
+          { name: "check", conclusion: "failure" },
+          { name: "visual", conclusion: "success" },
+        ],
+      },
+    ];
+    expect(laterAttemptLines([
+      { ...flaked, attempt: 3, earlier },
+    ])[0]).toContain("after e2e, check failed");
+  });
+
+  it("drops the failed jobs when none of the earlier attempt's jobs failed (still running, or ended otherwise)", () => {
+    const earlier = [
+      {
+        total_count: 1,
+        jobs: [
+          { name: "check", conclusion: null },
+        ],
+      },
+    ];
+    expect(laterAttemptLines([
+      { ...flaked, earlier },
+    ])[0]).toBe(`passed on attempt 2: CI (pull_request) ${RUNS}/43591584174/attempts/1`);
+  });
+
+  it("puts a flake, then the pointer, then a start failure's re-run", () => {
+    expect(laterAttemptLines([startFailure, flaked])).toEqual([
+      expect.stringContaining("passed on attempt 2"),
+      POINTER,
+      expect.stringContaining("start failure"),
+    ]);
+  });
+
+  it("prints the pointer once for two flakes", () => {
+    const lines = laterAttemptLines([
+      flaked,
+      { ...flaked, label: "CI (push)", url: `${RUNS}/43591584000` },
+    ]);
+    expect(lines).toHaveLength(3);
+    expect(lines.filter(line => line === POINTER)).toHaveLength(1);
+    expect(lines[2]).toBe(POINTER);
+  });
+});
+
+// The first line of a call: a caller that kills it early, or a person who reads it, knows how long it would have waited.
+describe("scripts/ci-verdict.mjs waitLine", () => {
+  it("says 2.5 minutes for the short wait", () => {
+    expect(waitLine(["CI"], "3e23713", 150_000)).toBe("waiting up to 2.5 minutes for CI on 3e23713 …");
+  });
+
+  it("says 20 minutes, without a decimal, for the whole-run wait", () => {
+    expect(waitLine(["CI", "Attribution"], "3e23713", 1_200_000)).toBe("waiting up to 20 minutes for CI and Attribution on 3e23713 …");
   });
 });

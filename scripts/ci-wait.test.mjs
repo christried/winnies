@@ -13,6 +13,6 @@ describe("ci-wait.mjs", () => {
 
     expect(run.status).toBe(1);
     expect(run.stdout).toContain("--until-don");
-    expect(run.stdout).not.toContain("waiting for CI");
+    expect(run.stdout).not.toContain("waiting up to");
   });
 });
