@@ -7,7 +7,7 @@ import UiTotalTimer from "../../app/components/ui/total-timer.vue";
 import { expectQuietAfter } from "../support/component-checks";
 import { chip } from "../support/html";
 import { page, readout, section } from "../support/motion-kit";
-import { clickReplay, frames, ONE_FRAME, withMotion, worstOverlap } from "../support/motion-play";
+import { clickReplay, frames, tickFaults, withMotion } from "../support/motion-play";
 import { FAKE_START, useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The Total Timer's ticks as the app's own component draws them (#320), on a clock at rate 4: a beat every 250 ms, so a
@@ -408,15 +408,17 @@ export const HiddenTab: StoryObj<typeof meta> = {
 };
 
 // #337: a rollover's staggered last digit ran into its next tick, so a slot held two animations at once. The fix is in the
-// engine, and this story holds it: no tick runs into the next one by more than a frame (see `ONE_FRAME`).
+// engine, and this story holds it: a tick's delay and duration end inside its beat and no beat ticks a slot twice
+// (`tickFaults`). Each step is one run, so it is checked before the next Replay cancels it.
 export const FastRolloverNoDoubleTick: StoryObj<typeof meta> = {
-  async play({ canvasElement, step }) {
+  async play({ canvasElement, parameters, step }) {
     await ready(canvasElement);
+    const interval = 1000 / (parameters.motion as { rate: number }).rate;
     for (const id of ["minute", "hour"] as const) {
-      await step(`no slot holds two animations at once over a ${id} run`, () => withMotion("full", async () => {
+      await step(`no slot ticks twice for one beat, and no tick outlasts its beat, over a ${id} run`, () => withMotion("full", async () => {
         const seen = await runAndSample(canvasElement, id);
         for (const display of DISPLAYS)
-          expect(worstOverlap(seen[display].animations), display).toBeLessThanOrEqual(ONE_FRAME);
+          expect(tickFaults(seen[display].animations, interval), display).toEqual([]);
       }));
     }
   },
