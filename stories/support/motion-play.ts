@@ -103,8 +103,35 @@ export function withDialect(value: "broadcast" | "showcase" | null, fn: () => Pr
 /** Every animation in the document, CSS transitions included. */
 export const animations = (): Animation[] => document.getAnimations();
 
-/** The animations that are running or paused: not idle, not finished. */
-export const live = (): Animation[] => animations().filter(a => a.playState === "running" || a.playState === "paused");
+/** The animations that are running: not paused, not idle, not finished. A paused animation is not moving. */
+export const live = (): Animation[] => animations().filter(a => a.playState === "running");
+
+/** True for an animation that repeats forever, in any play state; false for one that ends by itself. */
+export const isLoop = (a: Animation): boolean => a.effect?.getComputedTiming().iterations === Infinity;
+
+/** True for a loop that is running now. A paused loop is still a loop (`isLoop`), and is not moving. */
+export const isRunningLoop = (a: Animation): boolean => isLoop(a) && a.playState === "running";
+
+/**
+ * The loops running on an element and below it, or in the whole document: infinite, running now, and still running two
+ * frames later. `v-loop`'s host pauses a loop when an observer reports its frame off-screen, and the report comes after a
+ * frame, so a read taken in the frame the loop was made passes on a loop that is about to be paused (#355). The same
+ * animation objects come back, so a story can read their timing. A loop made anew between the two reads (a dialect switch
+ * rebuilds it) is not returned: retry with `waitFor`, which takes an async callback.
+ *
+ * @param root an element (its own animations and its descendants') or the document, by default
+ * @returns the running loops, empty when there is none
+ */
+export async function runningLoops(root: Document | Element = document): Promise<Animation[]> {
+  // Document.getAnimations() takes no options; an Element's needs `subtree` to include its children.
+  const under = () => root instanceof Document
+    ? root.getAnimations()
+    : root.getAnimations({ subtree: true });
+  const first = under().filter(isRunningLoop);
+  await frames();
+  const later = new Set(under().filter(isRunningLoop));
+  return first.filter(a => later.has(a));
+}
 
 /**
  * The surface's particle layer.
