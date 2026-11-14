@@ -7,7 +7,8 @@
 //
 // Exit 0: every run of the commit passed, and when the commit is the head of an open PR, that PR does not conflict.
 // Exit 1: a run failed or was cancelled (the failing step's output follows, cut to its failures), or a workflow has no
-// run after two minutes, or the commit is the head of an open PR that conflicts with its base. GitHub starts no
+// run after two minutes, or a read GitHub kept answering with a 5xx or a cut-off answer for four reads, or the commit is
+// the head of an open PR that conflicts with its base. GitHub starts no
 // pull_request run on a conflicting PR, so the push runs alone would look green (#267): the conflict is reported at
 // once, whatever the runs say, followed by the failing output of any run that is already red.
 // Exit 2: a run is still going after 2.5 minutes, or GitHub has not yet worked out whether the PR can merge (it does so
@@ -21,13 +22,22 @@
 // on 2026-11-09 with ci.yml unchanged), not a red run: the script re-runs it once with `gh run rerun` and keeps
 // waiting; a second one exits 1 with the run's URL. A later call recognises the single re-run by the run's attempt
 // number (retro 0.10, #388).
-// It prints one line while waiting, not a progress log.
+// A read that GitHub answers with a 5xx, an error page or a cut-off answer is read again after 2, 5 and 10 seconds, silently,
+// so a blip does not end a twenty-minute wait (R2's retro, 14). Exit 1 with one line, "… (not a red run: run this again)",
+// when four reads did not help: it says the runs were not read, since the caller reads exit 1 as red. A write (the re-run) is
+// never read again, since a retried re-run could re-run twice.
+// The first line says how long this call waits at most, so a caller whose own timeout is shorter (the `visual` job runs
+// longer than ten minutes) sees that it would end the wait early. On a green, a run that passed on a second or later
+// attempt is named after the `green:` line, with a pointer at the flake standard; a run this script re-ran after a start
+// failure is named apart, since nothing flaked. Exit 0 either way: a flake is told, not failed.
+// `gh` runs with its stderr piped: left to Node, a failed call copies the child's stderr, an error page included, to this
+// terminal, whatever is then caught. Otherwise it prints one line while waiting, not a progress log.
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { parseArgs } from "node:util";
 import { FAILURE_MARKER } from "./attribution.mjs";
-import { conclude, expectedWorkflows, latestRuns, missingWorkflows, PASSING, redRuns, rerunDecision, WORKFLOW_FILES } from "./ci-verdict.mjs";
-import { flagError } from "./cli-helpers.mjs";
+import { conclude, expectedWorkflows, giveUpLine, laterAttemptLines, latestRuns, missingWorkflows, parseJobCount, PASSING, redRuns, rerunDecision, retryDecision, waitLine, WORKFLOW_FILES } from "./ci-verdict.mjs";
+import { flagError, ghErrorLine } from "./cli-helpers.mjs";
 import { headPrOf } from "./pr-state.mjs";
 
 const USAGE = "usage: node scripts/ci-wait.mjs [sha] [--until-done]";
@@ -70,21 +80,43 @@ const CALL_MS = untilDone
   ? 20 * 60_000
   : 150_000;
 
-const gh = (...args) => execFileSync("gh", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+// stderr piped, as in deploy-wait.mjs: without it a failed call prints the child's stderr, a page included, here.
+function gh(...args) {
+  return execFileSync("gh", args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: 64 * 1024 * 1024,
+  });
+}
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// Synchronous, so that the decisions that read GitHub (decisionOf, done, printRed) stay synchronous.
+const pause = ms => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 // A failed gh call ends the script in one line naming the run (#388), not with a stack trace that hides the URL.
 function fail(what, error) {
-  console.log(`${what}: ${String(error.stderr || error.message).trim().split("\n")[0]}`);
+  console.log(`${what}: ${ghErrorLine(error)}`);
   process.exit(1);
 }
-function jobCountOf(run) {
-  try {
-    return Number(gh("api", `repos/{owner}/{repo}/actions/runs/${run.databaseId}/jobs`, "--jq", ".total_count"));
-  }
-  catch (error) {
-    return fail(`jobs count failed for ${run.url}`, error);
+/**
+ * One read of GitHub, read again after a blip (retryDecision) and silently: a progress line per retry would be the log the
+ * header says this script does not print. `read` does the parsing too, so a cut-off answer is a SyntaxError this loop sees.
+ * Not for a write: a retried `gh run rerun` could re-run twice.
+ */
+function readRetrying(what, read) {
+  for (let readsDone = 1; ; readsDone++) {
+    try {
+      return read();
+    }
+    catch (error) {
+      const next = retryDecision(error, readsDone);
+      if (!next.retry) {
+        console.log(giveUpLine(what, error, readsDone));
+        process.exit(1);
+      }
+      pause(next.afterMs);
+    }
   }
 }
+const jobCountOf = run => readRetrying(`jobs count failed for ${run.url}`, () => parseJobCount(gh("api", `repos/{owner}/{repo}/actions/runs/${run.databaseId}/jobs`, "--jq", ".total_count")));
 // The Attribution run exists only where the commit's own workflow file triggers on every push; a branch cut earlier, and
 // main until 1.0.0, has none to wait for.
 function attributionYmlAt(commit) {
@@ -100,24 +132,20 @@ function attributionYmlAt(commit) {
 }
 const expected = expectedWorkflows(attributionYmlAt(sha));
 // The workflow files by name, not "every workflow": a third workflow of the repository is none of this commit's gate.
-const runsOf = () => latestRuns(Object.values(WORKFLOW_FILES).flatMap(file => JSON.parse(gh("run", "list", "--workflow", file, "--commit", sha, "--json", "databaseId,status,conclusion,event,url,attempt,workflowName"))));
+const runsOf = () => latestRuns(Object.values(WORKFLOW_FILES).flatMap(file => readRetrying(`reading the runs of ${sha.slice(0, 7)} failed`, () => JSON.parse(gh("run", "list", "--workflow", file, "--commit", sha, "--json", "databaseId,status,conclusion,event,url,attempt,workflowName")))));
 // The PR whose head this commit is, with its merge state: the list route does not carry `mergeable_state`, the single route does.
 function headPr() {
-  try {
-    const found = headPrOf(JSON.parse(gh("api", `repos/{owner}/{repo}/commits/${sha}/pulls`)), sha);
-    return found === null
-      ? null
-      : JSON.parse(gh("api", `repos/{owner}/{repo}/pulls/${found.number}`));
-  }
-  catch (error) {
-    return fail(`reading the pull request of ${sha.slice(0, 7)} failed`, error);
-  }
+  const what = `reading the pull request of ${sha.slice(0, 7)} failed`;
+  const found = readRetrying(what, () => headPrOf(JSON.parse(gh("api", `repos/{owner}/{repo}/commits/${sha}/pulls`)), sha));
+  return found === null
+    ? null
+    : readRetrying(what, () => JSON.parse(gh("api", `repos/{owner}/{repo}/pulls/${found.number}`)));
 }
 const label = run => `${run.workflowName} (${run.event})`;
 
 /** The failing step's log from its first failure marker on, without the job/step/timestamp prefix and colour codes. */
 function failures(id) {
-  const lines = gh("run", "view", String(id), "--log-failed")
+  const lines = readRetrying(`reading the failing log of run ${id} failed`, () => gh("run", "view", String(id), "--log-failed"))
     .split("\n")
     // The log writes colour codes either as escapes or as a literal caret „^[“.
     .map(line => line.replace(/^[^\t]*\t[^\t]*\t\S+ ?/, "").replace(new RegExp(`(?:${String.fromCharCode(27)}|\\^\\[)\\[[0-9;]*m`, "g"), ""));
@@ -151,7 +179,7 @@ function stateNow() {
     expected,
   });
 }
-console.log(`waiting for ${expected.join(" and ")} on ${sha.slice(0, 7)} …`);
+console.log(waitLine(expected, sha.slice(0, 7), CALL_MS));
 while (Date.now() - started < CALL_MS) {
   runs = runsOf();
   pr = headPr();
@@ -218,6 +246,15 @@ if (state === "green") {
   console.log(`green: ${runs.map(label).join(", ")}; ${pr === null
     ? "no open PR for this commit, so merge state was not checked"
     : `PR #${pr.number} merges cleanly into ${pr.base.ref}`}`);
+  // Read only now: a red or waiting end has no use for it, and a run that is not green has no second attempt to tell of.
+  const passedLater = runs.filter(run => PASSING.has(run.conclusion) && (run.attempt ?? 1) > 1).map(run => ({
+    label: label(run),
+    url: run.url,
+    attempt: run.attempt,
+    earlier: Array.from({ length: run.attempt - 1 }, (_, index) => readRetrying(`reading attempt ${index + 1} of ${run.url} failed`, () => JSON.parse(gh("api", `repos/{owner}/{repo}/actions/runs/${run.databaseId}/attempts/${index + 1}/jobs?per_page=100`, "--jq", "{total_count, jobs: [.jobs[] | {name, conclusion}]}")))),
+  }));
+  for (const line of laterAttemptLines(passedLater))
+    console.log(line);
   process.exit(0);
 }
 printRed();

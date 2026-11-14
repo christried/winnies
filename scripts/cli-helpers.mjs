@@ -33,6 +33,18 @@ export function firstLine(error) {
 }
 
 /**
+ * Whether the text of a failed `gh` call holds an HTML page, which GitHub answers with when a gateway fails. One test of
+ * it, shared by ghErrorLine (which turns the page into one line) and ci-verdict.mjs's retryDecision (which reads again),
+ * so the two cannot disagree on what a page is.
+ *
+ * @param {string} text  what the call wrote to stderr, or the error's message
+ * @returns {boolean}  true when a page's opening tag is in it
+ */
+export function isErrorPage(text) {
+  return /<\s*(?:!doctype|html|head|body|title)\b/i.test(text);
+}
+
+/**
  * The line a failed `gh` call becomes, for deploy-wait.mjs and ci-wait.mjs. A 502 from GitHub can answer with a whole HTML
  * page, which must never reach an agent's context: a page costs one line, a status with it when `gh` printed one.
  *
@@ -44,7 +56,7 @@ export function ghErrorLine(error) {
   if (error instanceof SyntaxError)
     return "GitHub's answer was cut off or is not JSON";
   const text = String(error.stderr || error.message);
-  if (/<\s*(?:!doctype|html|head|body|title)\b/i.test(text)) {
+  if (isErrorPage(text)) {
     const status = /HTTP (\d{3})\b/.exec(text);
     return status
       ? `GitHub answered with an error page (HTTP ${status[1]})`
