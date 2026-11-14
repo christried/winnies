@@ -121,7 +121,7 @@ export default withNuxt(
     // Stories (`.storybook/main.ts` picks up `../stories/**/*.stories.ts`). `no-restricted-syntax` is ONE rule: antfu sets it
     // for every file, and the options of a later block replace its list instead of adding to it. So the two selectors antfu
     // ships are restated here, and every restriction on stories goes into this array, never into a second block
-    // (#361 adds its `iterations` selector here).
+    // (#361's `iterations` selector is here).
     name: "stories",
     files: ["stories/**/*.stories.ts"],
     rules: {
@@ -134,6 +134,12 @@ export default withNuxt(
           // literal. A story kept off needs a ticket (docs/agents/delivery.md § A flake at a required check).
           selector: ":matches(Literal[value=\"!test\"], TemplateElement[value.cooked=\"!test\"])",
           message: "A story kept off needs a ticket, not a \"!test\" tag: fix the story, or open the ticket (docs/agents/delivery.md § A flake at a required check).",
+        },
+        {
+          // A read of `iterations`: `a.effect.getComputedTiming().iterations`, `t["iterations"]`, `const { iterations } = t`. Not an
+          // options object (`{ iterations: 2 }`), which is how a loop is made, not read.
+          selector: "MemberExpression[computed=false] > Identifier.property[name=\"iterations\"], MemberExpression[computed=true] > Literal.property[value=\"iterations\"], ObjectPattern > Property[key.name=\"iterations\"], ObjectPattern > Property[key.value=\"iterations\"]",
+          message: "Do not read `iterations` in a story: an infinite animation can be paused, and a paused one is not moving (#355). Ask `runningLoops` or `isLoop` of stories/support/motion-play.ts.",
         },
       ],
     },

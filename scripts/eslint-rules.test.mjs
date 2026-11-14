@@ -53,3 +53,55 @@ describe("no \"!test\" tag in a story (#360)", () => {
     await expect(lintPlanted(text, filePath, rule)).rejects.toThrow();
   }, loadTimeout);
 });
+
+const asked = /runningLoops/;
+const memberRead = "export const n = (a: Animation) => a.effect!.getComputedTiming().iterations;";
+const destructure = "export const n = (t: any) => { const { iterations } = t; return iterations; };";
+
+describe("no read of `iterations` in a story (#361)", () => {
+  it.each([
+    ["a member read", memberRead],
+    ["a read through an optional chain", "export const n = (a: Animation) => a.effect?.getComputedTiming().iterations === Infinity;"],
+    ["a computed literal read", "export const n = (t: any) => t[\"iterations\"];"],
+    ["a destructure", destructure],
+    ["a renamed destructure", "export const n = (t: any) => { const { iterations: count } = t; return count; };"],
+  ])("reports %s once, pointing at runningLoops", async (_name, text) => {
+    const messages = await lintPlanted(text, storyPath, rule);
+
+    expect(messages.filter(message => asked.test(message.message))).toHaveLength(1);
+  }, loadTimeout);
+
+  it("reports each of two reads", async () => {
+    const messages = await lintPlanted("export const same = (x: any, y: any) => x.iterations === y.iterations;", storyPath, rule);
+
+    expect(messages.filter(message => asked.test(message.message))).toHaveLength(2);
+  }, loadTimeout);
+
+  it.each([
+    ["a member read", memberRead],
+    ["a destructure", destructure],
+  ])("does not report %s in the support code of the stories", async (_name, text) => {
+    expect(await lintPlanted(text, "stories/support/planted.ts", rule)).toEqual([]);
+  }, loadTimeout);
+
+  it.each([
+    ["an options object, which makes a loop", "export const a = (el: HTMLElement) => el.animate([], { iterations: 2 });"],
+    ["iterationStart", "export const s = (t: any) => t.iterationStart;"],
+  ])("does not report %s in a story", async (_name, text) => {
+    expect(await lintPlanted(text, storyPath, rule)).toEqual([]);
+  }, loadTimeout);
+
+  it("keeps the \"!test\" tag and antfu's restrictions beside it", async () => {
+    const text = [
+      memberRead,
+      "export const A = { tags: [\"!test\"] };",
+      "const enum E { A }",
+      "export const B = E.A;",
+    ].join("\n");
+    const messages = await lintPlanted(text, storyPath, rule);
+
+    expect(messages).toHaveLength(3);
+    expect(messages.filter(message => asked.test(message.message))).toHaveLength(1);
+    expect(messages.filter(message => kept.test(message.message))).toHaveLength(1);
+  }, loadTimeout);
+});
