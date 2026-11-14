@@ -1,6 +1,6 @@
 # Visual regression is self-hosted in a pinned Playwright image
 
-The redesign's component states are screenshot-tested from Storybook stories (Storybook's Vitest addon with Vitest's screenshot matcher), and the baselines are generated and compared only inside one pinned `mcr.microsoft.com/playwright:v<X.Y.Z>-noble` image: Podman on the maintainer's Windows machine, the same image as the CI job's container. Baselines are committed to the repo by the maintainer and reviewed as image diffs in the PR. Font rasterization differs between Windows and Linux, so baselines from a bare machine never match CI; one image on both ends removes the platform from the comparison, with no quota and no third party.
+The redesign's component states are screenshot-tested from Storybook stories (Storybook's Vitest addon with Vitest's screenshot matcher), and the baselines are generated and compared only inside one pinned `mcr.microsoft.com/playwright:v<X.Y.Z>-noble` image, the same image as the CI job's container, run by Podman on the maintainer's Windows machine and by Docker in a cloud session's container. Baselines are committed to the repo by the maintainer and reviewed as image diffs in the PR. Font rasterization differs between Windows and Linux, so baselines from a bare machine never match CI; one image on both ends removes the platform from the comparison, with no quota and no third party.
 
 ## Considered options
 
