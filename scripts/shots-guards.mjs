@@ -69,6 +69,62 @@ export function readPath(raw, target) {
   return path;
 }
 
+// The toolbar's dialects (.storybook/preview.ts).
+export const DIALECTS = ["workspace", "broadcast", "showcase"];
+
+/**
+ * What the caller asked a picture to look like: the theme, the motion and, for a story, the dialect.
+ *
+ * @param {{ dark?: boolean, fullMotion?: boolean, dialect?: string }} flags the script's `--dark`, `--full-motion`, `--dialect`
+ * @param {boolean} isStory whether a story is opened (`--story`); a page's dialect is the app's own
+ * @returns {{ theme: "light" | "dark", motion: "reduce" | "full", dialect: string, colorScheme: "light" | "dark", reducedMotion: "reduce" | "no-preference" }} the look, with the two browser settings that give it
+ */
+export function readLook({ dark, fullMotion, dialect }, isStory) {
+  if (dialect !== undefined) {
+    if (!isStory) {
+      throw new Refusal("--dialect is for a story: a page's dialect is the app's own.");
+    }
+    if (!DIALECTS.includes(dialect)) {
+      throw new Refusal(`--dialect ${JSON.stringify(dialect)} is not one of ${DIALECTS.join(", ")} (the toolbar's dialects).`);
+    }
+  }
+  const theme = dark ? "dark" : "light";
+  const motion = fullMotion ? "full" : "reduce";
+  return {
+    theme,
+    motion,
+    dialect: dialect ?? "workspace",
+    colorScheme: theme,
+    reducedMotion: fullMotion ? "no-preference" : "reduce",
+  };
+}
+
+// A Storybook id: lowercase words joined by `-`, one `--` between the component and the story (`ui-button--primary`).
+const STORY_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*--[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const STORY_ID_CHARS = 200;
+
+/**
+ * The address of one story's own page (no Storybook manager around it), built on the target's origin and nothing else.
+ * Staging serves Storybook under `/storybook/` (ADR-0005); `pnpm storybook` serves it at the root.
+ *
+ * @param {string} id the story's id, the one in the Storybook address (`?path=/story/<id>`)
+ * @param {{ theme: string, dialect: string, motion: string }} look what `readLook` returned
+ * @param {{ origin: string, local: boolean }} target the target `readTarget` returned
+ * @returns {string} the story's address
+ */
+export function readStoryUrl(id, look, target) {
+  if (typeof id !== "string" || id.length > STORY_ID_CHARS || !STORY_ID.test(id)) {
+    throw new Refusal(`${JSON.stringify(id)} is not a story id: lowercase words joined by \`-\`, one \`--\` between the component and the story, as in \`ui-button--primary\`. It is the id in the Storybook address (\`?path=/story/<id>\`), not a path or a URL.`);
+  }
+  const prefix = target.local ? "" : "/storybook";
+  const url = new URL(`${prefix}/iframe.html`, target.origin);
+  url.searchParams.set("id", id);
+  url.searchParams.set("viewMode", "story");
+  // Storybook's own encoding of the toolbar's globals (.storybook/preview.ts).
+  url.searchParams.set("globals", `theme:${look.theme};dialect:${look.dialect};motion:${look.motion}`);
+  return url.href;
+}
+
 /**
  * The part of a screenshot's file name that says which path it shows.
  *

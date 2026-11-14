@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readPath, readTarget, Refusal, scrub, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
+import { readLook, readPath, readStoryUrl, readTarget, Refusal, scrub, slugOf, STAGING_ORIGIN } from "./shots-guards.mjs";
 
 // scripts/shots.mjs holds the Playwright work; what keeps the Vercel bypass secret from leaving the staging
 // origin is decided here (#238): which origin it may open, which path, and what a printed line may show.
@@ -135,5 +135,122 @@ describe("scripts/shots-guards.mjs scrub", () => {
 
   it("leaves a line as it is when there is no secret yet (a local run)", () => {
     expect(scrub("nothing to hide", "")).toBe("nothing to hide");
+  });
+});
+
+const DEFAULT_LOOK = {
+  theme: "light",
+  motion: "reduce",
+  dialect: "workspace",
+  colorScheme: "light",
+  reducedMotion: "reduce",
+};
+
+describe("scripts/shots-guards.mjs readLook", () => {
+  it("is light with reduced motion and the Workspace dialect when no flag is given, as before the flags", () => {
+    expect(readLook({}, false)).toEqual(DEFAULT_LOOK);
+    expect(readLook({ dark: false, fullMotion: false }, true)).toEqual(DEFAULT_LOOK);
+  });
+
+  it("asks the browser for a dark scheme with --dark", () => {
+    expect(readLook({ dark: true }, false)).toEqual({ ...DEFAULT_LOOK, theme: "dark", colorScheme: "dark" });
+  });
+
+  it("asks the browser for no reduced-motion preference with --full-motion", () => {
+    expect(readLook({ fullMotion: true }, false)).toEqual({ ...DEFAULT_LOOK, motion: "full", reducedMotion: "no-preference" });
+  });
+
+  it("takes dark and full motion together", () => {
+    expect(readLook({ dark: true, fullMotion: true }, true)).toEqual({
+      theme: "dark",
+      motion: "full",
+      dialect: "workspace",
+      colorScheme: "dark",
+      reducedMotion: "no-preference",
+    });
+  });
+
+  it("takes a dialect for a story", () => {
+    expect(readLook({ dialect: "broadcast" }, true)).toEqual({ ...DEFAULT_LOOK, dialect: "broadcast" });
+  });
+
+  it.each(["overlay", "Broadcast", ""])("refuses the dialect %j and names the three", (dialect) => {
+    expect(() => readLook({ dialect }, true)).toThrow(Refusal);
+    expect(() => readLook({ dialect }, true)).toThrow(/workspace, broadcast, showcase/);
+  });
+
+  it("refuses a dialect for a page: a page's dialect is the app's own", () => {
+    expect(() => readLook({ dialect: "broadcast" }, false)).toThrow(Refusal);
+    expect(() => readLook({ dialect: "broadcast" }, false)).toThrow(/--dialect is for a story/);
+  });
+});
+
+const STORY_IDS = ["ui-button--primary", "motion-total-timer--idle-loop", "ui-counter--with-50-challenges"];
+
+describe("scripts/shots-guards.mjs readStoryUrl", () => {
+  it.each(STORY_IDS)("opens %s on staging's /storybook/ with the toolbar's globals in the address", (id) => {
+    const url = new URL(readStoryUrl(id, DEFAULT_LOOK, STAGING));
+    expect(url.origin).toBe(STAGING_ORIGIN);
+    expect(url.pathname).toBe("/storybook/iframe.html");
+    expect(url.searchParams.get("id")).toBe(id);
+    expect(url.searchParams.get("viewMode")).toBe("story");
+    expect(url.searchParams.get("globals")).toBe("theme:light;dialect:workspace;motion:reduce");
+  });
+
+  it.each(STORY_IDS)("opens %s at /iframe.html on a local target (pnpm storybook serves no /storybook/)", (id) => {
+    const url = new URL(readStoryUrl(id, DEFAULT_LOOK, LOCAL));
+    expect(url.origin).toBe(LOCAL.origin);
+    expect(url.pathname).toBe("/iframe.html");
+  });
+
+  it("puts the query keys in the order id, viewMode, globals", () => {
+    const url = new URL(readStoryUrl("ui-button--primary", DEFAULT_LOOK, LOCAL));
+    expect([
+      ...url.searchParams.keys(),
+    ]).toEqual(["id", "viewMode", "globals"]);
+  });
+
+  it("names dark, showcase and full motion in the globals", () => {
+    const look = readLook({ dark: true, fullMotion: true, dialect: "showcase" }, true);
+    const url = new URL(readStoryUrl("ui-button--primary", look, STAGING));
+    expect(url.searchParams.get("globals")).toBe("theme:dark;dialect:showcase;motion:full");
+  });
+
+  it.each([STAGING, LOCAL])("stays on the target's origin and carries no secret or header for %j", (target) => {
+    for (const id of STORY_IDS) {
+      const href = readStoryUrl(id, DEFAULT_LOOK, target);
+      expect(new URL(href).origin).toBe(target.origin);
+      expect(href).not.toMatch(/bypass|x-vercel/i);
+    }
+  });
+
+  it.each([
+    ["an empty id", ""],
+    ["no id", undefined],
+    ["uppercase", "UI-Button--Primary"],
+    ["no double dash", "ui-button"],
+    ["no story after the double dash", "ui-button--"],
+    ["no component before the double dash", "--primary"],
+    ["a tripled dash", "ui-button---primary"],
+    ["a second double dash", "ui-button--primary--x"],
+    ["a slash", "ui/button--primary"],
+    ["a query added to it", "ui-button--primary&globals=theme:dark"],
+    ["a query mark", "ui-button--primary?x=1"],
+    ["a hash", "ui-button--primary#a"],
+    ["a percent escape", "ui-button--primary%2F"],
+    ["a trailing space", "ui-button--primary "],
+    ["a trailing newline", "ui-button--primary\n"],
+    ["a whole URL", "https://evil.com/iframe.html"],
+    ["a protocol-relative URL", "//evil.com"],
+    ["more than 200 characters", `${"a".repeat(100)}--${"b".repeat(99)}`],
+  ])("refuses an id of %s", (_what, id) => {
+    expect(() => readStoryUrl(id, DEFAULT_LOOK, STAGING)).toThrow(Refusal);
+    expect(() => readStoryUrl(id, DEFAULT_LOOK, STAGING)).toThrow(/not a story id/);
+  });
+
+  it("takes an id of exactly 200 characters", () => {
+    const id = `${"a".repeat(100)}--${"b".repeat(98)}`;
+    expect(id).toHaveLength(200);
+    expect(new URL(readStoryUrl(id, DEFAULT_LOOK, STAGING)).searchParams.get("id")).toBe(id);
   });
 });
