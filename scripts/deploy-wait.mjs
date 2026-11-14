@@ -6,8 +6,13 @@
 //
 // Exit 0: merged, and the deployment of the merge commit is Ready (or the base does not deploy, by vercel.json).
 // Exit 1: a check failed, the PR is a draft, in conflict, behind its base or closed, or the deployment failed; the
-// line says what to do. Exit 2: still waiting after 2.5 minutes, so run it again. Exit 3: green, up to date and still
-// open two minutes after its last check, so the agent merges it (docs/agents/delivery.md § Branches and merges).
+// line says what to do, and for a failed deployment it is three steps. Exit 2: still waiting after 2.5 minutes, so run
+// it again; the line says whether a check runs again or GitHub still reports the PR blocked. Exit 3: green, up to date,
+// not blocked and still open two minutes after its last check, so the agent merges it (docs/agents/delivery.md §
+// Branches and merges).
+// It goes by the newest attempt of each check (`filter=all` lists them all): a check that runs again is waiting, not red
+// and not green. A PR moves, two merges can land at once, so it reads the PR a second time, five seconds later, before it
+// says "behind" or exits 3, and the second read stands.
 // `--until-done` is for a call that already runs in the background: it waits up to 25 minutes, as in ci-wait.mjs.
 // It only reads: it merges nothing and changes nothing on GitHub. The decisions are scripts/deploy-verdict.mjs.
 // Every read is `gh api` on a REST route, never `gh pr view`: that one asks GraphQL, which a cloud session is
@@ -15,10 +20,13 @@
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { parseArgs } from "node:util";
-import { deploysFrom, deployVerdict, prVerdict } from "./deploy-verdict.mjs";
+import { ghErrorLine } from "./cli-helpers.mjs";
+import { deploysFrom, deployVerdict, failedDeploymentLine, openLine, prVerdict, settledVerdict } from "./deploy-verdict.mjs";
 
 const USAGE = "usage: node scripts/deploy-wait.mjs <pr> [--until-done]";
 const POLL_MS = 15_000;
+// The pause between the two reads before "behind" and exit 3: long enough for a merge that was landing to land.
+const CONFIRM_MS = 5_000;
 
 let parsed;
 try {
@@ -57,13 +65,14 @@ function done(code, line) {
   console.log(line);
   process.exit(code);
 }
-// A failed gh call ends the script in one line (no PR of that number, gh signed out), not with a stack trace.
+// A failed gh call ends the script in one line (no PR of that number, gh signed out, an error page from GitHub), not
+// with a stack trace and never with the page.
 function read(what, ...args) {
   try {
     return JSON.parse(gh(...args));
   }
   catch (error) {
-    return done(1, `${what} failed: ${String(error.stderr || error.message).trim().split("\n")[0]}`);
+    return done(1, `${what} failed: ${ghErrorLine(error)}`);
   }
 }
 
@@ -75,7 +84,7 @@ function vercelConfig(sha) {
   catch (error) {
     if (/HTTP 404/.test(String(error.stderr)))
       return null;
-    return done(1, `reading vercel.json at ${sha.slice(0, 7)} failed: ${String(error.stderr || error.message).trim().split("\n")[0]}`);
+    return done(1, `reading vercel.json at ${sha.slice(0, 7)} failed: ${ghErrorLine(error)}`);
   }
 }
 
@@ -83,12 +92,23 @@ const started = Date.now();
 const timeLeft = () => Date.now() - started < CALL_MS;
 console.log(`waiting for #${pr} to merge and deploy …`);
 
+/** One read of the PR and of every attempt of its checks, decided; the PR comes with it, as the standing read's is the one used after. */
+function readOnce() {
+  const pull = read(`reading #${pr}`, "api", `repos/{owner}/{repo}/pulls/${pr}`);
+  // One page, as before: every attempt of each check, in the tens in this repository, far below 100. Rows beyond the
+  // first 100 are not read.
+  const runs = read(`reading the checks of #${pr}`, "api", `repos/{owner}/{repo}/commits/${pull.head.sha}/check-runs?per_page=100&filter=all`, "--jq", ".check_runs");
+  return {
+    ...prVerdict(pull, runs, Date.now()),
+    pull,
+  };
+}
+
 let pull;
 for (;;) {
-  pull = read(`reading #${pr}`, "api", `repos/{owner}/{repo}/pulls/${pr}`);
-  // One page: the latest run of each check, far below 100 in this repository.
-  const runs = read(`reading the checks of #${pr}`, "api", `repos/{owner}/{repo}/commits/${pull.head.sha}/check-runs?per_page=100`, "--jq", ".check_runs");
-  const { verdict, checks } = prVerdict(pull, runs, Date.now());
+  const now = await settledVerdict(readOnce, () => sleep(CONFIRM_MS));
+  pull = now.pull;
+  const { verdict, checks } = now;
   const base = pull.base.ref;
   if (verdict === "merged")
     break;
@@ -108,7 +128,7 @@ for (;;) {
       : `#${pr} is green, up to date and still open two minutes after its last check: merge it yourself, \`gh pr merge ${pr} --merge\` (docs/agents/delivery.md § Branches and merges).`);
   }
   if (!timeLeft())
-    done(2, `#${pr} has not merged yet (its checks run, or auto-merge lags): run this again.`);
+    done(2, openLine(pr, now));
   await sleep(POLL_MS);
 }
 
@@ -123,9 +143,8 @@ for (;;) {
   const { verdict, url, deployment } = deployVerdict(statuses);
   if (verdict === "ready")
     done(0, `merged into ${base} at ${short}, and its deployment is Ready: ${url}`);
-  if (verdict === "failed") {
-    done(1, `merged into ${base} at ${short}, but its deployment failed and the previous one keeps serving: read the build log with the Vercel connector's \`list_deployment_events\` for deployment ${deployment} (${url}). The ticket is not verified.`);
-  }
+  if (verdict === "failed")
+    done(1, failedDeploymentLine({ base, sha, url, deployment }));
   if (!timeLeft())
     done(2, `merged into ${base} at ${short}; Vercel is still building it: run this again.`);
   await sleep(POLL_MS);

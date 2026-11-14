@@ -5,10 +5,12 @@
  * Whether a PR can merge, from the `mergeable_state` of `GET pulls/<n>`.
  *
  * @param {{ mergeable_state?: string }} pr  the PR as `GET pulls/<n>` returns it
- * @returns {"conflict" | "unknown" | "behind" | "clean" | "ok"} `unknown` while GitHub has not computed it, which it does
- *   on the first read after a push or a base change. Only `dirty` is a conflict. `behind` and `clean` are named for
- *   deploy-wait, which merges a clean PR and updates a behind one; `blocked`, `unstable`, `has_hooks` and `draft` are
- *   `ok`, since a PR that waits on a check does not conflict with its base. Nothing else reads `mergeable_state`.
+ * @returns {"conflict" | "unknown" | "behind" | "clean" | "blocked" | "ok"} `unknown` while GitHub has not computed it,
+ *   which it does on the first read after a push or a base change. Only `dirty` is a conflict. `behind`, `clean` and
+ *   `blocked` are named for deploy-wait, which merges a clean PR, updates a behind one and never merges a blocked one:
+ *   GitHub says a rule blocks the merge (a required check pending, failing or not yet run, a required review), and that
+ *   is not a conflict. `unstable`, `has_hooks` and `draft` are `ok`, since a PR that waits on a check does not conflict
+ *   with its base. Nothing else reads `mergeable_state`.
  */
 export function mergeState(pr) {
   const state = pr.mergeable_state;
@@ -16,7 +18,7 @@ export function mergeState(pr) {
     return "conflict";
   if (state === undefined || state === "unknown")
     return "unknown";
-  if (state === "behind" || state === "clean")
+  if (state === "behind" || state === "clean" || state === "blocked")
     return state;
   return "ok";
 }
