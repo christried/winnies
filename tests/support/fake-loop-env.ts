@@ -6,11 +6,13 @@ import type { LoopEnv } from "../../app/utils/motion/loop-sync";
 export interface FakeLoopEnv extends LoopEnv {
   /** Hides or shows the tab and tells the visibility listeners. */
   setHidden: (hidden: boolean) => void;
-  /** Tells one element's observer that it came into view or left it. */
+  /** Tells every observer of one element that it came into view or left it. Nothing happens for an element nobody observes. */
   setVisible: (el: HTMLElement, visible: boolean) => void;
+  /** Whether anyone observes this element right now. */
+  isObserved: (el: HTMLElement) => boolean;
   /** Visibility listeners attached right now. */
   readonly visibilityListeners: number;
-  /** Elements observed right now. */
+  /** Observations right now: two loops under one parent are two. */
   readonly observed: number;
 }
 
@@ -23,7 +25,8 @@ export interface FakeLoopEnv extends LoopEnv {
 export function fakeLoopEnv(): FakeLoopEnv {
   let hidden = false;
   const listeners = new Set<() => void>();
-  const observers = new Map<HTMLElement, (visible: boolean) => void>();
+  // One element can be observed by several loops (they share a parent), each with its own callback.
+  const observers = new Map<HTMLElement, Set<(visible: boolean) => void>>();
   return {
     hidden: () => hidden,
     onVisibilityChange: (cb) => {
@@ -33,10 +36,14 @@ export function fakeLoopEnv(): FakeLoopEnv {
       };
     },
     observe: (el, cb) => {
-      observers.set(el, cb);
+      const watchers = observers.get(el) ?? new Set();
+      watchers.add(cb);
+      observers.set(el, watchers);
       cb(true);
       return () => {
-        observers.delete(el);
+        watchers.delete(cb);
+        if (!watchers.size)
+          observers.delete(el);
       };
     },
     setHidden: (value) => {
@@ -44,13 +51,18 @@ export function fakeLoopEnv(): FakeLoopEnv {
       [...listeners].forEach(cb => cb());
     },
     setVisible: (el, visible) => {
-      observers.get(el)?.(visible);
+      [
+        ...(observers.get(el) ?? []),
+      ].forEach(cb => cb(visible));
     },
+    isObserved: el => observers.has(el),
     get visibilityListeners() {
       return listeners.size;
     },
     get observed() {
-      return observers.size;
+      return [
+        ...observers.values(),
+      ].reduce((n, watchers) => n + watchers.size, 0);
     },
   };
 }
