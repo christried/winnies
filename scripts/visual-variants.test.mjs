@@ -55,7 +55,7 @@ function baselineProblems(expected, onDisk) {
   return [
     ...expected
       .filter(file => !onDisk.includes(file))
-      .map(file => `${file} is shot by its variant but is not on disk. Run \`pnpm test:visual:podman --update\` and commit it.`),
+      .map(file => `${file} is shot by its variant but is not on disk. Run \`pnpm test:visual:image --update\` and commit it.`),
     ...onDisk
       .filter(file => !expected.includes(file))
       .map(file => `${file} is on disk but no variant shoots that story. Delete it, or fix the variant that should shoot it (.storybook/visual-variants.ts).`),

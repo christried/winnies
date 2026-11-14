@@ -7,7 +7,7 @@
  * The rule is the one for reduced motion: a variant is shot only where its picture differs from the Workspace shot of
  * the same theme, and the shots were compared byte for byte to decide it (#265). Light and dark under Workspace are the
  * reference and are shot for every story. A story added later is shot in every variant that shoots all stories, and its
- * baselines are regenerated with `pnpm test:visual:podman --update`. The motion stories (`UNSHOT_PREFIXES`) are the
+ * baselines are regenerated with `pnpm test:visual:image --update`. The motion stories (`UNSHOT_PREFIXES`) are the
  * exception: they are rendered and run in every variant, and shot in none.
  */
 export interface Variant {
