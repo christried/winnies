@@ -118,6 +118,27 @@ export default withNuxt(
     },
   },
   {
+    // Stories (`.storybook/main.ts` picks up `../stories/**/*.stories.ts`). `no-restricted-syntax` is ONE rule: antfu sets it
+    // for every file, and the options of a later block replace its list instead of adding to it. So the two selectors antfu
+    // ships are restated here, and every restriction on stories goes into this array, never into a second block
+    // (#361 adds its `iterations` selector here).
+    name: "stories",
+    files: ["stories/**/*.stories.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        "TSEnumDeclaration[const=true]",
+        "TSExportAssignment",
+        {
+          // Any "!test" string in a story file: a tag in the meta or in one story, a const the tag is read from, a template
+          // literal. A story kept off needs a ticket (docs/agents/delivery.md § A flake at a required check).
+          selector: ":matches(Literal[value=\"!test\"], TemplateElement[value.cooked=\"!test\"])",
+          message: "A story kept off needs a ticket, not a \"!test\" tag: fix the story, or open the ticket (docs/agents/delivery.md § A flake at a required check).",
+        },
+      ],
+    },
+  },
+  {
     name: "better-tailwindcss",
     files: ["**/*.vue"],
     plugins: { "better-tailwindcss": betterTailwindcss },
