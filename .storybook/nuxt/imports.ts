@@ -45,7 +45,9 @@ export function importsOptions(root: string): Partial<UnimportPluginOptions> {
     imports: [
       {
         name: "useState",
-        from: path.join(root, ".storybook/nuxt/stubs.ts"),
+        // With forward slashes: unimport writes `from` into the import statement as it is, and a Windows path's
+        // backslashes are escapes there (`\n` of `\nuxt`), so no story that reaches `useState` would load.
+        from: path.join(root, ".storybook/nuxt/stubs.ts").replaceAll("\\", "/"),
       },
     ],
     parser: "oxc",
