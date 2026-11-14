@@ -45,6 +45,52 @@ export function pageWithCss(css: string, title: string, ...body: VNode[]): VNode
   ]);
 }
 
+// A focused field draws a blinking caret, which differs between two shots. The rule is the story page's, never the
+// component's: the caret is part of the product.
+const NO_CARET = "input{caret-color:transparent !important}";
+
+/**
+ * A story's page for a field: the page, with the rule that stops a focused field's caret from blinking between two shots.
+ *
+ * @param title the landmark's name and the heading
+ * @param body what the story shows
+ * @returns the page
+ */
+export function pageWithoutCaret(title: string, ...body: VNode[]): VNode {
+  return pageWithCss(NO_CARET, title, ...body);
+}
+
+/**
+ * A row of controls that wraps, 16px apart.
+ *
+ * @param body the controls
+ * @returns the row
+ */
+export function row(...body: VNode[]): VNode {
+  return h("div", { style: "display:flex;flex-wrap:wrap;gap:16px" }, body);
+}
+
+/**
+ * A card that holds one case of a field story: the case's chip, then what it shows, on the card's own surface so the
+ * card's width is the field's.
+ *
+ * @param story the chip's text
+ * @param width the card's width, in pixels
+ * @param body what the card shows
+ * @returns the card
+ */
+export function card(story: string, width: number, ...body: VNode[]): VNode {
+  return h("div", {
+    style: `box-sizing:border-box;width:${width}px;max-width:100%;display:flex;flex-direction:column;gap:12px;`
+      + "padding:16px;background:var(--color-surface);border-radius:var(--radius-xl)",
+  }, [
+    h("div", {
+      innerHTML: chip(story),
+    }),
+    ...body,
+  ]);
+}
+
 /** How a panel lays its controls out. */
 export interface PanelOptions {
   /** The space between the controls and the chip, in pixels. Default 16. */
@@ -87,6 +133,14 @@ export const labelled = panel();
 export function findButton(scope: HTMLElement, name: string) {
   return within(scope).findByRole("button", { name });
 }
+
+/**
+ * The first icon of a button (the spinner while it is busy), or null when it has none.
+ *
+ * @param button the button
+ * @returns the icon's `svg`
+ */
+export const iconOf = (button: HTMLElement) => button.querySelector("svg");
 
 /**
  * What a token's colour computes to, read from a probe so a check never writes the palette out.

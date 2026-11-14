@@ -8,7 +8,7 @@ import { animations, frames, withDialect, withMotion } from "../support/motion-p
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
 import { expectHoverGuarded } from "../support/touch";
-import { findButton, labelled, page } from "../support/ui-kit";
+import { findButton, iconOf, labelled, page } from "../support/ui-kit";
 
 // The app's own UiIconButton (#310): the handoff's round icon button (03-components.md, `icon-button`; `.w-btn--icon` in the
 // reference CSS and the buttons card, where the prototypes win). It is `UiButton`'s icon-only form, so its hover, press,
@@ -117,8 +117,6 @@ type Story = StoryObj<typeof meta>;
 
 /** The button of each ITEMS row, in order. */
 const findItems = (canvasElement: HTMLElement) => Promise.all(ITEMS.map(([, , , label]) => findButton(canvasElement, label)));
-
-const iconOf = (button: HTMLElement) => button.querySelector("svg");
 
 export const Default: Story = {
   render: args => () => page("Icon button", ...buttons(spied(args))),

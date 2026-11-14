@@ -7,7 +7,7 @@ import type { Ref, VNode, VNodeChild } from "vue";
 //   data-section  a section's id
 //   data-loop     a loop's name (stories/motion/loops.stories.ts)
 //   data-probe    one of the two same-named loops whose phase the loops story compares
-import { h, onBeforeUnmount, watch } from "vue";
+import { h, onBeforeUnmount, ref, watch } from "vue";
 import { attributesApplied, chip, headingCss } from "./html";
 
 /** The fill of a block, by role. */
@@ -180,6 +180,13 @@ export function reset(...els: (HTMLElement | null | undefined)[]): void {
     });
   }
 }
+
+/**
+ * A template ref for an element a story hands to `block` and to a recipe.
+ *
+ * @returns a ref that holds the element once it is drawn
+ */
+export const elementRef = () => ref<HTMLElement | null>(null);
 
 /**
  * A chip "label: value" that draws again on a toolbar switch. The value is read live (`resolved(...)` from html.ts),
