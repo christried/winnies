@@ -14,7 +14,10 @@ export interface LoopEnv {
   hidden: () => boolean;
   /** Calls back when the tab's visibility changes; returns the stop function. */
   onVisibilityChange: (cb: () => void) => () => void;
-  /** Calls back with the element's visibility: once with the initial state, then on every change; returns the stop function. */
+  /**
+   * Calls back with the visibility of what it is given: once with the initial state, then on every change; returns the
+   * stop function. The host hands it the frame a loop moves in (the element's parent), not the animated element.
+   */
   observe: (el: HTMLElement, cb: (visible: boolean) => void) => () => void;
 }
 
@@ -116,7 +119,7 @@ export interface LoopHost {
 interface Entry extends NormalSpec {
   /** Null while the engine gates the loop: reduced motion, a tier that is off, the Calm preset. */
   anim: Animation | null;
-  /** Whether the element is on screen; true until the observer says otherwise, so the loop starts at once. */
+  /** Whether the element's frame (its parent) is on screen; true until the observer says otherwise, so the loop starts at once. */
   visible: boolean;
   /** Whether the host paused `anim`. */
   paused: boolean;
@@ -137,7 +140,7 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
   const entries = new Map<HTMLElement, Entry>();
   let detach: (() => void) | null = null;
 
-  // Which animation plays when: a hidden tab or an element off-screen pauses; the reverse resumes. A resumed loop
+  // Which animation plays when: a hidden tab or an element whose frame is off-screen pauses; the reverse resumes. A resumed loop
   // jumps to the phase it would have had if it had run all along, so same-named loops stay in step however long each
   // was off. `play()` comes first, because assigning a `startTime` is what moves the clock.
   function applyPause(entry: Entry) {
@@ -255,8 +258,10 @@ export function createLoopHost(m: WinniesMotion, env: LoopEnv = browserLoopEnv()
     if (!detach)
       attach();
     start(el, added);
-    // The observer may call back at once, so the entry is in the map before it is asked to observe.
-    added.stopObserving = env.observe(el, (visible) => {
+    // The observer may call back at once, so the entry is in the map before it is asked to observe. It watches the frame
+    // the loop moves in, not the element: a loop that carries its element out of a clip (the Total Timer's gloss rests
+    // outside it) would otherwise be reported off-screen by its own motion, pause, and never move back in (#355).
+    added.stopObserving = env.observe(el.parentElement ?? el, (visible) => {
       added.visible = visible;
       applyPause(added);
     });

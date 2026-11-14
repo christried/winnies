@@ -23,8 +23,9 @@ function hostOf(m: WinniesMotion): LoopHost {
 
 /**
  * The `v-loop` directive of the surface a component renders under: it starts the named ambient loop when the element
- * mounts, switches it when the value changes, pauses it while the element is off-screen or the tab is hidden, and
- * cancels it when the element unmounts. Same-named loops share one phase; a `delay` offsets a stagger from it. The
+ * mounts, switches it when the value changes, pauses it while the element's parent is off-screen or the tab is hidden,
+ * and cancels it when the element unmounts. The parent is the frame the loop moves in; the element itself may be moved
+ * out of a clip by its own loop (#355). Same-named loops share one phase; a `delay` offsets a stagger from it. The
  * engine decides whether a loop may exist at all (reduced motion, the tier, `--ambient-motion`).
  *
  * A directive cannot `inject`, so the component asks for it in its setup:
