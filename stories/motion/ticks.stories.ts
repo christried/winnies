@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref } from "v
 import { resolved } from "../support/html";
 import { expectQuietWhenReduced } from "../support/motion-checks";
 import { block, page, readout, reset, section, stage } from "../support/motion-kit";
-import { animations, clickReplay, frames, particleCount, withMotion } from "../support/motion-play";
+import { animations, clickReplay, frames, particleCount, tickFaults, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The timer's ticks (T01 to T06, #305), on a clock at rate 4, so a beat comes every 250 ms and a run of six takes
@@ -228,27 +228,6 @@ interface Seen {
   animations: Map<number, Set<Animation>>;
 }
 
-/**
- * How far a tick runs into the next one on the same digit, in milliseconds, the worst over every slot: the earlier
- * animation's end on the document timeline, less the later one's start. Both start at a frame, so this is stable under
- * load where counting animations per frame is not: a stalled frame moves both starts together. It can be a few
- * milliseconds above zero even for correct timing, because the clamp leaves 5% of the interval (12.5 ms at 250 ms) and
- * a frame is 16.7 ms; `ONE_FRAME` is the allowance for that.
- */
-function worstOverlap(seen: Seen): number {
-  let worst = Number.NEGATIVE_INFINITY;
-  for (const set of seen.animations.values()) {
-    const byStart = [...set].toSorted((a, b) => Number(a.startTime) - Number(b.startTime));
-    byStart.slice(0, -1).forEach((a, i) => {
-      const end = Number(a.startTime) + Number(a.effect!.getComputedTiming().endTime);
-      worst = Math.max(worst, end - Number(byStart[i + 1]!.startTime));
-    });
-  }
-  return worst;
-}
-
-const ONE_FRAME = 17;
-
 /** Samples the Total digits every frame until stopped: an animation lasts at least 100 ms, so none is missed. */
 function sampleTotals(root: ParentNode) {
   let frame = 0;
@@ -311,7 +290,7 @@ export const Default: StoryObj<typeof meta> = {
       expect([...second.slots]).toEqual([5]);
     }));
 
-    await step("two ticks fired faster than the interval never overlap on a digit, and no tick outlasts the clamp", () => withMotion("full", async () => {
+    await step("a digit ticks once per beat, and no tick outlasts its beat or the clamp", () => withMotion("full", async () => {
       // Without the 95% clamp a Total digit lasts 480 ms at a 250 ms interval, so this bites.
       const all = [
         ...second.animations.values(),
@@ -319,7 +298,7 @@ export const Default: StoryObj<typeof meta> = {
       expect(all.length).toBeGreaterThanOrEqual(TICKS_PER_RUN - 1);
       for (const a of all)
         expect(a.effect!.getComputedTiming().duration as number).toBeLessThanOrEqual(interval * 0.95 + 0.01);
-      expect(worstOverlap(second)).toBeLessThanOrEqual(ONE_FRAME);
+      expect(tickFaults(second.animations, interval)).toEqual([]);
     }));
 
     await step("the dialect reaches the keyframes of a Total digit", () => withMotion("full", async () => {
@@ -335,20 +314,45 @@ export const Default: StoryObj<typeof meta> = {
     }));
 
     await step("T03: a minute ticks the digits that changed, and T04: an hour ticks them all", () => withMotion("full", async () => {
+      // Each run is checked before the next Replay, which cancels the previous run's animations (a null start time).
+      // A rollover's staggered tick ends within its beat, and no beat ticks a digit twice (#337).
       const minute = await runAndSample("min");
       expect([...minute.slots].toSorted()).toEqual([3, 4, 5]);
+      expect(tickFaults(minute.animations, interval)).toEqual([]);
       const hour = await runAndSample("hour");
       expect([...hour.slots].toSorted()).toEqual([0, 1, 2, 3, 4, 5]);
+      expect(tickFaults(hour.animations, interval)).toEqual([]);
       for (const seen of [minute, hour]) {
         for (const set of seen.animations.values()) {
           for (const a of set)
             expect(a.effect!.getComputedTiming().duration as number).toBeLessThanOrEqual(interval * 0.95 + 0.01);
         }
       }
-      // A rollover's staggered tick ends before the next beat ticks the same digit (#337).
-      for (const seen of [minute, hour])
-        expect(worstOverlap(seen)).toBeLessThanOrEqual(ONE_FRAME);
     }));
+
+    await step("the check bites: two ticks on one slot in one frame are a fault", async () => {
+      const el = document.createElement("div");
+      canvasElement.append(el);
+      try {
+        const keyframes = [
+          { transform: "none" },
+          { transform: "translateY(2px)" },
+          { transform: "none" },
+        ];
+        el.animate(keyframes, { duration: interval * 0.95 });
+        el.animate(keyframes, { duration: interval * 0.95 });
+        await frames(2);
+        expect(tickFaults(new Map([
+          [
+            0,
+            new Set(el.getAnimations()),
+          ],
+        ]), interval)).not.toEqual([]);
+      }
+      finally {
+        el.remove();
+      }
+    });
 
     await step("when reduced a run still counts its ticks and ends, and nothing animates", () => withMotion("reduce", async () => {
       await clickReplay(canvasElement, "hour");

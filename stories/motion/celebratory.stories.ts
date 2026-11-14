@@ -37,7 +37,7 @@ const Celebratory = defineComponent({
           spread: 520,
           cone: 3,
           gravity: 160,
-          dur: m.D.celebrate,
+          dur: m.T().D.celebrate,
         });
       },
       // S02 is a Responsive moment: its burst is "resp" while niniHop itself is "cel".

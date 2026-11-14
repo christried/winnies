@@ -50,6 +50,7 @@ defineExpose({
     ref="modal"
     title="Delete Winnie"
     action-label="Delete"
+    busy-label="Deleting…"
     destructive
     :pending="deleting"
     @action="confirmDelete"
@@ -59,8 +60,8 @@ defineExpose({
       {{ totalCount }} challenges. This cannot be undone.
     </p>
 
-    <p v-if="formError">
+    <UiFieldMessage v-if="formError" variant="error">
       {{ formError }}
-    </p>
+    </UiFieldMessage>
   </UiModal>
 </template>

@@ -2,47 +2,35 @@
 const { startRename } = useWinnieStore();
 const deleteWinnie = useTemplateRef("deleteWinnie");
 
-/**
- * Closes the menu, then opens the inline name editor.
- * @param close close method passed up by the menu.
- */
-function onRename(close: () => void) {
-  close();
-  startRename();
-}
-
-/**
- * Closes the menu, then opens the Winnie deletion modal.
- * @param close close method passed up by the menu.
- */
-function onDelete(close: () => void) {
-  close();
+/** Opens the Winnie deletion modal. The menu has closed and given the focus back to its trigger, which is where the modal returns it. */
+function onDelete() {
   deleteWinnie.value?.open();
 }
 </script>
 
 <template>
-  <UiDropdown label="More actions">
-    <template #trigger>
-      <UiIcon name="more" />
+  <UiMenu>
+    <template #trigger="{ trigger }">
+      <UiIconButton
+        v-bind="trigger"
+        icon="more_horiz"
+        label="More actions"
+        variant="ghost"
+      />
     </template>
 
-    <template #default="{ close }">
-      <li>
-        <button type="button" @click="onRename(close)">
-          <UiIcon name="edit" /> Rename
-        </button>
-      </li>
-      <li class="border-t">
-        <button
-          type="button"
-          @click="onDelete(close)"
-        >
-          <UiIcon name="trash" /> Delete
-        </button>
-      </li>
-    </template>
-  </UiDropdown>
+    <UiMenuItem icon="edit" @click="startRename()">
+      Rename
+    </UiMenuItem>
+    <UiMenuItem separator />
+    <UiMenuItem
+      icon="delete"
+      danger
+      @click="onDelete()"
+    >
+      Delete
+    </UiMenuItem>
+  </UiMenu>
 
   <WinnieDeleteWinnieModal ref="deleteWinnie" @deleted="deleteWinnie?.close()" />
 </template>

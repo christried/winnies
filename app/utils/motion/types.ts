@@ -167,8 +167,7 @@ export interface MotionState {
 /** The motion engine: plumbing, particles, ticks and beats, and every recipe under its handoff name. */
 export interface WinniesMotion {
   // plumbing
-  D: Record<DurationName, number>;
-  E: Record<EaseName, string>;
+  /** The current tokens: read from the surface's root on the first call that has one, and again by `refresh()`. */
   T: () => Tokens;
   refresh: (el?: HTMLElement | null) => void;
   on: (tier: Tier) => boolean;
@@ -180,10 +179,9 @@ export interface WinniesMotion {
   // listening and loops
   /**
    * Refreshes the tokens, then refreshes again on every media or attribute change and tells the subscribers. The first
-   * refresh is silent, as in the reference, unless `announce` is set: a surface sets it, so whatever was built from the
-   * defaults before its start is checked against the tokens it just read (#335).
+   * refresh is silent, as in the reference.
    */
-  watch: (opt?: { announce?: boolean }) => () => void;
+  watch: () => () => void;
   subscribe: (cb: (s: MotionState) => void) => () => void;
   loop: (el: HTMLElement, name: LoopName, opt?: LoopOptions) => Animation | null;
   /** What a loop of this name is built from right now, as a string: equal strings mean a running loop is current. */
@@ -241,6 +239,8 @@ export interface WinniesMotion {
   pageOut: (el: MaybeEl, dir: number) => Promise<unknown>;
   pageIn: (el: MaybeEl, dir: number) => void;
   progress: (fill: MaybeEl, fromX: number, toX: number) => Animation | null;
+  /** The switch knob's slide, as a share of the knob's own width. No moment ID in the handoff (#316). */
+  switchSlide: (knob: MaybeEl, fromX: number, toX: number) => Animation | null;
   pop: (el: MaybeEl, s?: number) => Animation | null;
   themeWipe: (layer: MaybeEl, x: number, y: number, color: string, swap: () => void) => void;
 

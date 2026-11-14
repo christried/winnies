@@ -31,9 +31,8 @@ const [game, gameAttrs] = defineField("game", validateLazily);
 const [spec, specAttrs] = defineField("spec", validateLazily);
 const [target, targetAttrs] = defineField("target", validateLazily);
 
-const gameId = useId();
-const specId = useId();
-const targetId = useId();
+// The preprocess above makes the field's input type `unknown`; the number input shows a number or nothing.
+const targetValue = computed(() => target.value as number | undefined);
 
 const counterChecked = ref(false);
 /**
@@ -90,84 +89,59 @@ const showSkeleton = useDelayed(pending);
         class="flex flex-col items-center gap-2 md:flex-row md:items-start"
         @submit="onSubmit"
       >
-        <div class="w-full">
-          <input
-            :id="gameId"
-            ref="gameInput"
-            v-model="game"
-            type="text"
-            v-bind="gameAttrs"
-            class="w-full border"
-            placeholder="Game"
-            :disabled="atCap"
-            :aria-invalid="Boolean(errors.game)"
-            :aria-describedby="errors.game ? `${gameId}-hint` : undefined"
-          >
-          <p
-            v-if="errors.game"
-            :id="`${gameId}-hint`"
-            class="mt-1 text-sm"
-          >
-            {{ errors.game }}
-          </p>
-        </div>
-        <div class="w-full">
-          <input
-            :id="specId"
-            v-model="spec"
-            type="text"
-            v-bind="specAttrs"
-            class="w-full border"
-            placeholder="Win Condition"
-            :disabled="atCap"
-            :aria-invalid="Boolean(errors.spec)"
-            :aria-describedby="errors.spec ? `${specId}-hint` : undefined"
-          >
-          <p
-            v-if="errors.spec"
-            :id="`${specId}-hint`"
-            class="mt-1 text-sm"
-          >
-            {{ errors.spec }}
-          </p>
-        </div>
+        <UiTextInput
+          ref="gameInput"
+          v-model="game"
+          v-bind="gameAttrs"
+          class="w-full"
+          label="Game"
+          hide-label
+          placeholder="Game"
+          :disabled="atCap"
+          :error="errors.game"
+        />
+        <UiTextInput
+          v-model="spec"
+          v-bind="specAttrs"
+          class="w-full"
+          label="Win Condition"
+          hide-label
+          placeholder="Win Condition"
+          :disabled="atCap"
+          :error="errors.spec"
+        />
         <div class="flex items-center gap-2">
-          <div v-if="counterChecked">
-            <input
-              :id="targetId"
-              v-model="target"
-              type="number"
-              v-bind="targetAttrs"
-              class="min-w-20 border"
-              placeholder="Target"
-              :disabled="atCap"
-              :aria-invalid="Boolean(errors.target)"
-              :aria-describedby="errors.target ? `${targetId}-hint` : undefined"
-            >
-            <p
-              v-if="errors.target"
-              :id="`${targetId}-hint`"
-              class="mt-1 text-sm"
-            >
-              {{ errors.target }}
-            </p>
-          </div>
+          <UiTextInput
+            v-if="counterChecked"
+            :model-value="targetValue"
+            v-bind="targetAttrs"
+            variant="number"
+            label="Target"
+            hide-label
+            placeholder="Target"
+            :disabled="atCap"
+            :error="errors.target"
+            @update:model-value="target = $event"
+          />
           <div>
+            <!-- The glyph stays tabler: countOn and countOff have no Material counterpart (#308), and R3 swaps the button for the switch. -->
             <UiIconButton
               type="button"
               label="Counter target"
-              :aria-pressed="counterChecked"
-              :icon="counterChecked ? 'countOn' : 'countOff'"
+              :pressed="counterChecked"
               :disabled="atCap || isSubmitting"
               @click="onCounterToggle"
-            />
+            >
+              <UiTablerIcon :name="counterChecked ? 'countOn' : 'countOff'" :size="28" />
+            </UiIconButton>
           </div>
 
           <div>
             <UiIconButton
               type="submit"
               label="Add challenge"
-              icon="plus"
+              icon="add"
+              variant="primary"
               :disabled="atCap || isSubmitting"
             />
           </div>

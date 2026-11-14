@@ -14,52 +14,45 @@ async function onSignIn() {
   await authClient.signIn.social({ provider: "discord", callbackURL: "/" });
 }
 
-/**
- * Processes logging out the current User.
- * @param close Passed up from the menu. Gives access to closing the popover menu.
- */
-async function onSignOut(close: () => void) {
-  close();
+/** Processes logging out the current User. */
+async function onSignOut() {
   await authClient.signOut();
   await reloadNuxtApp({ path: "/" });
 }
 </script>
 
 <template>
-  <button
+  <UiButton
     v-if="!user"
-    type="button"
+    variant="primary"
     :disabled="signingIn"
     @click="onSignIn()"
   >
     Sign in with Discord
-  </button>
+  </UiButton>
 
-  <UiDropdown
+  <UiMenu
     v-else
-    label="Account Menu"
+    :heading="`Logged in as ${user.name}`"
   >
-    <template #trigger>
-      <div v-if="user.image" class="cursor-pointer">
-        <div class="w-12 rounded-full">
-          <img alt="" :src="user.image">
-        </div>
-      </div>
-      <div v-else>
-        <div class="w-12 rounded-full">
-          <span> {{ userShorthand }}</span>
-        </div>
-      </div>
+    <template #trigger="{ trigger }">
+      <!-- The avatar is the glyph: a ghost icon button with the picture (or the initials) inside the circle. -->
+      <UiIconButton
+        v-bind="trigger"
+        label="Account Menu"
+        variant="ghost"
+      >
+        <img
+          v-if="user.image"
+          alt=""
+          :src="user.image"
+          class="size-9 rounded-full object-cover"
+        >
+        <span v-else class="text-sm">{{ userShorthand }}</span>
+      </UiIconButton>
     </template>
-    <template #default=" { close }">
-      <li>
-        Logged in as {{ user.name }}
-      </li>
-      <li>
-        <button type="button" @click="onSignOut(close)">
-          Log out
-        </button>
-      </li>
-    </template>
-  </UiDropdown>
+    <UiMenuItem @click="onSignOut()">
+      Log out
+    </UiMenuItem>
+  </UiMenu>
 </template>

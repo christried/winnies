@@ -20,14 +20,11 @@ const otherWinnies = computed(() =>
 );
 
 /**
- * Reports the choice and dismisses the menu.
+ * Reports the choice. The menu has closed by itself.
  * @param winnie The entry that was clicked.
- * @param close Closer handed down by `UiDropdown`'s slot scope
- * selecting an item does not dismiss the popover on its own!!
  */
-function selectWinnie(winnie: WinnieRow, close: () => void): void {
+function selectWinnie(winnie: WinnieRow): void {
   emit("update:currentWinnie", winnie);
-  close();
 }
 
 /**
@@ -44,19 +41,29 @@ function shortDate(value: string) {
   <span v-if="otherWinnies.length < 1" class="pointer-events-none">
     {{ currentWinnie.name }}
   </span>
-  <UiDropdown v-else>
-    <template #trigger>
-      <span class="max-w-56 truncate">{{ currentWinnie.name }} </span>
-      <UiIcon name="chevron" />
+  <UiMenu
+    v-else
+    wide
+    align="start"
+  >
+    <template #trigger="{ trigger }">
+      <!-- A name and a caret, so not an icon button. The accessible name stays the Winnie's name. -->
+      <UiButton
+        v-bind="trigger"
+        variant="secondary"
+        trailing-icon="expand_more"
+      >
+        <span class="max-w-56 truncate">{{ currentWinnie.name }}</span>
+      </UiButton>
     </template>
 
-    <template #default="{ close }">
-      <li v-for="winnie in otherWinnies" :key="winnie.id">
-        <button @click="selectWinnie(winnie, close)">
-          <span class="max-w-56 truncate">{{ winnie.name }}</span>
-          <span> {{ shortDate(winnie.createdAt) }} </span>
-        </button>
-      </li>
-    </template>
-  </UiDropdown>
+    <UiMenuItem
+      v-for="winnie in otherWinnies"
+      :key="winnie.id"
+      :meta="shortDate(winnie.createdAt)"
+      @click="selectWinnie(winnie)"
+    >
+      {{ winnie.name }}
+    </UiMenuItem>
+  </UiMenu>
 </template>

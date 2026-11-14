@@ -71,7 +71,7 @@ const freshness = computed(() => {
     <header class="flex flex-wrap items-center justify-center gap-2">
       <AppWordmark />
       <div class="ms-auto flex items-center gap-1">
-        <UiIcon name="eye" />
+        <UiTablerIcon name="eye" />
         <span>View only</span>
       </div>
       <ThemeController />
@@ -80,7 +80,7 @@ const freshness = computed(() => {
     <SharedWinnieCard :winnie="shared.winnie" :now="now" />
 
     <div v-if="isComplete" class="flex items-center gap-2">
-      <UiIcon name="trophy" />
+      <UiTablerIcon name="trophy" />
       Win-challenge complete
     </div>
 

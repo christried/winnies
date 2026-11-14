@@ -26,12 +26,12 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
       class="drag-grip flex size-11 cursor-grab items-center justify-center"
       aria-hidden="true"
     >
-      <UiIcon name="grip" class="size-6" />
+      <UiTablerIcon name="grip" class="size-6" />
     </span>
 
     <StatusDot :status="isWon ? 'won' : isRunning ? 'running' : 'idle'" />
 
-    <UiIcon
+    <UiTablerIcon
       v-if="challenge.pinned"
       name="pin"
       class="size-6"
@@ -60,16 +60,15 @@ const isTogglingTimer = computed(() => challengesBeingToggled.value.has(props.ch
 
       <UiIconButton
         :label="isRunning ? 'Pause timer' : 'Start timer'"
-        :icon="isRunning ? 'pause' : 'play'"
-        class="size-11"
+        :icon="isRunning ? 'pause' : 'play_arrow'"
+        :variant="isRunning ? 'primary' : 'default'"
         :disabled="isWon || isComplete || isTogglingTimer"
         @click="winnieStore.toggleChallengeTimer(challenge.id)"
       />
 
       <UiIconButton
         :label="isWon ? 'Mark as not won' : 'Mark as won'"
-        icon="trophy"
-        class="size-11"
+        icon="emoji_events"
         @click="winnieStore.toggleWin(challenge.id)"
       />
       <ChallengeOverflowMenu :challenge="challenge" />

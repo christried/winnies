@@ -17,12 +17,8 @@ const shareUrl = computed(() =>
     : "",
 );
 
-/**
- * Copies the current Winnie's share link to the clipboard.
- * @param close Closer handed down by `UiDropdown`'s slot scope
- */
-async function copyShareLink(close: () => void) {
-  close();
+/** Copies the current Winnie's share link to the clipboard. */
+async function copyShareLink() {
   if (!shareUrl.value)
     return;
 
@@ -38,12 +34,8 @@ async function copyShareLink(close: () => void) {
     useToast().error("Couldn't copy the link");
   }
 }
-/**
- * Copies the current Winnie's stream overlay link to the clipboard.
- * @param close Closer handed down by `UiDropdown`'s slot scope
- */
-async function copyOverlayLink(close: () => void) {
-  close();
+/** Copies the current Winnie's stream overlay link to the clipboard. */
+async function copyOverlayLink() {
   if (!shareUrl.value)
     return;
 
@@ -74,7 +66,7 @@ async function copyOverlayLink(close: () => void) {
       />
       <div>
         <UiIconButton
-          icon="plus"
+          icon="add"
           label="Create new Winnie"
           @click="newWinnie?.open()"
         />
@@ -83,23 +75,21 @@ async function copyOverlayLink(close: () => void) {
       </div>
 
       <div v-if="currentWinnie">
-        <UiDropdown label="Copy share links">
-          <template #trigger>
-            <UiIcon name="share" />
+        <UiMenu>
+          <template #trigger="{ trigger }">
+            <UiIconButton
+              v-bind="trigger"
+              icon="share"
+              label="Copy share links"
+            />
           </template>
-          <template #default="{ close }">
-            <li>
-              <button @click="copyShareLink(close)">
-                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="screenShare" />Shared view</span>
-              </button>
-            </li>
-            <li>
-              <button @click="copyOverlayLink(close)">
-                <span class="flex max-w-56 items-center gap-2 truncate"><UiIcon name="cast" />Stream overlay</span>
-              </button>
-            </li>
-          </template>
-        </UiDropdown>
+          <UiMenuItem icon="visibility" @click="copyShareLink()">
+            Shared view
+          </UiMenuItem>
+          <UiMenuItem icon="cast" @click="copyOverlayLink()">
+            Stream overlay
+          </UiMenuItem>
+        </UiMenu>
       </div>
     </template>
 

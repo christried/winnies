@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/vue3-vite";
+import { setup } from "@storybook/vue3-vite";
 import { attributesApplied } from "../stories/support/html";
 import "./preview.css";
 
@@ -31,6 +32,19 @@ const withWinniesAttributes: Decorator = (story, context) => {
   attributesApplied.value++;
   return story();
 };
+
+// A story renders the app's own components without the Nuxt app, so a name Storybook has no stand-in for (NuxtLink,
+// ClientOnly, a module's component or directive) is not resolved, and Vue only warns. That would draw a story with a
+// hole in it and pass, so those two warnings throw; every other warning goes to the console as before.
+const UNRESOLVED = /^Failed to resolve (?:component|directive): /;
+
+setup((app) => {
+  app.config.warnHandler = (message, _instance, trace) => {
+    if (UNRESOLVED.test(message))
+      throw new Error(`${message}\nA story renders without the Nuxt app: a component in it can use only what .storybook/nuxt/ resolves. Add a stub there, or take a prop instead of the Nuxt component.`);
+    console.warn(`[Vue warn]: ${message}${trace}`);
+  };
+});
 
 const preview: Preview = {
   globalTypes: {

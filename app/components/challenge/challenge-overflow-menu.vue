@@ -16,11 +16,8 @@ const pinLabel = computed(() => props.challenge.pinned ? "Unpin" : "Pin");
 
 /**
  * Toggles the counter on/off. Sets Target to 0 if it had one!
- * @param close close method passed up by the menu.
  */
-async function toggleCounter(close: () => void) {
-  close();
-
+async function toggleCounter() {
   try {
     const updatedChallenge = await $fetch(`/api/challenges/${props.challenge.id}/counter`, {
       method: "PATCH",
@@ -41,11 +38,8 @@ async function toggleCounter(close: () => void) {
 
 /**
  * Pins or unpins (Toggle) the Challenge row.
- * @param close close method passed up by the menu.
  */
-async function togglePin(close: () => void) {
-  close();
-
+async function togglePin() {
   try {
     const updatedChallenge = await $fetch(`/api/challenges/${props.challenge.id}`, {
       method: "PATCH",
@@ -61,11 +55,8 @@ async function togglePin(close: () => void) {
 
 /**
  * Resets the timer to 0.
- * @param close close method passed up by the menu.
  */
-async function resetTimer(close: () => void) {
-  close();
-
+async function resetTimer() {
   try {
     // not saving the resultBody for now, maybe later with timer Issues
     await $fetch(`/api/challenges/${props.challenge.id}/timer`, {
@@ -83,11 +74,8 @@ async function resetTimer(close: () => void) {
 
 /**
  * Copies the Challenge definition and fills up with default fields on server side for a fresh Challenge.
- * @param close close method passed up by the menu.
  */
-async function duplicate(close: () => void) {
-  close();
-
+async function duplicate() {
   try {
     const createdChallenge = await $fetch(`/api/challenges/${props.challenge.id}/duplicate`, {
       method: "POST",
@@ -102,11 +90,8 @@ async function duplicate(close: () => void) {
 
 /**
  * Deletes the challenge.
- * @param close close method passed up by the menu.
  */
-async function remove(close: () => void) {
-  close();
-
+async function remove() {
   try {
     await $fetch(`/api/challenges/${props.challenge.id}`, { method: "DELETE" });
     winnieStore.removeChallenge(props.challenge.id);
@@ -118,45 +103,38 @@ async function remove(close: () => void) {
 </script>
 
 <template>
-  <UiDropdown label="Challenge actions">
-    <template #trigger>
-      <UiIcon name="more" />
+  <UiMenu>
+    <template #trigger="{ trigger }">
+      <UiIconButton
+        v-bind="trigger"
+        icon="more_vert"
+        label="Challenge actions"
+        variant="ghost"
+      />
     </template>
 
-    <template #default="{ close }">
-      <li>
-        <button type="button" @click="winnieStore.editingChallengeId = challenge.id; close()">
-          Edit
-        </button>
-      </li>
-      <li>
-        <button type="button" @click="toggleCounter(close)">
-          {{ counterLabel }}
-        </button>
-      </li>
-      <li>
-        <button type="button" @click="togglePin(close)">
-          {{ pinLabel }}
-        </button>
-      </li>
-      <li>
-        <button type="button" @click="resetTimer(close)">
-          Reset timer
-        </button>
-      </li>
-      <li>
-        <button type="button" @click="duplicate(close)">
-          Duplicate
-        </button>
-      </li>
-      <li class="border-t">
-        <button
-          type="button"
-          @click="remove(close)"
-        >
-          Delete
-        </button>
-      </li>
-    </template>
-  </UiDropdown>
+    <UiMenuItem icon="edit" @click="winnieStore.editingChallengeId = challenge.id">
+      Edit
+    </UiMenuItem>
+    <UiMenuItem :icon="challenge.target > 0 ? 'exposure_neg_1' : 'exposure_plus_1'" @click="toggleCounter()">
+      {{ counterLabel }}
+    </UiMenuItem>
+    <UiMenuItem icon="push_pin" @click="togglePin()">
+      {{ pinLabel }}
+    </UiMenuItem>
+    <UiMenuItem icon="restart_alt" @click="resetTimer()">
+      Reset timer
+    </UiMenuItem>
+    <UiMenuItem icon="control_point_duplicate" @click="duplicate()">
+      Duplicate
+    </UiMenuItem>
+    <UiMenuItem separator />
+    <UiMenuItem
+      icon="delete"
+      danger
+      @click="remove()"
+    >
+      Delete
+    </UiMenuItem>
+  </UiMenu>
 </template>

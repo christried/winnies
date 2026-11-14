@@ -7,7 +7,8 @@ import type { Decorator } from "@storybook/vue3-vite";
 import type { InjectionKey, Ref } from "vue";
 import type { ClockSource, SurfaceClock } from "../../app/composables/use-surface-clock";
 import type { WinniesMotion } from "../../app/utils/motion/types";
-import { defineComponent, h, inject, onMounted, provide, ref, resolveComponent, shallowRef } from "vue";
+import { defineComponent, h, inject, provide, ref, resolveComponent, shallowRef } from "vue";
+import ParticleLayer from "../../app/components/particle-layer.vue";
 import { provideSurfaceClock, WINNIES_CLOCK_KEY } from "../../app/composables/use-surface-clock";
 import { provideWinniesMotion, WINNIES_SURFACE_KEY } from "../../app/composables/use-winnies-motion";
 
@@ -82,25 +83,6 @@ export function useMotionStory(): MotionStory {
   };
 }
 
-// A mirror of app/components/particle-layer.vue (a `.vue` file is not importable here: it calls the Nuxt auto-import
-// `useWinniesSurface`). Keep the two in step. #307 makes the app's components renderable in stories and can swap it.
-const StoryParticleLayer = defineComponent({
-  name: "StoryParticleLayer",
-  setup() {
-    const surface = inject(WINNIES_SURFACE_KEY);
-    if (!surface)
-      throw new Error("StoryParticleLayer renders under motionSurface() only.");
-    return () => h("div", {
-      "ref": (el: unknown) => {
-        surface.layer.value = el as HTMLElement | null;
-      },
-      "data-particle-layer": "",
-      "aria-hidden": "true",
-      "style": "position:fixed;inset:0;pointer-events:none;z-index:var(--z-confetti)",
-    });
-  },
-});
-
 function motionSurface(params: MotionParameters) {
   return defineComponent({
     name: "MotionSurface",
@@ -115,20 +97,14 @@ function motionSurface(params: MotionParameters) {
       // Before any await; the interval is the clock's, so a story at a high rate ticks at that rate.
       provideWinniesMotion({ root, interval: clock.interval });
       provide(SOURCE_KEY, source);
-      // Registered after both provides, so their `start()` runs first. The story mounts only then: a `v-loop` made on
-      // first render would take the engine's default tokens, not the dialect's (the host reads tokens in `watch()`).
-      // So a play function waits for elements and never reads them synchronously.
-      const ready = ref(false);
-      onMounted(() => {
-        ready.value = true;
-      });
       // `prepare()` in @storybook/vue3 registers the inner story as the component `story`. Resolve it here, and never
       // call `story()` in a render function: that would rebuild the decorator chain on every render.
+      // The story renders on the first pass, as a layout's children do: the engine reads the tokens on the first call that
+      // finds the root, so a recipe or a `v-loop` of the first render needs no gate before `start()`. The layer is the
+      // app's own component, not a copy.
       return () => h("div", { ref: root }, [
-        ready.value
-          ? h(resolveComponent("story"))
-          : null,
-        h(StoryParticleLayer),
+        h(resolveComponent("story")),
+        h(ParticleLayer),
       ]);
     },
   });

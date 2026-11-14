@@ -57,9 +57,9 @@ export const VARIANTS: readonly Variant[] = [
 
 /**
  * Story ids starting with one of these are rendered and checked by axe and play functions, never shot: a still of
- * motion shows its end state only (ADR-0004).
+ * motion shows its end state only (ADR-0004), and `storybook-` stories check Storybook's own plumbing, which is no design.
  */
-export const UNSHOT_PREFIXES = ["motion-"] as const;
+export const UNSHOT_PREFIXES = ["motion-", "storybook-"] as const;
 
 /** Whether a story rendered in this variant is also compared with a baseline. */
 export function shotIn(variant: Pick<Variant, "only" | "skip">, storyId: string) {
