@@ -52,6 +52,8 @@ It must not reach a commit. A merge commit takes the PR's title, not its body, w
 
 A story (`--story <id>`) goes through the same proxy as a page, so the same network secret reaches `/storybook/`, and the two failures below mean the same for it. `--dark` and `--full-motion` are settings of the container's own Chromium and need nothing from the network.
 
+A step file (`--steps`) goes through the same proxy: its clicks are requests of the container's own Chromium to the staging host, which the proxy marks as before, and a click that leaves that host carries no header. Steps need nothing else from the container.
+
 `net::ERR_TUNNEL_CONNECTION_FAILED` from the helper means the host is not allowed, so the secret is not saved. Vercel's login page means it is wrong or expired. Either way the staging check becomes a local check (§ What stays local), and the comment says which of the two it was.
 
 The Vercel connector's tools are named `mcp__Vercel__…` here; `.claude/settings.json` denies the two share-link tools under both names.
