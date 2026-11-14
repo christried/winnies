@@ -50,6 +50,8 @@ It must not reach a commit. A merge commit takes the PR's title, not its body, w
 
 `scripts/shots.mjs` reaches staging only when the human has saved the bypass secret on the `winnies` environment as a network secret: host `staging.winnies.christried.me`, header `x-vercel-protection-bypass`. The container's proxy then adds the header to every request to that host, the browser's included, and no agent sees the value. `VERCEL_AUTOMATION_BYPASS_SECRET` in the container's `.env` is a placeholder that only gets the helper past its own check; the rules for the real one (`delivery.md` § Issues) hold.
 
+A story (`--story <id>`) goes through the same proxy as a page, so the same network secret reaches `/storybook/`, and the two failures below mean the same for it. `--dark` and `--full-motion` are settings of the container's own Chromium and need nothing from the network.
+
 `net::ERR_TUNNEL_CONNECTION_FAILED` from the helper means the host is not allowed, so the secret is not saved. Vercel's login page means it is wrong or expired. Either way the staging check becomes a local check (§ What stays local), and the comment says which of the two it was.
 
 The Vercel connector's tools are named `mcp__Vercel__…` here; `.claude/settings.json` denies the two share-link tools under both names.
