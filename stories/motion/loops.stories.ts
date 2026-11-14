@@ -262,13 +262,14 @@ export const Default: StoryObj<typeof meta> = {
   async play({ canvasElement, step }) {
     // The story mounts one tick after the surface has read its tokens, so the first element has to be waited for.
     await within(canvasElement).findByRole("button", { name: "Replay" });
-    const everyLoopRuns = async () => {
+    // Every loop cell has its loop: an existence count, not "is moving". A cell below the fold is paused on purpose by the
+    // loop host (#355), so it cannot be asked for a running loop; the probes below are on screen and carry the running claim.
+    const everyLoopIsMade = () => {
       const els = loopEls(canvasElement);
       expect([
         ...new Set(els.map(el => el.dataset.loop)),
       ].toSorted()).toEqual(names);
-      for (const el of els)
-        expect(await runningLoops(el), el.dataset.loop).toHaveLength(1);
+      els.forEach(el => expect(el.getAnimations(), el.dataset.loop).toHaveLength(1));
     };
     // Both probes exist and run: b starts 700 ms after a.
     const probesRun = async () => {
@@ -284,11 +285,12 @@ export const Default: StoryObj<typeof meta> = {
     }));
 
     await step("reduce cancels every running loop and leaving it restarts them", () => withMotion("full", async () => {
-      await waitFor(everyLoopRuns, { timeout: 4000 });
+      await waitFor(everyLoopIsMade, { timeout: 4000 });
       await withMotion("reduce", async () => {
         await waitFor(() => expect(animations()).toHaveLength(0));
       });
-      await waitFor(everyLoopRuns, { timeout: 4000 });
+      await waitFor(everyLoopIsMade, { timeout: 4000 });
+      await waitFor(probesRun, { timeout: 4000 });
     }));
 
     await step("same-named loops share one start", () => withMotion("full", async () => {
