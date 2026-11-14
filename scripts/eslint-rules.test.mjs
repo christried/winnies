@@ -10,6 +10,53 @@ const rule = "no-restricted-syntax";
 const storyPath = "stories/ui/planted.stories.ts";
 const kept = /kept off needs a ticket/;
 
+// A bare control outside the UI components fails the lint (#363). The rule reads the template, so the snippets are a
+// `.vue` file with a template only: the planted path decides which block of the config applies.
+const bareRule = "vue/no-restricted-html-elements";
+const bareButton = "<template>\n  <button type=\"button\">Go</button>\n</template>\n";
+const bareInput = "<template>\n  <input type=\"text\">\n</template>\n";
+
+describe("a bare <button> or <input> outside the UI components (#363)", () => {
+  it.each([
+    ["a button in a component", bareButton, "app/components/winnie/planted.vue"],
+    ["an input in a component", bareInput, "app/components/planted.vue"],
+    ["a button in a page", bareButton, "app/pages/planted.vue"],
+    ["an input in a layout", bareInput, "app/layouts/planted.vue"],
+  ])("reports %s once", async (_name, text, filePath) => {
+    expect(await lintPlanted(text, filePath, bareRule)).toHaveLength(1);
+  }, loadTimeout);
+
+  it.each([
+    ["button", bareButton, /UiButton/],
+    ["input", bareInput, /UiTextInput/],
+  ])("names what to use instead of a bare %s", async (_element, text, replacement) => {
+    const messages = await lintPlanted(text, "app/components/planted.vue", bareRule);
+
+    expect(messages[0].message).toMatch(replacement);
+  }, loadTimeout);
+
+  it.each([
+    ["button", bareButton],
+    ["input", bareInput],
+  ])("does not report a %s in the UI components", async (_element, text) => {
+    expect(await lintPlanted(text, "app/components/ui/planted.vue", bareRule)).toEqual([]);
+  }, loadTimeout);
+
+  it.each([
+    ["the rename button", bareButton, "app/components/winnie/winnie-card-name.vue"],
+    ["the Counter pill's input", bareInput, "app/components/counter-pill.vue"],
+  ])("does not report %s, a known exception until R3", async (_name, text, filePath) => {
+    expect(await lintPlanted(text, filePath, bareRule)).toEqual([]);
+  }, loadTimeout);
+
+  it.each([
+    ["an input in the rename button's file", bareInput, "app/components/winnie/winnie-card-name.vue"],
+    ["a button in the Counter pill's file", bareButton, "app/components/counter-pill.vue"],
+  ])("still reports %s: an exception covers one control", async (_name, text, filePath) => {
+    expect(await lintPlanted(text, filePath, bareRule)).toHaveLength(1);
+  }, loadTimeout);
+});
+
 // The meta, a story, a const the tag is read from, and a template literal: each is one "!test" string in a story.
 const taggedMeta = "const meta = { title: \"A\", tags: [\"!test\"] };\nexport default meta;";
 const taggedStory = "export const A = { tags: [\"autodocs\", \"!test\"] };";
