@@ -1,6 +1,7 @@
 // What branch-prune.mjs and worktree-clean.mjs, the two scripts that delete things, both do before and around their git
 // calls: refuse a flag they do not know, run git, and name the line of a failure that says what went wrong. In one place
-// so the two cannot drift apart (#290 review).
+// so the two cannot drift apart (#290 review). It also holds the line a failed `gh` call becomes (ghErrorLine), for the
+// two scripts that wait on GitHub.
 import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { parseArgs } from "node:util";
@@ -29,6 +30,33 @@ export function git(...args) {
 export function firstLine(error) {
   const lines = String(error.stderr ?? error.message).trim().split("\n").map(line => line.trim());
   return lines.find(line => /^(?:!|error:|fatal:)/.test(line)) ?? lines[0];
+}
+
+/**
+ * The line a failed `gh` call becomes, for deploy-wait.mjs and ci-wait.mjs. A 502 from GitHub can answer with a whole HTML
+ * page, which must never reach an agent's context: a page costs one line, a status with it when `gh` printed one.
+ *
+ * @param {{ stderr?: unknown, message?: string }} error  what a failed `execFileSync("gh", …)` or the `JSON.parse` of its output threw
+ * @returns {string}  one line, no markup, at most 160 characters
+ */
+export function ghErrorLine(error) {
+  // An answer cut off or not JSON: what was read is no use, whatever it was.
+  if (error instanceof SyntaxError)
+    return "GitHub's answer was cut off or is not JSON";
+  const text = String(error.stderr || error.message);
+  if (/<\s*(?:!doctype|html|head|body|title)\b/i.test(text)) {
+    const status = /HTTP (\d{3})\b/.exec(text);
+    return status
+      ? `GitHub answered with an error page (HTTP ${status[1]})`
+      : "GitHub answered with an error page";
+  }
+  const line = (text.split("\n").find(candidate => candidate.trim() !== "") ?? "")
+    .replace(/^\s*gh: /, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return line.length > 160
+    ? `${line.slice(0, 159)}…`
+    : line;
 }
 
 /**
