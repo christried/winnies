@@ -22,6 +22,7 @@ The shape comes from the compies repository, where it grew out of ten retros; ru
 - The re-run shows that the check flaked. It is not a way past the failure: a flaky test is fixed or deleted, never retried until it is green (`CODING_STANDARDS.md` § Behaviour).
 - A run that GitHub never gave a job is not a flake: nothing ran, so nothing flaked and no ticket is due. Find out why it never started: a PR in conflict with its base starts no `pull_request` run (#267; `docs/agents/implementer-frame.md` § Before you report).
 - No story is kept off with a `!test` tag: `pnpm lint` refuses one (the `stories` block of `eslint.config.mjs`). A story kept off needs a ticket.
+- A flaky picture can be deleted without its story: list the story in `UNSHOT_STORIES` (`.storybook/visual-variants.ts`), which keeps its play function running. The entry's comment names the ticket (the human, 2026-11-15, #358).
 
 (R2's retro, item 4, 2026-11-14: #351 turned three `visual` runs red while it was `needs-triage`, and the job was re-run to get a merge; a `!test` tag outlived its reason and hid a wrong check.)
 
