@@ -7,8 +7,10 @@
  * The rule is the one for reduced motion: a variant is shot only where its picture differs from the Workspace shot of
  * the same theme, and the shots were compared byte for byte to decide it (#265). Light and dark under Workspace are the
  * reference and are shot for every story. A story added later is shot in every variant that shoots all stories, and its
- * baselines are regenerated with `pnpm test:visual:image --update`. The motion stories (`UNSHOT_PREFIXES`) are the
- * exception: they are rendered and run in every variant, and shot in none.
+ * baselines are regenerated with `pnpm test:visual:image --update`. The motion stories (`UNSHOT_PREFIXES`) and the
+ * stories in `UNSHOT_STORIES` are the exception: they are rendered and run in every variant, and shot in none. One
+ * variant, `browser-prefers-reduced`, shoots nothing and runs only the stories tagged `reduced-preference`, with the
+ * browser's own preference for reduced motion emulated (#345).
  */
 export interface Variant {
   name: string;
@@ -17,6 +19,13 @@ export interface Variant {
   only?: readonly string[];
   /** These stories are rendered and checked by axe, but not shot: their picture equals the Workspace one. */
   skip?: readonly string[];
+  /**
+   * The Chromium context emulates `prefers-reduced-motion: reduce` (Playwright's `reducedMotion`): the browser's own
+   * preference, whatever `globals.motion` says.
+   */
+  emulateReducedMotion?: boolean;
+  /** Only stories with one of these Storybook tags have a test in this variant; without it every story does. */
+  tags?: readonly string[];
 }
 
 export const VARIANTS: readonly Variant[] = [
@@ -33,6 +42,16 @@ export const VARIANTS: readonly Variant[] = [
     name: "workspace-light-reduced",
     globals: { theme: "light", dialect: "workspace", motion: "reduce" },
     only: ["tokens-switches--default"],
+  },
+  // The person's own system setting (#345): the engine reads the media query as well as `<html data-motion>`, and a toolbar
+  // value cannot set it. `motion` stays "full" on purpose: the attribute is absent, so only the media query reduces, which is
+  // the case this variant exists for. `only: []` shoots nothing; it is two stories rendered, played and checked by axe.
+  {
+    name: "browser-prefers-reduced",
+    globals: { theme: "light", dialect: "workspace", motion: "full" },
+    only: [],
+    emulateReducedMotion: true,
+    tags: ["reduced-preference"],
   },
   {
     name: "showcase-light",
@@ -61,14 +80,43 @@ export const VARIANTS: readonly Variant[] = [
  */
 export const UNSHOT_PREFIXES = ["motion-", "storybook-"] as const;
 
+/**
+ * Story ids that are rendered, checked and played in every variant, and shot in none, matched exactly. The icon button's
+ * Focus picture flaked on a commit that changed nothing, and no cause was found; the human deleted the picture on
+ * 2026-11-15 (#358). The play function checks the ring in the DOM instead: its colour, width and offset.
+ */
+export const UNSHOT_STORIES: readonly string[] = ["ui-icon-button--focus"];
+
 /** Whether a story rendered in this variant is also compared with a baseline. */
 export function shotIn(variant: Pick<Variant, "only" | "skip">, storyId: string) {
   if (UNSHOT_PREFIXES.some(prefix => storyId.startsWith(prefix))) {
     return false;
   }
+  if (UNSHOT_STORIES.includes(storyId)) {
+    return false;
+  }
   return variant.only
     ? variant.only.includes(storyId)
     : !variant.skip?.includes(storyId);
+}
+
+/**
+ * The options of the browser context a variant's tests run in: `reducedMotion` for a variant that emulates the
+ * preference, nothing (the browser's defaults, as before) for the others.
+ */
+export function contextOptions(variant: Pick<Variant, "emulateReducedMotion">) {
+  return variant.emulateReducedMotion
+    ? { reducedMotion: "reduce" as const }
+    : undefined;
+}
+
+/** The Storybook plugin's `tags` option for a variant: only the stories with these tags, or nothing (its own default). */
+export function storyTags(variant: Pick<Variant, "tags">) {
+  return variant.tags
+    ? {
+        include: [...variant.tags],
+      }
+    : undefined;
 }
 
 /** Whether a story rendered in the variant of that name is also compared with a baseline. */

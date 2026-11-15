@@ -6,7 +6,8 @@ import "./preview.css";
 /**
  * Sets the attributes the app sets, on the same elements: `data-theme` and `data-motion` on <html>,
  * `data-dialect` on <body>. Workspace carries no dialect attribute and full motion carries no motion attribute,
- * so those two are removed, not set to a value. The real attribute is used, not `prefers-reduced-motion` emulation.
+ * so those two are removed, not set to a value. The real attribute is used, not `prefers-reduced-motion` emulation
+ * (one variant emulates the preference: browser-prefers-reduced).
  */
 const withWinniesAttributes: Decorator = (story, context) => {
   const { theme, dialect, motion } = context.globals as Record<string, string>;
