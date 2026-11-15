@@ -134,7 +134,9 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
   made on a bare machine never matches CI (ADR-0004). `pnpm test:visual:image` runs them there, under Podman on the human's machine and under Docker in a cloud container.
   `pnpm test:visual:podman` is the same command pinned to Podman, kept so today's calls work. The motion
   stories (`stories/motion/`, ids starting with `motion-`) are rendered, checked by axe and run through their play
-  functions in every variant, but never shot: a still of motion shows its end state only. One more variant,
+  functions in every variant, but never shot: a still of motion shows its end state only. A story listed in
+  `UNSHOT_STORIES` (`.storybook/visual-variants.ts`) is rendered, checked and played the same way and never shot, because
+  its picture flaked and was deleted (#358); today that is the icon button's `Focus`. One more variant,
   `browser-prefers-reduced`, runs two tagged stories with the browser's own preference for reduced motion emulated,
   shoots nothing, and `withMotion("full")` skips its step and says why under it.
   - Prerequisite: a container runtime, which the command picks: Docker when `CLAUDE_CODE_REMOTE` is set (a cloud
