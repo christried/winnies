@@ -20,6 +20,8 @@ No agent shows up in this repository's commits, and nothing claims an agent as c
 - No C2PA manifest or other file metadata that names an agent in a committed image. A design export carries one; `node scripts/strip-metadata.mjs` removes it.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
+A new place an agent could sign gets a new check in `scripts/attribution.mjs`, with a test in `scripts/attribution.test.mjs`.
+
 ## Commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`. The body says why.
