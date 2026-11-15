@@ -393,20 +393,20 @@ describe("scripts/ci-verdict.mjs retryDecision", () => {
   });
 });
 
-// The one line a read that could not be made ends in: no page, and not read as a red run.
+// The one line a read that could not be made ends in (with exit 2, see ci-wait.test.mjs): no page, and no word of red.
 describe("scripts/ci-verdict.mjs giveUpLine", () => {
   const page = `<!DOCTYPE html>\n<html><head><title>Unicorn!</title></head><body>${"x".repeat(5000)}</body></html>\ngh: HTTP 502\n`;
   const what = "reading the runs of 3e23713 failed";
 
-  it("names the status, the number of reads and that this is not a red run, on one line", () => {
+  it("names the status, the number of reads and that GitHub could not be read, on one line", () => {
     const line = giveUpLine(what, { stderr: page }, 4);
-    expect(line).toBe("reading the runs of 3e23713 failed: GitHub answered with an error page (HTTP 502) after 4 reads (not a red run: run this again)");
+    expect(line).toBe("reading the runs of 3e23713 failed: GitHub answered with an error page (HTTP 502) after 4 reads: GitHub could not be read, so there is no result yet: run this again");
     expect(line).not.toMatch(/[\n<]/);
   });
 
   it("leaves the count out after one read", () => {
     const line = giveUpLine(what, { stderr: "gh: Not Found (HTTP 404)" }, 1);
-    expect(line).toBe("reading the runs of 3e23713 failed: Not Found (HTTP 404) (not a red run: run this again)");
+    expect(line).toBe("reading the runs of 3e23713 failed: Not Found (HTTP 404): GitHub could not be read, so there is no result yet: run this again");
     expect(line).not.toContain("after");
   });
 
