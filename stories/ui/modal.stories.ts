@@ -186,7 +186,9 @@ export const Default: Story = {
     });
 
     // The picture is of the open modal: the shot of a closed one would be the page.
-    expect(dialogOf(canvasElement).open).toBe(true);
+    await withMotion("full", async () => {
+      expect(dialogOf(canvasElement).open).toBe(true);
+    });
     await parkPointer();
     await finish(canvasElement);
   },

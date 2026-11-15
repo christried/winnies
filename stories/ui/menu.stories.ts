@@ -276,7 +276,9 @@ export const Navigation: Story = {
     });
     await parkPointer();
     await finish(canvasElement);
-    expect(isOpen(wrapperOf(canvasElement))).toBe(true);
+    await withMotion("full", async () => {
+      expect(isOpen(wrapperOf(canvasElement))).toBe(true);
+    });
   },
 };
 

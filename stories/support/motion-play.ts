@@ -111,7 +111,8 @@ async function showSkipped(reason: string): Promise<void> {
  * Runs `fn` with `<html data-motion>` set to a mode: "full" removes the attribute, as the toolbar's decorator does.
  * The previous value is restored in `finally`. Under the browser's own preference for reduced motion the engine plays
  * nothing whatever the attribute says, so "full" runs nothing there: the reason is shown in the Interactions panel as
- * a `skipped(...)` call, and the checks of reduced motion still run.
+ * a `skipped(...)` call, and the checks of reduced motion still run. A check outside the step that relies on what the
+ * step set up (an open menu) fails under that preference: put it in a `withMotion("full", …)` call of its own.
  *
  * @param mode the motion preference to run under
  * @param fn the check
