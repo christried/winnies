@@ -1,33 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import type { VNode } from "vue";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiTextInput from "../../app/components/ui/text-input.vue";
 import { expectQuietAfter } from "../support/component-checks";
-import { chip } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
-import { colourOf, pageWithCss, ringOf } from "../support/ui-kit";
+import { card, colourOf, pageWithoutCaret as page, ringOf } from "../support/ui-kit";
 
 // The app's own UiTextInput (#312): the handoff's pill well with its hover, focus and error rings (03-components.md,
 // `text-input`). Every string below is story copy, not product copy.
-
-// A focused field draws a blinking caret, which differs between two shots. The rule is the story page's, never the
-// component's: the caret is part of the product.
-const NO_CARET = "input{caret-color:transparent !important}";
-
-function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
-  return h("div", {
-    style: `box-sizing:border-box;width:${width}px;max-width:100%;display:flex;flex-direction:column;gap:12px;`
-      + "padding:16px;background:var(--color-surface);border-radius:var(--radius-xl)",
-  }, [
-    h("div", {
-      innerHTML: chip(story),
-    }),
-    ...body,
-  ]);
-}
 
 interface Api { focus: () => void; select: () => void }
 
@@ -76,8 +58,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const page = (title: string, ...body: VNode[]) => pageWithCss(NO_CARET, title, ...body);
 
 interface Spied {
   "onUpdate:modelValue": ReturnType<typeof fn>;

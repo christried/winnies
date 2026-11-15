@@ -3,7 +3,7 @@ import process from "node:process";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
-import { baselinePath, VARIANTS } from "./.storybook/visual-variants.ts";
+import { baselinePath, contextOptions, storyTags, VARIANTS } from "./.storybook/visual-variants.ts";
 import { assertInContainer } from "./scripts/visual-env.mjs";
 
 // Own config, like vitest.build.config.ts: `pnpm test` reads vitest.config.ts and never sees the stories.
@@ -13,7 +13,7 @@ assertInContainer({ env: process.env, argv: process.argv });
 // One project per variant: Storybook's plugin pins a toolbar global per project (`initialGlobals`).
 export default defineConfig({
   test: {
-    projects: VARIANTS.map(({ name, globals }) => ({
+    projects: VARIANTS.map(({ name, globals, ...options }) => ({
       extends: false as const,
       // The root tsconfig.json only references .nuxt/tsconfig.*.json, which `nuxt prepare` writes and the `visual`
       // job (no install scripts) never runs: without this, the dependency scan fails on the missing file, nothing is
@@ -25,7 +25,13 @@ export default defineConfig({
         },
       },
       plugins: [
-        storybookTest({ configDir: ".storybook", initialGlobals: globals }),
+        // `tags` undefined keeps the plugin's own default, the stories tagged "test" (all of them): a variant that sets
+        // `tags` runs only those stories.
+        storybookTest({
+          configDir: ".storybook",
+          initialGlobals: globals,
+          tags: storyTags(options),
+        }),
         // The plugin derives its cache directory from the Storybook config alone, so projects started side by side
         // share one and stall on each other's dependency optimization.
         {
@@ -36,7 +42,7 @@ export default defineConfig({
       test: {
         name,
         // Vitest's browser default is 15 s. A motion story's rain waits up to about 5.3 s, on top of the render, the play
-        // function and axe, with seven variants running side by side.
+        // function and axe, with eight variants running side by side.
         testTimeout: 30_000,
         setupFiles: [".storybook/vitest.setup.ts"],
         env: { WINNIES_VISUAL_VARIANT: name },
@@ -46,6 +52,8 @@ export default defineConfig({
           // WINNIES_CHROMIUM names it (docs/agents/cloud.md); the pinned image sets none.
           provider: playwright({
             launchOptions: { executablePath: process.env.WINNIES_CHROMIUM || undefined },
+            // The variant that emulates the browser's own preference for reduced motion (#345); the others keep the defaults.
+            contextOptions: contextOptions(options),
           }),
           headless: true,
           instances: [

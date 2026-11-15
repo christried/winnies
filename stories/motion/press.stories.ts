@@ -116,6 +116,8 @@ const meta = {
 export default meta;
 
 export const Default: StoryObj<typeof meta> = {
+  // Runs in the variant that emulates the browser's own preference for reduced motion (#345, `browser-prefers-reduced`).
+  tags: ["reduced-preference"],
   async play({ canvasElement, step }) {
     // The story mounts one tick after the surface has read its tokens, so the first element has to be waited for.
     await within(canvasElement).findByRole("button", { name: "Replay" });

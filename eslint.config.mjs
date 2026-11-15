@@ -40,6 +40,17 @@ const jsdocCorrectness = {
   "jsdoc/require-yields-check": "error",
 };
 
+// "A text button is UiButton, an icon-only one UiIconButton" (CODING_STANDARDS.md § Design): the UI components are the only
+// place a bare <button> or <input> belongs. Each entry is one restriction, so a file's override can drop just one of them.
+const bareButton = {
+  element: "button",
+  message: "A text button is UiButton, an icon-only one UiIconButton (CODING_STANDARDS.md § Design). A bare <button> belongs in app/components/ui/ only.",
+};
+const bareInput = {
+  element: "input",
+  message: "A text field is UiTextInput, a name edited in place UiInlineEdit, a toggle UiSwitch (CODING_STANDARDS.md § Design). A bare <input> belongs in app/components/ui/ only.",
+};
+
 export default withNuxt(
   antfu({
     vue: true,
@@ -118,6 +129,33 @@ export default withNuxt(
     },
   },
   {
+    // Stories (`.storybook/main.ts` picks up `../stories/**/*.stories.ts`). `no-restricted-syntax` is ONE rule: antfu sets it
+    // for every file, and the options of a later block replace its list instead of adding to it. So the two selectors antfu
+    // ships are restated here, and every restriction on stories goes into this array, never into a second block
+    // (#361's `iterations` selector is here).
+    name: "stories",
+    files: ["stories/**/*.stories.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        "TSEnumDeclaration[const=true]",
+        "TSExportAssignment",
+        {
+          // Any "!test" string in a story file: a tag in the meta or in one story, a const the tag is read from, a template
+          // literal. A story kept off needs a ticket (docs/agents/delivery.md § A flake at a required check).
+          selector: ":matches(Literal[value=\"!test\"], TemplateElement[value.cooked=\"!test\"])",
+          message: "A story kept off needs a ticket, not a \"!test\" tag: fix the story, or open the ticket (docs/agents/delivery.md § A flake at a required check).",
+        },
+        {
+          // A read of `iterations`: `a.effect.getComputedTiming().iterations`, `t["iterations"]`, `const { iterations } = t`. Not an
+          // options object (`{ iterations: 2 }`), which is how a loop is made, not read.
+          selector: "MemberExpression[computed=false] > Identifier.property[name=\"iterations\"], MemberExpression[computed=true] > Literal.property[value=\"iterations\"], ObjectPattern > Property[key.name=\"iterations\"], ObjectPattern > Property[key.value=\"iterations\"]",
+          message: "Do not read `iterations` in a story: an infinite animation can be paused, and a paused one is not moving (#355). Ask `runningLoops` or `isLoop` of stories/support/motion-play.ts.",
+        },
+      ],
+    },
+  },
+  {
     name: "better-tailwindcss",
     files: ["**/*.vue"],
     plugins: { "better-tailwindcss": betterTailwindcss },
@@ -136,6 +174,36 @@ export default withNuxt(
           ignore: ["drag-grip"],
         },
       ],
+    },
+  },
+  {
+    // Every Vue file of the app outside the UI components: components, and the pages and layouts too, which are components
+    // Nuxt routes to or wraps a page in. The rule reads templates only, so a story's `template:` string is not covered.
+    name: "bare-controls",
+    files: ["app/**/*.vue"],
+    ignores: ["app/components/ui/**"],
+    rules: {
+      "vue/no-restricted-html-elements": ["error", bareButton, bareInput],
+    },
+  },
+  {
+    // A known exception until R3 (docs/roadmap.md, Engineering backlog, "Two bare controls on today's screens"): the rename
+    // button of the Winnie card's name looks like a heading, so UiButton does not fit. It goes with R3's row: delete this
+    // block with the button. The file keeps the <input> restriction.
+    name: "bare-controls-winnie-card-name",
+    files: ["app/components/winnie/winnie-card-name.vue"],
+    rules: {
+      "vue/no-restricted-html-elements": ["error", bareInput],
+    },
+  },
+  {
+    // A known exception until R3 (docs/roadmap.md, Engineering backlog, "Two bare controls on today's screens" and "A `bare`
+    // variant of `UiTextInput`"): the Counter pill's input goes with the swap of counter-pill.vue for UiCounter. Delete this
+    // block with the input. The file keeps the <button> restriction.
+    name: "bare-controls-counter-pill",
+    files: ["app/components/counter-pill.vue"],
+    rules: {
+      "vue/no-restricted-html-elements": ["error", bareButton],
     },
   },
   {

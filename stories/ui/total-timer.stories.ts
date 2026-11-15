@@ -8,7 +8,7 @@ import UiTotalTimer from "../../app/components/ui/total-timer.vue";
 import { timerSpokenValue } from "../../app/utils/total-timer";
 import { expectQuietAfter } from "../support/component-checks";
 import { chip, headingCss } from "../support/html";
-import { frames, withMotion } from "../support/motion-play";
+import { frames, isLoop, isRunningLoop, runningLoops, withMotion } from "../support/motion-play";
 import { FAKE_START, withMotionSurface } from "../support/motion-surface";
 import { colourOf } from "../support/ui-kit";
 
@@ -393,31 +393,34 @@ function play(cases: Case[]): NonNullable<StoryObj<typeof meta>["play"]> {
     // A paused loop counts as an animation too, so the count alone passed while the host paused the gloss for good (#355):
     // the band rests outside its clip, and a host that asked about the band itself found it off-screen.
     await step("the gloss: one infinite loop in a running Total Timer, running; none anywhere else", () => withMotion("full", async () => {
-      const infinite = (el: HTMLElement) => el.getAnimations({ subtree: true })
-        .filter(a => a.effect?.getComputedTiming().iterations === Number.POSITIVE_INFINITY);
+      const loopsOf = (el: HTMLElement) => el.getAnimations({ subtree: true }).filter(isLoop);
       const gloss = (c: Case) => c.state === "running" && c.variant !== "row";
       // The observer reports after a frame, so `running` is waited for, not read.
-      await waitFor(() => {
+      await waitFor(async () => {
         for (const c of cases.filter(gloss)) {
-          expect(infinite(timerOf(c)), c.id).toHaveLength(1);
-          expect(infinite(timerOf(c))[0]!.playState, c.id).toBe("running");
+          expect(loopsOf(timerOf(c)), c.id).toHaveLength(1); // one infinite loop, in any state
+          expect(await runningLoops(timerOf(c)), c.id).toHaveLength(1); // and it runs
         }
       }, { timeout: 4000 });
       for (const c of cases.filter(c => !gloss(c)))
-        expect(infinite(timerOf(c)), c.id).toHaveLength(0);
+        expect(loopsOf(timerOf(c)), c.id).toHaveLength(0);
 
-      // With the band where the loop rests it, outside the clip, the loop still runs: the host watches the clip.
-      const loops = cases.filter(gloss).map(c => infinite(timerOf(c))[0]!);
+      // With the band on the loop's first keyframe, outside the clip, the loop still runs: the host watches the clip. Not at
+      // the middle of the cycle: the band rests there at +350% of its own width, which still overlaps the clip, so a host
+      // that watched the band would pass until the cycle wraps to this keyframe, up to 9 s on.
+      const loops = await Promise.all(cases.filter(gloss).map(async c => (await runningLoops(timerOf(c)))[0]!));
       const started = loops.map(loop => loop.startTime);
       try {
         for (const loop of loops)
-          loop.currentTime = Number(loop.effect!.getComputedTiming().duration) / 2;
+          loop.currentTime = 0;
         // Long enough for an observer callback to arrive, if the move were to provoke one.
         const until = performance.now() + 600;
         while (performance.now() < until) {
           await frames(1);
-          loops.forEach((loop, i) => expect(loop.playState, cases.filter(gloss)[i]!.id).toBe("running"));
+          loops.forEach((loop, i) => expect(isRunningLoop(loop), cases.filter(gloss)[i]!.id).toBe(true));
         }
+        for (const c of cases.filter(gloss))
+          expect(await runningLoops(timerOf(c)), c.id).toHaveLength(1);
       }
       finally {
         // Back on the shared origin the host gave it, so `finish` and the screenshot find the loop as before.

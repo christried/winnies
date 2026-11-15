@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import lint from "@commitlint/lint";
 import load from "@commitlint/load";
 
-// The commits up to here predate the rule, and the range skips them (CLAUDE.md § Commits): R0's history, and #285's
+// The commits up to here predate the rule, and the range skips them, so CI checks only the commits after this one: R0's history, and #285's
 // 76e996b `ci(attribution): …`, whose scope is not listed and which is already pushed. Rewriting pushed commits is out
 // of the scope of #290. A constant, not a branch name: it must stay put. It stays for good, because a range that holds
 // those commits, such as redesign's merge into main at 1.0.0 (when main gets this check with the workflow), would fail
