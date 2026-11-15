@@ -3,6 +3,8 @@
 // there would never match CI. The container script and the `visual` CI job set WINNIES_VISUAL=container; the config
 // calls this before Vitest writes anything. Apart from the config so scripts/visual-env.test.mjs can run it. No IO here.
 
+import { screenshotName } from "../.storybook/visual-variants.ts";
+
 export const CONTAINER_ENV = "WINNIES_VISUAL";
 export const CONTAINER_VALUE = "container";
 
@@ -35,6 +37,89 @@ export function visualRun(args) {
       : "test:visual",
     forwarded,
   };
+}
+
+// Where the baselines live; the folder `git status` is asked about after an update with a file filter (#367).
+export const SCREENSHOTS_DIR = "stories/__screenshots__";
+
+/**
+ * The file filters among the arguments forwarded to Vitest. Vitest decides what is a filter, so the value of `--project`
+ * or `-t` is not one and no list of flags is kept here. Loaded on the call, so a run with no update does not pay for it.
+ *
+ * @param {readonly string[]} forwarded the arguments for Vitest
+ * @returns {Promise<string[]>} the filters, as given
+ */
+export async function vitestFilters(forwarded) {
+  const { parseCLI } = await import("vitest/node");
+  return [
+    ...parseCLI(["vitest", "run", ...forwarded]).filter,
+  ];
+}
+
+/**
+ * The paths in `git status --porcelain=v1 -z --untracked-files=all -- stories/__screenshots__`: entries are NUL-separated
+ * `XY path`; a rename or a copy is followed by one more entry holding the old path, and both count.
+ *
+ * @param {string} porcelain the output
+ * @returns {string[]} the repo-relative posix paths, in the order git printed them
+ */
+export function changedPaths(porcelain) {
+  const entries = porcelain.split("\0").filter(entry => entry !== "");
+  const paths = [];
+  for (let index = 0; index < entries.length; index++) {
+    const status = entries[index].slice(0, 2);
+    paths.push(entries[index].slice(3));
+    if (/[RC]/.test(status)) {
+      paths.push(entries[++index]);
+    }
+  }
+  return paths;
+}
+
+// A baseline is `stories/__screenshots__/<variant>/<name>.png`; the variant is not part of the filter (`--project` is
+// not), so only the name is read.
+const BASELINE = new RegExp(`^${SCREENSHOTS_DIR}/[^/]+/([^/]+)\\.png$`);
+
+/**
+ * The baselines that changed although the file filter of the update did not name their story: the update redrew more
+ * than it was asked for, or a baseline was changed before it. A baseline is named by story id, so which file it belongs
+ * to cannot be told from its path; `storyFiles` says (`tokens/colors.stories.ts` holds `tokens-colours--default`).
+ *
+ * @param {object} run what the script knows
+ * @param {readonly string[]} run.filters the file filters of the update (`vitestFilters`); none is an update of everything
+ * @param {readonly string[]} run.changed the changed paths (`changedPaths`)
+ * @param {Record<string, string[]>} run.storyFiles story file (repo-relative, posix) to the ids of its stories
+ * @returns {string[]} the sorted changed baselines that lie outside the filter; what is not a baseline is ignored
+ */
+export function baselinesOutsideFilter({ filters, changed, storyFiles }) {
+  if (filters.length === 0) {
+    return [];
+  }
+  // As Vitest reads a filter: a substring of the path; a line number and a leading `./` are not part of it.
+  const wanted = filters.map(filter => filter.replaceAll("\\", "/").replace(/^\.\//, "").replace(/:\d+$/, ""));
+  const inside = new Set(Object.entries(storyFiles)
+    .filter(([file]) => wanted.some(filter => file.includes(filter)))
+    .flatMap(([, ids]) => ids.map(screenshotName)));
+  return changed
+    .filter((file) => {
+      const name = BASELINE.exec(file)?.[1];
+      return name !== undefined && !inside.has(name);
+    })
+    .toSorted();
+}
+
+/**
+ * What the script prints on stderr when `baselinesOutsideFilter` is not empty.
+ *
+ * @param {readonly string[]} outside the baselines
+ * @returns {string} the lines, joined by newlines
+ */
+export function outsideFilterMessage(outside) {
+  return [
+    "Baselines changed outside your file filter (the update redrew more than you asked for, or a baseline was changed before it):",
+    ...outside,
+    "Restore them with `git restore -- <paths>` before you commit.",
+  ].join("\n");
 }
 
 /**

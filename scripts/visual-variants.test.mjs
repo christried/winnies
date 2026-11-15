@@ -1,40 +1,23 @@
-import { globSync, readFileSync } from "node:fs";
-import path from "node:path";
-import { getStoryTitle } from "storybook/internal/common";
-import { loadCsf } from "storybook/internal/csf-tools";
+import { globSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import storybookConfig from "../.storybook/main.ts";
 import { baselinePath, shotIn, UNSHOT_PREFIXES, UNSHOT_STORIES, VARIANTS } from "../.storybook/visual-variants.ts";
+import { storyIdsByFile } from "./visual-stories.mjs";
 
 // The variant table decides which story renders are compared with a baseline (.storybook/visual-variants.ts), and the
 // baselines are PNG files in stories/__screenshots__/. Vitest fails a missing baseline in CI, and nothing else ties the
 // two together: a story id that names no story turns an `only` into "shoot nothing" and a `skip` into "shoot
 // everything", and a PNG no variant shoots any more stays on disk, never compared. This test is that tie.
 
-const CONFIG_DIR = ".storybook";
 const SCREENSHOTS = "stories/__screenshots__";
 const posix = file => file.replaceAll("\\", "/");
 
 /**
- * The id of every story Storybook indexes, read the way Storybook reads a story file: its static CSF reader and its
- * own title rule (the file's `title`, or the one it derives from the path), without importing a story.
+ * The id of every story Storybook indexes (scripts/visual-stories.mjs reads them without importing a story).
  * @returns {string[]} the ids, sorted
  */
 function storyIds() {
-  const files = storybookConfig.stories.flatMap(pattern => globSync(pattern, { cwd: CONFIG_DIR }).map(file => path.resolve(CONFIG_DIR, file)));
-  return files.flatMap((file) => {
-    const csf = loadCsf(readFileSync(file, "utf8"), {
-      fileName: file,
-      makeTitle: userTitle => getStoryTitle({
-        storyFilePath: file,
-        configDir: CONFIG_DIR,
-        stories: storybookConfig.stories,
-        workingDir: process.cwd(),
-        userTitle,
-      }) ?? userTitle,
-    }).parse();
-    return csf.stories.map(story => story.id);
-  }).toSorted();
+  return Object.values(storyIdsByFile(storybookConfig.stories)).flat().toSorted();
 }
 
 /** The story ids a variant's `only` and `skip` name that are not stories, one problem each. */
@@ -214,6 +197,15 @@ describe("the icon button's Focus picture, deleted (#358)", () => {
 
   it("every id in UNSHOT_STORIES is a story, so a rename cannot turn the entry into a shot again", () => {
     expect(UNSHOT_STORIES.filter(id => !ids.includes(id))).toEqual([]);
+  });
+});
+
+describe("the story reader the update's file-filter check uses (#367)", () => {
+  it("keys the ids by story file, relative to the root, and a file's title decides the id, not its name", () => {
+    const byFile = storyIdsByFile(storybookConfig.stories);
+    expect(byFile["stories/tokens/colors.stories.ts"]).toContain("tokens-colours--default");
+    expect(byFile["stories/tokens/radii.stories.ts"]).toContain("tokens-radii--default");
+    expect(Object.keys(byFile).every(file => file.startsWith("stories/") && file.endsWith(".stories.ts"))).toBe(true);
   });
 });
 

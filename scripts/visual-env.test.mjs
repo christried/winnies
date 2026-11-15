@@ -1,15 +1,21 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { parseCLI } from "vitest/node";
 import {
   asksForUpdate,
   assertInContainer,
+  baselinesOutsideFilter,
   caBundlePath,
+  changedPaths,
   CLOUD_CA_BUNDLE,
   containerArgs,
   isCloudContainer,
   missingRuntimeMessage,
+  outsideFilterMessage,
   pickRuntime,
   pinnedImage,
   visualRun,
+  vitestFilters,
 } from "./visual-env.mjs";
 
 // Baselines come out of the pinned Playwright image and nowhere else (ADR-0004), so a run on the host is refused
@@ -115,6 +121,60 @@ describe("scripts/visual-env.mjs visualRun", () => {
   it("several update flags still hand Vitest exactly one", () => {
     expect(visualRun(["-u", "--update=new", "--update"]).forwarded).toEqual(["--update=new"]);
     expect(visualRun(["--update=all", "--update=new"]).forwarded).toEqual(["--update=new"]);
+  });
+});
+
+// #367: `--update` takes an optional value in Vitest, so a bare one at the end of the package script made the first
+// file filter after it the value of the flag, with an empty filter and every story redrawn. The command line is the
+// package script's own, plus what `visualRun` forwards, read by Vitest's own parser: nothing here is a copy of its rules.
+describe("the update's Vitest command line reads its filter", () => {
+  const updateScript = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).scripts["test:visual:update"];
+
+  /**
+   * What Vitest makes of `pnpm test:visual:image --update <args>` inside the container.
+   * @param {string[]} args the arguments after `--update`
+   * @returns {{ filter: string[], update: unknown }} the file filters and the value of the update option
+   */
+  const parsed = (args) => {
+    const [, ...scriptArgs] = updateScript.split(" ");
+    const { filter, options } = parseCLI([
+      "vitest",
+      ...scriptArgs,
+      ...visualRun(["--update", ...args]).forwarded,
+    ]);
+    return { filter, update: options.update };
+  };
+
+  it.each([
+    [
+      "the filter first",
+      ["stories/tokens/radii.stories.ts"],
+      ["stories/tokens/radii.stories.ts"],
+    ],
+    [
+      "the filter after a flag",
+      ["--project", "workspace-light", "stories/tokens/radii.stories.ts"],
+      ["stories/tokens/radii.stories.ts"],
+    ],
+    [
+      "two filters",
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+    ],
+    [
+      "no filter",
+      [],
+      [],
+    ],
+    [
+      "a backslash filter, kept as given",
+      ["stories\\ui\\button.stories.ts"],
+      ["stories\\ui\\button.stories.ts"],
+    ],
+  ])("%s", (_name, args, filter) => {
+    const result = parsed(args);
+    expect(result.filter).toEqual(filter);
+    expect([true, "all"]).toContain(result.update);
   });
 });
 
@@ -443,5 +503,270 @@ describe("scripts/visual-env.mjs missingRuntimeMessage", () => {
     expect(line).toContain("spawnSync docker ENOENT");
     expect(line).toContain("README § Tests");
     expect(line).toContain("docs/agents/cloud.md");
+  });
+});
+
+describe("scripts/visual-env.mjs vitestFilters", () => {
+  it.each([
+    [
+      "none",
+      [],
+      [],
+    ],
+    [
+      "one",
+      ["stories/ui/button.stories.ts"],
+      ["stories/ui/button.stories.ts"],
+    ],
+    [
+      "two",
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+    ],
+    [
+      "one after a flag with a value",
+      ["--project", "workspace-light", "stories/tokens/radii.stories.ts"],
+      ["stories/tokens/radii.stories.ts"],
+    ],
+    [
+      "none, when the only values are those of flags",
+      [
+        "--project",
+        "workspace-light",
+        "-t",
+        "Default",
+      ],
+      [],
+    ],
+  ])("%s", async (_name, forwarded, filters) => {
+    expect(await vitestFilters(forwarded)).toEqual(filters);
+  });
+});
+
+describe("scripts/visual-env.mjs changedPaths", () => {
+  const nul = (...entries) => `${entries.join("\0")}\0`;
+
+  it("reads modified, untracked and deleted baselines, staged or not", () => {
+    expect(changedPaths(nul(
+      " M stories/__screenshots__/workspace-light/a-default.png",
+      "M  stories/__screenshots__/workspace-dark/a-default.png",
+      "?? stories/__screenshots__/workspace-light/b-default.png",
+      " D stories/__screenshots__/showcase-light/c-default.png",
+    ))).toEqual([
+      "stories/__screenshots__/workspace-light/a-default.png",
+      "stories/__screenshots__/workspace-dark/a-default.png",
+      "stories/__screenshots__/workspace-light/b-default.png",
+      "stories/__screenshots__/showcase-light/c-default.png",
+    ]);
+  });
+
+  it("counts both paths of a rename or a copy, the new one first and the old one in the entry after it", () => {
+    expect(changedPaths(nul(
+      "R  stories/__screenshots__/workspace-light/new-default.png",
+      "stories/__screenshots__/workspace-light/old-default.png",
+      " M stories/__screenshots__/workspace-light/a-default.png",
+      "C  stories/__screenshots__/workspace-dark/copy-default.png",
+      "stories/__screenshots__/workspace-dark/orig-default.png",
+      "?R stories/__screenshots__/x/y.png",
+      "stories/__screenshots__/x/z.png",
+    ))).toEqual([
+      "stories/__screenshots__/workspace-light/new-default.png",
+      "stories/__screenshots__/workspace-light/old-default.png",
+      "stories/__screenshots__/workspace-light/a-default.png",
+      "stories/__screenshots__/workspace-dark/copy-default.png",
+      "stories/__screenshots__/workspace-dark/orig-default.png",
+      "stories/__screenshots__/x/y.png",
+      "stories/__screenshots__/x/z.png",
+    ]);
+  });
+
+  it("is empty for an empty output, and a trailing NUL adds nothing", () => {
+    expect(changedPaths("")).toEqual([]);
+    expect(changedPaths("\0")).toEqual([]);
+    expect(changedPaths(" M a.png")).toEqual(["a.png"]);
+  });
+});
+
+describe("scripts/visual-env.mjs baselinesOutsideFilter", () => {
+  const SHOTS = "stories/__screenshots__";
+  // A story file's path and the ids of its stories. `tokens/colors` is titled "Tokens/Colours": the file name is not
+  // the id's, which is why a baseline cannot be matched to a file by its name.
+  const storyFiles = {
+    "stories/tokens/colors.stories.ts": ["tokens-colours--default"],
+    "stories/tokens/radii.stories.ts": ["tokens-radii--default"],
+    "stories/ui/button.stories.ts": [
+      "ui-button--primary",
+      "ui-button--ghost",
+    ],
+    "stories/ui/icon-button.stories.ts": ["ui-icon-button--default"],
+  };
+  const baseline = (variant, name) => `${SHOTS}/${variant}/${name}.png`;
+
+  it("is empty when every changed baseline is a story of the filter, in any variant", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/radii.stories.ts"],
+      changed: [
+        baseline("workspace-light", "tokens-radii-default"),
+        baseline("showcase-dark", "tokens-radii-default"),
+      ],
+      storyFiles,
+    })).toEqual([]);
+  });
+
+  it("names a baseline of a story outside the filter, matching the id of a file whose name differs from it", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/radii.stories.ts"],
+      changed: [
+        baseline("workspace-light", "tokens-colours-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-light", "tokens-colours-default"),
+    ]);
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/colors.stories.ts"],
+      changed: [
+        baseline("workspace-light", "tokens-colours-default"),
+      ],
+      storyFiles,
+    })).toEqual([]);
+  });
+
+  it("names only the outside ones of a mixed set, sorted", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/radii.stories.ts"],
+      changed: [
+        baseline("workspace-light", "ui-button-primary"),
+        baseline("workspace-light", "tokens-radii-default"),
+        baseline("broadcast-dark", "tokens-colours-default"),
+        baseline("workspace-dark", "ui-button-ghost"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("broadcast-dark", "tokens-colours-default"),
+      baseline("workspace-dark", "ui-button-ghost"),
+      baseline("workspace-light", "ui-button-primary"),
+    ]);
+  });
+
+  it("is empty with no filter, whatever changed", () => {
+    expect(baselinesOutsideFilter({
+      filters: [],
+      changed: [
+        baseline("workspace-light", "tokens-colours-default"),
+        baseline("workspace-light", "no-story-default"),
+      ],
+      storyFiles,
+    })).toEqual([]);
+  });
+
+  it("takes every story file the filter is a substring of: `button` is also the icon button", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["button"],
+      changed: [
+        baseline("workspace-light", "ui-button-primary"),
+        baseline("workspace-light", "ui-icon-button-default"),
+        baseline("workspace-light", "tokens-radii-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-light", "tokens-radii-default"),
+    ]);
+  });
+
+  it("takes a directory, and two filters together", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/ui", "radii"],
+      changed: [
+        baseline("workspace-light", "ui-button-primary"),
+        baseline("workspace-light", "tokens-radii-default"),
+        baseline("workspace-light", "tokens-colours-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-light", "tokens-colours-default"),
+    ]);
+  });
+
+  it.each([
+    "stories\\tokens\\radii.stories.ts",
+    "./stories/tokens/radii.stories.ts",
+    "stories/tokens/radii.stories.ts:12",
+    ".\\stories\\tokens\\radii.stories.ts:12",
+  ])("reads %s as the path it names", (filter) => {
+    expect(baselinesOutsideFilter({
+      filters: [filter],
+      changed: [
+        baseline("workspace-light", "tokens-radii-default"),
+        baseline("workspace-light", "tokens-colours-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-light", "tokens-colours-default"),
+    ]);
+  });
+
+  it("names a baseline of a story no file has (deleted or renamed)", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/radii.stories.ts"],
+      changed: [
+        baseline("workspace-light", "gone-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-light", "gone-default"),
+    ]);
+  });
+
+  it("ignores what is not a baseline: another folder, or a file in the folder that is not a PNG", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/tokens/radii.stories.ts"],
+      changed: [
+        ".vitest/x.png",
+        `${SHOTS}/workspace-light/notes.txt`,
+        "stories/tokens/radii.stories.ts",
+      ],
+      storyFiles,
+    })).toEqual([]);
+  });
+
+  it("puts every changed baseline outside a filter that matches no story file", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/nothing"],
+      changed: [
+        baseline("workspace-light", "tokens-radii-default"),
+        baseline("workspace-dark", "tokens-colours-default"),
+      ],
+      storyFiles,
+    })).toEqual([
+      baseline("workspace-dark", "tokens-colours-default"),
+      baseline("workspace-light", "tokens-radii-default"),
+    ]);
+  });
+
+  it("is empty when nothing changed", () => {
+    expect(baselinesOutsideFilter({
+      filters: ["stories/ui"],
+      changed: [],
+      storyFiles,
+    })).toEqual([]);
+  });
+});
+
+describe("scripts/visual-env.mjs outsideFilterMessage", () => {
+  const lines = outsideFilterMessage([
+    "stories/__screenshots__/workspace-light/tokens-spacing-default.png",
+    "stories/__screenshots__/workspace-dark/tokens-spacing-default.png",
+  ]).split("\n");
+
+  it("opens with what happened and closes with what to do", () => {
+    expect(lines[0]).toBe("Baselines changed outside your file filter (the update redrew more than you asked for, or a baseline was changed before it):");
+    expect(lines.at(-1)).toBe("Restore them with `git restore -- <paths>` before you commit.");
+  });
+
+  it("names each path on its own line", () => {
+    expect(lines).toContain("stories/__screenshots__/workspace-light/tokens-spacing-default.png");
+    expect(lines).toContain("stories/__screenshots__/workspace-dark/tokens-spacing-default.png");
+    expect(lines).toHaveLength(4);
   });
 });
