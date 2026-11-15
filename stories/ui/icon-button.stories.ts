@@ -4,11 +4,12 @@ import { expect, fn, userEvent, waitFor } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiIconButton from "../../app/components/ui/icon-button.vue";
 import { expectQuietAfter, finish, freezeSpinners, settled } from "../support/component-checks";
+import { resolved } from "../support/html";
 import { animations, frames, withDialect, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
 import { expectHoverGuarded } from "../support/touch";
-import { findButton, labelled, page } from "../support/ui-kit";
+import { colourOf, findButton, iconOf, labelled, page } from "../support/ui-kit";
 
 // The app's own UiIconButton (#310): the handoff's round icon button (03-components.md, `icon-button`; `.w-btn--icon` in the
 // reference CSS and the buttons card, where the prototypes win). It is `UiButton`'s icon-only form, so its hover, press,
@@ -117,8 +118,6 @@ type Story = StoryObj<typeof meta>;
 
 /** The button of each ITEMS row, in order. */
 const findItems = (canvasElement: HTMLElement) => Promise.all(ITEMS.map(([, , , label]) => findButton(canvasElement, label)));
-
-const iconOf = (button: HTMLElement) => button.querySelector("svg");
 
 export const Default: Story = {
   render: args => () => page("Icon button", ...buttons(spied(args))),
@@ -253,26 +252,35 @@ export const Active: Story = {
   },
 };
 
+/**
+ * The ring of a focused button, read from the tokens: its colour, width and offset, and no transition of the outline.
+ * The story takes no picture (`UNSHOT_STORIES`, #358), so the DOM is the only check of the ring.
+ */
+function expectRing(el: HTMLElement, focusColour: string) {
+  const ring = getComputedStyle(el);
+  expect(ring.outlineStyle).toBe("solid");
+  expect(ring.outlineWidth).toBe(resolved("--focus-width"));
+  expect(ring.outlineOffset).toBe(resolved("--focus-offset"));
+  expect(ring.outlineColor).toBe(focusColour);
+  // R32: the ring is never animated, so neither `outline` nor `all` is a transitioned property.
+  expect(ring.transitionProperty).not.toMatch(/outline|\ball\b/);
+}
+
 export const Focus: Story = {
   render: args => () => page("Icon button focus", ...buttons(spied(args), { class: "is-focus" }, false)),
   async play({ canvasElement }) {
+    const focusColour = colourOf("--color-focus", "backgroundColor");
     // The forced ring (`is-focus`) is the same as the real one: both are checked.
     const items = await findItems(canvasElement);
-    for (const button of items) {
-      expect(getComputedStyle(button).outlineStyle).toBe("solid");
-      expect(getComputedStyle(button).outlineWidth).not.toBe("0px");
-    }
+    for (const button of items)
+      expectRing(button, focusColour);
 
     const first = items[0]!;
     // Tab, so the focus is keyboard-driven and `:focus-visible` matches.
     await userEvent.tab();
     expect(first).toHaveFocus();
     expect(first.matches(":focus-visible")).toBe(true);
-    const ring = getComputedStyle(first);
-    expect(ring.outlineStyle).toBe("solid");
-    expect(ring.outlineWidth).not.toBe("0px");
-    // R32: the ring is never animated, so neither `outline` nor `all` is a transitioned property.
-    expect(ring.transitionProperty).not.toMatch(/outline|\ball\b/);
+    expectRing(first, focusColour);
     await finish(canvasElement);
   },
 };

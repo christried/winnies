@@ -20,13 +20,12 @@ No agent shows up in this repository's commits, and nothing claims an agent as c
 - No C2PA manifest or other file metadata that names an agent in a committed image. A design export carries one; `node scripts/strip-metadata.mjs` removes it.
 - Never pass `--no-verify`, set `HUSKY=0` or change `core.hooksPath`.
 
-`scripts/attribution.mjs` enforces this in four places: the git hooks in `.husky/` (commit message, identity, the images staged for the commit, push), the `Attribution` CI job on every PR and on every pushed branch (the commits, and the images a change touches), the Claude Code hook in `.claude/settings.json` that refuses such a command, or such a call of the GitHub connector, before it runs, and the `attribution` setting there that switches Claude Code's own trailers off. A new place an agent could sign gets a new check there, with a test in `scripts/attribution.test.mjs`.
+A new place an agent could sign gets a new check in `scripts/attribution.mjs`, with a test in `scripts/attribution.test.mjs`.
 
 ## Commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`. The body says why.
 - Scopes: `tokens`, `motion`, `ui`, `workspace`, `shared`, `overlay`, `landing`, `changelog`, `server`, `deps`, `ci`, `agents`. Add a scope only when none fits, and list it here. `commitlint.config.mjs` reads this line: the commit-msg hook and CI refuse a header with no scope or one not listed here.
-- CI checks only the commits after `ENFORCED_AFTER` in `scripts/commit-format.mjs`: R0's history and #285's `76e996b ci(attribution): …`, whose scope isn't listed, come before it. `main` gets the check with 1.0.0, as it gets the workflow.
 - Merge commits (`Merge <branch> (#<n>)`, `Merge … into …`, `Merge remote-tracking branch …`, `Merge pull request …`) and `Revert "…"` commits are exempt.
 
 ## Branches and releases

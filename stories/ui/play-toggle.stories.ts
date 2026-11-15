@@ -4,8 +4,8 @@ import { h, ref } from "vue";
 import UiButton from "../../app/components/ui/button.vue";
 import UiPlayToggle from "../../app/components/ui/play-toggle.vue";
 import { expectQuietAfter, finish, freezeSpinners, parkPointer, repaint, settled } from "../support/component-checks";
-import { resolved } from "../support/html";
-import { animations, frames, withMotion } from "../support/motion-play";
+import { resolved, resolvedNumber } from "../support/html";
+import { animations, frames, isLoop, runningLoops, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { colourOf, cutMarkup, findButton, page, panel } from "../support/ui-kit";
 
@@ -41,8 +41,6 @@ const labelled = panel({ gap: 32, padding: 24 });
 
 const ringOf = (button: HTMLElement) => button.querySelector<HTMLElement>("[data-ring]");
 const iconWrapOf = (button: HTMLElement) => button.querySelector<HTMLElement>("[data-icon]");
-
-const ms = (token: string) => Number.parseFloat(resolved(token));
 
 /** The animations that act on one element, whatever the rest of the page runs. */
 const onEl = (el: HTMLElement) => animations().filter(a => (a.effect as KeyframeEffect | null)?.target === el);
@@ -139,11 +137,10 @@ export const Running: Story = {
 
     await withMotion("full", async () => {
       // A06: the ring is the one thing that loops, on the engine's breathe loop; the button itself moves nowhere.
-      await waitFor(() => expect(ring.getAnimations().filter(a => a.playState === "running")).toHaveLength(1), { timeout: 4000 });
+      await waitFor(async () => expect(await runningLoops(ring)).toHaveLength(1), { timeout: 4000 });
       expect(ring.getAnimations()).toHaveLength(1);
       const timing = (ring.getAnimations()[0]!.effect as KeyframeEffect).getTiming();
-      expect(timing.iterations).toBe(Number.POSITIVE_INFINITY);
-      expect(timing.duration).toBe(ms("--dur-breathe"));
+      expect(timing.duration).toBe(resolvedNumber("--dur-breathe"));
       expect(el.getAnimations()).toHaveLength(0);
 
       // The loop runs for the checks above; the picture needs it still.
@@ -387,19 +384,17 @@ export const Toggling: Story = {
       await userEvent.click(toggle);
       await waitFor(() => expect(toggle).toHaveAccessibleName(PAUSE));
       const start = await caught();
-      expect(timingOf(start.morph).duration).toBe(ms("--dur-flick"));
+      expect(timingOf(start.morph).duration).toBe(resolvedNumber("--dur-flick"));
       // The loop was created first, and `ringIn` after it: the loop is not cancelled, it runs on once `ringIn` is done.
-      const loop = start.ring.find(a => timingOf(a).iterations === Number.POSITIVE_INFINITY)!;
-      const land = start.ring.find(a => timingOf(a).iterations !== Number.POSITIVE_INFINITY)!;
+      const loop = start.ring.find(isLoop)!;
+      const land = start.ring.find(a => !isLoop(a))!;
       expect(loop).toBeDefined();
-      expect(timingOf(loop).duration).toBe(ms("--dur-breathe"));
-      expect(timingOf(land).duration).toBe(ms("--dur-land"));
+      expect(timingOf(loop).duration).toBe(resolvedNumber("--dur-breathe"));
+      expect(timingOf(land).duration).toBe(resolvedNumber("--dur-land"));
 
       await land.finished;
       await waitFor(() => expect(ringOf(toggle)!.getAnimations()).toHaveLength(1));
-      const kept = ringOf(toggle)!.getAnimations()[0]!;
-      expect(timingOf(kept).iterations).toBe(Number.POSITIVE_INFINITY);
-      expect(kept.playState).toBe("running");
+      expect(await runningLoops(ringOf(toggle)!)).toHaveLength(1);
       expect(spy).toHaveBeenLastCalledWith(true);
 
       // A second click: the morph plays on the icon again, the ring goes, and no loop is left in the document.
@@ -409,10 +404,10 @@ export const Toggling: Story = {
         const icon = onEl(iconWrapOf(toggle)!);
         expect(icon).toHaveLength(1);
         expect(icon[0]).not.toBe(start.morph);
-        expect(timingOf(icon[0]!).duration).toBe(ms("--dur-flick"));
+        expect(timingOf(icon[0]!).duration).toBe(resolvedNumber("--dur-flick"));
       });
       expect(ringOf(toggle)).toBeNull();
-      await waitFor(() => expect(animations().filter(a => timingOf(a).iterations === Number.POSITIVE_INFINITY)).toHaveLength(0));
+      await waitFor(() => expect(animations().filter(isLoop)).toHaveLength(0));
       expect(spy).toHaveBeenLastCalledWith(false);
       await settled();
     }));
@@ -422,10 +417,10 @@ export const Toggling: Story = {
       await userEvent.click(outside);
       await waitFor(() => expect(toggle).toHaveAccessibleName(PAUSE));
       const start = await caught();
-      expect(timingOf(start.morph).duration).toBe(ms("--dur-flick"));
+      expect(timingOf(start.morph).duration).toBe(resolvedNumber("--dur-flick"));
       expect(start.ring.map(a => timingOf(a).duration).sort()).toEqual([
-        ms("--dur-land"),
-        ms("--dur-breathe"),
+        resolvedNumber("--dur-land"),
+        resolvedNumber("--dur-breathe"),
       ].sort());
       // The toggle was never pressed.
       expect(spy).not.toHaveBeenCalled();

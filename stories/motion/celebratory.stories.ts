@@ -1,14 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { expect, waitFor, within } from "storybook/test";
-import { defineComponent, h, ref } from "vue";
-import { block, page, readout, reset, section, stage } from "../support/motion-kit";
+import { defineComponent, h } from "vue";
+import { block, elementRef, page, readout, reset, section, stage } from "../support/motion-kit";
 import { animations, clickReplay, frames, live, particleCount, withMotion } from "../support/motion-play";
 import { useMotionStory, withMotionSurface } from "../support/motion-surface";
 
 // The Celebratory moments C01 to C05 and the Responsive hop S02 (handoff 04-motion-and-sound), one section each. The
 // calls follow the handoff's playground (Winnies Motion Playground, won and complete): its arguments, not its look.
-
-const elementRef = () => ref<HTMLElement | null>(null);
 
 const Celebratory = defineComponent({
   name: "CelebratoryStory",

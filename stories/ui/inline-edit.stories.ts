@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import type { PropType, VNode } from "vue";
+import type { PropType } from "vue";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { defineComponent, h, ref } from "vue";
 import UiInlineEdit from "../../app/components/ui/inline-edit.vue";
@@ -8,14 +8,10 @@ import { chip } from "../support/html";
 import { animations, frames, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { realPointer } from "../support/real-pointer";
-import { colourOf, pageWithCss, ringOf } from "../support/ui-kit";
+import { colourOf, pageWithoutCaret as page, ringOf } from "../support/ui-kit";
 
 // The app's own UiInlineEdit (#323): text that becomes an input on the caller's say-so (03-components.md,
 // `inline-edit`; R11 on the input, R12 on the label). Every string below is story copy, not product copy.
-
-// A focused field draws a blinking caret, which differs between two shots. The rule is the story page's, never the
-// component's: the caret is part of the product.
-const NO_CARET = "input{caret-color:transparent !important}";
 
 function card(story: string, width: number, ...body: ReturnType<typeof h>[]) {
   return h("div", {
@@ -135,8 +131,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-const page = (title: string, ...body: VNode[]) => pageWithCss(NO_CARET, title, ...body);
 
 interface Spied { onSave: ReturnType<typeof fn> }
 

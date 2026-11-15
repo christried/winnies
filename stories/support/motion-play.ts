@@ -3,7 +3,8 @@
 //
 // A play function runs in every variant (stories/../.storybook/visual-variants.ts), so it never branches on the
 // toolbar's value: it takes control with `withMotion` and `withDialect`, which also covers `workspace-light-reduced`,
-// the variant that starts with `data-motion="reduce"`.
+// the variant that starts with `data-motion="reduce"`. `withMotion` also covers the browser's own preference for reduced
+// motion, which no attribute overrides: it skips a full-motion step there and says why (variant `browser-prefers-reduced`).
 
 /**
  * Waits for animation frames.
@@ -74,16 +75,55 @@ async function withAttribute(el: HTMLElement, name: string, value: string | null
   }
 }
 
+/** The query the engine reads too (`app/utils/motion/env.ts`): `<html data-motion>` cannot override it. */
+const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
+
+/** True when the browser itself prefers reduced motion: the person's system setting, or a runner's emulation. */
+export function browserPrefersReduced(): boolean {
+  return typeof matchMedia === "function" && matchMedia(REDUCED_QUERY).matches;
+}
+
+/**
+ * Why a check cannot run under a mode, or null when it can. Only full motion can be blocked: under the browser's
+ * preference the engine creates no animation whatever `data-motion` says. A check of reduced motion always runs.
+ *
+ * @param mode the motion preference the check asks for
+ * @param prefersReduced whether the browser itself prefers reduced motion
+ * @returns the reason, in words a person reading the Interactions panel understands, or null
+ */
+export function fullMotionBlocker(mode: "full" | "reduce", prefersReduced: boolean): string | null {
+  return mode === "full" && prefersReduced
+    ? "This browser prefers reduced motion, so the engine plays no animation here and the check that needs one is skipped. Turn reduced motion off in the system's settings to run it."
+    : null;
+}
+
+/** Puts the reason in the Interactions panel as a call of its own, `skipped("...")`, where whoever opens the story reads it. */
+async function showSkipped(reason: string): Promise<void> {
+  // Imported here, not at the top: the unit test of this module runs in node, where the instrumenter has no preview to
+  // talk to. It is the function `storybook/test` wraps `expect` with, so the call lands in the same panel.
+  const { instrument } = await import("storybook/internal/instrumenter");
+  instrument({
+    skipped: (message: string) => message,
+  }).skipped(reason);
+}
+
 /**
  * Runs `fn` with `<html data-motion>` set to a mode: "full" removes the attribute, as the toolbar's decorator does.
- * The previous value is restored in `finally`.
+ * The previous value is restored in `finally`. Under the browser's own preference for reduced motion the engine plays
+ * nothing whatever the attribute says, so "full" runs nothing there: the reason is shown in the Interactions panel as
+ * a `skipped(...)` call, and the checks of reduced motion still run.
  *
  * @param mode the motion preference to run under
  * @param fn the check
- * @returns when the check has run and the preference is back
+ * @returns when the check has run and the preference is back, or when the skip has been shown
  */
-export function withMotion(mode: "full" | "reduce", fn: () => Promise<void>): Promise<void> {
-  return withAttribute(document.documentElement, "data-motion", mode === "reduce"
+export async function withMotion(mode: "full" | "reduce", fn: () => Promise<void>): Promise<void> {
+  const blocker = fullMotionBlocker(mode, browserPrefersReduced());
+  if (blocker !== null) {
+    await showSkipped(blocker);
+    return;
+  }
+  await withAttribute(document.documentElement, "data-motion", mode === "reduce"
     ? "reduce"
     : null, fn);
 }
@@ -103,8 +143,35 @@ export function withDialect(value: "broadcast" | "showcase" | null, fn: () => Pr
 /** Every animation in the document, CSS transitions included. */
 export const animations = (): Animation[] => document.getAnimations();
 
-/** The animations that are running or paused: not idle, not finished. */
-export const live = (): Animation[] => animations().filter(a => a.playState === "running" || a.playState === "paused");
+/** The animations that are running: not paused, not idle, not finished. A paused animation is not moving. */
+export const live = (): Animation[] => animations().filter(a => a.playState === "running");
+
+/** True for an animation that repeats forever, in any play state; false for one that ends by itself. */
+export const isLoop = (a: Animation): boolean => a.effect?.getComputedTiming().iterations === Infinity;
+
+/** True for a loop that is running now. A paused loop is still a loop (`isLoop`), and is not moving. */
+export const isRunningLoop = (a: Animation): boolean => isLoop(a) && a.playState === "running";
+
+/**
+ * The loops running on an element and below it, or in the whole document: infinite, running now, and still running two
+ * frames later. `v-loop`'s host pauses a loop when an observer reports its frame off-screen, and the report comes after a
+ * frame, so a read taken in the frame the loop was made passes on a loop that is about to be paused (#355). The same
+ * animation objects come back, so a story can read their timing. A loop made anew between the two reads (a dialect switch
+ * rebuilds it) is not returned: retry with `waitFor`, which takes an async callback.
+ *
+ * @param root an element (its own animations and its descendants') or the document, by default
+ * @returns the running loops, empty when there is none
+ */
+export async function runningLoops(root: Document | Element = document): Promise<Animation[]> {
+  // Document.getAnimations() takes no options; an Element's needs `subtree` to include its children.
+  const under = () => root instanceof Document
+    ? root.getAnimations()
+    : root.getAnimations({ subtree: true });
+  const first = under().filter(isRunningLoop);
+  await frames();
+  const later = new Set(under().filter(isRunningLoop));
+  return first.filter(a => later.has(a));
+}
 
 /**
  * The surface's particle layer.
