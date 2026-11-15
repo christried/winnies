@@ -4,7 +4,7 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
 import { h, ref } from "vue";
 import UiProgressBar from "../../app/components/ui/progress-bar.vue";
 import { expectQuietAfter, finish } from "../support/component-checks";
-import { chip, resolvedNumber } from "../support/html";
+import { chip, resolvedMs } from "../support/html";
 import { animations, frames, runningLoops, withMotion } from "../support/motion-play";
 import { withMotionSurface } from "../support/motion-surface";
 import { page } from "../support/ui-kit";
@@ -247,7 +247,7 @@ export const Running: Story = {
         expect(effect.target).toBe(stripes);
         const timing = effect.getTiming();
         expect(timing.easing).toBe("linear");
-        expect(timing.duration).toBe(resolvedNumber("--dur-breathe"));
+        expect(timing.duration).toBe(resolvedMs("--dur-breathe"));
         expect(effect.getKeyframes().at(-1)!.transform).toBe("translateX(28.28px)");
         expect(fill.getAnimations()).toHaveLength(0);
 
@@ -351,7 +351,7 @@ async function clickAndLand(canvasElement: HTMLElement, id: string, from: number
   expect(effect.target).toBe(fill);
   const keys = effect.getKeyframes();
   expect(keys.map(k => k.transform)).toEqual([`translateX(${from - 100}%)`, `translateX(${to - 100}%)`]);
-  expect(effect.getTiming().duration).toBe(resolvedNumber("--dur-land"));
+  expect(effect.getTiming().duration).toBe(resolvedMs("--dur-land"));
   await anim.finished;
   await frames();
   expect(fill.getAnimations()).toHaveLength(0);
