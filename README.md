@@ -90,6 +90,8 @@ resolves its auto-imports as Nuxt does (composables, utils, Vue APIs, components
 another Nuxt-only name (`useRoute`, `NuxtLink`, `$fetch`, ...) fails its own story, in the browser and in the `visual`
 job; the fix is a stub beside `useState` or a prop instead of the global.
 
+A Storybook that outlives the shell that started it (a stopped background task leaves it listening) keeps port 6006. On Windows, `Get-NetTCPConnection -LocalPort 6006 -State Listen | Select-Object OwningProcess` in PowerShell names the process, and `Stop-Process -Id <that id>` ends it.
+
 CI runs lint, typecheck, the Storybook build, test, build and the build test (the `check` job), the API tests (the
 `api-tests` job), the browser tests (the `e2e` job) and the screenshot tests (the `visual` job) on every pull request.
 

@@ -29,18 +29,21 @@ The motion stories' play functions run there too, as a check before the push: `W
 
 GitHub's GraphQL API is refused: `gh pr …`, `gh issue …` and `gh repo …` end in HTTP 403. REST answers, so `gh api <route>`, `gh run …`, `scripts/ci-wait.mjs` and `scripts/deploy-wait.mjs` work. Where `issue-tracker.md` or `delivery.md` name a `gh` command, take:
 
-| For                                           | In a cloud session                                                    |
-| --------------------------------------------- | --------------------------------------------------------------------- |
-| reading an issue, a PR, a list                | `gh api repos/{owner}/{repo}/…`, as `issue-tracker.md` § Conventions  |
-| `gh issue create`, `edit`, `close`            | the GitHub connector's `issue_write`                                  |
-| `gh issue edit --add-label`, `--remove-label` | `issue_write` with the issue's whole list of `labels`                 |
-| `gh issue comment`                            | `add_issue_comment`                                                   |
-| a sub-issue                                   | `sub_issue_write`                                                     |
-| a dependency, a label that does not exist     | `gh api --method POST` on the REST route                              |
-| `gh pr create`                                | `create_pull_request`                                                 |
-| `gh pr merge <n> --auto --merge`              | `enable_pr_auto_merge` with `MERGE`                                   |
-| `gh pr merge <n> --merge`                     | `merge_pull_request` with `merge`, no commit title or message (below) |
-| `gh pr ready <n>`                             | `update_pull_request`                                                 |
+| For                                                                                    | In a cloud session                                                                                                                                                                  |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| reading an issue, a PR, a list                                                         | `gh api repos/{owner}/{repo}/…`, as `issue-tracker.md` § Conventions                                                                                                                |
+| `gh issue create`, `edit`, `close`                                                     | the GitHub connector's `issue_write`                                                                                                                                                |
+| `gh issue edit --add-label`, `--remove-label`                                          | `issue_write` with the issue's whole list of `labels`                                                                                                                               |
+| `gh issue comment`                                                                     | `add_issue_comment`                                                                                                                                                                 |
+| `gh issue create` or `gh issue comment` with a long body: a report, a brief, a handoff | `gh api --method POST repos/{owner}/{repo}/issues -F title=… -F body=@<file>`, or `…/issues/<n>/comments -F body=@<file> --jq .html_url`, the file written once with the Write tool |
+| a sub-issue                                                                            | `sub_issue_write`                                                                                                                                                                   |
+| a dependency, a label that does not exist                                              | `gh api --method POST` on the REST route                                                                                                                                            |
+| `gh pr create`                                                                         | `create_pull_request`                                                                                                                                                               |
+| `gh pr merge <n> --auto --merge`                                                       | `enable_pr_auto_merge` with `MERGE`                                                                                                                                                 |
+| `gh pr merge <n> --merge`                                                              | `merge_pull_request` with `merge`, no commit title or message (below)                                                                                                               |
+| `gh pr ready <n>`                                                                      | `update_pull_request`                                                                                                                                                               |
+
+A body of more than a few lines goes through REST from a file, never through the connector, which takes the body as a tool argument and so has the model write it out a second time. (R2's retro, item 20: a long issue body.)
 
 Every write to GitHub from the container, through the connector or `gh api`, comes out with a footer that names the agent. Something on the way out adds it, after the attribution hook has looked at the call, and an edit through REST brings it back (#277). CLAUDE.md § Attribution allows it in a PR body, an issue, a comment and a review, so leave it; don't write one yourself.
 
@@ -69,7 +72,7 @@ A check a cloud session cannot do is handed on, never dropped or replaced by a g
 
 ## Handoffs and retros
 
-A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) is posted as a comment on the spec's or the ticket's issue, briefs included, and the human is told the issue's number instead of a path. The friction worth a `/retro` goes into the same comment: a `/retro` on the human's machine cannot read a cloud session.
+A scratchpad and a transcript stay on the machine that wrote them. So a handoff that crosses machines (`subagents.md` § Supervision) is posted as a comment on the spec's or the ticket's issue, briefs included, and the human is told the issue's number instead of a path. The friction worth a `/retro` goes into the phase's friction comment (`subagents.md` § Supervision, Context limit), not into the handoff: a `/retro` on the human's machine cannot read a cloud session, and does read that comment.
 
 ## The container is not the human's machine
 

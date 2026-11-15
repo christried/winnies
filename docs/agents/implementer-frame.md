@@ -31,6 +31,10 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 - The bypass secret in `.env` is a credential: never print `.env` or put its value in a command, a file, a commit, an issue, a PR or your report (`docs/agents/delivery.md` § Issues).
 - Touch only what your brief allows. If the brief and the ticket disagree, or the code makes the brief wrong, do what the ticket needs and say so in the report.
 
+## In a cloud container
+
+When `CLAUDE_CODE_REMOTE` is set, read `docs/agents/cloud.md` after this file; where it says otherwise it wins. This frame is written for the human's Windows machine. In a container the shell is Linux's bash, not Git Bash (the rest of § Rules' Shell line holds: files with the Write tool, scripts with `node <file>`, plain commands inside your worktree), and every write to GitHub, the report of § Before you report, step 6 and a fix round's comment included, goes as `cloud.md` § GitHub has it. (R1's retro, item 13, and R2's retro, item 12: every spawn prompt of two phases carried the same ten lines of corrections to this file.)
+
 ## Commits
 
 - Small commits on your branch, in Conventional Commits with the scopes `CLAUDE.md` lists. The body says why.
@@ -57,7 +61,7 @@ You build ONE ticket in your own git worktree. The orchestrator reviews your dif
 - Branch and head SHA, and CI on it: green, or the failing output.
 - The red run: the first test you wrote, and its failing line before any production code existed. A test that pins existing behaviour is green from the start: its red run is a deliberate break in the code under test, shown failing and then reverted before you commit. (Safety net: the frame left each implementer of a pinning test to decide alone what its red run was.)
 - Acceptance criteria of the ticket: each one ✅ / ❌, with one line on how it is covered (test file and case name).
-- Deviations from the brief or the ticket, and why.
+- Deviations from the brief or the ticket, and why. A test that pins a number other than the brief's or the ticket's (a duration, a size, a count) is one. (R1's retro, item 6: #337's ticket and brief said 250 ms + 720 ms = 970 ms fits; the implementer pinned 700 ms and reported no deviation.)
 - **Design/asset needed**, if anything.
 - Anything the orchestrator must decide or look at (e.g. a page to check in the browser).
 
