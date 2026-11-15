@@ -11,6 +11,8 @@
 //   node scripts/attribution.mjs text <file>      CI: a PR's title and body
 //   node scripts/attribution.mjs tool             Claude Code PreToolUse hook: a shell command or a GitHub connector call before it runs (stdin)
 //
+// The `attribution` setting in .claude/settings.json switches Claude Code's own commit and PR trailers and its session link off; it calls nothing here. A new place an agent could sign gets a new check here, with a test in scripts/attribution.test.mjs.
+//
 // Exit 0: clean. Exit 1: a finding, one line each. `tool` always exits 0 and answers in JSON, as hooks do.
 import { Buffer } from "node:buffer";
 import { execFileSync, spawnSync } from "node:child_process";

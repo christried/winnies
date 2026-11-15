@@ -39,6 +39,7 @@ What the Standards review checks in Winnies, on top of `GLOSSARY.md`, the ADRs a
 ## Copy
 
 - UI copy uses the glossary's words: a Challenge is Won, a Winnie is Complete, the mascot is Winniebert (`GLOSSARY.md` § Flagged ambiguities).
+- Names in code follow the glossary too, comments included: a Winnie's state is Not started, not `untouched` or `idle`, and the mascot is Winniebert, not `Nini`. No tool checks it: `Nini` and `idle` are the two words a lint could find, and none is built; the glossary's other Avoid words are plain English and stay the reviewer's. `idle` is in more than a dozen places of today's components, which R3 rebuilds. (R2's retro, item 9, and its review, S6: `TimerState` had `"untouched"`, `play-toggle.ts` named a state `IDLE`, and a comment said "Nini's hop".)
 - No copy anywhere (app, Landing, Changelog, link-preview cards) says "free", mentions pricing or says "beta". Winnies is free today; the human wants to stay able to change that without a broken promise (#187, 2026-10-16). Describing access is fine: "works without an account".
 
 ## Environment

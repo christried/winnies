@@ -13,6 +13,8 @@ Every ticket is written for an **agent** that implements it in one fresh session
 - Each batch goes through `/to-spec` (one spec issue), then `/to-tickets` (sub-issues of the spec), then implementation. The next phase's spec is written only once the current batch is implemented.
 - Labels: one type label (`feat`, `fix`, `chore`, `docs`) plus, once it's fully specified, `ready-to-implement` (an agent builds it) or `ready-for-human` (only the human can do it).
 - Blocking edges use GitHub's native issue dependencies (see `issue-tracker.md`).
+- A ticket that renders another ticket's component is blocked by it. (R2's retro, item 10: #320's Total Timer draws an icon and was not blocked by #308, which makes it; a brief drafter found the missing edge.)
+- A spec that builds something a browser runs cuts its first real-browser story or test with the module's first ticket, not as the closing tickets. (R1's retro, item 1: #335 and #337 passed every unit test on the recorder and showed only in a real browser; the stories were the phase's last tickets, so R2 got its go-ahead on a `v-loop` that was wrong on first render.)
 
 ## Body
 
