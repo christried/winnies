@@ -101,6 +101,8 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
 - `pnpm build`, then `pnpm test:build`: fails if the production build carries `/api/dev/sign-in` or `/storybook`
   (ADR-0005).
   It reads `.output`, so it needs the build first; CI runs it after `pnpm build`.
+  The Storybook token test, `tests/build/storybook-tokens.test.ts`, reads `storybook-static` the same way, so it needs
+  `pnpm build-storybook` first: it fails if a minified `--dur-*` reads as another time than the token file's (#378).
 - The API tests build the app, start it, and call it over HTTP, signed in as a throwaway Owner,
   against a local Postgres that they empty on every run:
   1. Install [Podman](https://podman.io) with its compose provider (`winget install RedHat.Podman`,

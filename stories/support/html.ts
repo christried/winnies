@@ -1,4 +1,5 @@
 import { h, ref } from "vue";
+import { cssTimeMs } from "./css-time";
 
 /** The decorator bumps this after it has set the toolbar's attributes, so a story that read them draws again. */
 export const attributesApplied = ref(0);
@@ -59,9 +60,9 @@ export function resolved(name: string) {
 }
 
 /**
- * A token that resolves to a number, such as a duration in seconds or a pixel length without its unit.
+ * A duration token in milliseconds, whether the stylesheet holds `2200ms` or the build's `2.2s`.
  *
  * @param token the custom property, such as `--dur-breathe`
- * @returns what it resolves to, as a number
+ * @returns what it resolves to, in milliseconds
  */
-export const resolvedNumber = (token: string) => Number.parseFloat(resolved(token));
+export const resolvedMs = (token: string) => cssTimeMs(resolved(token));
