@@ -3,7 +3,8 @@
 //
 // A play function runs in every variant (stories/../.storybook/visual-variants.ts), so it never branches on the
 // toolbar's value: it takes control with `withMotion` and `withDialect`, which also covers `workspace-light-reduced`,
-// the variant that starts with `data-motion="reduce"`.
+// the variant that starts with `data-motion="reduce"`. `withMotion` also covers the browser's own preference for reduced
+// motion, which no attribute overrides: it skips a full-motion step there and says why (variant `browser-prefers-reduced`).
 
 /**
  * Waits for animation frames.
@@ -74,16 +75,55 @@ async function withAttribute(el: HTMLElement, name: string, value: string | null
   }
 }
 
+/** The query the engine reads too (`app/utils/motion/env.ts`): `<html data-motion>` cannot override it. */
+const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
+
+/** True when the browser itself prefers reduced motion: the person's system setting, or a runner's emulation. */
+export function browserPrefersReduced(): boolean {
+  return typeof matchMedia === "function" && matchMedia(REDUCED_QUERY).matches;
+}
+
+/**
+ * Why a check cannot run under a mode, or null when it can. Only full motion can be blocked: under the browser's
+ * preference the engine creates no animation whatever `data-motion` says. A check of reduced motion always runs.
+ *
+ * @param mode the motion preference the check asks for
+ * @param prefersReduced whether the browser itself prefers reduced motion
+ * @returns the reason, in words a person reading the Interactions panel understands, or null
+ */
+export function fullMotionBlocker(mode: "full" | "reduce", prefersReduced: boolean): string | null {
+  return mode === "full" && prefersReduced
+    ? "This browser prefers reduced motion, so the engine plays no animation here and the check that needs one is skipped. Turn reduced motion off in the system's settings to run it."
+    : null;
+}
+
+/** Puts the reason in the Interactions panel as a call of its own, `skipped("...")`, where whoever opens the story reads it. */
+async function showSkipped(reason: string): Promise<void> {
+  // Imported here, not at the top: the unit test of this module runs in node, where the instrumenter has no preview to
+  // talk to. It is the function `storybook/test` wraps `expect` with, so the call lands in the same panel.
+  const { instrument } = await import("storybook/internal/instrumenter");
+  instrument({
+    skipped: (message: string) => message,
+  }).skipped(reason);
+}
+
 /**
  * Runs `fn` with `<html data-motion>` set to a mode: "full" removes the attribute, as the toolbar's decorator does.
- * The previous value is restored in `finally`.
+ * The previous value is restored in `finally`. Under the browser's own preference for reduced motion the engine plays
+ * nothing whatever the attribute says, so "full" runs nothing there: the reason is shown in the Interactions panel as
+ * a `skipped(...)` call, and the checks of reduced motion still run.
  *
  * @param mode the motion preference to run under
  * @param fn the check
- * @returns when the check has run and the preference is back
+ * @returns when the check has run and the preference is back, or when the skip has been shown
  */
-export function withMotion(mode: "full" | "reduce", fn: () => Promise<void>): Promise<void> {
-  return withAttribute(document.documentElement, "data-motion", mode === "reduce"
+export async function withMotion(mode: "full" | "reduce", fn: () => Promise<void>): Promise<void> {
+  const blocker = fullMotionBlocker(mode, browserPrefersReduced());
+  if (blocker !== null) {
+    await showSkipped(blocker);
+    return;
+  }
+  await withAttribute(document.documentElement, "data-motion", mode === "reduce"
     ? "reduce"
     : null, fn);
 }

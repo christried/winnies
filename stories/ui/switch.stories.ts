@@ -125,6 +125,8 @@ function knobLeft(track: HTMLElement) {
 }
 
 export const Toggling: Story = {
+  // Runs in the variant that emulates the browser's own preference for reduced motion (#345, `browser-prefers-reduced`).
+  tags: ["reduced-preference"],
   render: () => {
     const on = ref(false);
     return () => page("Switch toggling", labelled("stateful", h(UiSwitch, {
