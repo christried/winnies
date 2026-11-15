@@ -4,7 +4,7 @@ import { getStoryTitle } from "storybook/internal/common";
 import { loadCsf } from "storybook/internal/csf-tools";
 import { describe, expect, it } from "vitest";
 import storybookConfig from "../.storybook/main.ts";
-import { baselinePath, shotIn, UNSHOT_PREFIXES, VARIANTS } from "../.storybook/visual-variants.ts";
+import { baselinePath, shotIn, UNSHOT_PREFIXES, UNSHOT_STORIES, VARIANTS } from "../.storybook/visual-variants.ts";
 
 // The variant table decides which story renders are compared with a baseline (.storybook/visual-variants.ts), and the
 // baselines are PNG files in stories/__screenshots__/. Vitest fails a missing baseline in CI, and nothing else ties the
@@ -186,6 +186,34 @@ describe("catches a table that and the disk do not agree on", () => {
     expect(problems).toHaveLength(1);
     expect(problems[0]).toContain(`${SCREENSHOTS}/all/a-one-default.png`);
     expect(problems[0]).toContain("not on disk");
+  });
+});
+
+// The icon button's Focus picture was deleted, not diagnosed (#358, the human's decision of 2026-11-15): the story is
+// rendered, played and checked by axe in every variant, and listed in UNSHOT_STORIES, so it is shot in none.
+describe("the icon button's Focus picture, deleted (#358)", () => {
+  const ids = storyIds();
+  const FOCUS = "ui-icon-button--focus";
+
+  it("the UNSHOT_STORIES list names the Focus story, and no variant shoots it", () => {
+    expect(UNSHOT_STORIES).toContain(FOCUS);
+    for (const variant of VARIANTS)
+      expect(shotIn(variant, FOCUS), variant.name).toBe(false);
+    expect(shotIn({}, FOCUS)).toBe(false);
+  });
+
+  it("the story still exists, so it still renders and plays in every variant", () => {
+    expect(ids).toContain(FOCUS);
+  });
+
+  it("the match is exact: a story whose id only starts with that one is still shot", () => {
+    expect(shotIn({}, `${FOCUS}-x`)).toBe(true);
+    for (const id of ["ui-icon-button--hover", "ui-icon-button--default", "ui-icon-button--active"])
+      expect(shotIn(VARIANTS[0], id), id).toBe(true);
+  });
+
+  it("every id in UNSHOT_STORIES is a story, so a rename cannot turn the entry into a shot again", () => {
+    expect(UNSHOT_STORIES.filter(id => !ids.includes(id))).toEqual([]);
   });
 });
 

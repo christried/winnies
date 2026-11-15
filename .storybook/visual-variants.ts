@@ -7,8 +7,8 @@
  * The rule is the one for reduced motion: a variant is shot only where its picture differs from the Workspace shot of
  * the same theme, and the shots were compared byte for byte to decide it (#265). Light and dark under Workspace are the
  * reference and are shot for every story. A story added later is shot in every variant that shoots all stories, and its
- * baselines are regenerated with `pnpm test:visual:image --update`. The motion stories (`UNSHOT_PREFIXES`) are the
- * exception: they are rendered and run in every variant, and shot in none.
+ * baselines are regenerated with `pnpm test:visual:image --update`. The motion stories (`UNSHOT_PREFIXES`) and the
+ * stories in `UNSHOT_STORIES` are the exception: they are rendered and run in every variant, and shot in none.
  */
 export interface Variant {
   name: string;
@@ -61,9 +61,19 @@ export const VARIANTS: readonly Variant[] = [
  */
 export const UNSHOT_PREFIXES = ["motion-", "storybook-"] as const;
 
+/**
+ * Story ids that are rendered, checked and played in every variant, and shot in none, matched exactly. The icon button's
+ * Focus picture flaked on a commit that changed nothing, and no cause was found; the human deleted the picture on
+ * 2026-11-15 (#358). The play function checks the ring in the DOM instead: its colour, width and offset.
+ */
+export const UNSHOT_STORIES: readonly string[] = ["ui-icon-button--focus"];
+
 /** Whether a story rendered in this variant is also compared with a baseline. */
 export function shotIn(variant: Pick<Variant, "only" | "skip">, storyId: string) {
   if (UNSHOT_PREFIXES.some(prefix => storyId.startsWith(prefix))) {
+    return false;
+  }
+  if (UNSHOT_STORIES.includes(storyId)) {
     return false;
   }
   return variant.only
