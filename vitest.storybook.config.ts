@@ -3,7 +3,7 @@ import process from "node:process";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
-import { baselinePath, contextOptions, storyTags, VARIANTS } from "./.storybook/visual-variants.ts";
+import { baselinePath, contextOptions, VARIANTS } from "./.storybook/visual-variants.ts";
 import { assertInContainer } from "./scripts/visual-env.mjs";
 
 // Own config, like vitest.build.config.ts: `pnpm test` reads vitest.config.ts and never sees the stories.
@@ -25,12 +25,9 @@ export default defineConfig({
         },
       },
       plugins: [
-        // `tags` undefined keeps the plugin's own default, the stories tagged "test" (all of them): a variant that sets
-        // `tags` runs only those stories.
         storybookTest({
           configDir: ".storybook",
           initialGlobals: globals,
-          tags: storyTags(options),
         }),
         // The plugin derives its cache directory from the Storybook config alone, so projects started side by side
         // share one and stall on each other's dependency optimization.
