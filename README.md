@@ -141,7 +141,7 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
   functions in every variant, but never shot: a still of motion shows its end state only. A story listed in
   `UNSHOT_STORIES` (`.storybook/visual-variants.ts`) is rendered, checked and played the same way and never shot, because
   its picture flaked and was deleted (#358); today that is the icon button's `Focus`. One more variant,
-  `browser-prefers-reduced`, runs two tagged stories with the browser's own preference for reduced motion emulated,
+  `browser-prefers-reduced`, runs every story with the browser's own preference for reduced motion emulated,
   shoots nothing, and `withMotion("full")` skips its step and says why under it.
   - Prerequisite: a container runtime, which the command picks: Docker when `CLAUDE_CODE_REMOTE` is set (a cloud
     container), else Podman; `--runtime=podman` or `--runtime=docker` names one. On a Windows machine it is Podman, as

@@ -1,4 +1,4 @@
-// The stories Storybook indexes, their ids and their tags, read the way Storybook reads them (its static CSF reader and its
+// The stories Storybook indexes and their ids, read the way Storybook reads them (its static CSF reader and its
 // own title rule), without importing a story. Shared by scripts/visual-variants.test.mjs, which ties the baselines to
 // the stories, and scripts/visual-image.mjs, which tells which baselines an update with a file filter may change.
 import { globSync, readFileSync } from "node:fs";
@@ -47,16 +47,4 @@ export function storyIdsByFile(stories, root = process.cwd()) {
     file,
     csf.stories.map(story => story.id),
   ]));
-}
-
-/**
- * The id and the tags of every story, as the indexer reads them: the meta's tags and the story's own. A variant that
- * selects stories by tag (`tags` in .storybook/visual-variants.ts) selects what these say, not what a story file seems to say.
- *
- * @param {readonly string[]} stories the globs of `.storybook/main.ts`, relative to `.storybook`
- * @param {string} [root] the repository root
- * @returns {{ id: string, tags: string[] }[]} one entry per story
- */
-export function storyEntries(stories, root = process.cwd()) {
-  return parseStoryFiles(stories, root).flatMap(([, csf]) => csf.indexInputs.map(({ __id: id, tags }) => ({ id, tags })));
 }
