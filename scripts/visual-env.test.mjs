@@ -1,4 +1,6 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { parseCLI } from "vitest/node";
 import {
   asksForUpdate,
   assertInContainer,
@@ -115,6 +117,60 @@ describe("scripts/visual-env.mjs visualRun", () => {
   it("several update flags still hand Vitest exactly one", () => {
     expect(visualRun(["-u", "--update=new", "--update"]).forwarded).toEqual(["--update=new"]);
     expect(visualRun(["--update=all", "--update=new"]).forwarded).toEqual(["--update=new"]);
+  });
+});
+
+// #367: `--update` takes an optional value in Vitest, so a bare one at the end of the package script made the first
+// file filter after it the value of the flag, with an empty filter and every story redrawn. The command line is the
+// package script's own, plus what `visualRun` forwards, read by Vitest's own parser: nothing here is a copy of its rules.
+describe("the update's Vitest command line reads its filter", () => {
+  const updateScript = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).scripts["test:visual:update"];
+
+  /**
+   * What Vitest makes of `pnpm test:visual:image --update <args>` inside the container.
+   * @param {string[]} args the arguments after `--update`
+   * @returns {{ filter: string[], update: unknown }} the file filters and the value of the update option
+   */
+  const parsed = (args) => {
+    const [, ...scriptArgs] = updateScript.split(" ");
+    const { filter, options } = parseCLI([
+      "vitest",
+      ...scriptArgs,
+      ...visualRun(["--update", ...args]).forwarded,
+    ]);
+    return { filter, update: options.update };
+  };
+
+  it.each([
+    [
+      "the filter first",
+      ["stories/tokens/radii.stories.ts"],
+      ["stories/tokens/radii.stories.ts"],
+    ],
+    [
+      "the filter after a flag",
+      ["--project", "workspace-light", "stories/tokens/radii.stories.ts"],
+      ["stories/tokens/radii.stories.ts"],
+    ],
+    [
+      "two filters",
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+      ["stories/ui/button.stories.ts", "stories/tokens"],
+    ],
+    [
+      "no filter",
+      [],
+      [],
+    ],
+    [
+      "a backslash filter, kept as given",
+      ["stories\\ui\\button.stories.ts"],
+      ["stories\\ui\\button.stories.ts"],
+    ],
+  ])("%s", (_name, args, filter) => {
+    const result = parsed(args);
+    expect(result.filter).toEqual(filter);
+    expect([true, "all"]).toContain(result.update);
   });
 });
 
