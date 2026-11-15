@@ -11,7 +11,7 @@ import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import { isCloudContainer } from "./visual-env.mjs";
+import { isCloudContainer } from "./environment.mjs";
 
 const READ_TIMEOUT_MS = 5000;
 const READ_LIMIT = 50;

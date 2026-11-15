@@ -1,9 +1,13 @@
 // What keeps a screenshot baseline from coming out of the wrong place (ADR-0004, spec #257 § 9): the suite and its
 // `--update` run only inside the pinned Playwright image. Windows rasterizes fonts differently, so a baseline written
 // there would never match CI. The container script and the `visual` CI job set WINNIES_VISUAL=container; the config
-// calls this before Vitest writes anything. Apart from the config so scripts/visual-env.test.mjs can run it. No IO here.
+// calls this before Vitest writes anything. Apart from the config so scripts/visual-env.test.mjs can run it. It reads no
+// file, runs no command and touches no process: every function takes the environment, the arguments or a command's
+// output as a parameter. It does load code: `.storybook/visual-variants.ts` with the module, and Vitest on a call of
+// `vitestFilters`.
 
 import { screenshotName } from "../.storybook/visual-variants.ts";
+import { isCloudContainer } from "./environment.mjs";
 
 export const CONTAINER_ENV = "WINNIES_VISUAL";
 export const CONTAINER_VALUE = "container";
@@ -154,19 +158,8 @@ export function pinnedImage(playwrightVersion) {
 // The pin is the image (ADR-0004), not the runtime that starts it: Podman on the human's machine, Docker in a cloud
 // container. Which one, and the argv each gets, are decided here as data so a test can compare them without a container.
 export const RUNTIMES = ["podman", "docker"];
-export const CLOUD_ENV = "CLAUDE_CODE_REMOTE";
 // Where a cloud container's proxy certificate was found when #307 ran the suite green; the fallback of `caBundlePath`.
 export const CLOUD_CA_BUNDLE = "/root/.ccr/ca-bundle.crt";
-
-/**
- * Whether the process runs in a cloud container (`docs/agents/cloud.md`), which sets `CLAUDE_CODE_REMOTE`.
- *
- * @param {Record<string, string | undefined>} env the process environment
- * @returns {boolean} true when the variable is a non-empty string
- */
-export function isCloudContainer(env) {
-  return typeof env[CLOUD_ENV] === "string" && env[CLOUD_ENV] !== "";
-}
 
 /**
  * Which runtime starts the pinned image, and the arguments left for the container script once the runtime flag is taken

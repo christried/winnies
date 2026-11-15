@@ -196,9 +196,9 @@ export function retryDecision(error, readsDone) {
 }
 
 /**
- * The single line a read that could not be made ends the script in. It says that the runs were not read, not that they
- * failed: the caller reads exit 1 as "red: fix, push", so without the last words a blip of GitHub's would send an
- * implementer to fix a green run.
+ * The single line a read the verdict needs, and that could not be made, ends the script in, with exit 2. It says that
+ * GitHub could not be read and to run it again, and it never says "red" or "not a red run": for the jobs count of a run
+ * that has ended and not passed, a red is possible, and what the run's result is is not known.
  *
  * @param {string} what  what was being read, e.g. `reading the runs of 3e23713 failed`
  * @param {{ stderr?: unknown, message?: string }} error  the last error of the read
@@ -209,7 +209,7 @@ export function giveUpLine(what, error, readsDone) {
   const reads = readsDone > 1
     ? ` after ${readsDone} reads`
     : "";
-  return `${what}: ${ghErrorLine(error)}${reads} (not a red run: run this again)`;
+  return `${what}: ${ghErrorLine(error)}${reads}: GitHub could not be read, so there is no result yet: run this again`;
 }
 
 /**
