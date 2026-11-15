@@ -3,6 +3,7 @@
 // a cloud container (`--runtime=podman|docker` names one; scripts/visual-env.mjs decides the rest). Windows never produces
 // a baseline: the repo is mounted, the Linux node_modules live in a named volume (never the Windows ones), and the
 // baselines the run writes appear in the working tree. Everything after the flags goes to Vitest, e.g. `--project workspace-dark`.
+// An update with a file filter then names every baseline that changed outside the filter and exits 1 (#367).
 //
 // What runs inside is scripts/visual-container.sh, not a command line built here: the machine guard reads the command text
 // of a Bash call, and an install of Node or pnpm belongs to the container, not the machine.
@@ -12,7 +13,20 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import { caBundlePath, containerArgs, isCloudContainer, missingRuntimeMessage, pickRuntime, pinnedImage, visualRun } from "./visual-env.mjs";
+import {
+  baselinesOutsideFilter,
+  caBundlePath,
+  changedPaths,
+  containerArgs,
+  isCloudContainer,
+  missingRuntimeMessage,
+  outsideFilterMessage,
+  pickRuntime,
+  pinnedImage,
+  SCREENSHOTS_DIR,
+  visualRun,
+  vitestFilters,
+} from "./visual-env.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
@@ -69,4 +83,39 @@ if (result.error) {
   console.error(missingRuntimeMessage(runtime, result.error.message));
   process.exit(1);
 }
-process.exit(result.status ?? 1);
+const status = result.status ?? 1;
+
+// An update with a file filter redraws only the stories of that filter (#367); whatever else changed in the baselines,
+// the update redrew more than asked for or a baseline was changed before it, and it is named before it is committed.
+// A check that cannot run is not a pass. The story reader is loaded only here, so a run without a filter loads nothing new.
+const filters = update
+  ? await vitestFilters(forwarded)
+  : [];
+if (filters.length > 0) {
+  const git = spawnSync("git", [
+    "status",
+    "--porcelain=v1",
+    "-z",
+    "--untracked-files=all",
+    "--",
+    SCREENSHOTS_DIR,
+  ], { cwd: root, encoding: "utf8" });
+  if (git.error || git.status !== 0) {
+    console.error(`Could not check which baselines changed (git status: ${git.error?.message ?? git.stderr.trim()}). Run \`git status ${SCREENSHOTS_DIR}\` before you commit.`);
+    process.exit(1);
+  }
+  const { storyIdsByFile } = await import("./visual-stories.mjs");
+  const { default: storybookConfig } = await import("../.storybook/main.ts");
+  const outside = baselinesOutsideFilter({
+    filters,
+    changed: changedPaths(git.stdout),
+    storyFiles: storyIdsByFile(storybookConfig.stories, root),
+  });
+  if (outside.length > 0) {
+    console.error(outsideFilterMessage(outside));
+    process.exit(status === 0
+      ? 1
+      : status);
+  }
+}
+process.exit(status);

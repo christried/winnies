@@ -150,7 +150,9 @@ CI runs lint, typecheck, the Storybook build, test, build and the build test (th
     because the proxy listens on loopback; there is nothing to set up.
   - `pnpm test:visual:image --update` regenerates the baselines in `stories/__screenshots__/<variant>/`. Commit them
     with the change that moved them: the PR shows each as an image diff, and that is the review. Arguments after the
-    flags go to Vitest (`--project workspace-dark`).
+    flags go to Vitest (`--project workspace-dark`). A file filter (`--update stories/ui/button.stories.ts`) redraws
+    only the stories in that file, and afterwards the script names every baseline that changed outside the filter and
+    exits 1.
   - `pnpm test:visual` and `pnpm test:visual:update` are what runs inside the image; run on the host they refuse
     to start (`scripts/visual-env.mjs`), so a baseline can only come from the container.
   - A story with no baseline fails the run (`CI=true`, which the script and the `visual` job set); it does not
