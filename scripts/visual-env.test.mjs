@@ -9,7 +9,6 @@ import {
   changedPaths,
   CLOUD_CA_BUNDLE,
   containerArgs,
-  isCloudContainer,
   missingRuntimeMessage,
   outsideFilterMessage,
   pickRuntime,
@@ -181,22 +180,6 @@ describe("the update's Vitest command line reads its filter", () => {
 describe("scripts/visual-env.mjs pinnedImage", () => {
   it("is the e2e job's image for the Playwright the repo installs", () => {
     expect(pinnedImage("1.65.0")).toBe("mcr.microsoft.com/playwright:v1.65.0-noble");
-  });
-});
-
-describe("scripts/visual-env.mjs isCloudContainer", () => {
-  it("is true when CLAUDE_CODE_REMOTE is a non-empty string", () => {
-    expect(isCloudContainer({ CLAUDE_CODE_REMOTE: "true" })).toBe(true);
-  });
-
-  it.each([
-    ["unset", {}],
-    [
-      "empty",
-      { CLAUDE_CODE_REMOTE: "" },
-    ],
-  ])("is false when CLAUDE_CODE_REMOTE is %s", (_case, env) => {
-    expect(isCloudContainer(env)).toBe(false);
   });
 });
 

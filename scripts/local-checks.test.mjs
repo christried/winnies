@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { localChecksNotice } from "./local-checks.mjs";
@@ -89,5 +90,16 @@ describe("the hook command", () => {
       env: { ...process.env, CLAUDE_CODE_REMOTE: "true" },
     });
     expect({ status: result.status, stdout: result.stdout }).toEqual({ status: 0, stdout: "" });
+  });
+
+  // A failed import happens at module load, before the hook's `try`: a SessionStart hook that loaded a `.ts` file through
+  // visual-env.mjs could fail a session's start on a Node that cannot strip types, against its promise never to.
+  it("loads only Node's own modules and the leaf that holds the cloud check", () => {
+    const importsOf = file => Array.from(readFileSync(new URL(file, import.meta.url), "utf8").matchAll(/^import\b[^"']*["']([^"']+)["']/gm), match => match[1]);
+    const source = readFileSync(SCRIPT, "utf8");
+
+    expect(source).not.toMatch(/\bimport\(/);
+    expect(importsOf("./local-checks.mjs").filter(specifier => !specifier.startsWith("node:"))).toEqual(["./environment.mjs"]);
+    expect(importsOf("./environment.mjs")).toEqual([]);
   });
 });
